@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 01
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 import colors from "tailwindcss/colors";
@@ -96,8 +96,8 @@ export default {
           "--popover-foreground": toRGB(colors.zinc["950"]),
           "--primary": toRGB(colors.zinc["900"]),
           "--primary-foreground": toRGB(colors.zinc["50"]),
-          "--secondary": toRGB(colors.zinc["100"]),
-          "--secondary-foreground": toRGB(colors.zinc["900"]),
+          "--secondary": toRGB(colors.red["500"]),
+          "--secondary-foreground": toRGB(colors.red["50"]),
           "--muted": toRGB(colors.zinc["100"]),
           "--muted-foreground": toRGB(colors.zinc["500"]),
           "--accent": toRGB(colors.zinc["100"]),
@@ -127,8 +127,8 @@ export default {
           "--popover-foreground": toRGB(colors.zinc["50"]),
           "--primary": toRGB(colors.zinc["50"]),
           "--primary-foreground": toRGB(colors.zinc["900"]),
-          "--secondary": toRGB(colors.zinc["800"]),
-          "--secondary-foreground": toRGB(colors.zinc["50"]),
+          "--secondary": toRGB(colors.red["400"]),
+          "--secondary-foreground": toRGB(colors.red["950"]),
           "--muted": toRGB(colors.zinc["800"]),
           "--muted-foreground": toRGB(colors.zinc["400"]),
           "--accent": toRGB(colors.zinc["800"]),
