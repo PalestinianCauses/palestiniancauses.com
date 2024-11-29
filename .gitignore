@@ -1,0 +1,27 @@
+# REVIEWED - 02
+# dependencies
+/node_modules
+package-lock.json
+
+# testing
+/coverage
+
+# next.js
+/.next
+/out
+
+# production
+/build
+
+# misc
+.DS_Store
+
+# env files
+.env
+.env.*
+
+# typescript
+next-env.d.ts
+
+# payload
+payload-types.ts

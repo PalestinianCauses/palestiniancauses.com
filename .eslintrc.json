@@ -1,0 +1,72 @@
+// REVIEWED - 04
+
+{
+  // "parser": "@typescript-eslint/parser",
+
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript",
+
+    "airbnb",
+    "airbnb/hooks",
+
+    // "eslint:recommended",
+
+    // "plugin:@typescript-eslint/recommended",
+
+    // "plugin:jsx-a11y/recommended",
+    // "plugin:import/recommended",
+    // "plugin:react/recommended",
+
+    "plugin:prettier/recommended"
+  ],
+
+  "plugins": [
+    // "@typescript-eslint",
+    // "jsx-a11y",
+    // "import",
+    // "react",
+    "prettier"
+  ],
+
+  "rules": {
+    "prettier/prettier": "warn",
+
+    "arrow-body-style": "error",
+    "func-name-matching": "error",
+    "func-names": "error",
+    "func-style": "error",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "_" }],
+    "prefer-arrow-callback": "error",
+
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "_" }
+    ],
+
+    "import/extensions": ["error", { "ts": "never", "tsx": "never" }],
+    "import/no-extraneous-dependencies": "off",
+    "import/prefer-default-export": "off",
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ]
+      }
+    ],
+
+    "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+    "react/jsx-fragments": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off"
+  }
+}
