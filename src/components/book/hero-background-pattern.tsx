@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 import { Fragment } from "react";
 
 export const polygon =
@@ -38,7 +38,7 @@ export const HeroBackgroundPattern = function HeroBackgroundPattern() {
         aria-hidden="true"
         className="absolute left-[calc(50%_-_4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%_-_18rem)] lg:left-48 lg:top-[calc(50%_-_30rem)] xl:left-[calc(50%_-_24rem)]">
         <div
-          className="to-tertiary-2/50 via-tertiary/50 aspect-[1108/632] w-[69.25rem] bg-gradient-to-r from-secondary/50"
+          className="aspect-[1108/632] w-[69.25rem] bg-gradient-to-r from-secondary/90 via-secondary/10 to-secondary/50"
           style={{ clipPath: polygon }}
         />
       </div>
