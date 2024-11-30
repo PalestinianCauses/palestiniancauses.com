@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { PropsWithChildren } from "react";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 const RootLayout = function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body className={inter.className}>{children}</body>
     </html>
   );
