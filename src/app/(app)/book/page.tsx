@@ -1,4 +1,7 @@
 // REVIEWED
+import { Hero } from "@/components/book/hero";
+
+// REVIEWED
 export default function BookPage() {
-  return <main>Book Page</main>;
+  return <Hero />;
 }
