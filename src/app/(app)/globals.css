@@ -1,4 +1,4 @@
-/* REVIEWED - 03 */
+/* REVIEWED - 04 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,6 +6,11 @@
 @layer base {
   * {
     @apply border-border;
+  }
+
+  html,
+  body {
+    @apply h-full;
   }
 
   body {
