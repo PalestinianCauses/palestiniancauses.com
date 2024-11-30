@@ -1,7 +1,75 @@
-/* REVIEWED - 04 */
+/* REVIEWED - 05 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 100;
+  src: url("../../assets/fonts/gilroy-thin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 200;
+  src: url("../../assets/fonts/gilroy-ultra-light.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 300;
+  src: url("../../assets/fonts/gilroy-light.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 400;
+  src: url("../../assets/fonts/gilroy-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 500;
+  src: url("../../assets/fonts/gilroy-medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 600;
+  src: url("../../assets/fonts/gilroy-semi-bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 700;
+  src: url("../../assets/fonts/gilroy-bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 800;
+  src: url("../../assets/fonts/gilroy-extra-bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 900;
+  src: url("../../assets/fonts/gilroy-black.woff2") format("woff2");
+}
+
+@keyframes book {
+  0% {
+    transform: rotateX(50deg) rotateZ(45deg);
+  }
+
+  50% {
+    transform: rotateX(50deg) rotateZ(40deg) translateZ(2.5rem);
+  }
+
+  100% {
+    transform: rotateX(50deg) rotateZ(45deg);
+  }
+}
 
 @layer base {
   * {
@@ -14,6 +82,25 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background font-["Gilroy",_system-ui,_sans-serif] text-foreground;
+  }
+}
+
+@layer utilities {
+  .font-stretch {
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
+    font-stretch: 150%;
+  }
+
+  .book-animation {
+    animation-name: book;
+    animation-duration: 5s;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-iteration-count: infinite;
   }
 }
