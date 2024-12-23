@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -51,8 +51,8 @@ export const Hero = function Hero() {
                 A Human But From Gaza
               </span>
               , a powerful book of diaries and art capturing Gaza&apos;s pain,
-              resilience, and hope of life under genocide. Stand with Gaza and
-              share in its people voices—order your copy now.
+              resilience, and hope of life under war. Stand with Gaza and share
+              in its people voices—order your copy now.
             </p>
             <div className="mt-10 flex items-center gap-x-6">
               <Button variant="secondary" size="lg" className="text-base">
