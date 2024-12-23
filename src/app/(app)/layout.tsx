@@ -1,11 +1,11 @@
-// REVIEWED - 05
+// REVIEWED - 06
 import type { Metadata } from "next";
 import { PropsWithChildren } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Shawqi Stack",
-  description: "Created by @shawqicauses.",
+  title: "Home - PalestinianCauses",
+  description: "No description available for now.",
 };
 
 const RootLayout = function RootLayout({ children }: PropsWithChildren) {
