@@ -43,7 +43,7 @@ export const Hero = function Hero() {
             <h1
               className="font-stretch mt-10 text-pretty bg-gradient-to-b from-foreground/25 via-foreground to-foreground/50 bg-cover bg-clip-text bg-center bg-no-repeat text-5xl font-bold tracking-tight text-foreground sm:text-7xl"
               style={{ WebkitTextFillColor: "transparent" }}>
-              Families Shadows Over Gaza&apos;s Rubble.
+              Families&apos; Shadows Over Gaza&apos;s Rubble.
             </h1>
             <p className="mt-8 text-pretty text-lg font-normal text-muted-foreground sm:text-xl/8">
               Discover{" "}
@@ -52,7 +52,7 @@ export const Hero = function Hero() {
               </span>
               , a powerful book of diaries and art capturing Gaza&apos;s pain,
               resilience, and hope of life under war. Stand with Gaza and share
-              in its people voices—order your copy now.
+              in its people&apos; voices—order your copy now.
             </p>
             <div className="mt-10 flex items-center gap-x-6">
               <Button variant="secondary" size="lg" className="text-base">
