@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,7 +8,6 @@ import { Button } from "../ui/button";
 
 import { HeroBackgroundPattern } from "./hero-background-pattern";
 
-// REVIEWED
 export const Hero = function Hero() {
   return (
     <header className="relative isolate overflow-hidden">
@@ -24,7 +23,9 @@ export const Hero = function Hero() {
               className="!static !h-auto !w-16"
             />
             <div className="mt-24 lg:mt-16">
-              <Link href="/" className="inline-flex space-x-6">
+              <Link
+                href="/"
+                className="inline-flex flex-col items-start space-y-6 sm:flex-row sm:items-center sm:space-x-6 sm:space-y-0">
                 <Button
                   variant="outline"
                   className="rounded-full border-0 bg-secondary/15 text-foreground ring-1 ring-inset ring-secondary/35 hover:bg-secondary"
@@ -54,7 +55,7 @@ export const Hero = function Hero() {
               resilience, and hope of life under war. Stand with Gaza and share
               in its people&apos; voices—order your copy now.
             </p>
-            <div className="mt-10 flex items-center gap-x-6">
+            <div className="mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
               <Button variant="secondary" size="lg" className="text-base">
                 Support Gaza: Order Now
               </Button>
