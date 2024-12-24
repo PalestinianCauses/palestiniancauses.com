@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import Image from "next/image";
 
@@ -82,41 +82,41 @@ export const About = function About() {
             </ul>
           </div>
           <div className="pt-16 lg:row-span-2 lg:-mr-16 xl:mr-auto">
-            <div className="-mx-8 grid grid-cols-2 gap-4 sm:-mx-16 sm:grid-cols-4 lg:mx-0 lg:grid-cols-2 lg:gap-4 xl:gap-8">
-              <div className="aspect-[2/3] overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10">
+            <div className="-mx-8 grid grid-cols-2 items-start gap-4 sm:-mx-16 sm:grid-cols-4 lg:mx-0 lg:grid-cols-2 lg:gap-4 xl:gap-8">
+              <div className="overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10">
                 <Image
                   src="/book/p-01.png"
                   alt="Book Page 01"
                   fill
                   sizes="12rem"
-                  className="!static block !size-full rounded-2xl object-cover"
+                  className="!static block aspect-[2/3] !h-auto !w-full rounded-2xl object-cover"
                 />
               </div>
-              <div className="-mt-8 aspect-[2/3] overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10 lg:-mt-40">
+              <div className="-mt-8 overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10 lg:-mt-40">
                 <Image
                   src="/book/p-03.png"
                   alt="Book Page 02"
                   fill
                   sizes="12rem"
-                  className="!static block !size-full rounded-2xl object-cover"
+                  className="!static block aspect-[2/3] !h-auto !w-full rounded-2xl object-cover"
                 />
               </div>
-              <div className="aspect-[2/3] overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10">
+              <div className="overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10">
                 <Image
                   src="/book/p-05.png"
                   alt="Book Page 03"
                   fill
                   sizes="12rem"
-                  className="!static block !size-full rounded-2xl object-cover"
+                  className="!static block aspect-[2/3] !h-auto !w-full rounded-2xl object-cover"
                 />
               </div>
-              <div className="-mt-8 aspect-[2/3] overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10 lg:-mt-40">
+              <div className="-mt-8 overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10 lg:-mt-40">
                 <Image
                   src="/book/p-07.png"
                   alt="Book Page 04"
                   fill
                   sizes="12rem"
-                  className="!static block !size-full rounded-2xl object-cover"
+                  className="!static block aspect-[2/3] !h-auto !w-full rounded-2xl object-cover"
                 />
               </div>
             </div>

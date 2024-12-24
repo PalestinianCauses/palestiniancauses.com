@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -67,7 +67,7 @@ export const Hero = function Hero() {
           <div className="z-10 mx-auto flex aspect-[2/3] w-full max-w-lg [perspective:75rem] lg:max-w-none lg:flex-1">
             <div className="book-animation relative isolate flex w-full justify-self-center overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10 transition-all duration-500 [transform-style:preserve-3d]">
               <Image
-                src="/book-cover.jpeg"
+                src="/book/book-cover.jpeg"
                 alt="Book Cover"
                 sizes="10rem"
                 fill
