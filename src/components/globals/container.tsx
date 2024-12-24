@@ -1,7 +1,14 @@
-// REVIEWED
+// REVIEWED - 01
 
-import { PropsWithChildren } from "react";
+import { forwardRef, HTMLAttributes } from "react";
 
-export const Container = function Container({ children }: PropsWithChildren) {
-  return <div className="mx-auto max-w-7xl px-6 lg:px-8">{children}</div>;
-};
+import { cn } from "@/lib/utils";
+
+export const Container = forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement>
+>(({ className, children }) => (
+  <div className={cn("mx-auto max-w-7xl px-6 lg:px-8", className)}>
+    {children}
+  </div>
+));
