@@ -1,10 +1,57 @@
-// REVIEWED - 02
-import { Fragment } from "react";
+"use client";
+
+// REVIEWED - 03
+import { Fragment, useEffect, useState } from "react";
+
+import { cn } from "@/lib/utils";
 
 export const polygon =
   "polygon(73% 51%, 91% 11%, 100% 46%, 97% 82%, 92% 84%, 75% 64%, 55% 47%, 46% 49%, 45% 62%, 50% 87%, 21% 64%, 0% 100%, 5% 51%, 21% 63%, 58% 0%, 73% 51%)";
 
 export const HeroBackgroundPattern = function HeroBackgroundPattern() {
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.5 },
+    );
+
+    const sections = document.querySelectorAll("[data-section]");
+    sections.forEach((section) => {
+      observer.observe(section);
+    });
+
+    return () => {
+      sections.forEach((section) => {
+        observer.unobserve(section);
+      });
+
+      observer.disconnect();
+    };
+  }, []);
+
+  const getPatternColors = () => {
+    switch (activeSection) {
+      case "hero":
+        return "var(--secondary)";
+      case "about":
+        return "var(--tertiary)";
+      case "sneak-peak":
+        return "var(--tertiary-2)";
+      case "early-reviews":
+        return "var(--secondary)";
+      default:
+        return "var(--secondary)";
+    }
+  };
+
   return (
     <Fragment>
       <svg
@@ -38,7 +85,18 @@ export const HeroBackgroundPattern = function HeroBackgroundPattern() {
         aria-hidden="true"
         className="fixed left-[calc(50%_-_4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%_-_18rem)] lg:left-48 lg:top-[calc(50%_-_30rem)] xl:left-[calc(50%_-_24rem)]">
         <div
-          className="aspect-[1108/632] w-[69.25rem] bg-gradient-to-r from-secondary/90 via-secondary/10 to-secondary/50"
+          className={cn(
+            "aspect-[1108/632] w-[69.25rem] transition-all duration-500 ease-in-out",
+          )}
+          style={{
+            background: `rgb(${getPatternColors()})`,
+            clipPath: polygon,
+          }}
+        />
+        <div
+          className={cn(
+            "absolute left-0 top-0 aspect-[1108/632] w-[69.25rem] bg-gradient-to-r from-background/10 via-background/90 to-background/50 transition-all duration-500 ease-in-out",
+          )}
           style={{ clipPath: polygon }}
         />
       </div>

@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,7 +10,10 @@ import { HeroBackgroundPattern } from "./hero-background-pattern";
 
 export const Hero = function Hero() {
   return (
-    <header className="relative isolate overflow-hidden">
+    <header
+      id="hero"
+      data-section="hero"
+      className="relative isolate overflow-hidden">
       <HeroBackgroundPattern />
       <Container>
         <div className="h-full min-h-screen w-full py-12 lg:flex lg:items-center lg:gap-5 lg:py-40">
