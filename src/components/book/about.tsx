@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import Image from "next/image";
 
@@ -6,7 +6,10 @@ import { Container } from "../globals/container";
 
 export const About = function About() {
   return (
-    <div className="relative z-10 my-24 overflow-hidden sm:my-32">
+    <div
+      id="about"
+      data-section="about"
+      className="relative z-10 my-24 overflow-hidden sm:my-32">
       <Container className="max-w-2xl lg:max-w-7xl">
         <div className="max-w-4xl">
           <h2
@@ -53,7 +56,7 @@ export const About = function About() {
             </h3>
             <ul className="mt-8 space-y-5 text-muted-foreground">
               <li className="flex items-center gap-x-3">
-                <div className="m-1 size-2 flex-none rounded-full bg-secondary text-secondary ring-4 ring-secondary/30" />
+                <div className="m-1 size-2 flex-none rounded-full bg-tertiary text-tertiary ring-4 ring-tertiary/30" />
                 <span>
                   <strong className="font-medium text-foreground">
                     Authentic Voices.
@@ -62,7 +65,7 @@ export const About = function About() {
                 </span>
               </li>
               <li className="flex items-center gap-x-3">
-                <div className="m-1 size-2 flex-none rounded-full bg-secondary text-secondary ring-4 ring-secondary/30" />
+                <div className="m-1 size-2 flex-none rounded-full bg-tertiary text-tertiary ring-4 ring-tertiary/30" />
                 <span>
                   <strong className="font-medium text-foreground">
                     Unique Format.
@@ -71,7 +74,7 @@ export const About = function About() {
                 </span>
               </li>
               <li className="flex items-center gap-x-3">
-                <div className="m-1 size-2 flex-none rounded-full bg-secondary text-secondary ring-4 ring-secondary/30" />
+                <div className="m-1 size-2 flex-none rounded-full bg-tertiary text-tertiary ring-4 ring-tertiary/30" />
                 <span>
                   <strong className="font-medium text-foreground">
                     A Global Message.
@@ -83,40 +86,40 @@ export const About = function About() {
           </div>
           <div className="w-full pt-16 lg:row-span-2 lg:-mr-16 xl:mr-auto">
             <div className="-mx-8 grid grid-cols-2 items-start gap-4 sm:-mx-16 sm:grid-cols-4 lg:mx-0 lg:grid-cols-2 lg:gap-4 xl:gap-8">
-              <div className="overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10">
+              <div className="relative overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10">
                 <Image
                   src="/book/p-01.png"
                   alt="Book Page 01"
                   fill
                   sizes="12rem"
-                  className="!static block aspect-[2/3] !h-auto !w-full rounded-2xl object-cover"
+                  className="!static block aspect-[2/3] !h-auto !w-full rounded-2xl object-cover grayscale"
                 />
               </div>
-              <div className="-mt-8 overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10 lg:-mt-40">
+              <div className="relative -mt-8 overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10 lg:-mt-40">
                 <Image
                   src="/book/p-02.png"
                   alt="Book Page 02"
                   fill
                   sizes="12rem"
-                  className="!static block aspect-[2/3] !h-auto !w-full rounded-2xl object-cover"
+                  className="!static block aspect-[2/3] !h-auto !w-full rounded-2xl object-cover grayscale"
                 />
               </div>
-              <div className="overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10">
+              <div className="relative overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10">
                 <Image
                   src="/book/p-03.png"
                   alt="Book Page 03"
                   fill
                   sizes="12rem"
-                  className="!static block aspect-[2/3] !h-auto !w-full rounded-2xl object-cover"
+                  className="!static block aspect-[2/3] !h-auto !w-full rounded-2xl object-cover grayscale"
                 />
               </div>
-              <div className="-mt-8 overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10 lg:-mt-40">
+              <div className="relative -mt-8 overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10 lg:-mt-40">
                 <Image
                   src="/book/p-04.png"
                   alt="Book Page 04"
                   fill
                   sizes="12rem"
-                  className="!static block aspect-[2/3] !h-auto !w-full rounded-2xl object-cover"
+                  className="!static block aspect-[2/3] !h-auto !w-full rounded-2xl object-cover grayscale"
                 />
               </div>
             </div>
