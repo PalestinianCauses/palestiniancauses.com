@@ -1,16 +1,18 @@
-// REVIEWED - 01
+// REVIEWED - 02
 import { Fragment } from "react";
 
 import { About } from "@/components/book/about";
+import { EarlyReviews } from "@/components/book/early-reviews";
 import { Hero } from "@/components/book/hero";
+import { SneakPeak } from "@/components/book/sneak-peak";
 
-// REVIEWED
-export default function BookPage() {
+export default async function BookPage() {
   return (
     <Fragment>
       <Hero />
       <About />
-      <div className="py-24" />
+      <SneakPeak />
+      <EarlyReviews />
     </Fragment>
   );
 }
