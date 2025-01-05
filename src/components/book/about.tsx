@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import Image from "next/image";
 
@@ -81,7 +81,7 @@ export const About = function About() {
               </li>
             </ul>
           </div>
-          <div className="pt-16 lg:row-span-2 lg:-mr-16 xl:mr-auto">
+          <div className="w-full pt-16 lg:row-span-2 lg:-mr-16 xl:mr-auto">
             <div className="-mx-8 grid grid-cols-2 items-start gap-4 sm:-mx-16 sm:grid-cols-4 lg:mx-0 lg:grid-cols-2 lg:gap-4 xl:gap-8">
               <div className="overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10">
                 <Image
@@ -94,7 +94,7 @@ export const About = function About() {
               </div>
               <div className="-mt-8 overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10 lg:-mt-40">
                 <Image
-                  src="/book/p-03.png"
+                  src="/book/p-02.png"
                   alt="Book Page 02"
                   fill
                   sizes="12rem"
@@ -103,7 +103,7 @@ export const About = function About() {
               </div>
               <div className="overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10">
                 <Image
-                  src="/book/p-05.png"
+                  src="/book/p-03.png"
                   alt="Book Page 03"
                   fill
                   sizes="12rem"
@@ -112,7 +112,7 @@ export const About = function About() {
               </div>
               <div className="-mt-8 overflow-hidden rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10 lg:-mt-40">
                 <Image
-                  src="/book/p-07.png"
+                  src="/book/p-04.png"
                   alt="Book Page 04"
                   fill
                   sizes="12rem"
