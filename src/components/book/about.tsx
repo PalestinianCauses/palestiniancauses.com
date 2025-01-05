@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import Image from "next/image";
 
@@ -21,10 +21,10 @@ export const About = function About() {
             voices that unveil the human side of Gaza&apos;s untold stories.
             This project brings together the profoundly personal diaries of{" "}
             <span className="pr-1.5">
-              <em>Maha</em>
+              <em>M.</em>
             </span>
-            and <em>Lama</em>, two resilient women who lived through the recent
-            war in Gaza, alongside the powerful art-work of <em>Nour</em>, which
+            and <em>L.</em>, two resilient women who lived through the recent
+            war in Gaza, alongside the powerful art-work of <em>N.</em>, which
             captures the emotions, struggles, and hopes of a people under siege.
           </p>
         </div>
