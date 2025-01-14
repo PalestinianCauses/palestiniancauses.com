@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 /* eslint-disable no-shadow */
 
 import { useActionState, useEffect } from "react";
@@ -21,7 +21,7 @@ export const PricingButton = function PricingButton({
 }: {
   product: Product;
 }) {
-  const [message, formAction] = useActionState(insertItem, null);
+  const [, formAction] = useActionState(insertItem, null);
 
   const { cart, insertCartItem } = useCart();
   const { state } = useProduct();
