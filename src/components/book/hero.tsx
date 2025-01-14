@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,7 +27,7 @@ export const Hero = function Hero() {
             />
             <div className="mt-24 lg:mt-16">
               <Link
-                href="/"
+                href="#pricing"
                 className="inline-flex flex-col items-start space-y-6 sm:flex-row sm:items-center sm:space-x-6 sm:space-y-0">
                 <Button
                   variant="outline"
@@ -36,7 +36,7 @@ export const Hero = function Hero() {
                   <span>Be Part Of The Story</span>
                 </Button>
                 <span className="inline-flex items-center space-x-2 text-sm/6 font-medium text-foreground">
-                  <span>Just published our book</span>
+                  <span>We just published our book</span>
                   <ChevronRightIcon
                     aria-hidden="true"
                     className="size-5 text-muted-foreground"
@@ -56,14 +56,20 @@ export const Hero = function Hero() {
               </span>
               , a powerful book of diaries and art capturing Gaza&apos;s pain,
               resilience, and hope of life under war. Stand with Gaza and share
-              in its people&apos; voices—order your copy now.
+              in its people&apos;s voices—order your copy now.
             </p>
             <div className="mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-              <Button variant="secondary" size="lg" className="text-base">
-                Support Gaza: Order Now
+              <Button
+                variant="secondary"
+                size="lg"
+                asChild
+                className="text-base">
+                <Link href="#pricing">Support Gaza: Order Now</Link>
               </Button>
-              <Button variant="link" className="text-base">
-                About us <ChevronRightIcon className="size-5" />
+              <Button variant="link" asChild className="text-base">
+                <Link href="#about">
+                  Learn more <ChevronRightIcon className="size-5" />
+                </Link>
               </Button>
             </div>
           </div>

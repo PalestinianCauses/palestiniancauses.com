@@ -1,7 +1,8 @@
-# REVIEWED - 02
+# REVIEWED - 03
 # dependencies
 /node_modules
 package-lock.json
+pnpm-lock.yaml
 
 # testing
 /coverage
