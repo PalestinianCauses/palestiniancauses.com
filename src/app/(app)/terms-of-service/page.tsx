@@ -1,6 +1,9 @@
-// REVIEWED
+// REVIEWED - 01
+import Link from "next/link";
+
 import { HeroBackgroundPattern } from "@/components/book/hero-background-pattern";
 import { Container } from "@/components/globals/container";
+import { Button } from "@/components/ui/button";
 
 export default function TermsOfServicePage() {
   return (
@@ -20,16 +23,36 @@ export default function TermsOfServicePage() {
           </div>
           <div className="flex flex-col gap-10 text-lg/9 text-muted-foreground">
             <p>
-              These Terms of Service govern your use of the website at
-              https://palestiniancauses.com and any related services provided by
-              PalestinianCauses LLC.
+              These Terms of Service govern your use of the website at{" "}
+              <span>
+                <Button
+                  variant="link"
+                  className="p-0 text-lg/9 font-medium text-foreground"
+                  asChild>
+                  <Link href="https://palestiniancauses.com">
+                    palestiniancauses.com
+                  </Link>
+                </Button>
+              </span>{" "}
+              and any related services provided by PalestinianCauses LLC.
             </p>
             <p>
-              By accessing https://palestiniancauses.com, you agree to abide by
-              these Terms of Service and to comply with all applicable laws and
-              regulations. Suppose you do not agree with these Terms of Service.
-              In that case, you are prohibited from using or accessing this
-              website or any other services provided by PalestinianCauses LLC.
+              By accessing{" "}
+              <span>
+                <Button
+                  variant="link"
+                  className="p-0 text-lg/9 font-medium text-foreground"
+                  asChild>
+                  <Link href="https://palestiniancauses.com">
+                    palestiniancauses.com
+                  </Link>
+                </Button>
+              </span>
+              , you agree to abide by these Terms of Service and to comply with
+              all applicable laws and regulations. Suppose you do not agree with
+              these Terms of Service. In that case, you are prohibited from
+              using or accessing this website or any other services provided by
+              PalestinianCauses LLC.
             </p>
             <p>
               We, PalestinianCauses LLC, reserve the right to review and amend
