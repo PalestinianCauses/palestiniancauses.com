@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 import { Fragment, useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -55,6 +55,8 @@ export const HeroBackgroundPattern = function HeroBackgroundPattern() {
         return "var(--secondary)";
       case "sneak-peak-02":
         return "var(--tertiary)";
+      case "thanks":
+        return "var(--tertiary-2)";
       default:
         return "var(--secondary)";
     }
