@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import Image from "next/image";
 
@@ -18,16 +18,15 @@ export const About = function About() {
             About The Book.
           </h2>
           <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
-            &ldquo;
-            <em>A Human But From Gaza</em>
-            &ldquo; is not just a book—it&apos;s a collection of raw, unfiltered
-            voices that unveil the human side of Gaza&apos;s untold stories.
-            This project brings together the profoundly personal diaries of{" "}
+            &ldquo;<em>A Human But From Gaza</em>&ldquo; is not just a
+            book—it&apos;s a collection of raw, unfiltered voices that unveil
+            the human side of Gaza&apos;s untold stories. This project brings
+            together the profoundly personal diaries of{" "}
             <span className="pr-1.5">
               <em>M.</em>
-            </span>
+            </span>{" "}
             and <em>L.</em>, two resilient women who lived through the recent
-            war in Gaza, alongside the powerful art-work of <em>N.</em>, which
+            war in Gaza, alongside the powerful artwork of <em>N.</em>, which
             captures the emotions, struggles, and hopes of a people under siege.
           </p>
         </div>
@@ -46,20 +45,20 @@ export const About = function About() {
               resonates with humanity, strength, and resilience.
             </p>
             <p className="mt-8 text-base/7 tracking-wide text-muted-foreground">
-              This is more than a book; it is a bridge to understanding, a call
+              It is more than a book; it is a bridge to understanding, a call
               for empathy, and an invitation to witness the strength of those
-              who refuse to be silenced. Let their stories inspire, challenge,
-              and connect you to a reality too often overlooked.
+              who refuse to be silenced. Let the authors&apos; stories inspire,
+              challenge, and connect you to a reality too often overlooked.
             </p>
             <h3 className="mt-12 text-pretty text-2xl font-semibold text-foreground">
-              Why This Book Matters?
+              Why Does This Book Matter?
             </h3>
             <ul className="mt-8 space-y-5 text-muted-foreground">
               <li className="flex items-center gap-x-3">
                 <div className="m-1 size-2 flex-none rounded-full bg-tertiary text-tertiary ring-4 ring-tertiary/30" />
                 <span>
                   <strong className="font-medium text-foreground">
-                    Authentic Voices.
+                    Authentic Voices:
                   </strong>{" "}
                   Written by Palestinians currently living through the war.
                 </span>
@@ -68,16 +67,16 @@ export const About = function About() {
                 <div className="m-1 size-2 flex-none rounded-full bg-tertiary text-tertiary ring-4 ring-tertiary/30" />
                 <span>
                   <strong className="font-medium text-foreground">
-                    Unique Format.
+                    Unique Format:
                   </strong>{" "}
-                  Combines intimate diaries with compelling art-work.
+                  Combines intimate diaries with compelling artwork.
                 </span>
               </li>
               <li className="flex items-center gap-x-3">
                 <div className="m-1 size-2 flex-none rounded-full bg-tertiary text-tertiary ring-4 ring-tertiary/30" />
                 <span>
                   <strong className="font-medium text-foreground">
-                    A Global Message.
+                    A Global Message:
                   </strong>{" "}
                   Aims to break stereotypes and build awareness.
                 </span>

@@ -1,7 +1,13 @@
-// REVIEWED - 07
+// REVIEWED - 08
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { PropsWithChildren } from "react";
 import "./globals.css";
+
+import { Footer } from "@/components/layout/footer";
+import { CartProvider } from "@/contexts/cart";
+import { ProductProvider } from "@/contexts/product";
+import { getCart } from "@/lib/shopify";
 
 export const metadata: Metadata = {
   title: { template: "%s | PalestinianCauses", default: "PalestinianCauses" },
@@ -9,10 +15,18 @@ export const metadata: Metadata = {
     "PalestinianCauses LLC is a U.S.-registered company that creates innovative digital solutions and e-commerce experiences driven by Palestinians with specialized expertise and a unique perspective. Our platform is structured around 'rooms,' each offering exceptional content, services, or products. Our current project features the book A Human But From Gaza, and we have long-term plans to develop team members' rooms to showcase their digital solutions and tech-based services. We aim to foster meaningful connections and global awareness through storytelling, creativity, and technology.",
 };
 
-const RootLayout = function RootLayout({ children }: PropsWithChildren) {
+const RootLayout = async function RootLayout({ children }: PropsWithChildren) {
+  const cartId = (await cookies()).get("cartId")?.value;
+  const cart = getCart(cartId);
+
   return (
     <html lang="en" className="dark">
-      <body>{children}</body>
+      <body>
+        <CartProvider cartPromise={cart}>
+          <ProductProvider>{children}</ProductProvider>
+        </CartProvider>
+        <Footer />
+      </body>
     </html>
   );
 };

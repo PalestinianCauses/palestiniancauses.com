@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import Image from "next/image";
 
@@ -39,7 +39,7 @@ export const EarlyReviews = function EarlyReviews() {
       className="relative isolate pt-24 sm:py-32">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-base/7 font-semibold uppercase tracking-[0.2em] text-secondary">
+          <h2 className="text-base/7 font-semibold uppercase tracking-[0.2em] text-foreground">
             Surrounded By The Snippets From The Book.
           </h2>
           <p
@@ -53,22 +53,21 @@ export const EarlyReviews = function EarlyReviews() {
             <blockquote className="p-6 text-lg font-medium tracking-tight text-foreground sm:p-12 sm:text-xl/8">
               <p>
                 As a Gazan who has been through all the difficulties and
-                atrocities anyone could imagine (and not imagine). I never
-                thought anyone would be able to express our feelings and
-                thoughts through everything we&apos;ve lived so far, but I can
-                say I&apos;m glad this book disappointed me.
+                atrocities, anyone could imagine (and not imagine). I never
+                thought anyone could express our feelings and thoughts through
+                everything we&apos;ve lived so far, but I&apos;m glad this book
+                disappointed me.
               </p>
               <p className="mt-8">
-                Reading this book and going through its chapters really felt
-                like a journey, even to me, someone who actually lived these
-                feelings and emotions. And I can only imagine how deeply it will
-                affect everyone who reads it.
+                Reading this book and going through its chapters felt like a
+                journey, even to me, someone who lived these feelings and
+                emotions. And I can only imagine how deeply it will affect
+                everyone who reads it.
               </p>
               <p className="mt-8">
-                I wouldn&apos;t hesitate for a second in recommending it to
-                anyone who wants to get a better understanding of people&apos;s
-                lives in Gaza and what it&apos;s like to live through such
-                times.
+                I wouldn&apos;t hesitate to recommend it to anyone who wants to
+                understand people&apos;s lives in Gaza better and what it&apos;s
+                like to live through such times.
               </p>
             </blockquote>
             <figcaption className="relative flex flex-wrap items-center gap-x-4 gap-y-4 border-t border-foreground/5 px-6 py-4 sm:flex-nowrap">
