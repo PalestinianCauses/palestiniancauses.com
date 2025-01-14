@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import Image from "next/image";
 
@@ -55,7 +55,7 @@ export const About = function About() {
             </h3>
             <ul className="mt-8 space-y-5 text-muted-foreground">
               <li className="flex items-center gap-x-3">
-                <div className="m-1 size-2 flex-none rounded-full bg-tertiary text-tertiary ring-4 ring-tertiary/30" />
+                <div className="m-1 size-2 flex-none rounded-full bg-secondary text-secondary ring-4 ring-secondary/30" />
                 <span>
                   <strong className="font-medium text-foreground">
                     Authentic Voices:
@@ -64,7 +64,7 @@ export const About = function About() {
                 </span>
               </li>
               <li className="flex items-center gap-x-3">
-                <div className="m-1 size-2 flex-none rounded-full bg-tertiary text-tertiary ring-4 ring-tertiary/30" />
+                <div className="m-1 size-2 flex-none rounded-full bg-secondary text-secondary ring-4 ring-secondary/30" />
                 <span>
                   <strong className="font-medium text-foreground">
                     Unique Format:
@@ -73,7 +73,7 @@ export const About = function About() {
                 </span>
               </li>
               <li className="flex items-center gap-x-3">
-                <div className="m-1 size-2 flex-none rounded-full bg-tertiary text-tertiary ring-4 ring-tertiary/30" />
+                <div className="m-1 size-2 flex-none rounded-full bg-secondary text-secondary ring-4 ring-secondary/30" />
                 <span>
                   <strong className="font-medium text-foreground">
                     A Global Message:

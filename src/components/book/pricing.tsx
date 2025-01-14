@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 import { CheckIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 
@@ -56,7 +56,7 @@ export const Pricing = async function Pricing() {
                 <li key={experience} className="flex gap-x-3">
                   <CheckIcon
                     aria-hidden="true"
-                    className="h-6 w-5 flex-none text-tertiary"
+                    className="h-6 w-5 flex-none text-secondary"
                   />
                   {experience}
                 </li>

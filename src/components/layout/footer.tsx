@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 import Image from "next/image";
 import Link from "next/link";
 
@@ -78,7 +78,7 @@ export const Footer = function Footer() {
             </p>
             <div className="mt-8 flex justify-center">
               <Button
-                variant="tertiary-2"
+                variant="secondary"
                 disabled
                 className="pointer-events-none italic opacity-50">
                 About us (coming soon)
@@ -97,7 +97,7 @@ export const Footer = function Footer() {
                 className="!static !h-auto !w-16 object-cover"
               />
               <h3 className="mt-6 text-xl font-semibold text-foreground">
-                PalestinianCauses <span className="text-tertiary-2">.</span>
+                PalestinianCauses <span className="text-secondary">.</span>
               </h3>
               <p className="mt-2 text-base text-muted-foreground">
                 PalestinianCauses is a brand owned by PalestinianCauses LLC.

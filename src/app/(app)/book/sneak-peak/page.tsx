@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -88,7 +88,7 @@ export default function SneakPeakPage() {
           <div className="flex flex-col items-start gap-2">
             <Button
               variant="outline"
-              className="rounded-full border-0 bg-tertiary/15 text-foreground ring-1 ring-inset ring-tertiary/35 hover:bg-tertiary"
+              className="rounded-full border-0 bg-secondary/15 text-foreground ring-1 ring-inset ring-secondary/35 hover:bg-secondary"
               asChild>
               <span>Apr 1, 2024</span>
             </Button>

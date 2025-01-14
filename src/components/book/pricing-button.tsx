@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 /* eslint-disable no-shadow */
 
 import { useActionState, useEffect } from "react";
@@ -71,7 +71,7 @@ export const PricingButton = function PricingButton({
 
           await redirectToCheckout();
         }}>
-        <Button type="submit" variant="tertiary" className="mt-10 w-full">
+        <Button type="submit" variant="secondary" className="mt-10 w-full">
           Get access
         </Button>
       </form>

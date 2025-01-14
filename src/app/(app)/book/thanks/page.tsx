@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 import { MailCheckIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -17,7 +17,7 @@ export default function ThanksPage() {
         <div className="text-center">
           <Button
             variant="outline"
-            className="gap-3 rounded-full border-0 bg-tertiary-2/15 px-5 py-6 text-lg text-foreground ring-1 ring-inset ring-tertiary-2/35 hover:bg-tertiary-2"
+            className="gap-3 rounded-full border-0 bg-secondary/15 px-5 py-6 text-lg text-foreground ring-1 ring-inset ring-secondary/35 hover:bg-secondary"
             asChild>
             <p>
               <MailCheckIcon className="!size-6" />{" "}
@@ -33,7 +33,7 @@ export default function ThanksPage() {
             unimaginable hardships.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Button variant="tertiary-2" asChild>
+            <Button variant="secondary" asChild>
               <Link href="/">Go Back Home</Link>
             </Button>
             <Button variant="link" asChild>

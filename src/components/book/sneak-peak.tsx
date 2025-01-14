@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CheckCircleIcon } from "lucide-react";
 import Image from "next/image";
@@ -46,7 +46,7 @@ export const SneakPeak = function SneakPeak() {
                 <li key={benefit} className="flex gap-x-3">
                   <CheckCircleIcon
                     aria-hidden="true"
-                    className="h-7 w-5 flex-none text-tertiary-2"
+                    className="h-7 w-5 flex-none text-secondary"
                   />
                   {benefit}
                 </li>
