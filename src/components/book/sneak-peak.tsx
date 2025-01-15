@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CheckCircleIcon } from "lucide-react";
 import Image from "next/image";
@@ -19,7 +19,7 @@ export const SneakPeak = function SneakPeak() {
       data-section="sneak-peak"
       className="relative isolate">
       <Container>
-        <div className="mx-auto flex max-w-2xl flex-col gap-16 rounded-3xl bg-foreground/5 px-6 py-16 ring-1 ring-foreground/10 sm:p-8 lg:mx-0 lg:max-w-none lg:flex-row lg:items-center lg:py-20 xl:gap-x-20 xl:px-20">
+        <div className="mx-auto flex max-w-2xl flex-col gap-16 rounded-3xl bg-foreground/5 px-6 py-6 ring-1 ring-foreground/10 sm:p-8 lg:mx-0 lg:max-w-none lg:flex-row lg:items-center lg:py-20 xl:gap-x-20 xl:px-20">
           <div className="shrink-1 relative grow basis-0 rounded-3xl bg-foreground/5 p-3 shadow-2xl ring-1 ring-inset ring-foreground/10">
             <Image
               src="/book/p-05.png"
@@ -52,7 +52,7 @@ export const SneakPeak = function SneakPeak() {
                 </li>
               ))}
             </ul>
-            <div className="mt-16 flex gap-x-4">
+            <div className="mt-16 flex flex-col gap-y-4 sm:flex-row sm:gap-x-4">
               <Button size="lg" asChild>
                 <Link href="/book/sneak-peak">Get your free sample</Link>
               </Button>

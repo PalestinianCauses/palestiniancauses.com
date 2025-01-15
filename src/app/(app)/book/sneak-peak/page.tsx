@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -9,7 +9,7 @@ export default function SneakPeakPage() {
   return (
     <main className="relative py-48">
       <HeroBackgroundPattern />
-      <div className="absolute left-5 top-5 z-10">
+      <div className="absolute left-6 top-6 z-10">
         <Button variant="outline" className="rounded-full" asChild>
           <Link href="/book">
             <ChevronLeftIcon className="size-5" />
@@ -17,7 +17,7 @@ export default function SneakPeakPage() {
           </Link>
         </Button>
       </div>
-      <div className="mx-auto max-w-3xl text-lg/9 text-muted-foreground">
+      <div className="mx-auto max-w-3xl px-6 text-lg/9 text-muted-foreground lg:px-8">
         <section
           id="sneak-peak-01"
           data-section="sneak-peak-01"
