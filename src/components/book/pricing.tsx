@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 import { CheckIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 
@@ -9,7 +9,7 @@ import { Container } from "../globals/container";
 import { PricingButton } from "./pricing-button";
 
 export const Pricing = async function Pricing() {
-  const product = await getProduct("a-human-but-from-gaza-e-book");
+  const product = await getProduct("a-human-but-from-gaza-e-book-free");
 
   if (!product) return notFound();
 

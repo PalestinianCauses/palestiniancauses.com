@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 /* eslint-disable no-shadow */
 
 import { HeartIcon } from "lucide-react";
@@ -10,6 +10,7 @@ import {
   createCartPlusSetCookie,
   insertItem,
   redirectToCheckout,
+  removeCartPlusRemoveCookie,
 } from "@/actions/cart";
 import { useCart } from "@/contexts/cart";
 import { useProduct } from "@/contexts/product";
@@ -41,10 +42,7 @@ export const PricingButton = function PricingButton({
     }).render("#donate-button");
   }, []);
 
-  const {
-    variants,
-    priceRange: { minVariantPrice },
-  } = product;
+  const { variants } = product;
 
   const variant = variants.find((variant: ProductVariant) =>
     variant.selectedOptions.every(
@@ -59,6 +57,10 @@ export const PricingButton = function PricingButton({
   const variantFinal = variants.find(
     (variant) => variant.id === variantIdSelected,
   )!;
+
+  useEffect(() => {
+    removeCartPlusRemoveCookie();
+  }, []);
 
   useEffect(() => {
     if (!cart) createCartPlusSetCookie();
@@ -81,10 +83,10 @@ export const PricingButton = function PricingButton({
       </p>
       <p className="mt-6 flex items-baseline justify-center gap-x-2">
         <span className="text-5xl font-semibold tracking-tight text-foreground">
-          Only {Number(minVariantPrice.amount).toFixed(0)}
+          Only 15
         </span>
         <span className="text-sm/6 font-medium tracking-wide text-muted-foreground">
-          {minVariantPrice.currencyCode}
+          USD
         </span>
       </p>
       <form

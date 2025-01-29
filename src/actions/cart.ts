@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -37,6 +37,11 @@ export const insertItem = async function insertItem(
     return "Error adding item to cart.";
   }
 };
+
+export const removeCartPlusRemoveCookie =
+  async function removeCartPlusRemoveCookie() {
+    (await cookies()).delete("cartId");
+  };
 
 export const redirectToCheckout = async function redirectToCheckout() {
   const cartId = (await cookies()).get("cartId")?.value;
