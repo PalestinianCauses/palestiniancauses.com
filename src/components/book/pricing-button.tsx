@@ -1,9 +1,10 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 /* eslint-disable no-shadow */
 
 import { HeartIcon } from "lucide-react";
+import Link from "next/link";
 import { startTransition, useActionState, useEffect } from "react";
 
 import {
@@ -27,20 +28,6 @@ export const PricingButton = function PricingButton({
 
   const { cart, insertCartItem } = useCart();
   const { state } = useProduct();
-
-  useEffect(() => {
-    // @ts-expect-error PayPal is not defined
-    // eslint-disable-next-line no-undef
-    PayPal.Donation.Button({
-      env: "production",
-      hosted_button_id: process.env.NEXT_PUBLIC_PAYPAL_HOSTED_BUTTON_ID,
-      image: {
-        src: "https://pics.paypal.com/00/s/ZWRhZmExMzEtYmZmOC00OTM4LThhYzYtZGEwYTUwYTM2MDQx/file.PNG",
-        alt: "Support a cause by donating.",
-        title: "Support a cause by donating.",
-      },
-    }).render("#donate-button");
-  }, []);
 
   const { variants } = product;
 
@@ -75,9 +62,6 @@ export const PricingButton = function PricingButton({
 
   return (
     <div className="mx-auto max-w-xs px-8">
-      <div id="donate-button-container" className="sr-only">
-        <div id="donate-button" />
-      </div>
       <p className="text-base font-medium text-muted-foreground">
         Support a cause by donating
       </p>
@@ -97,12 +81,18 @@ export const PricingButton = function PricingButton({
           type="button"
           variant="secondary"
           className="mt-10 w-full"
-          onClick={() => {
-            (
-              document.querySelector("#donate-button img") as HTMLImageElement
-            )?.click();
-          }}>
-          <HeartIcon /> Donate First
+          asChild>
+          <Link
+            href={[
+              "https://www.paypal.com/donate/",
+              [
+                "hosted_button_id",
+                process.env.NEXT_PUBLIC_PAYPAL_HOSTED_BUTTON_ID,
+              ].join("="),
+            ].join("?")}
+            target="_blank">
+            <HeartIcon /> Donate First
+          </Link>
         </Button>
         <Button
           type="submit"

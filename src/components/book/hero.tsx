@@ -1,5 +1,5 @@
-// REVIEWED - 06
-import { ChevronRightIcon } from "lucide-react";
+// REVIEWED - 07
+import { ChevronRightIcon, HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -67,8 +67,16 @@ export const Hero = function Hero() {
                 <Link href="#pricing">Get Your Free Copy</Link>
               </Button>
               <Button variant="link" asChild className="text-base">
-                <Link href="#pricing">
-                  Donate <ChevronRightIcon className="size-5" />
+                <Link
+                  href={[
+                    "https://www.paypal.com/donate/",
+                    [
+                      "hosted_button_id",
+                      process.env.NEXT_PUBLIC_PAYPAL_HOSTED_BUTTON_ID,
+                    ].join("="),
+                  ].join("?")}
+                  target="_blank">
+                  Donate <HeartIcon className="size-5" />
                 </Link>
               </Button>
             </div>
