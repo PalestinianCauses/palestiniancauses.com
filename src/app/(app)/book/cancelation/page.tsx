@@ -1,6 +1,6 @@
 "use clients";
 
-// REVIEWED
+// REVIEWED - 01
 /* eslint-disable no-shadow */
 
 import Link from "next/link";
@@ -20,12 +20,12 @@ export default function CancelationPage() {
       <Container>
         <div className="text-center">
           <h1 className="mx-auto mt-4 max-w-3xl text-balance text-5xl font-semibold tracking-tight text-foreground sm:text-7xl">
-            You have changed your mind? It is okay.
+            Have you changed your mind? It is fine.
           </h1>
           <p className="mx-auto mt-6 max-w-3xl text-pretty text-base text-muted-foreground sm:text-lg/8">
-            Even though your donation would mean the world to us and directly
-            impact the lives of the PalestinianCauses family, we are still
-            giving you your free copy of &quot;A Human But From Gaza&quot;.
+            Even though your donation means the world to us and directly impacts
+            the lives of the PalestinianCauses family, we are still giving you
+            your free copy of &quot;A Human But From Gaza&quot;.
           </p>
           <form
             action={async () => {
