@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CheckCircleIcon } from "lucide-react";
 import Image from "next/image";
@@ -33,10 +33,10 @@ export const SneakPeak = function SneakPeak() {
             <h2
               className="font-stretch text-pretty bg-gradient-to-b from-foreground/25 via-foreground to-foreground/50 bg-cover bg-clip-text bg-center bg-no-repeat text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
               style={{ WebkitTextFillColor: "transparent" }}>
-              Take a Free Glimpse Into Our Book.
+              Take a Quick Glimpse Into Our Book.
             </h2>
             <p className="mt-6 text-pretty text-lg/8 text-muted-foreground">
-              Step into the world of our book with a free glimpse into two
+              Step into the world of our book with a quick glimpse into two
               powerful diaries from L. and M., complemented by two stunning
               artworks by N. Discover the resilience and creativity that shine
               through these pages.
@@ -54,10 +54,10 @@ export const SneakPeak = function SneakPeak() {
             </ul>
             <div className="mt-16 flex flex-col gap-y-4 sm:flex-row sm:gap-x-4">
               <Button size="lg" asChild>
-                <Link href="/book/sneak-peak">Get your free sample</Link>
+                <Link href="/book/sneak-peak">Get Your Quick Sample</Link>
               </Button>
               <Button variant="link" asChild>
-                <Link href="/book#pricing">Order your copy</Link>
+                <Link href="/book#pricing">Get Your Free Copy</Link>
               </Button>
             </div>
           </div>

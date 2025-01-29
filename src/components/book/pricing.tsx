@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 import { CheckIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 
@@ -44,7 +44,7 @@ export const Pricing = async function Pricing() {
               <h4 className="flex-none text-sm/6 font-medium text-foreground">
                 That means:
               </h4>
-              <div className="h-px flex-auto bg-border" />
+              <div className="h-px flex-auto bg-foreground/10" />
             </div>
             <ul className="is mt-8 grid grid-cols-1 gap-4 text-sm/6 text-foreground sm:grid-cols-2 sm:gap-6">
               {[

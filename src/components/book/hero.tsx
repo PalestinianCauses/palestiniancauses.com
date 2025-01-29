@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -64,11 +64,11 @@ export const Hero = function Hero() {
                 size="lg"
                 asChild
                 className="text-base">
-                <Link href="#pricing">Support Gaza: Order Now</Link>
+                <Link href="#pricing">Get Your Free Copy</Link>
               </Button>
               <Button variant="link" asChild className="text-base">
-                <Link href="#about">
-                  Learn more <ChevronRightIcon className="size-5" />
+                <Link href="#pricing">
+                  Donate <ChevronRightIcon className="size-5" />
                 </Link>
               </Button>
             </div>

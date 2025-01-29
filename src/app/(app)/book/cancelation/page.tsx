@@ -1,6 +1,6 @@
 "use clients";
 
-// REVIEWED - 02
+// REVIEWED
 /* eslint-disable no-shadow */
 
 import Link from "next/link";
@@ -10,22 +10,22 @@ import { HeroBackgroundPattern } from "@/components/book/hero-background-pattern
 import { Container } from "@/components/globals/container";
 import { Button } from "@/components/ui/button";
 
-export default function ThanksPage() {
+export default function CancelationPage() {
   return (
     <main
-      id="thanks"
-      data-section="thanks"
+      id="cancelation"
+      data-section="cancelation"
       className="grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
       <HeroBackgroundPattern />
       <Container>
         <div className="text-center">
           <h1 className="mx-auto mt-4 max-w-3xl text-balance text-5xl font-semibold tracking-tight text-foreground sm:text-7xl">
-            Thank you for your donation ❤️!
+            You have changed your mind? It is okay.
           </h1>
           <p className="mx-auto mt-6 max-w-3xl text-pretty text-base text-muted-foreground sm:text-lg/8">
-            Your support means the world to us and directly impacts the lives of
-            the PalestinianCauses family, helping us to rebuild after
-            unimaginable hardships.
+            Even though your donation would mean the world to us and directly
+            impact the lives of the PalestinianCauses family, we are still
+            giving you your free copy of &quot;A Human But From Gaza&quot;.
           </p>
           <form
             action={async () => {
@@ -36,7 +36,7 @@ export default function ThanksPage() {
             className="mt-10 flex items-center justify-center gap-x-6">
             <Button variant="secondary">Get Your Free Copy</Button>
             <Button variant="link" asChild>
-              <Link href="/">Go Back Home</Link>
+              <Link href="/#pricing">Donate Again</Link>
             </Button>
           </form>
         </div>

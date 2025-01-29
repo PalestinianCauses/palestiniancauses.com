@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { PropsWithChildren } from "react";
@@ -26,6 +26,10 @@ const RootLayout = async function RootLayout({ children }: PropsWithChildren) {
           <ProductProvider>{children}</ProductProvider>
         </CartProvider>
         <Footer />
+        <script
+          async
+          src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js"
+        />
       </body>
     </html>
   );

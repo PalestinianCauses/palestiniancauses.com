@@ -1,9 +1,10 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 /* eslint-disable no-shadow */
 
-import { useActionState, useEffect } from "react";
+import { HeartIcon } from "lucide-react";
+import { startTransition, useActionState, useEffect } from "react";
 
 import {
   createCartPlusSetCookie,
@@ -27,8 +28,18 @@ export const PricingButton = function PricingButton({
   const { state } = useProduct();
 
   useEffect(() => {
-    if (!cart) createCartPlusSetCookie();
-  }, [cart]);
+    // @ts-expect-error PayPal is not defined
+    // eslint-disable-next-line no-undef
+    PayPal.Donation.Button({
+      env: "production",
+      hosted_button_id: process.env.NEXT_PUBLIC_PAYPAL_HOSTED_BUTTON_ID,
+      image: {
+        src: "https://pics.paypal.com/00/s/ZWRhZmExMzEtYmZmOC00OTM4LThhYzYtZGEwYTUwYTM2MDQx/file.PNG",
+        alt: "Support a cause by donating.",
+        title: "Support a cause by donating.",
+      },
+    }).render("#donate-button");
+  }, []);
 
   const {
     variants,
@@ -49,10 +60,24 @@ export const PricingButton = function PricingButton({
     (variant) => variant.id === variantIdSelected,
   )!;
 
+  useEffect(() => {
+    if (!cart) createCartPlusSetCookie();
+
+    startTransition(async () => {
+      if (cart?.totalQuantity === 0) {
+        insertCartItem(product, variantFinal);
+        await variantPlusAction();
+      }
+    });
+  }, [cart, product, variantFinal, insertCartItem, variantPlusAction]);
+
   return (
     <div className="mx-auto max-w-xs px-8">
+      <div id="donate-button-container" className="sr-only">
+        <div id="donate-button" />
+      </div>
       <p className="text-base font-medium text-muted-foreground">
-        Support a cause by paying once.
+        Support a cause by donating
       </p>
       <p className="mt-6 flex items-baseline justify-center gap-x-2">
         <span className="text-5xl font-semibold tracking-tight text-foreground">
@@ -64,20 +89,27 @@ export const PricingButton = function PricingButton({
       </p>
       <form
         action={async () => {
-          if (cart?.totalQuantity === 0) {
-            insertCartItem(product, variantFinal);
-            await variantPlusAction();
-          }
-
           await redirectToCheckout();
         }}>
-        <Button type="submit" variant="secondary" className="mt-10 w-full">
-          Get access
+        <Button
+          type="button"
+          variant="secondary"
+          className="mt-10 w-full"
+          onClick={() => {
+            (
+              document.querySelector("#donate-button img") as HTMLImageElement
+            )?.click();
+          }}>
+          <HeartIcon /> Donate First
+        </Button>
+        <Button
+          type="submit"
+          variant="link"
+          className="mx-auto mt-6 max-w-sm whitespace-normal text-center text-xs/5 text-muted-foreground">
+          No, I just want my free copy of &quot;A Human But From Gaza&quot;
+          e-book.
         </Button>
       </form>
-      <p className="mt-6 text-xs/5 text-muted-foreground">
-        The current pricing is for our e-book, our hard-copy is coming soon.
-      </p>
     </div>
   );
 };
