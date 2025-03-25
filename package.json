@@ -1,5 +1,5 @@
 {
-  "reviewed": "true - 07",
+  "reviewed": "true - 08",
   "name": "shawqi-stack",
   "version": "0.1.0",
   "private": true,
@@ -49,6 +49,7 @@
     "cmdk": "1.0.0",
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.1",
+    "frappe-react-sdk": "1.11.0",
     "graphql": "16.9.0",
     "input-otp": "1.4.1",
     "lucide-react": "0.460.0",
