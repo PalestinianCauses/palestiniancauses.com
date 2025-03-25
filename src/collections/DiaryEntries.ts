@@ -1,6 +1,8 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CollectionConfig } from "payload";
+
+import { populateUser } from "@/lib/payload/hooks/diary-entry";
 
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
@@ -36,5 +38,15 @@ export const DiaryEntries: CollectionConfig = {
       defaultValue: "Pending",
       required: false,
     },
+    {
+      label: "Author",
+      name: "author",
+      type: "relationship",
+      relationTo: "users",
+      hasMany: false,
+    },
   ],
+  hooks: {
+    beforeChange: [populateUser],
+  },
 };
