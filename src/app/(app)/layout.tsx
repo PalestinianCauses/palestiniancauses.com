@@ -1,4 +1,4 @@
-// REVIEWED - 09
+// REVIEWED - 10
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { PropsWithChildren } from "react";
@@ -8,6 +8,8 @@ import { Footer } from "@/components/layout/footer";
 import { CartProvider } from "@/contexts/cart";
 import { ProductProvider } from "@/contexts/product";
 import { getCart } from "@/lib/shopify";
+
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: { template: "%s | PalestinianCauses", default: "PalestinianCauses" },
@@ -23,7 +25,9 @@ const RootLayout = async function RootLayout({ children }: PropsWithChildren) {
     <html lang="en" className="dark">
       <body>
         <CartProvider cartPromise={cart}>
-          <ProductProvider>{children}</ProductProvider>
+          <ProductProvider>
+            <Providers>{children}</Providers>
+          </ProductProvider>
         </CartProvider>
         <Footer />
         <script
