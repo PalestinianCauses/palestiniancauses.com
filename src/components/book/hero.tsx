@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 import { ChevronRightIcon, HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,7 +16,7 @@ export const Hero = function Hero() {
       className="relative isolate overflow-hidden">
       <HeroBackgroundPattern />
       <Container>
-        <div className="h-full min-h-screen w-full py-12 lg:flex lg:items-center lg:gap-5 lg:py-40">
+        <div className="h-full min-h-screen w-full py-40 lg:flex lg:items-center lg:gap-5">
           <div className="relative z-20 lg:mx-0 lg:shrink lg:grow-[1.5] lg:basis-[0]">
             <Image
               src="/pc-logo-primary-foreground.png"
