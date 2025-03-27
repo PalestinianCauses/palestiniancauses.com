@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { signInSchema, SignInSchema } from "@/lib/schemas/auth";
 
 export const SignInForm = function SignInForm() {
@@ -34,23 +35,29 @@ export const SignInForm = function SignInForm() {
         <FormMessage />
       </FormItem>
       <FormItem className="mb-8">
-        <FormLabel>Password</FormLabel>
+        <div className="flex w-full items-center justify-between gap-3">
+          <FormLabel>Password</FormLabel>
+          <Button variant="link" className="h-auto p-0" asChild>
+            <Label>
+              <Link href="/password-forgot">Forgot password?</Link>
+            </Label>
+          </Button>
+        </div>
         <FormControl>
           <Input />
         </FormControl>
         <FormMessage />
       </FormItem>
-      <Button type="submit" className="mb-4">
+      <Button type="submit" className="mb-8">
         Sign in
       </Button>
       <p className="text-center text-sm text-muted-foreground">
         Not a member of our family?{" "}
-        <Link
-          href="/sign-up"
-          className="font-medium text-foreground transition-all duration-300 ease-linear hover:text-secondary-foreground hover:underline hover:underline-offset-4">
-          Join us
-        </Link>
-        .
+        <Button variant="link" className="h-auto p-0" asChild>
+          <Label>
+            <Link href="/sign-up ">Join us</Link>
+          </Label>
+        </Button>
       </p>
     </Form>
   );
