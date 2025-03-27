@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 import { ChevronRightIcon, HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,34 +16,25 @@ export const Hero = function Hero() {
       className="relative isolate overflow-hidden">
       <HeroBackgroundPattern />
       <Container>
-        <div className="h-full min-h-screen w-full py-40 lg:flex lg:items-center lg:gap-5">
+        <div className="xs:py-40 h-full min-h-screen w-full py-48 lg:flex lg:items-center lg:gap-5">
           <div className="relative z-20 lg:mx-0 lg:shrink lg:grow-[1.5] lg:basis-[0]">
-            <Image
-              src="/pc-logo-primary-foreground.png"
-              alt="PC Logo"
-              sizes="4rem"
-              fill
-              className="!static !h-auto !w-16"
-            />
-            <div className="mt-24 lg:mt-16">
-              <Link
-                href="#pricing"
-                className="inline-flex flex-col items-start space-y-6 sm:flex-row sm:items-center sm:space-x-6 sm:space-y-0">
-                <Button
-                  variant="outline"
-                  className="rounded-full border-0 bg-secondary/15 text-foreground ring-1 ring-inset ring-secondary/35 hover:bg-secondary"
-                  asChild>
-                  <span>Be Part Of The Story</span>
-                </Button>
-                <span className="inline-flex items-center space-x-2 text-sm/6 font-medium text-foreground">
-                  <span>We just published our book</span>
-                  <ChevronRightIcon
-                    aria-hidden="true"
-                    className="size-5 text-muted-foreground"
-                  />
-                </span>
-              </Link>
-            </div>
+            <Link
+              href="#pricing"
+              className="inline-flex flex-col items-start space-y-6 sm:flex-row sm:items-center sm:space-x-6 sm:space-y-0">
+              <Button
+                variant="outline"
+                className="rounded-full border-0 bg-secondary/15 text-foreground ring-1 ring-inset ring-secondary/35 hover:bg-secondary"
+                asChild>
+                <span>Be Part Of The Story</span>
+              </Button>
+              <span className="inline-flex items-center space-x-2 text-sm/6 font-medium text-foreground">
+                <span>We just published our book</span>
+                <ChevronRightIcon
+                  aria-hidden="true"
+                  className="size-5 text-muted-foreground"
+                />
+              </span>
+            </Link>
             <h1
               className="font-stretch mt-10 text-pretty bg-gradient-to-b from-foreground/25 via-foreground to-foreground/50 bg-cover bg-clip-text bg-center bg-no-repeat text-5xl font-bold tracking-tight text-foreground sm:text-7xl"
               style={{ WebkitTextFillColor: "transparent" }}>
