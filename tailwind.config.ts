@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 import colors from "tailwindcss/colors";
@@ -17,6 +17,9 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: "27rem",
+      },
       colors: {
         "background": "rgb(var(--background) / <alpha-value>)",
         "foreground": "rgb(var(--foreground) / <alpha-value>)",
