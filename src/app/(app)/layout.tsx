@@ -1,9 +1,10 @@
-// REVIEWED - 10
+// REVIEWED - 11
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { PropsWithChildren } from "react";
 import "./globals.css";
 
+import { Navbar } from "@/components/globals/navbar";
 import { Footer } from "@/components/layout/footer";
 import { CartProvider } from "@/contexts/cart";
 import { ProductProvider } from "@/contexts/product";
@@ -26,7 +27,10 @@ const RootLayout = async function RootLayout({ children }: PropsWithChildren) {
       <body>
         <CartProvider cartPromise={cart}>
           <ProductProvider>
-            <Providers>{children}</Providers>
+            <Providers>
+              <Navbar />
+              {children}
+            </Providers>
           </ProductProvider>
         </CartProvider>
         <Footer />
