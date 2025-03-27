@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import Image from "next/image";
 import { PropsWithChildren } from "react";
@@ -8,7 +8,7 @@ import { Container } from "@/components/globals/container";
 
 export default function AuthLayout({ children }: PropsWithChildren) {
   return (
-    <div className="my-40">
+    <div className="xs:my-40 my-48">
       <HeroBackgroundPattern />
       <Container className="max-w-lg">
         <Image
