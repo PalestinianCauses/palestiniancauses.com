@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { cookies } from "next/headers";
 import { PaginatedDocs } from "payload";
@@ -63,7 +63,14 @@ const signInUserPayload = async function signInUserPayload(
   return { token: response.token, user: response.user };
 };
 
-export const signIn = async function signIn(signInData: SignInSchema) {
+export type SignInResponse = {
+  data: SignInResponsePayload | null;
+  error: string | null;
+};
+
+export const signIn = async function signIn(
+  signInData: SignInSchema,
+): Promise<SignInResponse> {
   const response = {
     data: null as SignInResponsePayload | null,
     error: null as string | null,
