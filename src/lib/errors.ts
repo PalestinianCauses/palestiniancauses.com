@@ -1,9 +1,11 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 export const messages = {
   actions: {
     auth: {
       signIn: {
+        pending: "Signing in...",
+        success: "Signed in successfully.",
         notFound(email: string) {
           return ["User with", email, "email does not exist."].join(" ");
         },
@@ -15,7 +17,10 @@ export const messages = {
           ].join(" ");
         },
         serverError() {
-          return ["An error occurred while signing in."].join(" ");
+          return [
+            "An error occurred while signing in.",
+            "Please try again later.",
+          ].join(" ");
         },
       },
     },
