@@ -17,9 +17,9 @@ export default function SignInPage() {
           Welcome Back.
         </h2>
         <p className="text-center text-sm leading-normal text-muted-foreground">
-          You missed us you at{" "}
-          <span className="font-medium text-foreground">PalestinianCauses</span>
-          , didn&apos;t you?
+          Let us be united together to share{" "}
+          <span className="font-medium text-foreground">Gaza&apos;s</span>{" "}
+          voices.
         </p>
       </div>
       <SignInForm />
