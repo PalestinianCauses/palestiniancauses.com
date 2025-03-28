@@ -1,10 +1,11 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 import { signIn, SignInResponse } from "@/actions/auth";
@@ -24,6 +25,7 @@ import { messages } from "@/lib/errors";
 import { signInSchema, SignInSchema } from "@/lib/schemas/auth";
 
 export const SignInForm = function SignInForm() {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [response, setResponse] = useState<SignInResponse>({
     data: null,
@@ -42,6 +44,13 @@ export const SignInForm = function SignInForm() {
       setResponse(signInResponse);
     });
   };
+
+  useEffect(() => {
+    if (!isPending && response.data?.token)
+      setTimeout(() => {
+        router.push("/");
+      }, 250);
+  }, [router, isPending, response.data]);
 
   return (
     <Form {...form}>
