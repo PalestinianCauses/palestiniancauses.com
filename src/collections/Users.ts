@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 import type { CollectionConfig } from "payload";
 
 import { syncUserWithFrappe } from "@/lib/payload/hooks/user";
@@ -19,19 +19,20 @@ export const Users: CollectionConfig = {
       label: "First Name",
       name: "firstName",
       type: "text",
-      required: true,
+      defaultValue: "",
     },
     {
       label: "Last Name",
       name: "lastName",
       type: "text",
-      required: true,
+      defaultValue: "",
     },
     {
       admin: { hidden: true },
       label: "Role",
       name: "role",
       type: "text",
+      defaultValue: "user",
       required: true,
     },
     {
