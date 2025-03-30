@@ -1,12 +1,12 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { AuthResponse, signIn } from "@/actions/auth";
+import { AuthResponse, signIn, signUp } from "@/actions/auth";
 import { queryClient } from "@/app/(app)/providers";
 import { messages } from "@/lib/errors";
 import { AuthResponsePayload } from "@/lib/payload";
-import { SignInSchema } from "@/lib/schemas/auth";
+import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
 import { actionTryCatch } from "@/lib/utils";
 
 export const useUser = function useUser() {
@@ -14,7 +14,7 @@ export const useUser = function useUser() {
     isLoading: isPending,
     data,
     refetch,
-  } = useQuery({
+  } = useQuery<AuthResponse>({
     queryKey: ["user"],
     queryFn: async () => {
       const response: AuthResponse = { data: null, error: null };
@@ -50,7 +50,19 @@ export const useUser = function useUser() {
       return response;
     },
     onSuccess: (mutationData) => {
-      queryClient.setQueryData(["user"], mutationData.data?.user);
+      if (mutationData.data)
+        queryClient.setQueryData(["user"], mutationData.data.user);
+    },
+  });
+
+  const signUpMutation = useMutation({
+    mutationFn: async (userData: SignUpSchema) => {
+      const response = await signUp(userData);
+      return response;
+    },
+    onSuccess: (mutationData) => {
+      if (mutationData.data)
+        queryClient.setQueryData(["user"], mutationData.data.user);
     },
   });
 
@@ -59,5 +71,6 @@ export const useUser = function useUser() {
     data,
     refetch,
     signInMutation,
+    signUpMutation,
   };
 };
