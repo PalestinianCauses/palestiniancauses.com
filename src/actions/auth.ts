@@ -1,8 +1,9 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { PaginatedDocs } from "payload";
 
 import { httpStatusesMessages } from "@/lib/errors";
@@ -13,7 +14,7 @@ import {
   UserFrappe,
 } from "@/lib/frappe";
 import { AuthResponsePayload, payload } from "@/lib/payload";
-import { SignInSchema } from "@/lib/schemas/auth";
+import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
 import { actionTryCatch } from "@/lib/utils";
 import { User } from "@/payload-types";
 
@@ -21,6 +22,24 @@ const verifyUserFrappe = async function verifyUserFrappe({
   email,
 }: SignInSchema) {
   const user = await frappeDB.getDoc("User", email);
+
+  return user;
+};
+
+const createUserFrappe = async function createUserFrappe(
+  signUpData: SignUpSchema,
+) {
+  const user = await frappeDB.createDoc("User", {
+    user_type: "Website User",
+    username: [signUpData.firstName.trim(), signUpData.lastName.trim()]
+      .join("")
+      .toLowerCase(),
+    first_name: signUpData.firstName,
+    last_name: signUpData.lastName,
+    email: signUpData.email,
+    new_password: signUpData.password,
+    send_welcome_email: 0,
+  });
 
   return user;
 };
@@ -66,6 +85,18 @@ const signInUserPayload = async function signInUserPayload(
   });
 
   return { token: response.token, user: response.user };
+};
+
+const setUserCookies = async function setUserCookies(
+  name: string,
+  value: string,
+) {
+  (await cookies()).set({
+    name,
+    value,
+    secure: true,
+    httpOnly: true,
+  });
 };
 
 export type AuthResponse = {
@@ -153,13 +184,7 @@ export const signIn = async function signIn(
         }
 
         if (userDataPayload && userDataPayload.token) {
-          (await cookies()).set({
-            name: "payload-token",
-            value: userDataPayload.token,
-            httpOnly: true,
-            secure: true,
-          });
-
+          await setUserCookies("payload-token", userDataPayload.token);
           response.data = userDataPayload;
           return response;
         }
@@ -173,6 +198,79 @@ export const signIn = async function signIn(
   ) {
     response.data = null;
     response.error = httpStatusesMessages[500].signIn;
+  }
+
+  return response;
+};
+
+export const signUp = async function signUp(
+  signUpData: SignUpSchema,
+): Promise<AuthResponse> {
+  const response = {
+    data: null as AuthResponsePayload | null,
+    error: null as string | null,
+  };
+
+  const { data: dataFrappe, error: errorFrappe } = await actionTryCatch<
+    UserFrappe,
+    unknown
+  >(createUserFrappe(signUpData));
+
+  if (errorFrappe) {
+    if (isErrorFrappe(errorFrappe)) {
+      if (errorFrappe.httpStatus === 409)
+        response.error = httpStatusesMessages[409].signUp(signUpData.email);
+      else if (errorFrappe.httpStatus === 417)
+        response.error = httpStatusesMessages[417].signUp;
+    } else response.error = httpStatusesMessages[500].signUp;
+
+    return response;
+  }
+
+  if (dataFrappe) {
+    const { data: dataPayload, error: errorPayload } = await actionTryCatch<
+      User,
+      unknown
+    >(
+      createUserPayload({
+        ...signUpData,
+        role: "user",
+        frappeUserId: dataFrappe.name,
+        frappeUserRole: dataFrappe.user_type,
+        isSyncedWithFrappe: true,
+      }),
+    );
+
+    if (errorPayload) {
+      response.error = httpStatusesMessages[500].signUp;
+      return response;
+    }
+
+    if (dataPayload) {
+      const { data: userDataPayload, error: userErrorPayload } =
+        await actionTryCatch(
+          signInUserPayload({
+            email: signUpData.email,
+            password: signUpData.password,
+          }),
+        );
+
+      if (userErrorPayload) redirect("/signin");
+
+      if (userDataPayload && userDataPayload.token) {
+        await setUserCookies("payload-token", userDataPayload.token);
+        response.data = userDataPayload;
+        return response;
+      }
+    }
+  }
+
+  if (
+    (!response.data && !response.error) ||
+    (response.data && response.error)
+  ) {
+    response.data = null;
+    response.error = httpStatusesMessages[500].signUp;
   }
 
   return response;
