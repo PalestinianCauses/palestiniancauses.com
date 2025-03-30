@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { getPayload } from "payload";
 
@@ -12,7 +12,7 @@ export type ErrorPayload = {
   errors: Array<{ message: string }>;
 };
 
-export type SignInResponsePayload = {
+export type AuthResponsePayload = {
   token: string | undefined;
   user: User | undefined;
 };
