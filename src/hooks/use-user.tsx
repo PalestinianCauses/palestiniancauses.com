@@ -1,10 +1,12 @@
-// REVIEWED
+// REVIEWED - 01
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { AuthResponse } from "@/actions/auth";
+import { AuthResponse, signIn } from "@/actions/auth";
+import { queryClient } from "@/app/(app)/providers";
 import { messages } from "@/lib/errors";
 import { AuthResponsePayload } from "@/lib/payload";
+import { SignInSchema } from "@/lib/schemas/auth";
 import { actionTryCatch } from "@/lib/utils";
 
 export const useUser = function useUser() {
@@ -42,9 +44,20 @@ export const useUser = function useUser() {
     },
   });
 
+  const signInMutation = useMutation({
+    mutationFn: async (credentials: SignInSchema) => {
+      const response = await signIn(credentials);
+      return response;
+    },
+    onSuccess: (mutationData) => {
+      queryClient.setQueryData(["user"], mutationData.data?.user);
+    },
+  });
+
   return {
     isPending,
     data,
     refetch,
+    signInMutation,
   };
 };
