@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -8,9 +8,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
-import { signIn, SignInResponse } from "@/actions/auth";
+import { AuthResponse, signIn } from "@/actions/auth";
+import { FormStatus } from "@/components/globals/form-status";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -27,7 +27,7 @@ import { signInSchema, SignInSchema } from "@/lib/schemas/auth";
 export const SignInForm = function SignInForm() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [response, setResponse] = useState<SignInResponse>({
+  const [response, setResponse] = useState<AuthResponse>({
     data: null,
     error: null,
   });
@@ -57,34 +57,22 @@ export const SignInForm = function SignInForm() {
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
         className="flex flex-col items-stretch justify-center">
-        {isPending && (
-          <Card className="mb-4 rounded-md border-yellow-500/50 bg-yellow-500/25">
-            <CardHeader className="px-5 py-4">
-              <CardDescription className="font-medium text-foreground">
-                {messages.actions.auth.signIn.pending}
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        )}
-        {!isPending && response.data && (
-          <Card className="mb-4 rounded-md border-tertiary-2/50 bg-tertiary-2/25">
-            <CardHeader className="px-5 py-4">
-              <CardDescription className="font-medium text-foreground">
-                {messages.actions.auth.signIn.success}
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        )}
-        {!isPending && response.error && (
-          <Card className="mb-4 rounded-md border-destructive/50 bg-destructive/25">
-            <CardHeader className="px-5 py-4">
-              <CardDescription className="font-medium text-foreground">
-                {response.error}
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        )}
+        <FormStatus
+          isPending={{
+            true: isPending,
+            message: messages.actions.auth.signIn.pending,
+          }}
+          success={{
+            true: !isPending && Boolean(response.data),
+            message: messages.actions.auth.signIn.success,
+          }}
+          failure={{
+            true: !isPending && Boolean(response.error),
+            message: response.error ?? "",
+          }}
+        />
         <FormField
+          control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem className="mb-4">
@@ -97,9 +85,10 @@ export const SignInForm = function SignInForm() {
           )}
         />
         <FormField
+          control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem className="mb-8">
+            <FormItem className="mb-6">
               <div className="flex w-full items-center justify-between gap-3">
                 <FormLabel>Password</FormLabel>
                 <Button variant="link" className="h-auto p-0" asChild>
@@ -115,16 +104,17 @@ export const SignInForm = function SignInForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isPending} className="mb-8">
+        <Button type="submit" disabled={isPending} className="mb-6">
           Sign in
         </Button>
         <p className="text-center text-sm text-muted-foreground">
-          Not a member of our family?{" "}
+          Not a family member yet?{" "}
           <Button variant="link" className="h-auto p-0" asChild>
             <Label>
-              <Link href="/sign-up ">Join us</Link>
+              <Link href="/signup">Be one</Link>
             </Label>
           </Button>
+          .
         </p>
       </form>
     </Form>
