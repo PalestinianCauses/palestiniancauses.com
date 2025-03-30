@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { FrappeApp } from "frappe-js-sdk";
 
@@ -25,6 +25,8 @@ export type UserFrappe = {
   username: string;
   name: string;
   email: string;
+  new_password: string;
+  send_welcome_email: number;
 };
 
 export type ErrorFrappe = {
