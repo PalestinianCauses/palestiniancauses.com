@@ -1,13 +1,41 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
-import { CollectionConfig } from "payload";
+import { Access, CollectionConfig, FieldAccess } from "payload";
 
-import { populateUser } from "@/lib/payload/hooks/diary-entry";
+const isAdmin: FieldAccess = function isAdmin({ req: { user } }) {
+  console.log(user);
+  if (!user) return false;
+
+  return user.role === "admin";
+};
+
+const isAuthenticated: Access = function isAuthenticated({ req: { user } }) {
+  if (!user) return false;
+
+  return true;
+};
+
+const isAuthorized: Access = function isAuthorized({ req: { user } }) {
+  if (!user) return false;
+
+  if (user.role === "admin" || user.role === "system-user") return true;
+
+  return {
+    author: {
+      equals: user.id,
+    },
+  };
+};
 
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
+  access: {
+    read: () => true,
+    create: isAuthenticated,
+    update: isAuthorized,
+    delete: isAuthorized,
+  },
   admin: { useAsTitle: "title" },
-  auth: true,
   fields: [
     {
       label: "Title",
@@ -31,22 +59,38 @@ export const DiaryEntries: CollectionConfig = {
       required: true,
     },
     {
+      access: { update: isAdmin },
       label: "Status",
       name: "status",
       type: "select",
-      options: ["Pending", "Rejected", "Approved", "Published", "Archived"],
-      defaultValue: "Pending",
-      required: false,
+      options: [
+        { label: "Pending", value: "pending" },
+        { label: "Rejected", value: "rejected" },
+        { label: "Approved", value: "approved" },
+        { label: "Published", value: "published" },
+        { label: "Archived", value: "archived" },
+      ],
+      defaultValue: "pending",
+      required: true,
     },
     {
       label: "Author",
       name: "author",
       type: "relationship",
       relationTo: "users",
-      hasMany: false,
+      required: true,
+    },
+    {
+      label: "Is Authentic",
+      name: "isAuthentic",
+      type: "checkbox",
+      required: true,
+    },
+    {
+      label: "Is Anonymous",
+      name: "isAnonymous",
+      type: "checkbox",
+      required: true,
     },
   ],
-  hooks: {
-    beforeChange: [populateUser],
-  },
 };
