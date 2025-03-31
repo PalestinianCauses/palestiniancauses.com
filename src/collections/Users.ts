@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 import type { CollectionConfig } from "payload";
 
 import { syncUserWithFrappe } from "@/lib/payload/hooks/user";
@@ -6,7 +6,13 @@ import { syncUserWithFrappe } from "@/lib/payload/hooks/user";
 export const Users: CollectionConfig = {
   slug: "users",
   admin: { useAsTitle: "email" },
-  auth: true,
+  auth: {
+    cookies: {
+      sameSite: "Strict",
+      domain: "localhost:3000",
+      secure: true,
+    },
+  },
   fields: [
     {
       label: "Email",
@@ -14,6 +20,7 @@ export const Users: CollectionConfig = {
       type: "email",
       required: true,
       unique: true,
+      index: false,
     },
     {
       label: "First Name",
@@ -31,8 +38,9 @@ export const Users: CollectionConfig = {
       admin: { hidden: true },
       label: "Role",
       name: "role",
-      type: "text",
-      defaultValue: "user",
+      type: "select",
+      options: ["admin", "system-user", "website-user"],
+      defaultValue: "website-user",
       required: true,
     },
     {
