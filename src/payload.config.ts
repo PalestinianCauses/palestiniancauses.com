@@ -1,8 +1,8 @@
-// REVIEWED - 02
+// REVIEWED - 03
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { mongooseAdapter } from "@payloadcms/db-mongodb";
+import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { buildConfig } from "payload";
 import sharp from "sharp";
@@ -16,7 +16,9 @@ const dirname = path.dirname(filename);
 
 export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || "",
-  db: mongooseAdapter({ url: process.env.DATABASE_URI || "" }),
+  db: postgresAdapter({
+    pool: { connectionString: process.env.DATABASE_URI || "" },
+  }),
   typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },
   editor: lexicalEditor(),
   admin: { user: Users.slug, importMap: { baseDir: path.resolve(dirname) } },
@@ -24,3 +26,5 @@ export default buildConfig({
   sharp,
   plugins: [],
 });
+
+// PCE-Neon-0710-2023-0822-2003-PCE
