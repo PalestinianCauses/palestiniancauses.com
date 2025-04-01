@@ -1,14 +1,14 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { AuthResponse, signIn } from "@/actions/auth";
+import { AuthResponse } from "@/actions/auth";
 import { FormStatus } from "@/components/globals/form-status";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,12 +21,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUser } from "@/hooks/use-user";
 import { messages } from "@/lib/errors";
 import { signInSchema, SignInSchema } from "@/lib/schemas/auth";
 
 export const SignInForm = function SignInForm() {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const { signIn } = useUser();
   const [response, setResponse] = useState<AuthResponse>({
     data: null,
     error: null,
@@ -39,18 +40,17 @@ export const SignInForm = function SignInForm() {
   });
 
   const handleSubmit = function handleSubmit(data: SignInSchema) {
-    startTransition(async () => {
-      const signInResponse = await signIn(data);
-      setResponse(signInResponse);
+    signIn.mutate(data, {
+      onSuccess: (responseData) => {
+        setResponse(responseData);
+        if (!responseData.error) {
+          setTimeout(() => {
+            router.push("/book");
+          }, 500);
+        }
+      },
     });
   };
-
-  useEffect(() => {
-    if (!isPending && response.data?.token)
-      setTimeout(() => {
-        router.push("/");
-      }, 250);
-  }, [router, isPending, response.data]);
 
   return (
     <Form {...form}>
@@ -59,16 +59,16 @@ export const SignInForm = function SignInForm() {
         className="flex flex-col items-stretch justify-center">
         <FormStatus
           isPending={{
-            true: isPending,
+            true: signIn.isPending,
             message: messages.actions.auth.signIn.pending,
           }}
           success={{
-            true: !isPending && Boolean(response.data),
+            true: !signIn.isPending && Boolean(response.data),
             message: messages.actions.auth.signIn.success,
           }}
           failure={{
-            true: !isPending && Boolean(response.error),
-            message: response.error ?? "",
+            true: !signIn.isPending && Boolean(response.error),
+            message: response.error || "",
           }}
         />
         <FormField
@@ -78,7 +78,7 @@ export const SignInForm = function SignInForm() {
             <FormItem className="mb-4">
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} disabled={signIn.isPending} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -91,20 +91,20 @@ export const SignInForm = function SignInForm() {
             <FormItem className="mb-6">
               <div className="flex w-full items-center justify-between gap-3">
                 <FormLabel>Password</FormLabel>
-                <Button variant="link" className="h-auto p-0" asChild>
+                {/* <Button variant="link" className="h-auto p-0" asChild>
                   <Label>
                     <Link href="/password-forgot">Forgot password?</Link>
                   </Label>
-                </Button>
+                </Button> */}
               </div>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} type="password" disabled={signIn.isPending} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isPending} className="mb-6">
+        <Button type="submit" disabled={signIn.isPending} className="mb-6">
           Sign in
         </Button>
         <p className="text-center text-sm text-muted-foreground">
