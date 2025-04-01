@@ -1,4 +1,4 @@
-/* REVIEWED - 06 */
+/* REVIEWED - 07 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -93,6 +93,7 @@
 @layer utilities {
   .font-stretch {
     font-family:
+      "Gilroy",
       system-ui,
       -apple-system,
       BlinkMacSystemFont,
