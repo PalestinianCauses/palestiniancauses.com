@@ -1,9 +1,8 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Access, CollectionConfig, FieldAccess } from "payload";
 
-const isAdmin: FieldAccess = function isAdmin({ req: { user } }) {
-  console.log(user);
+export const isAdmin: FieldAccess = function isAdmin({ req: { user } }) {
   if (!user) return false;
 
   return user.role === "admin";
@@ -35,7 +34,7 @@ export const DiaryEntries: CollectionConfig = {
     update: isAuthorized,
     delete: isAuthorized,
   },
-  admin: { useAsTitle: "title" },
+  admin: { hidden: true, useAsTitle: "title" },
   fields: [
     {
       label: "Title",
@@ -74,6 +73,7 @@ export const DiaryEntries: CollectionConfig = {
       required: true,
     },
     {
+      access: { update: isAdmin },
       label: "Author",
       name: "author",
       type: "relationship",
