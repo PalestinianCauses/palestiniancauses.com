@@ -1,14 +1,14 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { AuthResponse, signUp } from "@/actions/auth";
+import { AuthResponse } from "@/actions/auth";
 import { FormStatus } from "@/components/globals/form-status";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,12 +21,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUser } from "@/hooks/use-user";
 import { messages } from "@/lib/errors";
 import { signUpSchema, SignUpSchema } from "@/lib/schemas/auth";
 
 export const SignUpForm = function SignUpForm() {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const { signUp } = useUser();
   const [response, setResponse] = useState<AuthResponse>({
     data: null,
     error: null,
@@ -39,18 +40,17 @@ export const SignUpForm = function SignUpForm() {
   });
 
   const handleSubmit = async function handleSubmit(data: SignUpSchema) {
-    startTransition(async () => {
-      const signUpResponse = await signUp(data);
-      setResponse(signUpResponse);
+    signUp.mutate(data, {
+      onSuccess: (responseData) => {
+        setResponse(responseData);
+        if (!responseData.error) {
+          setTimeout(() => {
+            router.push("/book");
+          }, 500);
+        }
+      },
     });
   };
-
-  useEffect(() => {
-    if (!isPending && response.data?.token)
-      setTimeout(() => {
-        router.push("/");
-      }, 250);
-  }, [router, isPending, response.data]);
 
   return (
     <Form {...form}>
@@ -59,16 +59,16 @@ export const SignUpForm = function SignUpForm() {
         className="flex flex-col items-stretch justify-center">
         <FormStatus
           isPending={{
-            true: isPending,
+            true: signUp.isPending,
             message: messages.actions.auth.signUp.pending,
           }}
           success={{
-            true: !isPending && Boolean(response.data),
+            true: !signUp.isPending && Boolean(response.data),
             message: messages.actions.auth.signUp.success,
           }}
           failure={{
-            true: !isPending && Boolean(response.error),
-            message: response.error ?? "",
+            true: !signUp.isPending && Boolean(response.error),
+            message: response.error || "",
           }}
         />
         <div className="mb-4 grid w-full grid-cols-2 items-start gap-4">
@@ -79,7 +79,7 @@ export const SignUpForm = function SignUpForm() {
               <FormItem>
                 <FormLabel>First name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={signUp.isPending} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -92,7 +92,7 @@ export const SignUpForm = function SignUpForm() {
               <FormItem>
                 <FormLabel>Last name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={signUp.isPending} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -106,7 +106,7 @@ export const SignUpForm = function SignUpForm() {
             <FormItem className="mb-4">
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} disabled={signUp.isPending} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -119,13 +119,13 @@ export const SignUpForm = function SignUpForm() {
             <FormItem className="mb-6">
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} type="password" disabled={signUp.isPending} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isPending} className="mb-6">
+        <Button type="submit" disabled={signUp.isPending} className="mb-6">
           Sign up
         </Button>
         <p className="text-center text-sm text-muted-foreground">
