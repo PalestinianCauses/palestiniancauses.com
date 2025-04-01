@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 import type { CollectionConfig } from "payload";
 
 import { isAdmin } from "./DiaryEntries";
@@ -15,7 +15,7 @@ export const Users: CollectionConfig = {
   auth: {
     cookies: {
       sameSite: "Strict",
-      domain: "localhost:3000",
+      domain: "palestiniancauses.com",
       secure: true,
     },
   },
