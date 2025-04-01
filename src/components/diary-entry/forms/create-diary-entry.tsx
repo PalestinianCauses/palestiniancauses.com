@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -64,7 +64,11 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
     createDiaryEntry.mutate(
       {
         title: data.title,
-        date: data.date.toLocaleDateString(),
+        date: [
+          data.date.toLocaleDateString().split("/")[2],
+          data.date.toLocaleDateString().split("/")[1],
+          data.date.toLocaleDateString().split("/")[0],
+        ].join("-"),
         content: data.content,
         isAuthentic: data.isAuthentic,
         isAnonymous: data.isAnonymous,
