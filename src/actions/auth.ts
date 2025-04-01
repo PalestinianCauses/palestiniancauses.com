@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -84,7 +84,7 @@ const signInUserPayload = async function signInUserPayload(
     data: signInData,
   });
 
-  return { token: response.token, user: response.user };
+  return { token: response.token || null, user: response.user || null };
 };
 
 const setUserCookies = async function setUserCookies(
@@ -157,7 +157,10 @@ export const signIn = async function signIn(
             createUserPayload({
               email: signInData.email,
               password: signInData.password,
-              role: "user",
+              role: dataFrappe.user_type.toLowerCase().split(" ").join("-") as
+                | "admin"
+                | "system-user"
+                | "website-user",
               frappeUserId: dataFrappe.name,
               frappeUserRole: dataFrappe.user_type,
               isSyncedWithFrappe: true,
@@ -234,7 +237,10 @@ export const signUp = async function signUp(
     >(
       createUserPayload({
         ...signUpData,
-        role: "user",
+        role: dataFrappe.user_type.toLowerCase().split(" ").join("-") as
+          | "admin"
+          | "system-user"
+          | "website-user",
         frappeUserId: dataFrappe.name,
         frappeUserRole: dataFrappe.user_type,
         isSyncedWithFrappe: true,
@@ -274,4 +280,8 @@ export const signUp = async function signUp(
   }
 
   return response;
+};
+
+export const signOut = async function signOut() {
+  (await cookies()).delete("payload-token");
 };
