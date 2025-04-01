@@ -1,11 +1,17 @@
-// REVIEWED - 03
+// REVIEWED - 04
 import type { CollectionConfig } from "payload";
 
-import { syncUserWithFrappe } from "@/lib/payload/hooks/user";
+import { isAdmin } from "./DiaryEntries";
 
 export const Users: CollectionConfig = {
   slug: "users",
-  admin: { useAsTitle: "email" },
+  access: {
+    read: () => true,
+    create: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
+  },
+  admin: { hidden: true, useAsTitle: "email" },
   auth: {
     cookies: {
       sameSite: "Strict",
@@ -20,7 +26,6 @@ export const Users: CollectionConfig = {
       type: "email",
       required: true,
       unique: true,
-      index: false,
     },
     {
       label: "First Name",
@@ -66,7 +71,4 @@ export const Users: CollectionConfig = {
       defaultValue: false,
     },
   ],
-  hooks: {
-    afterChange: [syncUserWithFrappe],
-  },
 };
