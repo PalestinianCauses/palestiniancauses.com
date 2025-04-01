@@ -1,9 +1,10 @@
 {
-  "reviewed": "true - 12",
+  "reviewed": "true - 13",
   "name": "shawqi-stack",
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@9.15.0",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
