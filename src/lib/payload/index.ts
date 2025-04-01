@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { getPayload } from "payload";
 
@@ -7,14 +7,17 @@ import configPromise from "@payload-config";
 
 export const payload = await getPayload({ config: configPromise });
 
+export type ErrorsPayload = Array<{ message: string }>;
+
 export type ErrorPayload = {
   status: number;
-  errors: Array<{ message: string }>;
+  message?: string;
+  errors?: ErrorsPayload;
 };
 
 export type AuthResponsePayload = {
-  token: string | undefined;
-  user: User | undefined;
+  token: string | null;
+  user: User | null;
 };
 
 export const isErrorPayload = function isErrorPayload(
@@ -24,7 +27,7 @@ export const isErrorPayload = function isErrorPayload(
     error !== null &&
     typeof error === "object" &&
     "status" in error &&
-    "errors" in error &&
-    Array.isArray((error as ErrorPayload).errors)
+    ("message" in error ||
+      ("errors" in error && Array.isArray((error as ErrorPayload).errors)))
   );
 };
