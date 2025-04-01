@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Metadata } from "next";
 import { Fragment } from "react";
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "Sign Up",
 };
 
-export default function SignInPage() {
+export default function SignUpPage() {
   return (
     <Fragment>
       <div className="mb-10 flex flex-col items-center justify-center gap-3">
