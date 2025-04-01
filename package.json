@@ -1,5 +1,5 @@
 {
-  "reviewed": "true - 13",
+  "reviewed": "true - 14",
   "name": "shawqi-stack",
   "version": "0.1.0",
   "private": true,
@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "next lint",
     "payload:migrate": "payload migrate",
+    "payload:migrate:create": "payload migrate:create",
     "payload:types": "payload generate:types",
     "format": "prettier --write ."
   },
@@ -18,7 +19,7 @@
     "@floating-ui/react": "0.26.28",
     "@hookform/resolvers": "3.9.1",
     "@payloadcms/db-mongodb": "3.30.0",
-    "@payloadcms/db-postgres": "3.31.0",
+    "@payloadcms/db-postgres": "3.30.0",
     "@payloadcms/email-nodemailer": "3.30.0",
     "@payloadcms/next": "3.30.0",
     "@payloadcms/payload-cloud": "3.30.0",
