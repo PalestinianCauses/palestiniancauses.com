@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Metadata } from "next";
 
@@ -17,13 +17,13 @@ export default function SharePage() {
     <Protected>
       <main className="flex flex-col items-center justify-center py-48 xs:py-40">
         <Container>
-          <div className="mb-10 flex flex-col items-center justify-center gap-3">
+          <div className="mx-auto mb-10 flex w-full max-w-3xl flex-col items-center justify-center gap-3">
             <h1
-              className="font-stretch mt-10 max-w-3xl truncate text-pretty bg-gradient-to-b from-foreground/25 via-foreground to-foreground/50 bg-cover bg-clip-text bg-center bg-no-repeat text-center text-5xl font-bold tracking-tight text-foreground sm:text-7xl"
+              className="font-stretch mt-10 truncate text-pretty bg-gradient-to-b from-foreground/25 via-foreground to-foreground/50 bg-cover bg-clip-text bg-center bg-no-repeat text-center text-5xl font-bold tracking-tight text-foreground sm:text-7xl"
               style={{ WebkitTextFillColor: "transparent" }}>
               Share Your Diary With The Truth Museum.
             </h1>
-            <p className="mx-auto max-w-4xl text-center leading-normal text-muted-foreground">
+            <p className="mx-auto text-center leading-normal text-muted-foreground">
               We understand the weight of sharing experiences from Gaza&apos;s
               war. Like you, our team has witnessed the same heartache. Join us
               in amplifying Gaza&apos;s stories and ensuring every voice is
