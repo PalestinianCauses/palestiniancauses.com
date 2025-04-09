@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { forwardRef, HTMLAttributes } from "react";
 
@@ -8,7 +8,7 @@ export const Container = forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement>
 >(({ className, children }, ref) => (
-  <div ref={ref} className={cn("mx-auto max-w-7xl px-6 lg:px-8", className)}>
+  <div ref={ref} className={cn("mx-auto w-full px-5 lg:px-7", className)}>
     {children}
   </div>
 ));
