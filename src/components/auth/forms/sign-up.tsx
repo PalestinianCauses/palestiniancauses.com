@@ -1,15 +1,13 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-import { AuthResponse } from "@/actions/auth";
-import { FormStatus } from "@/components/globals/form-status";
+import { MotionDiv } from "@/components/globals/motion";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -23,15 +21,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/use-user";
 import { messages } from "@/lib/errors";
+import { motions } from "@/lib/motion";
 import { signUpSchema, SignUpSchema } from "@/lib/schemas/auth";
 
 export const SignUpForm = function SignUpForm() {
-  const router = useRouter();
   const { signUp } = useUser();
-  const [response, setResponse] = useState<AuthResponse>({
-    data: null,
-    error: null,
-  });
 
   const form = useForm<SignUpSchema>({
     mode: "onBlur",
@@ -40,16 +34,8 @@ export const SignUpForm = function SignUpForm() {
   });
 
   const handleSubmit = async function handleSubmit(data: SignUpSchema) {
-    signUp.mutate(data, {
-      onSuccess: (responseData) => {
-        setResponse(responseData);
-        if (!responseData.error) {
-          setTimeout(() => {
-            router.push("/book");
-          }, 500);
-        }
-      },
-    });
+    toast.info(messages.actions.auth.signUp.pending);
+    signUp.mutate(data);
   };
 
   return (
@@ -57,86 +43,104 @@ export const SignUpForm = function SignUpForm() {
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
         className="flex flex-col items-stretch justify-center">
-        <FormStatus
-          isPending={{
-            true: signUp.isPending,
-            message: messages.actions.auth.signUp.pending,
-          }}
-          success={{
-            true: !signUp.isPending && Boolean(response.data),
-            message: messages.actions.auth.signUp.success,
-          }}
-          failure={{
-            true: !signUp.isPending && Boolean(response.error),
-            message: response.error || "",
-          }}
-        />
         <div className="mb-4 grid w-full grid-cols-2 items-start gap-4">
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First name</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={signUp.isPending} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last name</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={signUp.isPending} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <MotionDiv
+            initial={motions.fadeIn.initial}
+            animate={motions.fadeIn.whileInView}
+            transition={motions.transition({ duration: "fast", delay: 0.3 })}>
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First name</FormLabel>
+                  <FormControl>
+                    <Input {...field} disabled={signUp.isPending} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </MotionDiv>
+          <MotionDiv
+            initial={motions.fadeIn.initial}
+            animate={motions.fadeIn.whileInView}
+            transition={motions.transition({ duration: "fast", delay: 0.4 })}>
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last name</FormLabel>
+                  <FormControl>
+                    <Input {...field} disabled={signUp.isPending} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </MotionDiv>
         </div>
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem className="mb-4">
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input {...field} disabled={signUp.isPending} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem className="mb-6">
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input {...field} type="password" disabled={signUp.isPending} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" disabled={signUp.isPending} className="mb-6">
-          Sign up
-        </Button>
-        <p className="text-center text-sm text-muted-foreground">
-          A family member already?{" "}
-          <Button variant="link" className="h-auto p-0" asChild>
-            <Label>
-              <Link href="/signin">Sign in</Link>
-            </Label>
+        <MotionDiv
+          initial={motions.fadeIn.initial}
+          animate={motions.fadeIn.whileInView}
+          transition={motions.transition({ duration: "fast", delay: 0.5 })}
+          className="mb-4">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} disabled={signUp.isPending} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </MotionDiv>
+        <MotionDiv
+          initial={motions.fadeIn.initial}
+          animate={motions.fadeIn.whileInView}
+          transition={motions.transition({ duration: "fast", delay: 0.6 })}
+          className="mb-6">
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="password"
+                    disabled={signUp.isPending}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </MotionDiv>
+        <MotionDiv
+          initial={motions.fadeIn.initial}
+          animate={motions.fadeIn.whileInView}
+          transition={motions.transition({ duration: "fast", delay: 0.7 })}
+          className="flex flex-col items-stretch justify-center">
+          <Button type="submit" disabled={signUp.isPending} className="mb-6">
+            Sign up
           </Button>
-          .
-        </p>
+          <p className="text-center text-sm text-muted-foreground">
+            A family member already?{" "}
+            <Button variant="link" className="h-auto p-0" asChild>
+              <Label>
+                <Link href="/signin">Sign in</Link>
+              </Label>
+            </Button>
+            .
+          </p>
+        </MotionDiv>
       </form>
     </Form>
   );
