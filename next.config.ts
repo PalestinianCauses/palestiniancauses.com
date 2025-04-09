@@ -1,8 +1,8 @@
-// REVIEWED - 03
+// REVIEWED - 04
 import { withPayload } from "@payloadcms/next/withPayload";
-import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+const nextConfig = {
+  experimental: { dynamicIO: true },
   eslint: { ignoreDuringBuilds: true },
 };
 
