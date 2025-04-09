@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 export const messages = {
   http: {
@@ -31,9 +31,15 @@ export const messages = {
         duplication: (email: string) =>
           `User with ${email}, email is already a family member. May be sign in instead?`,
         validationError:
-          "Password entered is not as resilient as Gaza's people.",
+          "Password entered is not as resilient as Gazans people.",
         serverError:
           "An error occurred while signing up. Please try again later.",
+      },
+      signOut: {
+        pending: "Signing out...",
+        success: "Signed out successfully.",
+        serverError:
+          "An error occurred while signing out. Please try again later.",
       },
     },
     diaryEntry: {
@@ -82,6 +88,7 @@ export const httpStatusesMessages = {
     http: messages.http.serverError,
     signIn: messages.actions.auth.signIn.serverError,
     signUp: messages.actions.auth.signUp.serverError,
+    signOut: messages.actions.auth.signOut.serverError,
     diaryEntry: messages.actions.diaryEntry.serverError,
   },
 };
