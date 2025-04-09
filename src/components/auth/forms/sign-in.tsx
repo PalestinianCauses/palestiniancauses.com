@@ -1,15 +1,13 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-import { AuthResponse } from "@/actions/auth";
-import { FormStatus } from "@/components/globals/form-status";
+import { MotionDiv } from "@/components/globals/motion";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -23,15 +21,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/use-user";
 import { messages } from "@/lib/errors";
+import { motions } from "@/lib/motion";
 import { signInSchema, SignInSchema } from "@/lib/schemas/auth";
 
 export const SignInForm = function SignInForm() {
-  const router = useRouter();
   const { signIn } = useUser();
-  const [response, setResponse] = useState<AuthResponse>({
-    data: null,
-    error: null,
-  });
 
   const form = useForm<SignInSchema>({
     mode: "onBlur",
@@ -40,16 +34,8 @@ export const SignInForm = function SignInForm() {
   });
 
   const handleSubmit = function handleSubmit(data: SignInSchema) {
-    signIn.mutate(data, {
-      onSuccess: (responseData) => {
-        setResponse(responseData);
-        if (!responseData.error) {
-          setTimeout(() => {
-            router.push("/book");
-          }, 500);
-        }
-      },
-    });
+    toast.info(messages.actions.auth.signIn.pending);
+    signIn.mutate(data);
   };
 
   return (
@@ -57,65 +43,73 @@ export const SignInForm = function SignInForm() {
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
         className="flex flex-col items-stretch justify-center">
-        <FormStatus
-          isPending={{
-            true: signIn.isPending,
-            message: messages.actions.auth.signIn.pending,
-          }}
-          success={{
-            true: !signIn.isPending && Boolean(response.data),
-            message: messages.actions.auth.signIn.success,
-          }}
-          failure={{
-            true: !signIn.isPending && Boolean(response.error),
-            message: response.error || "",
-          }}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem className="mb-4">
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input {...field} disabled={signIn.isPending} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem className="mb-6">
-              <div className="flex w-full items-center justify-between gap-3">
-                <FormLabel>Password</FormLabel>
-                {/* <Button variant="link" className="h-auto p-0" asChild>
+        <MotionDiv
+          initial={motions.fadeIn.initial}
+          animate={motions.fadeIn.whileInView}
+          transition={motions.transition({ duration: "fast", delay: 0.3 })}
+          className="mb-4">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} disabled={signIn.isPending} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </MotionDiv>
+        <MotionDiv
+          initial={motions.fadeIn.initial}
+          animate={motions.fadeIn.whileInView}
+          transition={motions.transition({ duration: "fast", delay: 0.4 })}
+          className="mb-6">
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex w-full items-center justify-between gap-3">
+                  <FormLabel>Password</FormLabel>
+                  {/* <Button variant="link" className="h-auto p-0" asChild>
                   <Label>
-                    <Link href="/password-forgot">Forgot password?</Link>
+                  <Link href="/password-forgot">Forgot password?</Link>
                   </Label>
-                </Button> */}
-              </div>
-              <FormControl>
-                <Input {...field} type="password" disabled={signIn.isPending} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" disabled={signIn.isPending} className="mb-6">
-          Sign in
-        </Button>
-        <p className="text-center text-sm text-muted-foreground">
-          Not a family member yet?{" "}
-          <Button variant="link" className="h-auto p-0" asChild>
-            <Label>
-              <Link href="/signup">Be one</Link>
-            </Label>
+                  </Button> */}
+                </div>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="password"
+                    disabled={signIn.isPending}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </MotionDiv>
+        <MotionDiv
+          initial={motions.fadeIn.initial}
+          animate={motions.fadeIn.whileInView}
+          transition={motions.transition({ duration: "fast", delay: 0.5 })}
+          className="flex w-full flex-col items-stretch justify-center">
+          <Button type="submit" disabled={signIn.isPending} className="mb-6">
+            Sign in
           </Button>
-          .
-        </p>
+          <p className="text-center text-sm text-muted-foreground">
+            Not a family member yet?{" "}
+            <Button variant="link" className="h-auto p-0" asChild>
+              <Label>
+                <Link href="/signup">Be one</Link>
+              </Label>
+            </Button>
+            .
+          </p>
+        </MotionDiv>
       </form>
     </Form>
   );
