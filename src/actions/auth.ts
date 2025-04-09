@@ -1,8 +1,8 @@
 "use server";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { PaginatedDocs } from "payload";
 
@@ -102,6 +102,16 @@ const setUserCookies = async function setUserCookies(
 export type AuthResponse = {
   data: AuthResponsePayload | null;
   error: string | null;
+};
+
+export const getAuth = async function getAuth() {
+  const response = await actionTryCatch(
+    payload.auth({ headers: await headers() }),
+  );
+
+  if (response.error) return null;
+
+  return response.data;
 };
 
 export const signIn = async function signIn(
