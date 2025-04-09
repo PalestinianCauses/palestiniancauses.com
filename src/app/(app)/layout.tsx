@@ -1,17 +1,12 @@
-// REVIEWED - 13
+// REVIEWED - 14
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { PropsWithChildren } from "react";
-import "./globals.css";
 
-import { Announcement } from "@/components/globals/announcement";
-import { Navbar } from "@/components/globals/navbar";
-import { Footer } from "@/components/layout/footer";
-import { CartProvider } from "@/contexts/cart";
-import { ProductProvider } from "@/contexts/product";
-import { getCart } from "@/lib/shopify";
+import { Toaster } from "@/components/ui/sonner";
 
 import { Providers } from "./providers";
+
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: { template: "%s | PalestinianCauses", default: "PalestinianCauses" },
@@ -20,26 +15,11 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async function RootLayout({ children }: PropsWithChildren) {
-  const cartId = (await cookies()).get("cartId")?.value;
-  const cart = getCart(cartId);
-
   return (
     <html lang="en" className="dark">
       <body>
-        <CartProvider cartPromise={cart}>
-          <ProductProvider>
-            <Providers>
-              <Navbar />
-              {children}
-              <Footer />
-              <Announcement />
-            </Providers>
-          </ProductProvider>
-        </CartProvider>
-        <script
-          async
-          src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js"
-        />
+        <Providers>{children}</Providers>
+        <Toaster richColors />
       </body>
     </html>
   );
