@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as React from "react";
@@ -23,7 +23,7 @@ const PopoverContent = React.forwardRef<
       align={align}
       sideOffset={sideOffset}
       className={cn(
-        "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state_=_open]:animate-in data-[state_=_closed]:animate-out data-[state_=_closed]:fade-out-0 data-[state_=_open]:fade-in-0 data-[state_=_closed]:zoom-out-95 data-[state_=_open]:zoom-in-95 data-[side_=_bottom]:slide-in-from-top-2 data-[side_=_left]:slide-in-from-right-2 data-[side_=_right]:slide-in-from-left-2 data-[side_=_top]:slide-in-from-bottom-2",
+        "z-50 w-72 bg-popover p-2.5 text-popover-foreground shadow-lg outline-none ring-1 ring-input data-[state_=_open]:animate-in data-[state_=_closed]:animate-out data-[state_=_closed]:fade-out-0 data-[state_=_open]:fade-in-0 data-[state_=_closed]:zoom-out-95 data-[state_=_open]:zoom-in-95 data-[side_=_bottom]:slide-in-from-top-2 data-[side_=_left]:slide-in-from-right-2 data-[side_=_right]:slide-in-from-left-2 data-[side_=_top]:slide-in-from-bottom-2",
         className,
       )}
       {...props}
