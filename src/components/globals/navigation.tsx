@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { motions } from "@/lib/motion";
 
@@ -14,7 +14,7 @@ const navigation = [
   },
   {
     label: "Humans But From Gaza",
-    href: "/humans-but-from-gaza",
+    href: "/humans-but-from-gaza/share",
     recent: true,
     coming: false,
   },
