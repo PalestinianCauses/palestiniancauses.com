@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import Link from "next/link";
 import { Fragment, startTransition } from "react";
@@ -15,7 +15,7 @@ import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 
 export const AuthButtons = function AuthButtons() {
-  const { isPending, user, signOut } = useUser();
+  const { isPending, data: user, signOut } = useUser();
   useAutoRedirectOnTokenExpire();
 
   if (isPending)
