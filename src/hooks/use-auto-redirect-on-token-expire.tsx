@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
@@ -16,7 +16,7 @@ import { useUser } from "./use-user";
 export const useAutoRedirectOnTokenExpire =
   function useAutoRedirectOnTokenExpire() {
     const router = useRouter();
-    const { user } = useUser();
+    const { data: user } = useUser();
 
     useEffect(() => {
       if (!user) return;
