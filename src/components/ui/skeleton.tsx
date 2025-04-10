@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import * as React from "react";
 
@@ -8,12 +8,7 @@ const Skeleton = function Skeleton({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn("animate-pulse rounded-md bg-primary/10", className)}
-      {...props}
-    />
-  );
+  return <div className={cn("animate-pulse bg-muted", className)} {...props} />;
 };
 
 export { Skeleton };
