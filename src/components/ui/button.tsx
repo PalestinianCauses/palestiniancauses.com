@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -27,9 +27,9 @@ const buttonVariants = cva(
         "link": "text-primary hover:underline hover:underline-offset-4",
       },
       size: {
-        default: "px-6 py-2.5 gap-3",
-        sm: "px-4 py-1.5 text-xs gap-2",
-        lg: "px-8 py-3.5 text-base gap-4",
+        default: "px-6 py-2.5 gap-1.5",
+        sm: "px-4 py-1.5 text-xs gap-1",
+        lg: "px-8 py-3.5 text-base gap-2",
         icon: "h-9 w-9",
       },
     },
