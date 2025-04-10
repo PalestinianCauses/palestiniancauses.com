@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -26,5 +26,3 @@ export default buildConfig({
   sharp,
   plugins: [],
 });
-
-// PCE-Neon-0710-2023-0822-2003-PCE

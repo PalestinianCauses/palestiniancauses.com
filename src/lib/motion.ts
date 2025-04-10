@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 export const motions = {
   transition: ({
@@ -22,6 +22,11 @@ export const motions = {
   fadeIn: {
     initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
+  },
+
+  fadeInLeft: {
+    initial: { opacity: 0, x: 20 },
+    whileInView: { opacity: 1, x: 0 },
   },
 
   hoverScaleX: {

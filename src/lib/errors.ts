@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 export const messages = {
   http: {
@@ -38,6 +38,9 @@ export const messages = {
       signOut: {
         pending: "Signing out...",
         success: "Signed out successfully.",
+        timer: (time: string) =>
+          `Your session will expire at ${time}. Make the most of your time!`,
+        expired: "Your session has ended. Please sign in to continue.",
         serverError:
           "An error occurred while signing out. Please try again later.",
       },
