@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -8,23 +8,24 @@ import { getAuth, signIn, signOut, signUp } from "@/actions/auth";
 import { queryClient } from "@/app/(app)/providers";
 import { messages } from "@/lib/errors";
 import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
-import { httpTryCatch } from "@/lib/utils";
+import { actionTryCatch, httpTryCatch } from "@/lib/utils";
 
 export const useUser = function useUser() {
   const router = useRouter();
 
   const {
     isLoading: isPending,
-    data: user,
+    data,
     refetch,
   } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const response = await getAuth();
+      const response = await actionTryCatch(getAuth());
 
-      if (!response || !response.user) return null;
+      if (!response || !response.data || !response.data.user || response.error)
+        return null;
 
-      return response.user;
+      return response.data.user;
     },
   });
 
@@ -87,7 +88,7 @@ export const useUser = function useUser() {
 
   return {
     isPending,
-    user,
+    data,
     refetch,
     signIn: signInMutation,
     signUp: signUpMutation,
