@@ -1,28 +1,29 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 import { TAGS } from "@/lib/constants";
 import { createCart, getCart, insertToCart } from "@/lib/shopify";
 
-export const createCartPlusSetCookie =
-  async function createCartPlusSetCookie() {
-    const cart = await createCart();
-    (await cookies()).set("cartId", cart.id!);
-  };
+export const createCartPlusSetCookie = async function createCartPlusSetCookie(
+  key: string,
+) {
+  const cart = await createCart();
+  (await cookies()).set(key, cart.id!);
+};
 
 export const insertItem = async function insertItem(
+  key: string,
   previousState: any,
   selectedVariantId: string | undefined,
 ) {
-  const cartId = (await cookies()).get("cartId")?.value;
+  const cartId = (await cookies()).get(key)?.value;
 
   if (!cartId || !selectedVariantId) return "Error adding item to cart.";
 
@@ -39,12 +40,12 @@ export const insertItem = async function insertItem(
 };
 
 export const removeCartPlusRemoveCookie =
-  async function removeCartPlusRemoveCookie() {
-    (await cookies()).delete("cartId");
+  async function removeCartPlusRemoveCookie(key: string) {
+    (await cookies()).delete(key);
   };
 
-export const redirectToCheckout = async function redirectToCheckout() {
-  const cartId = (await cookies()).get("cartId")?.value;
+export const getCheckoutUrl = async function getCheckoutUrl(key: string) {
+  const cartId = (await cookies()).get(key)?.value;
   const cart = await getCart(cartId);
-  redirect(cart!.checkoutUrl);
+  return cart!.checkoutUrl;
 };
