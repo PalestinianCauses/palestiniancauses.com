@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useRouter } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
@@ -11,7 +11,7 @@ import { Loading } from "../globals/loading";
 
 export const Protected = function Protected({ children }: PropsWithChildren) {
   const router = useRouter();
-  const { isPending, user } = useUser();
+  const { isPending, data: user } = useUser();
 
   useEffect(() => {
     if (!isPending && !user) router.push("/signin");

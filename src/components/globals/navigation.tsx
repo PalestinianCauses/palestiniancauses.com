@@ -1,11 +1,11 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { motions } from "@/lib/motion";
 
 import { MotionDiv } from "./motion";
 import { NavigationLink } from "./navigation-link";
 
-const navigation = [
+export const navigation = [
   {
     label: "A Human But From Gaza",
     href: "/a-human-but-from-gaza",

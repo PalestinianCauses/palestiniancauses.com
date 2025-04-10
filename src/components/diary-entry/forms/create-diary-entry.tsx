@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -36,7 +36,7 @@ import { ActionTryCatchReturn, cn } from "@/lib/utils";
 
 export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
   const router = useRouter();
-  const { user } = useUser();
+  const { data: user } = useUser();
   const { createDiaryEntryMutation: createDiaryEntry } = useDiaryEntry();
 
   const form = useForm<DiaryEntrySchema>({
@@ -133,7 +133,7 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
                         variant="outline"
                         disabled={createDiaryEntry.isPending}
                         className={cn(
-                          "w-full items-center justify-start border-foreground/10 bg-foreground/5 text-left font-normal",
+                          "w-full items-center justify-start text-left font-normal",
                           !field.value && "text-muted-foreground",
                         )}>
                         <CalendarIcon />
