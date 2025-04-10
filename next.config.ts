@@ -1,8 +1,7 @@
-// REVIEWED - 04
+// REVIEWED - 05
 import { withPayload } from "@payloadcms/next/withPayload";
 
 const nextConfig = {
-  experimental: { dynamicIO: true },
   eslint: { ignoreDuringBuilds: true },
 };
 
