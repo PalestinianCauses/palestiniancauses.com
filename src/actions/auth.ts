@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -85,6 +85,10 @@ const signInUserPayload = async function signInUserPayload(
   });
 
   return { token: response.token || null, user: response.user || null };
+};
+
+export const getUserCookies = async function getUserCookies(name: string) {
+  return (await cookies()).get(name);
 };
 
 const setUserCookies = async function setUserCookies(
