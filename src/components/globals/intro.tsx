@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import Link from "next/link";
 
@@ -34,7 +34,7 @@ export const Intro = function Intro() {
         <AuthButtons />
       </nav>
       <div className="flex flex-col items-start justify-center">
-        <h1 className="flex w-full max-w-2xl flex-wrap gap-3 text-6xl font-normal leading-none tracking-tight lg:text-7xl xl:text-8xl [@media_(max-height:48rem)_and_(max-width:27rem)]:text-5xl [@media_(max-height:48rem)_and_(min-width:64rem)]:text-5xl">
+        <h1 className="flex w-full max-w-2xl flex-wrap gap-x-3 text-6xl leading-none tracking-tight sm:text-8xl lg:text-7xl xl:text-8xl [@media_(max-height:48rem)_and_(max-width:27rem)]:text-5xl [@media_(max-height:48rem)_and_(min-width:40rem)]:text-7xl">
           {[
             "Passionate",
             "and",

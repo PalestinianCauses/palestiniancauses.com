@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
 
@@ -17,7 +17,7 @@ export const MarqueeItem = function MarqueeItem({
       initial={motions.fadeInLeft.initial}
       animate={motions.fadeInLeft.whileInView}
       transition={motions.transition({ delay })}
-      className="inline-block">
+      className="relative inline-block">
       {children}
     </MotionDiv>
   );
