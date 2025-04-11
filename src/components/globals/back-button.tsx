@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { ArrowLeftIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -24,7 +24,6 @@ export const BackButton = function BackButton() {
       transition={motions.transition({})}>
       <Button
         variant="outline"
-        size="lg"
         className="fixed left-5 top-5 z-50"
         onClick={router.back}>
         <ArrowLeftIcon />
