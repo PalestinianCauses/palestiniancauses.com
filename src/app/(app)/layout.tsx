@@ -1,7 +1,8 @@
-// REVIEWED - 14
+// REVIEWED - 15
 import type { Metadata } from "next";
 import { PropsWithChildren } from "react";
 
+import { BackButton } from "@/components/globals/back-button";
 import { Toaster } from "@/components/ui/sonner";
 
 import { Providers } from "./providers";
@@ -18,6 +19,7 @@ const RootLayout = async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className="dark">
       <body>
+        <BackButton />
         <Providers>{children}</Providers>
         <Toaster richColors />
       </body>
