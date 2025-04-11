@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -20,7 +20,6 @@ export const createCartPlusSetCookie = async function createCartPlusSetCookie(
 
 export const insertItem = async function insertItem(
   key: string,
-  previousState: any,
   selectedVariantId: string | undefined,
 ) {
   const cartId = (await cookies()).get(key)?.value;
