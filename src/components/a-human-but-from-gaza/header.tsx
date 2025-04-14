@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import Image from "next/image";
 
@@ -14,36 +14,36 @@ import { Badge } from "../ui/badge";
 import { HeaderButtons } from "./header-buttons";
 
 const pagesImages = [
-  { name: "Image - 01", image: "/book/B-3.jpg" },
-  { name: "Image - 02", image: "/book/B-6.jpg" },
-  { name: "Image - 03", image: "/book/C-32.jpg" },
-  { name: "Image - 04", image: "/book/C-35.jpg" },
-  { name: "Image - 05", image: "/book/B-9.jpg" },
-  { name: "Image - 06", image: "/book/B-14.jpg" },
-  { name: "Image - 07", image: "/book/C-39.jpg" },
-  { name: "Image - 08", image: "/book/C-42.jpg" },
-  { name: "Image - 09", image: "/book/B-22.jpg" },
-  { name: "Image - 10", image: "/book/B-11.jpg" },
-  { name: "Image - 11", image: "/book/C-49.jpg" },
-  { name: "Image - 12", image: "/book/C-36.jpg" },
-  { name: "Image - 13", image: "/book/B-12.jpg" },
-  { name: "Image - 14", image: "/book/B-19.jpg" },
-  { name: "Image - 15", image: "/book/C-44.jpg" },
-  { name: "Image - 16", image: "/book/C-54.jpg" },
-  { name: "Image - 17", image: "/book/B-21.jpg" },
-  { name: "Image - 18", image: "/book/C-52.jpg" },
+  { name: "Image - 01", image: "/a-human-but-from-gaza/B-3.jpg" },
+  { name: "Image - 02", image: "/a-human-but-from-gaza/B-6.jpg" },
+  { name: "Image - 03", image: "/a-human-but-from-gaza/C-32.jpg" },
+  { name: "Image - 04", image: "/a-human-but-from-gaza/C-35.jpg" },
+  { name: "Image - 05", image: "/a-human-but-from-gaza/B-9.jpg" },
+  { name: "Image - 06", image: "/a-human-but-from-gaza/B-14.jpg" },
+  { name: "Image - 07", image: "/a-human-but-from-gaza/C-39.jpg" },
+  { name: "Image - 08", image: "/a-human-but-from-gaza/C-42.jpg" },
+  { name: "Image - 09", image: "/a-human-but-from-gaza/B-22.jpg" },
+  { name: "Image - 10", image: "/a-human-but-from-gaza/B-11.jpg" },
+  { name: "Image - 11", image: "/a-human-but-from-gaza/C-49.jpg" },
+  { name: "Image - 12", image: "/a-human-but-from-gaza/C-36.jpg" },
+  { name: "Image - 13", image: "/a-human-but-from-gaza/B-12.jpg" },
+  { name: "Image - 14", image: "/a-human-but-from-gaza/B-19.jpg" },
+  { name: "Image - 15", image: "/a-human-but-from-gaza/C-44.jpg" },
+  { name: "Image - 16", image: "/a-human-but-from-gaza/C-54.jpg" },
+  { name: "Image - 17", image: "/a-human-but-from-gaza/B-21.jpg" },
+  { name: "Image - 18", image: "/a-human-but-from-gaza/C-52.jpg" },
 ];
 
 export const Header = function Header({ product }: { product: Product }) {
   return (
     <header>
-      <div className="py-32">
+      <div className="my-32">
         <Container>
           <div className="mx-auto flex max-w-6xl flex-col items-start justify-center md:items-center">
             <MotionDiv
               initial={motions.fadeIn.initial}
-              whileInView={motions.fadeIn.whileInView}
-              transition={motions.transition({ delay: 0.1 })}
+              animate={motions.fadeIn.whileInView}
+              transition={motions.transition({})}
               className="mb-4">
               <Badge variant="outline">
                 Be Part For PalestinianCauses&apos; Journey
@@ -66,8 +66,8 @@ export const Header = function Header({ product }: { product: Product }) {
                 <MotionSpan
                   key={typeof word === "string" ? word : word.text}
                   initial={motions.fadeIn.initial}
-                  whileInView={motions.fadeIn.whileInView}
-                  transition={motions.transition({ delay: index * 0.2 })}
+                  animate={motions.fadeIn.whileInView}
+                  transition={motions.transition({ delay: index * 0.1 })}
                   className={cn(
                     "whitespace-break-spaces",
                     typeof word === "string" ? "" : word.class,
@@ -78,8 +78,8 @@ export const Header = function Header({ product }: { product: Product }) {
             </h1>
             <MotionP
               initial={motions.fadeIn.initial}
-              whileInView={motions.fadeIn.whileInView}
-              transition={motions.transition({ delay: 0.5 })}
+              animate={motions.fadeIn.whileInView}
+              transition={motions.transition({ delay: 0.4 })}
               className="mb-12 max-w-5xl text-pretty text-left text-base text-muted-foreground sm:text-xl/8 md:text-center">
               Discover{" "}
               <span className="font-medium italic text-foreground">
@@ -100,12 +100,13 @@ export const Header = function Header({ product }: { product: Product }) {
         className="relative max-w-full border-y border-muted py-5">
         <div className="absolute left-1/2 top-1/2 z-20 aspect-[2/3] h-auto w-72 -translate-x-1/2 -translate-y-1/2 lg:w-96">
           <MotionDiv
+            viewport={{ once: true }}
             initial={motions.fadeIn.initial}
             whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({ delay: 0.6 })}
+            transition={motions.transition({ delay: 0.5 })}
             className="relative h-full w-full border border-muted">
             <Image
-              src="/book/book-cover.jpeg"
+              src="/a-human-but-from-gaza/book-cover.jpeg"
               alt="Book Cover"
               priority
               fill
