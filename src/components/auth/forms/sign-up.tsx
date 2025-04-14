@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -35,7 +35,12 @@ export const SignUpForm = function SignUpForm() {
 
   const handleSubmit = async function handleSubmit(data: SignUpSchema) {
     toast.info(messages.actions.auth.signUp.pending);
-    signUp.mutate(data);
+    signUp.mutate({
+      ...data,
+      email: data.email.trim().toLowerCase(),
+      firstName: data.firstName.trim(),
+      lastName: data.lastName.trim(),
+    });
   };
 
   return (
