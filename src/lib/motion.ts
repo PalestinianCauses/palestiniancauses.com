@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 export const motions = {
   transition: ({
@@ -10,7 +10,7 @@ export const motions = {
     duration?: "slow" | "medium" | "fast";
     delay?: number;
   }) => ({
-    ease: ease || "easeIn",
+    ease: ease || "linear",
     duration:
       (duration === "slow" && 1) ||
       (duration === "medium" && 0.5) ||
