@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { motions } from "@/lib/motion";
 
@@ -59,6 +59,7 @@ export const Navigation = function Navigation() {
           key={href}
           className="flex w-full snap-start items-center justify-start overflow-hidden">
           <MotionDiv
+            viewport={{ once: true }}
             initial={motions.fadeIn.initial}
             whileInView={motions.fadeIn.whileInView}
             whileHover="hover"

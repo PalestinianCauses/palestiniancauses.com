@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import Link from "next/link";
 
@@ -24,6 +24,7 @@ export const Intro = function Intro() {
     <section className="grid snap-start grid-rows-[max-content_1fr_max-content] gap-5 p-5 xl:gap-10 xl:p-10">
       <nav className="flex flex-wrap items-center justify-between gap-5">
         <MotionDiv
+          viewport={{ once: true }}
           initial={motions.fadeIn.initial}
           whileInView={motions.fadeIn.whileInView}
           transition={motions.transition({})}>
@@ -47,6 +48,7 @@ export const Intro = function Intro() {
           ].map((word, index) => (
             <MotionSpan
               key={typeof word === "string" ? word : word.text}
+              viewport={{ once: true }}
               initial={motions.fadeIn.initial}
               whileInView={motions.fadeIn.whileInView}
               transition={motions.transition({ delay: index * 0.1 })}
@@ -61,6 +63,7 @@ export const Intro = function Intro() {
       </div>
       <footer className="flex w-full flex-row flex-wrap items-center justify-start gap-5">
         <MotionP
+          viewport={{ once: true }}
           initial={motions.fadeIn.initial}
           whileInView={motions.fadeIn.whileInView}
           transition={motions.transition({})}
@@ -72,6 +75,7 @@ export const Intro = function Intro() {
             navigation.map(({ label, href }, index) => (
               <li key={href}>
                 <MotionDiv
+                  viewport={{ once: true }}
                   initial={motions.fadeIn.initial}
                   whileInView={motions.fadeIn.whileInView}
                   transition={motions.transition({

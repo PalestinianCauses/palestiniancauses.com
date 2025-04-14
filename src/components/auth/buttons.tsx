@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import Link from "next/link";
 import { Fragment, startTransition } from "react";
@@ -22,15 +22,15 @@ export const AuthButtons = function AuthButtons() {
     return (
       <div className="flex flex-row items-center justify-center gap-2.5">
         <MotionDiv
+          viewport={{ once: true }}
           initial={motions.fadeIn.initial}
-          animate={motions.fadeIn.whileInView}
           whileInView={motions.fadeIn.whileInView}
           transition={motions.transition({ delay: 0.1 })}>
           <Skeleton className="h-10 w-24" />
         </MotionDiv>
         <MotionDiv
+          viewport={{ once: true }}
           initial={motions.fadeIn.initial}
-          animate={motions.fadeIn.whileInView}
           whileInView={motions.fadeIn.whileInView}
           transition={motions.transition({ delay: 0.2 })}>
           <Skeleton className="h-10 w-24" />
@@ -42,8 +42,8 @@ export const AuthButtons = function AuthButtons() {
     <ul className="flex flex-row items-center justify-center gap-2.5">
       {user && (user.role === "admin" || user.role === "system-user") ? (
         <MotionDiv
+          viewport={{ once: true }}
           initial={motions.fadeIn.initial}
-          animate={motions.fadeIn.whileInView}
           whileInView={motions.fadeIn.whileInView}
           transition={motions.transition({ delay: 0.1 })}>
           <Button variant="link" asChild>
@@ -53,8 +53,8 @@ export const AuthButtons = function AuthButtons() {
       ) : null}
       {user ? (
         <MotionDiv
+          viewport={{ once: true }}
           initial={motions.fadeIn.initial}
-          animate={motions.fadeIn.whileInView}
           whileInView={motions.fadeIn.whileInView}
           transition={motions.transition({ delay: 0.2 })}>
           <Button
@@ -74,8 +74,8 @@ export const AuthButtons = function AuthButtons() {
       {!user ? (
         <Fragment>
           <MotionDiv
+            viewport={{ once: true }}
             initial={motions.fadeIn.initial}
-            animate={motions.fadeIn.whileInView}
             whileInView={motions.fadeIn.whileInView}
             transition={motions.transition({ delay: 0.1 })}>
             <Button variant="outline" asChild>
@@ -83,8 +83,8 @@ export const AuthButtons = function AuthButtons() {
             </Button>
           </MotionDiv>
           <MotionDiv
+            viewport={{ once: true }}
             initial={motions.fadeIn.initial}
-            animate={motions.fadeIn.whileInView}
             whileInView={motions.fadeIn.whileInView}
             transition={motions.transition({ delay: 0.2 })}>
             <Button asChild>
