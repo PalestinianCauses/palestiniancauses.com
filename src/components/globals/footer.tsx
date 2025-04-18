@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import Image from "next/image";
 import Link from "next/link";
@@ -35,11 +35,30 @@ export const Footer = function Footer() {
           </MotionDiv>
           <ul className="flex flex-wrap items-center justify-start gap-5">
             {[
-              { href: "/", label: "Home" },
-              { href: "/cookie-policy", label: "Cookie Policy" },
-              { href: "/privacy-policy", label: "Privacy Policy" },
-              { href: "/returns-policy", label: "Returns Policy" },
-              { href: "/terms-of-service", label: "Terms of Service" },
+              {
+                href: "/",
+                label: "Home",
+              },
+              {
+                href: "/acceptable-use-policy",
+                label: "Acceptable Use Policy",
+              },
+              {
+                href: "/cookie-policy",
+                label: "Cookie Policy",
+              },
+              {
+                href: "/privacy-policy",
+                label: "Privacy Policy",
+              },
+              {
+                href: "/returns-policy",
+                label: "Returns Policy",
+              },
+              {
+                href: "/terms-of-service",
+                label: "Terms of Service",
+              },
             ].map(({ href, label }, index) => (
               <li key={href}>
                 <MotionDiv
