@@ -1,6 +1,6 @@
 "server-only";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { messages } from "@/lib/errors";
 import { frappeDB } from "@/lib/frappe";
@@ -44,8 +44,6 @@ export const deleteUser = async function deleteUser(email: string) {
     return response;
   }
 
-  response.data = messages.actions.user.delete.success;
-
   if (
     (response.data && response.error) ||
     (!response.data && !response.error)
@@ -55,5 +53,6 @@ export const deleteUser = async function deleteUser(email: string) {
     return response;
   }
 
+  response.data = messages.actions.user.delete.success;
   return response;
 };
