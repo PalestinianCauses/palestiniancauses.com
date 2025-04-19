@@ -1,5 +1,5 @@
 {
-  "reviewed": "true - 16",
+  "reviewed": "true - 17",
   "name": "shawqi-stack",
   "version": "0.1.0",
   "private": true,
@@ -13,6 +13,7 @@
     "payload:migrate": "payload migrate",
     "payload:migrate:create": "payload migrate:create",
     "payload:types": "payload generate:types",
+    "playwright:test": "playwright test --ui",
     "format": "prettier --write ."
   },
   "dependencies": {
@@ -57,6 +58,7 @@
     "clsx": "2.1.1",
     "cmdk": "1.0.0",
     "date-fns": "4.1.0",
+    "dotenv": "16.5.0",
     "embla-carousel-react": "8.5.1",
     "frappe-js-sdk": "1.8.0",
     "frappe-react-sdk": "1.11.0",
@@ -83,6 +85,7 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
+    "@playwright/test": "1.52.0",
     "@types/node": "20",
     "@types/react": "18",
     "@types/react-dom": "18",
