@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { deleteUser } from "@/actions/user";
 import { messages } from "@/lib/errors";
@@ -16,7 +16,7 @@ export const DELETE = async function DELETE(request: Request) {
     process.env.PLAYWRIGHT_TESTING_USER_CLEAN_UP_SECRET
   ) {
     response.error = messages.http.unAuthorized;
-    return new Response(JSON.stringify(response), {
+    return new Response(JSON.stringify(response.error), {
       status: 401,
     });
   }
@@ -26,10 +26,12 @@ export const DELETE = async function DELETE(request: Request) {
 
   if (deleteResponse.error) {
     response.error = deleteResponse.error;
-    return new Response(JSON.stringify(response), {
+    return new Response(JSON.stringify(response.error), {
       status: 400,
     });
   }
+
+  response.data = deleteResponse.data;
 
   if (
     (response.data && response.error) ||
@@ -37,13 +39,12 @@ export const DELETE = async function DELETE(request: Request) {
   ) {
     response.data = null;
     response.error = messages.http.serverError;
-    return new Response(JSON.stringify(response), {
+    return new Response(JSON.stringify(response.error), {
       status: 500,
     });
   }
 
-  response.data = deleteResponse.data;
-  return new Response(JSON.stringify(response), {
+  return new Response(JSON.stringify(response.data), {
     status: 200,
   });
 };
