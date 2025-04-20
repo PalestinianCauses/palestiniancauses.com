@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import Image from "next/image";
 
@@ -37,62 +37,63 @@ const pagesImages = [
 export const Header = function Header({ product }: { product: Product }) {
   return (
     <header>
-      <div className="my-32">
-        <Container>
-          <div className="mx-auto flex max-w-6xl flex-col items-start justify-center md:items-center">
-            <MotionDiv
-              initial={motions.fadeIn.initial}
-              animate={motions.fadeIn.whileInView}
-              transition={motions.transition({})}
-              className="mb-4">
-              <Badge variant="outline">
-                Be Part For PalestinianCauses&apos; Journey
-              </Badge>
-            </MotionDiv>
-            <h1 className="mb-6 flex w-full max-w-4xl flex-wrap justify-start gap-x-1.5 text-left text-6xl leading-none tracking-tight sm:text-7xl md:justify-center md:text-center lg:max-w-none lg:text-8xl xl:text-9xl">
-              {[
-                "Families'",
-                {
-                  text: "Shadows ",
-                  class: "italic font-semibold",
-                },
-                "Over",
-                {
-                  text: "Gaza's ",
-                  class: "italic font-semibold",
-                },
-                "Rubble.",
-              ].map((word, index) => (
-                <MotionSpan
-                  key={typeof word === "string" ? word : word.text}
-                  initial={motions.fadeIn.initial}
-                  animate={motions.fadeIn.whileInView}
-                  transition={motions.transition({ delay: index * 0.1 })}
-                  className={cn(
-                    "whitespace-break-spaces",
-                    typeof word === "string" ? "" : word.class,
-                  )}>
-                  {typeof word === "string" ? word : word.text}
-                </MotionSpan>
-              ))}
-            </h1>
-            <MotionP
-              initial={motions.fadeIn.initial}
-              animate={motions.fadeIn.whileInView}
-              transition={motions.transition({ delay: 0.4 })}
-              className="mb-12 max-w-5xl text-pretty text-left text-base text-muted-foreground sm:text-xl/8 md:text-center">
-              Discover{" "}
-              <span className="font-medium italic text-foreground">
-                A Human But From Gaza
-              </span>
-              , a powerful book of diaries and art capturing Gazans&apos; pain,
-              resilience, and hope of life under war. Stand with Gaza and share
-              its people&apos;s voices—order your copy now.
-            </MotionP>
-            <HeaderButtons product={product} />
-          </div>
-        </Container>
-      </div>
+      <Container className="my-32">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-center md:items-center">
+          <MotionDiv
+            initial={motions.fadeIn.initial}
+            animate={motions.fadeIn.whileInView}
+            transition={motions.transition({})}
+            className="mb-4">
+            <Badge variant="outline">
+              Be Part Of PalestinianCauses&apos; Journey
+            </Badge>
+          </MotionDiv>
+          <h1 className="mb-6 flex w-full max-w-4xl flex-wrap justify-start gap-x-1.5 text-left text-6xl !leading-none tracking-tight sm:text-7xl md:justify-center md:text-center lg:max-w-none lg:text-8xl xl:text-9xl">
+            {[
+              "Families'",
+              {
+                text: "Shadows ",
+                class: "italic font-semibold",
+              },
+              "Over",
+              {
+                text: "Gaza's ",
+                class: "italic font-semibold",
+              },
+              "Rubble.",
+            ].map((word, index) => (
+              <MotionSpan
+                key={typeof word === "string" ? word : word.text}
+                initial={motions.fadeIn.initial}
+                animate={motions.fadeIn.whileInView}
+                transition={motions.transition({ delay: index * 0.1 })}
+                className={cn(
+                  "whitespace-break-spaces",
+                  typeof word === "string" ? "" : word.class,
+                )}>
+                {typeof word === "string" ? word : word.text}
+              </MotionSpan>
+            ))}
+          </h1>
+          <MotionP
+            initial={motions.fadeIn.initial}
+            animate={motions.fadeIn.whileInView}
+            transition={motions.transition({ delay: 0.2 })}
+            className="mb-12 max-w-5xl text-pretty text-left text-base text-muted-foreground sm:text-xl/8 md:text-center">
+            Explore{" "}
+            <span className="font-medium italic text-foreground">
+              &ldquo;A Human But From Gaza,&ldquo;
+            </span>
+            {"  "}
+            an essential collection merging intimate diaries and powerful
+            artwork. Witness firsthand the pain, resilience, and enduring hope
+            of Gazans living through the war in Gaza. Amplify their authentic
+            voices and stand in solidarity—order your copy today to support our
+            mission.
+          </MotionP>
+          <HeaderButtons product={product} />
+        </div>
+      </Container>
       <MotionDiv
         initial={motions.fadeInLeft.initial}
         animate={motions.fadeInLeft.whileInView}
@@ -102,8 +103,8 @@ export const Header = function Header({ product }: { product: Product }) {
           <MotionDiv
             viewport={{ once: true }}
             initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({ delay: 0.5 })}
+            animate={motions.fadeIn.whileInView}
+            transition={motions.transition({ delay: 0.3 })}
             className="relative h-full w-full border border-muted">
             <Image
               src="/a-human-but-from-gaza/book-cover.jpeg"

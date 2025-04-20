@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { ArrowRightIcon, HeartIcon } from "lucide-react";
 import Link from "next/link";
@@ -29,9 +29,10 @@ export const HeaderButtons = function HeaderButtons({
   return (
     <div className="flex w-full flex-col items-stretch justify-center gap-2.5 sm:w-max sm:flex-row sm:items-center sm:gap-5">
       <MotionDiv
+        viewport={{ once: true }}
         initial={motions.fadeIn.initial}
         animate={motions.fadeIn.whileInView}
-        transition={motions.transition({ delay: 0.6 })}
+        transition={motions.transition({ delay: 0.4 })}
         className="w-full">
         <Button
           size="lg"
@@ -53,9 +54,10 @@ export const HeaderButtons = function HeaderButtons({
         </Button>
       </MotionDiv>
       <MotionDiv
+        viewport={{ once: true }}
         initial={motions.fadeIn.initial}
         animate={motions.fadeIn.whileInView}
-        transition={motions.transition({ delay: 0.7 })}
+        transition={motions.transition({ delay: 0.5 })}
         className="w-full">
         <Button variant="outline" size="lg" className="w-full" asChild>
           <Link href={navigation[3].href} target="_blank">
