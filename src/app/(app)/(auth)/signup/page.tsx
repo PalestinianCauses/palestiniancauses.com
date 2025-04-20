@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Metadata } from "next";
 import { Fragment } from "react";
@@ -6,6 +6,8 @@ import { Fragment } from "react";
 import { SignUpForm } from "@/components/auth/forms/sign-up";
 import { MotionH2, MotionP } from "@/components/globals/motion";
 import { motions } from "@/lib/motion";
+
+import { QueryProvider } from "../../providers";
 
 export const metadata: Metadata = {
   title: "Sign up",
@@ -32,7 +34,9 @@ export default function SignUpPage() {
           voices.
         </MotionP>
       </div>
-      <SignUpForm />
+      <QueryProvider>
+        <SignUpForm />
+      </QueryProvider>
     </Fragment>
   );
 }
