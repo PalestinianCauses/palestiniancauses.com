@@ -1,8 +1,8 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 export const messages = {
   http: {
-    unAuthorized: "Could not authorize request. Please sign in first.",
+    unAuthorized: "Could not authorize request.",
     unAuthenticated: "Could not authenticate request. Please sign in first.",
     notFound: "Could not find requested resource. Please try another resource.",
     serverError:
@@ -10,15 +10,23 @@ export const messages = {
   },
   actions: {
     user: {
-      unAuthenticated: "You are not authenticated. Please sign in first.",
+      unAuthorized: "You are not authorized to perform this action.",
+      unAuthenticated:
+        "You are not authenticated to perform this action. Please sign in first.",
+      notFound: "Could not find user. Please try again later.",
       serverError:
         "An error occurred while getting authenticated user. Please try again later.",
+      delete: {
+        success: "User deleted successfully.",
+        serverError:
+          "An error occurred while deleting user. Please try again later.",
+      },
     },
     auth: {
       signIn: {
         pending: "Signing in...",
         success: "Signed in successfully.",
-        unAuthorized: (email: string) =>
+        unAuthenticated: (email: string) =>
           `Password entered for user with ${email}, email is not correct.`,
         notFound: (email: string) =>
           `User with ${email} is not yet a family member. May be sign up first?`,
@@ -30,8 +38,9 @@ export const messages = {
         success: "Signed up successfully.",
         duplication: (email: string) =>
           `User with ${email}, email is already a family member. May be sign in instead?`,
-        validationError:
-          "Password entered is not as resilient as Gazans people.",
+        validation: "Password entered is not as resilient as Gaza's people.",
+        signIn:
+          "Signed up successfully, but could not sign you in automatically. Please try signing in.",
         serverError:
           "An error occurred while signing up. Please try again later.",
       },
@@ -69,7 +78,8 @@ export const messages = {
 export const httpStatusesMessages = {
   401: {
     http: messages.http.unAuthorized,
-    signIn: (email: string) => messages.actions.auth.signIn.unAuthorized(email),
+    signIn: (email: string) =>
+      messages.actions.auth.signIn.unAuthenticated(email),
     diaryEntry: messages.actions.diaryEntry.unAuthorized,
   },
   403: {
@@ -85,7 +95,7 @@ export const httpStatusesMessages = {
     signUp: (email: string) => messages.actions.auth.signUp.duplication(email),
   },
   417: {
-    signUp: messages.actions.auth.signUp.validationError,
+    signUp: messages.actions.auth.signUp.validation,
   },
   500: {
     http: messages.http.serverError,
