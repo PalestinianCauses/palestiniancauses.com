@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import Image from "next/image";
 import Link from "next/link";
@@ -11,7 +11,11 @@ import {
   MotionDiv,
   MotionFigcaption,
 } from "../globals/motion";
-import { Heading, Paragraph, SectionBadge } from "../globals/typography";
+import {
+  Paragraph,
+  SectionHeading,
+  SectionHeadingBadge,
+} from "../globals/typography";
 import { Button } from "../ui/button";
 
 const testimonials = [
@@ -41,13 +45,13 @@ export const Testimonials = function Testimonials() {
   return (
     <section className="relative my-24 xl:my-32">
       <Container className="max-w-7xl">
-        <SectionBadge number="03" className="mb-8">
+        <SectionHeadingBadge as="h2" number="03" className="mb-8">
           What Did Gazans Feel?
-        </SectionBadge>
-        <Heading className="mb-24 xl:mb-32">
+        </SectionHeadingBadge>
+        <SectionHeading as="h3" className="mb-24 xl:mb-32">
           Glimpses into Gazans&apos; hearts. Here is what they had to say about
           our book.
-        </Heading>
+        </SectionHeading>
         <div className="flex w-full flex-col gap-24">
           {testimonials.map(({ name, link, image, paragraphs }) => (
             <figure
