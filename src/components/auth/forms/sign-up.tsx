@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -60,7 +60,11 @@ export const SignUpForm = function SignUpForm() {
                 <FormItem>
                   <FormLabel>First name</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={signUp.isPending} />
+                    <Input
+                      {...field}
+                      disabled={signUp.isPending}
+                      data-testid="first-name-input"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -78,7 +82,11 @@ export const SignUpForm = function SignUpForm() {
                 <FormItem>
                   <FormLabel>Last name</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={signUp.isPending} />
+                    <Input
+                      {...field}
+                      disabled={signUp.isPending}
+                      data-testid="last-name-input"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -98,7 +106,11 @@ export const SignUpForm = function SignUpForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={signUp.isPending} />
+                  <Input
+                    {...field}
+                    disabled={signUp.isPending}
+                    data-testid="email-input"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -121,6 +133,7 @@ export const SignUpForm = function SignUpForm() {
                     {...field}
                     type="password"
                     disabled={signUp.isPending}
+                    data-testid="password-input"
                   />
                 </FormControl>
                 <FormMessage />
@@ -133,7 +146,11 @@ export const SignUpForm = function SignUpForm() {
           animate={motions.fadeIn.whileInView}
           transition={motions.transition({ duration: "fast", delay: 0.7 })}
           className="flex flex-col items-stretch justify-center">
-          <Button type="submit" disabled={signUp.isPending} className="mb-6">
+          <Button
+            type="submit"
+            disabled={signUp.isPending}
+            data-testid="signup-button"
+            className="mb-6">
             Sign up
           </Button>
           <p className="text-center text-sm text-muted-foreground">
