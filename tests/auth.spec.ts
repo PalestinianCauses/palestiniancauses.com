@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { expect, test } from "@playwright/test";
 
@@ -115,8 +115,6 @@ test.describe("Authentication: Sign In Flows", () => {
   }) => {
     userTestingEmail = "non-existing-user@palestiniancauses.com";
     userTestingPassword = "Secure-Password-012345678@";
-
-    await page.goto("/signin");
 
     await page.goto("/signin");
     await page.getByTestId("email-input").fill(userTestingEmail);
