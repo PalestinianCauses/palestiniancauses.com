@@ -1,12 +1,15 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Metadata } from "next";
 import { Fragment } from "react";
 
 import { About } from "@/components/a-human-but-from-gaza/about";
-import { Footer } from "@/components/a-human-but-from-gaza/footer";
 import { Header } from "@/components/a-human-but-from-gaza/header";
+import { HeaderButtons } from "@/components/a-human-but-from-gaza/header-buttons";
 import { Testimonials } from "@/components/a-human-but-from-gaza/testimonials";
+import { Container } from "@/components/globals/container";
+import { Footer } from "@/components/globals/footer";
+import { VideoOutroScene } from "@/components/globals/video-outro-scene";
 import { getProduct } from "@/lib/shopify";
 
 export const metadata: Metadata = {
@@ -24,7 +27,13 @@ export default async function AHumanButFromGazaPage() {
       <Header product={product} />
       <About />
       <Testimonials />
-      <Footer product={product} />
+      <VideoOutroScene />
+      <Container>
+        <div className="relative z-50 flex w-full -translate-y-[3.25rem] items-center justify-center sm:-mt-[4.25rem] sm:translate-y-0 sm:pb-4 lg:-mt-[5.25rem] lg:pb-8">
+          <HeaderButtons product={product} />
+        </div>
+      </Container>
+      <Footer />
     </Fragment>
   );
 }
