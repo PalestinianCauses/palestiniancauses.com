@@ -1,60 +1,63 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { motions } from "@/lib/motion";
 
 import { Container } from "../globals/container";
 import { InfiniteMarquee, MarqueeItem } from "../globals/marquee";
 import { MotionDiv, MotionSpan } from "../globals/motion";
-import { Heading, Paragraph, SectionBadge } from "../globals/typography";
+import {
+  Paragraph,
+  SectionHeading,
+  SectionHeadingBadge,
+} from "../globals/typography";
 
 export const About = function About() {
   return (
-    <section className="relative my-24 xl:my-32">
-      <Container className="mb-24 max-w-7xl xl:mb-32">
-        <SectionBadge number="01" className="mb-8">
+    <div className="relative my-24 xl:my-32">
+      <Container as="section" className="mb-24 max-w-7xl xl:mb-32">
+        <SectionHeadingBadge as="h2" number="01" className="mb-8">
           About The Book
-        </SectionBadge>
-        <Heading className="mb-8">
-          A collection of raw and un-filtered voices that un-veil the human side
-          of Gazans&apos; un-told stories.
-        </Heading>
+        </SectionHeadingBadge>
+        <SectionHeading as="h3" className="mb-8">
+          Embodying our commitment to authentic storytelling and solidarity.
+        </SectionHeading>
         <Paragraph>
           <span className="font-medium text-foreground">
             &ldquo;A Human But From Gaza&ldquo;
           </span>{" "}
-          is not just a book—it is a collection of raw and un-filtered voices
-          that un-veil the human side of Gaza&apos;s un-told stories. This
-          project brings together the profoundly personal diaries of{" "}
-          <span className="font-medium text-foreground">M.</span> and{" "}
-          <span className="font-medium text-foreground">L.</span>, two resilient
-          women who lived through the recent war in Gaza, alongside the powerful
-          artwork of <span className="font-medium text-foreground">N.</span>,
-          which captures the emotions, struggles, and hopes of a people under
-          siege.
+          is a vital testament to the Gazan experience. It offers a raw,
+          unfiltered collection of voices illuminating the human realities often
+          obscured in narratives about Gaza. This project amplifies the
+          profoundly personal diaries of M. and L., two women demonstrating
+          immense resilience while living through the recent war, presented
+          alongside the powerful and evocative artwork of N. Together, their
+          words and images capture the complex emotions, daily struggles, and
+          steadfast hopes of a people under siege, creating a crucial bridge for
+          fostering the global empathy and understanding central to our mission.
         </Paragraph>
       </Container>
-      <Container className="mb-24 max-w-7xl xl:mb-32">
-        <SectionBadge number="02" className="mb-8">
+      <Container as="section" className="mb-24 max-w-7xl xl:mb-32">
+        <SectionHeadingBadge as="h2" number="02" className="mb-8">
           What&apos;s Inside The Pages?
-        </SectionBadge>
-        <Heading className="mb-8">
-          Through their words and art, this book provides a rare glimpse into
-          the daily lives of Palestinians.
-        </Heading>
+        </SectionHeadingBadge>
+        <SectionHeading as="h3" className="mb-8">
+          Within this book, the words of M. and L. and the art of N. offer an
+          intimate window into:
+        </SectionHeading>
         <Paragraph className="mb-8">
-          Through their words and art, this book provides a rare glimpse into
-          the daily lives of Palestinians enduring unimaginable hardships. It
-          offers stories of survival, family, and the unwavering spirit of a
-          community amidst destruction. From the poignant reflections of a
-          mother comforting her children to the sketches that reveal the shadows
-          of a war-torn city, every page resonates with humanity, strength, and
-          resilience.
+          The daily realities of Gazans navigating extreme adversity. Readers
+          will find powerful accounts of survival, the enduring strength of
+          family bonds, and the collective spirit of a community facing
+          widespread destruction. From poignant diary entries detailing moments
+          of quiet endurance to artwork capturing the stark landscapes of
+          conflict, each page conveys profound humanity and resilience.
         </Paragraph>
         <Paragraph>
-          It is more than a book; it is a bridge to understanding, a call for
-          empathy, and an invitation to witness the strength of those who refuse
-          to be silenced. Let the authors&apos; stories inspire, challenge, and
-          connect you to a reality too often overlooked.
+          This collection is more than testimony; it is an essential bridge for
+          building understanding and fostering the empathy central to our work.
+          We invite readers to witness these authentic voices, challenge
+          preconceived notions, and connect deeply with a reality demanding
+          global attention.
         </Paragraph>
       </Container>
       <MotionDiv
@@ -69,7 +72,7 @@ export const About = function About() {
             "Voices:",
             "Written",
             "by",
-            "Palestinians",
+            "Gazans",
             "currently",
             "living",
             "through",
@@ -107,6 +110,6 @@ export const About = function About() {
           ))}
         </InfiniteMarquee>
       </MotionDiv>
-    </section>
+    </div>
   );
 };
