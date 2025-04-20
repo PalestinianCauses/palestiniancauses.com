@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -58,7 +58,11 @@ export const SignInForm = function SignInForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={signIn.isPending} />
+                  <Input
+                    {...field}
+                    disabled={signIn.isPending}
+                    data-testid="email-input"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -77,17 +81,18 @@ export const SignInForm = function SignInForm() {
               <FormItem>
                 <div className="flex w-full items-center justify-between gap-3">
                   <FormLabel>Password</FormLabel>
-                  {/* <Button variant="link" className="h-auto p-0" asChild>
-                  <Label>
-                  <Link href="/password-forgot">Forgot password?</Link>
-                  </Label>
-                  </Button> */}
+                  <Button variant="link" className="h-auto p-0" asChild>
+                    <Label>
+                      <Link href="/password-forgot">Forgot password?</Link>
+                    </Label>
+                  </Button>
                 </div>
                 <FormControl>
                   <Input
                     {...field}
                     type="password"
                     disabled={signIn.isPending}
+                    data-testid="password-input"
                   />
                 </FormControl>
                 <FormMessage />
@@ -100,7 +105,11 @@ export const SignInForm = function SignInForm() {
           animate={motions.fadeIn.whileInView}
           transition={motions.transition({ duration: "fast", delay: 0.5 })}
           className="flex w-full flex-col items-stretch justify-center">
-          <Button type="submit" disabled={signIn.isPending} className="mb-6">
+          <Button
+            type="submit"
+            disabled={signIn.isPending}
+            data-testid="signin-button"
+            className="mb-6">
             Sign in
           </Button>
           <p className="text-center text-sm text-muted-foreground">
