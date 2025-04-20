@@ -1,59 +1,20 @@
 "use server";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { PaginatedDocs } from "payload";
 
-import { httpStatusesMessages } from "@/lib/errors";
+import { messages } from "@/lib/errors";
 import {
-  frappeClient,
-  frappeDB,
-  isErrorFrappe,
-  UserFrappe,
-} from "@/lib/frappe";
-import { AuthResponsePayload, payload } from "@/lib/payload";
+  AuthResponsePayload,
+  isErrorHasDataPlusErrors,
+  isErrorPayload,
+  payload,
+} from "@/lib/payload";
 import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
-import { actionTryCatch } from "@/lib/utils";
+import { actionTryCatch, isResilientPassword } from "@/lib/utils";
 import { User } from "@/payload-types";
-
-const verifyUserFrappe = async function verifyUserFrappe({
-  email,
-}: SignInSchema) {
-  const user = await frappeDB.getDoc("User", email);
-
-  return user;
-};
-
-const createUserFrappe = async function createUserFrappe(
-  signUpData: SignUpSchema,
-) {
-  const user = await frappeDB.createDoc("User", {
-    user_type: "Website User",
-    username: [signUpData.firstName.trim(), signUpData.lastName.trim()]
-      .join("")
-      .toLowerCase(),
-    first_name: signUpData.firstName,
-    last_name: signUpData.lastName,
-    email: signUpData.email,
-    new_password: signUpData.password,
-    send_welcome_email: 0,
-  });
-
-  return user;
-};
-
-const signInUserFrappe = async function signInUserFrappe(
-  signInData: SignInSchema,
-) {
-  const user = await frappeClient.auth().loginWithUsernamePassword({
-    username: signInData.email,
-    password: signInData.password,
-  });
-
-  return user;
-};
 
 const verifyUserPayload = async function verifyUserPayload({
   email,
@@ -100,6 +61,7 @@ const setUserCookies = async function setUserCookies(
     value,
     secure: true,
     httpOnly: true,
+    path: "/",
   });
 };
 
@@ -123,99 +85,44 @@ export const signIn = async function signIn(
 ): Promise<AuthResponse> {
   const response = {
     data: null as AuthResponsePayload | null,
-    error: null as string | null,
+    error: messages.actions.auth.signIn.serverError as string | null,
   };
 
-  const { data: dataFrappe, error: errorFrappe } = await actionTryCatch<
-    UserFrappe,
-    unknown
-  >(verifyUserFrappe(signInData));
+  const { data: dataPayload, error: errorPayload } = await actionTryCatch(
+    verifyUserPayload({ email: signInData.email }),
+  );
 
-  if (errorFrappe) {
-    if (isErrorFrappe(errorFrappe) && errorFrappe.httpStatus === 404)
-      response.error = httpStatusesMessages[404].signIn(signInData.email);
-    else response.error = httpStatusesMessages[500].signIn;
+  if (errorPayload || !dataPayload) return response;
+
+  if (dataPayload.docs.length === 0) {
+    response.error = messages.actions.auth.signIn.notFound(signInData.email);
+    return response;
+  }
+
+  const { data: userDataPayload, error: userErrorPayload } =
+    await actionTryCatch(
+      signInUserPayload({
+        email: signInData.email,
+        password: signInData.password,
+      }),
+    );
+
+  if (userErrorPayload) {
+    if (isErrorPayload(userErrorPayload))
+      if (userErrorPayload.name === "AuthenticationError")
+        response.error = messages.actions.auth.signIn.unAuthenticated(
+          signInData.email,
+        );
 
     return response;
   }
 
-  if (dataFrappe) {
-    const { data: userDataFrappe, error: userErrorFrappe } =
-      await actionTryCatch(signInUserFrappe(signInData));
+  if (!userDataPayload || !userDataPayload.user || !userDataPayload.token)
+    return response;
 
-    if (userErrorFrappe) {
-      if (isErrorFrappe(userErrorFrappe) && userErrorFrappe.httpStatus === 401)
-        response.error = httpStatusesMessages[401].signIn(signInData.email);
-      else response.error = httpStatusesMessages[500].signIn;
-
-      return response;
-    }
-
-    if (userDataFrappe) {
-      const { data: dataPayload, error: errorPayload } = await actionTryCatch<
-        PaginatedDocs<User>,
-        unknown
-      >(verifyUserPayload({ email: signInData.email }));
-
-      if (errorPayload) {
-        response.error = httpStatusesMessages[500].signIn;
-        return response;
-      }
-
-      if (dataPayload) {
-        if (dataPayload.docs.length === 0) {
-          const { error: userErrorPayload } = await actionTryCatch<
-            User,
-            unknown
-          >(
-            createUserPayload({
-              email: signInData.email,
-              password: signInData.password,
-              role: dataFrappe.user_type.toLowerCase().split(" ").join("-") as
-                | "admin"
-                | "system-user"
-                | "website-user",
-              frappeUserId: dataFrappe.name,
-              frappeUserRole: dataFrappe.user_type,
-              isSyncedWithFrappe: true,
-            }),
-          );
-
-          if (userErrorPayload) {
-            response.error = httpStatusesMessages[500].signIn;
-            return response;
-          }
-        }
-
-        const { data: userDataPayload, error: userErrorPayload } =
-          await actionTryCatch<AuthResponsePayload, unknown>(
-            signInUserPayload({
-              email: signInData.email,
-              password: signInData.password,
-            }),
-          );
-
-        if (userErrorPayload) {
-          response.error = httpStatusesMessages[500].signIn;
-          return response;
-        }
-
-        if (userDataPayload && userDataPayload.token) {
-          await setUserCookies("payload-token", userDataPayload.token);
-          response.data = userDataPayload;
-          return response;
-        }
-      }
-    }
-  }
-
-  if (
-    (!response.data && !response.error) ||
-    (response.data && response.error)
-  ) {
-    response.data = null;
-    response.error = httpStatusesMessages[500].signIn;
-  }
+  await setUserCookies("payload-token", userDataPayload.token);
+  response.data = userDataPayload;
+  response.error = null;
 
   return response;
 };
@@ -225,73 +132,50 @@ export const signUp = async function signUp(
 ): Promise<AuthResponse> {
   const response = {
     data: null as AuthResponsePayload | null,
-    error: null as string | null,
+    error: messages.actions.auth.signUp.serverError as string | null,
   };
 
-  const { data: dataFrappe, error: errorFrappe } = await actionTryCatch<
-    UserFrappe,
-    unknown
-  >(createUserFrappe(signUpData));
+  if (!isResilientPassword(signUpData.password)) {
+    response.error = messages.actions.auth.signUp.validation;
+    return response;
+  }
 
-  if (errorFrappe) {
-    if (isErrorFrappe(errorFrappe)) {
-      if (errorFrappe.httpStatus === 409)
-        response.error = httpStatusesMessages[409].signUp(signUpData.email);
-      else if (errorFrappe.httpStatus === 417)
-        response.error = httpStatusesMessages[417].signUp;
-    } else response.error = httpStatusesMessages[500].signUp;
+  const { error: errorPayload } = await actionTryCatch(
+    createUserPayload({ ...signUpData, role: "website-user" }),
+  );
+
+  if (errorPayload) {
+    if (isErrorHasDataPlusErrors(errorPayload))
+      if (
+        errorPayload.name === "ValidationError" &&
+        errorPayload.data.errors[0].path === "email"
+      )
+        response.error = messages.actions.auth.signUp.duplication(
+          signUpData.email,
+        );
 
     return response;
   }
 
-  if (dataFrappe) {
-    const { data: dataPayload, error: errorPayload } = await actionTryCatch<
-      User,
-      unknown
-    >(
-      createUserPayload({
-        ...signUpData,
-        role: dataFrappe.user_type.toLowerCase().split(" ").join("-") as
-          | "admin"
-          | "system-user"
-          | "website-user",
-        frappeUserId: dataFrappe.name,
-        frappeUserRole: dataFrappe.user_type,
-        isSyncedWithFrappe: true,
+  const { data: userDataPayload, error: userErrorPayload } =
+    await actionTryCatch(
+      signInUserPayload({
+        email: signUpData.email,
+        password: signUpData.password,
       }),
     );
 
-    if (errorPayload) {
-      response.error = httpStatusesMessages[500].signUp;
-      return response;
-    }
-
-    if (dataPayload) {
-      const { data: userDataPayload, error: userErrorPayload } =
-        await actionTryCatch(
-          signInUserPayload({
-            email: signUpData.email,
-            password: signUpData.password,
-          }),
-        );
-
-      if (userErrorPayload) redirect("/signin");
-
-      if (userDataPayload && userDataPayload.token) {
-        await setUserCookies("payload-token", userDataPayload.token);
-        response.data = userDataPayload;
-        return response;
-      }
-    }
-  }
-
   if (
-    (!response.data && !response.error) ||
-    (response.data && response.error)
-  ) {
-    response.data = null;
-    response.error = httpStatusesMessages[500].signUp;
-  }
+    userErrorPayload ||
+    !userDataPayload ||
+    !userDataPayload.user ||
+    !userDataPayload.token
+  )
+    redirect("/signin");
+
+  await setUserCookies("payload-token", userDataPayload.token);
+  response.data = userDataPayload;
+  response.error = null;
 
   return response;
 };
