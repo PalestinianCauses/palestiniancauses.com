@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -32,7 +32,7 @@ import { useDiaryEntry } from "@/hooks/use-diary-entry";
 import { useUser } from "@/hooks/use-user";
 import { messages } from "@/lib/errors";
 import { diaryEntrySchema, DiaryEntrySchema } from "@/lib/schemas/diary";
-import { ActionTryCatchReturn, cn } from "@/lib/utils";
+import { ActionResponseTryCatch, cn } from "@/lib/utils";
 
 export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
   const router = useRouter();
@@ -52,7 +52,7 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
   });
 
   const [response, setResponse] = useState<
-    ActionTryCatchReturn<string, string>
+    ActionResponseTryCatch<string, string>
   >({ data: null, error: null });
 
   const handleSubmit = function handleSubmit(data: DiaryEntrySchema) {

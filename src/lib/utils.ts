@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -24,15 +24,15 @@ export const ensureStartsWith = function ensureStartsWith(
     : [startsWith, stringToCheck].join("");
 };
 
-export type ActionTryCatchReturn<D, E> = {
+export type ActionResponseTryCatch<D, E> = {
   data: D | null;
   error: E | null | unknown;
 };
 
 export const actionTryCatch = async function actionTryCatch<D, E>(
   action: Promise<D>,
-): Promise<ActionTryCatchReturn<D, E>> {
-  const result: ActionTryCatchReturn<D, E> = {
+): Promise<ActionResponseTryCatch<D, E>> {
+  const result: ActionResponseTryCatch<D, E> = {
     data: null,
     error: null,
   };
@@ -49,8 +49,8 @@ export const actionTryCatch = async function actionTryCatch<D, E>(
 
 export const httpTryCatch = async function httpTryCatch<D, E>(
   http: Promise<Response>,
-): Promise<ActionTryCatchReturn<D, E>> {
-  const result: ActionTryCatchReturn<D, E> = {
+): Promise<ActionResponseTryCatch<D, E>> {
+  const result: ActionResponseTryCatch<D, E> = {
     data: null,
     error: null,
   };
@@ -80,4 +80,20 @@ export const httpTryCatch = async function httpTryCatch<D, E>(
   }
 
   return result;
+};
+
+export const isResilientPassword = function isResilientPassword(
+  password: string,
+  minimumLength = 8,
+) {
+  if (!password || typeof password !== "string") return false;
+
+  if (password.length < minimumLength) return false;
+
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasDigit = /\d/.test(password);
+  const hasCharacterSpecial = /[!@#$%^&*()_+\-=`]/.test(password);
+
+  return hasLowerCase && hasUpperCase && hasDigit && hasCharacterSpecial;
 };

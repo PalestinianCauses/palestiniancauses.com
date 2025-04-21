@@ -1,17 +1,17 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { httpStatusesMessages, messages } from "@/lib/errors";
 import { payload } from "@/lib/payload";
 import { isError } from "@/lib/payload/utils";
-import { actionTryCatch, ActionTryCatchReturn } from "@/lib/utils";
+import { ActionResponseTryCatch, actionTryCatch } from "@/lib/utils";
 import { DiaryEntry } from "@/payload-types";
 
 export const createDiaryEntry = async function createDiaryEntry(
   data: Omit<DiaryEntry, "id" | "status" | "createdAt" | "updatedAt">,
 ) {
-  const response: ActionTryCatchReturn<string, string> = {
+  const response: ActionResponseTryCatch<string, string> = {
     data: null,
     error: null,
   };
