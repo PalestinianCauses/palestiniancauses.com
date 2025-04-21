@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 export const messages = {
   http: {
@@ -64,6 +64,10 @@ export const messages = {
         "An error occurred while sharing your diary. Please try again later.",
       unique: (title: string) =>
         `"${title}" - what a poignant title! It appears another resilient author has already used this exact title for their story. To ensure your unique testimony shines brightly, could you please choose a different title?`,
+    },
+    collection: {
+      serverError:
+        "An error occurred while getting collection. Please try again later.",
     },
   },
   forms: {
