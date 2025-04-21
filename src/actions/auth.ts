@@ -1,17 +1,14 @@
 "use server";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { messages } from "@/lib/errors";
-import {
-  AuthResponsePayload,
-  isErrorHasDataPlusErrors,
-  isErrorPayload,
-  payload,
-} from "@/lib/payload";
+import { payload } from "@/lib/payload";
+import { AuthenticationResponse } from "@/lib/payload/types";
+import { isError, isErrorHasDataPlusErrors } from "@/lib/payload/utils";
 import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
 import { actionTryCatch, isResilientPassword } from "@/lib/utils";
 import { User } from "@/payload-types";
@@ -65,11 +62,6 @@ const setUserCookies = async function setUserCookies(
   });
 };
 
-export type AuthResponse = {
-  data: AuthResponsePayload | null;
-  error: string | null;
-};
-
 export const getAuth = async function getAuth() {
   const response = await actionTryCatch(
     payload.auth({ headers: await headers() }),
@@ -82,10 +74,10 @@ export const getAuth = async function getAuth() {
 
 export const signIn = async function signIn(
   signInData: SignInSchema,
-): Promise<AuthResponse> {
-  const response = {
-    data: null as AuthResponsePayload | null,
-    error: messages.actions.auth.signIn.serverError as string | null,
+): Promise<AuthenticationResponse> {
+  const response: AuthenticationResponse = {
+    data: null,
+    error: messages.actions.auth.signIn.serverError,
   };
 
   const { data: dataPayload, error: errorPayload } = await actionTryCatch(
@@ -108,7 +100,7 @@ export const signIn = async function signIn(
     );
 
   if (userErrorPayload) {
-    if (isErrorPayload(userErrorPayload))
+    if (isError(userErrorPayload))
       if (userErrorPayload.name === "AuthenticationError")
         response.error = messages.actions.auth.signIn.unAuthenticated(
           signInData.email,
@@ -129,10 +121,10 @@ export const signIn = async function signIn(
 
 export const signUp = async function signUp(
   signUpData: SignUpSchema,
-): Promise<AuthResponse> {
-  const response = {
-    data: null as AuthResponsePayload | null,
-    error: messages.actions.auth.signUp.serverError as string | null,
+): Promise<AuthenticationResponse> {
+  const response: AuthenticationResponse = {
+    data: null,
+    error: messages.actions.auth.signUp.serverError,
   };
 
   if (!isResilientPassword(signUpData.password)) {
