@@ -1,5 +1,5 @@
 {
-  "id": "6b050f14-732d-42f2-8d70-91f07b14743e",
+  "id": "9cf04d24-0754-42d8-a364-01ecd6cabb6f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -175,25 +175,6 @@
           "notNull": true,
           "default": "'website-user'"
         },
-        "frappe_user_id": {
-          "name": "frappe_user_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "frappe_user_role": {
-          "name": "frappe_user_role",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "is_synced_with_frappe": {
-          "name": "is_synced_with_frappe",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp(3) with time zone",
@@ -253,21 +234,6 @@
         }
       },
       "indexes": {
-        "users_frappe_user_id_idx": {
-          "name": "users_frappe_user_id_idx",
-          "columns": [
-            {
-              "expression": "frappe_user_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
         "users_updated_at_idx": {
           "name": "users_updated_at_idx",
           "columns": [
@@ -1039,7 +1005,7 @@
     "public.enum_diary_entries_status": {
       "name": "enum_diary_entries_status",
       "schema": "public",
-      "values": ["pending", "rejected", "approved", "published", "archived"]
+      "values": ["pending", "rejected", "approved", "archived"]
     }
   },
   "schemas": {},
