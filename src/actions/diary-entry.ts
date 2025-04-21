@@ -1,9 +1,10 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { httpStatusesMessages, messages } from "@/lib/errors";
-import { isErrorPayload, payload } from "@/lib/payload";
+import { payload } from "@/lib/payload";
+import { isError } from "@/lib/payload/utils";
 import { actionTryCatch, ActionTryCatchReturn } from "@/lib/utils";
 import { DiaryEntry } from "@/payload-types";
 
@@ -33,7 +34,7 @@ export const createDiaryEntry = async function createDiaryEntry(
 
   if (diaryEntryError) {
     if (
-      isErrorPayload(diaryEntryError) &&
+      isError(diaryEntryError) &&
       (diaryEntryError.status === 400 ||
         diaryEntryError.status === 401 ||
         diaryEntryError.status === 403)
