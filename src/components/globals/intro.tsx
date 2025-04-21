@@ -1,7 +1,8 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import Link from "next/link";
 
+import { QueryProvider } from "@/app/(app)/providers";
 import { motions } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -12,10 +13,7 @@ import { Label } from "../ui/label";
 import { MotionDiv, MotionP, MotionSpan } from "./motion";
 
 const navigation = [
-  // { label: "Acceptable Use Policy", href: "/acceptable-use-policy" },
-  // { label: "Cookie Policy", href: "/cookie-policy" },
   { label: "Privacy Policy", href: "/privacy-policy" },
-  // { label: "Returns Policy", href: "/returns-policy" },
   { label: "Terms of Service", href: "/terms-of-service" },
 ];
 
@@ -32,7 +30,9 @@ export const Intro = function Intro() {
             <Link href="/">PalestinianCauses.</Link>
           </Label>
         </MotionDiv>
-        <AuthButtons />
+        <QueryProvider>
+          <AuthButtons />
+        </QueryProvider>
       </nav>
       <div className="flex flex-col items-start justify-center">
         <h1 className="flex w-full max-w-2xl flex-wrap gap-x-3 text-6xl leading-none tracking-tight sm:text-8xl lg:text-7xl xl:text-8xl [@media_(max-height:48rem)_and_(max-width:27rem)]:text-5xl [@media_(max-height:48rem)_and_(min-width:40rem)]:text-7xl">
@@ -40,23 +40,20 @@ export const Intro = function Intro() {
             "Passionate",
             "and",
             "Creative",
-            { text: "Individuals", class: "italic font-semibold" },
+            "Individuals",
             "United",
             "By",
             "One",
-            { text: "Mission.", class: "italic font-semibold" },
+            "Mission.",
           ].map((word, index) => (
             <MotionSpan
-              key={typeof word === "string" ? word : word.text}
+              key={word}
               viewport={{ once: true }}
               initial={motions.fadeIn.initial}
               whileInView={motions.fadeIn.whileInView}
               transition={motions.transition({ delay: index * 0.1 })}
-              className={cn(
-                "whitespace-break-spaces",
-                typeof word === "string" ? "" : word.class,
-              )}>
-              {typeof word === "string" ? word : word.text}
+              className={cn("whitespace-break-spaces")}>
+              {word}
             </MotionSpan>
           ))}
         </h1>

@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { motions } from "@/lib/motion";
 
@@ -14,15 +14,15 @@ export const navigation = [
   },
   {
     label: "Humans But From Gaza",
-    href: "/humans-but-from-gaza/share",
+    href: "/humans-but-from-gaza",
     recent: true,
     coming: false,
   },
   {
-    label: "Palestinian-Causes' Rooms",
-    href: "/rooms",
-    recent: false,
-    coming: true,
+    label: "About Us",
+    href: "/about-us",
+    recent: true,
+    coming: false,
   },
   {
     label: "Support Us",
@@ -38,8 +38,8 @@ export const navigation = [
     coming: false,
   },
   {
-    label: "About Us",
-    href: "/about-us",
+    label: "Palestinian-Causes' Rooms",
+    href: "/rooms",
     recent: false,
     coming: true,
   },
