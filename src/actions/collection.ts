@@ -1,14 +1,8 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
-import {
-  CollectionSlug,
-  DataFromCollectionSlug,
-  PaginatedDocs,
-  PopulateType,
-  Where,
-} from "payload";
+import { GeneratedTypes, PaginatedDocs, PopulateType, Where } from "payload";
 
 import { messages } from "@/lib/errors";
 import { payload } from "@/lib/payload";
@@ -16,23 +10,24 @@ import { SelectOptions } from "@/lib/payload/types";
 import { selectDefaults } from "@/lib/payload/utils";
 import { actionTryCatch } from "@/lib/utils";
 
-type CollectionOptions = {
-  collection: CollectionSlug;
+type CollectionOptions<TSlug extends keyof GeneratedTypes["collections"]> = {
+  collection: TSlug;
   selects: SelectOptions;
-  fields?: string[];
+  fields?: (keyof GeneratedTypes["collections"][TSlug])[];
   populate?: PopulateType;
 };
 
-type CollectionResponseData = PaginatedDocs<
-  DataFromCollectionSlug<CollectionSlug>
->;
+type CollectionResponseData<TSlug extends keyof GeneratedTypes["collections"]> =
+  PaginatedDocs<GeneratedTypes["collections"][TSlug]>;
 
-type CollectionResponse = {
-  data: CollectionResponseData | null;
+type CollectionResponse<TSlug extends keyof GeneratedTypes["collections"]> = {
+  data: CollectionResponseData<TSlug> | null;
   error: string | null;
 };
 
-export const getCollection = async function getCollection({
+export const getCollection = async function getCollection<
+  TSlug extends keyof GeneratedTypes["collections"],
+>({
   collection,
   selects: {
     page = selectDefaults.page,
@@ -41,17 +36,17 @@ export const getCollection = async function getCollection({
     search = selectDefaults.search,
     ...otherSelects
   },
-  fields = ["title"],
+  fields,
   populate,
-}: CollectionOptions): Promise<CollectionResponse> {
-  const response: CollectionResponse = {
+}: CollectionOptions<TSlug>): Promise<CollectionResponse<TSlug>> {
+  const response: CollectionResponse<TSlug> = {
     data: null,
     error: messages.actions.collection.serverError,
   };
 
   const where: Where = {};
 
-  if (search && fields.length > 0) {
+  if (search && fields && fields.length > 0) {
     where.or = fields.map((field) => ({
       [field]: { contains: search },
     }));
