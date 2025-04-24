@@ -1,12 +1,12 @@
-// REVIEWED
+// REVIEWED - 01
 
-import { User } from "payload";
+import { User } from "@/payload-types";
 
 export type SelectOptions = {
-  search?: string;
-  sort?: string;
   page?: number;
   limit?: number;
+  sort?: string;
+  search?: string;
   [key: string]: string | number | undefined;
 };
 

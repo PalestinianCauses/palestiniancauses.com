@@ -1,6 +1,13 @@
-// REVIEWED
+// REVIEWED - 01
 
-import { Error, ErrorPlusData } from "./types";
+import { Error, ErrorPlusData, SelectOptions } from "./types";
+
+export const selectDefaults: SelectOptions = {
+  page: 1,
+  limit: 50,
+  sort: ["-", "created", "At"].join(""),
+  search: "",
+};
 
 export const isError = function isError(error: unknown): error is Error {
   return (

@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import {
   CollectionSlug,
@@ -13,35 +13,38 @@ import {
 import { messages } from "@/lib/errors";
 import { payload } from "@/lib/payload";
 import { SelectOptions } from "@/lib/payload/types";
+import { selectDefaults } from "@/lib/payload/utils";
 import { actionTryCatch } from "@/lib/utils";
 
-type FilterOptions = {
+type CollectionOptions = {
   collection: CollectionSlug;
-  filters: SelectOptions;
+  selects: SelectOptions;
   fields?: string[];
   populate?: PopulateType;
 };
 
-type FilterResponseData = PaginatedDocs<DataFromCollectionSlug<CollectionSlug>>;
+type CollectionResponseData = PaginatedDocs<
+  DataFromCollectionSlug<CollectionSlug>
+>;
 
-type FilterResponse = {
-  data: FilterResponseData | null;
+type CollectionResponse = {
+  data: CollectionResponseData | null;
   error: string | null;
 };
 
-export const getCollectionFiltered = async function getCollectionFiltered({
+export const getCollection = async function getCollection({
   collection,
-  filters: {
-    search = "",
-    sort = ["-created", "At"].join(""),
-    page = 1,
-    limit = 10,
-    ...otherFilters
+  selects: {
+    page = selectDefaults.page,
+    limit = selectDefaults.limit,
+    sort = selectDefaults.sort,
+    search = selectDefaults.search,
+    ...otherSelects
   },
   fields = ["title"],
   populate,
-}: FilterOptions): Promise<FilterResponse> {
-  const response: FilterResponse = {
+}: CollectionOptions): Promise<CollectionResponse> {
+  const response: CollectionResponse = {
     data: null,
     error: messages.actions.collection.serverError,
   };
@@ -55,18 +58,18 @@ export const getCollectionFiltered = async function getCollectionFiltered({
   }
 
   /* eslint-disable no-restricted-syntax */
-  for (const key in otherFilters) {
-    if (otherFilters[key] !== undefined && otherFilters[key] !== "") {
-      where[key] = { equals: otherFilters[key] };
+  for (const key in otherSelects) {
+    if (otherSelects[key] !== undefined && otherSelects[key] !== "") {
+      where[key] = { equals: otherSelects[key] };
     }
   }
 
   const collectionPromise = payload.find({
     collection,
-    where,
-    limit,
     page,
+    limit,
     sort,
+    where,
     populate,
   });
 

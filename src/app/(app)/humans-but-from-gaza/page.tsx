@@ -1,6 +1,8 @@
-// REVIEWED
+// REVIEWED - 01
 
-import { getCollectionFiltered } from "@/actions/collection";
+import { Metadata } from "next";
+
+import { getCollection } from "@/actions/collection";
 import { Container } from "@/components/globals/container";
 import {
   FilterConfig,
@@ -9,6 +11,13 @@ import {
 import { Footer } from "@/components/globals/footer";
 import { Paragraph, SectionHeading } from "@/components/globals/typography";
 import { SelectOptions } from "@/lib/payload/types";
+import { selectDefaults } from "@/lib/payload/utils";
+
+export const metadata: Metadata = {
+  title: "The Truth Museum: Humans But From Gaza",
+  description:
+    "Welcome to The Truth Museum, the diary archive for our Humans But From Gaza initiative. Explore unfiltered narratives shared directly by individuals navigating life during the war in Gaza, revealing daily survival, loss, resilience, and hope under siege. Engage respectfully with these authentic testimonies to connect with the human experience often overlooked and deepen your understanding of Gaza.",
+};
 
 export default async function HumansButFromGazaPage(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -16,11 +25,11 @@ export default async function HumansButFromGazaPage(props: {
   /* eslint-disable react/destructuring-assignment */
   const searchParams = await props.searchParams;
 
-  const filters: SelectOptions = {
-    page: parseInt(String(searchParams?.page || "1"), 10),
-    limit: parseInt(String(searchParams?.limit || "10"), 10),
-    sort: String(searchParams?.sort || "-createdAt"),
-    search: String(searchParams?.title || ""),
+  const selects: SelectOptions = {
+    page: parseInt(String(searchParams?.page || selectDefaults.page), 10),
+    limit: parseInt(String(searchParams?.limit || selectDefaults.limit), 10),
+    sort: String(searchParams?.sort || selectDefaults.sort),
+    search: String(searchParams?.title || selectDefaults.search),
   };
 
   const filterConfigs: FilterConfig[] = [
@@ -31,13 +40,11 @@ export default async function HumansButFromGazaPage(props: {
     },
   ];
 
-  const diaryEntries = await getCollectionFiltered({
+  const diaryEntries = await getCollection({
     collection: "diary-entries",
-    filters,
+    selects,
     fields: ["title"],
   });
-
-  console.log(filters, diaryEntries.data?.docs);
 
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">

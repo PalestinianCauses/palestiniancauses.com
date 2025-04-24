@@ -1,9 +1,15 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { startTransition, useCallback, useEffect, useState } from "react";
+import {
+  Fragment,
+  startTransition,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 import { useDebounce } from "@/hooks/use-debounce";
 
@@ -26,15 +32,13 @@ export type FilterConfig =
       placeholder?: string;
     };
 
-export type TFilterControls = {
-  filterConfigs: FilterConfig[];
-  debounceTime?: number;
-};
-
 export const FilterControls = function FilterControls({
   filterConfigs,
   debounceTime = 400,
-}: TFilterControls) {
+}: {
+  filterConfigs: FilterConfig[];
+  debounceTime?: number;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const paramsSearch = useSearchParams(); // Read-only current URL params
@@ -109,7 +113,7 @@ export const FilterControls = function FilterControls({
   };
 
   return (
-    <div>
+    <Fragment>
       {filterConfigs.map((filter) => (
         <div key={filter.param}>
           <Label htmlFor={filter.param}>{filter.label}</Label>
@@ -126,6 +130,6 @@ export const FilterControls = function FilterControls({
           ) : null}
         </div>
       ))}
-    </div>
+    </Fragment>
   );
 };
