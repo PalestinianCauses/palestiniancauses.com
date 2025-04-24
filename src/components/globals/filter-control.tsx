@@ -1,20 +1,23 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Fragment,
-  startTransition,
   useCallback,
   useEffect,
   useState,
+  useTransition,
 } from "react";
 
 import { useDebounce } from "@/hooks/use-debounce";
+import { SelectOptions } from "@/lib/payload/types";
+import { selectDefaults } from "@/lib/payload/utils";
 
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
 
 // Defining a structure for configuring a single filter control
 export type FilterConfig =
@@ -34,25 +37,43 @@ export type FilterConfig =
 
 export const FilterControls = function FilterControls({
   filterConfigs,
+  pageDefault = selectDefaults.page,
+  limitDefault = selectDefaults.limit,
+  sortDefault = selectDefaults.sort,
   debounceTime = 400,
 }: {
   filterConfigs: FilterConfig[];
+  pageDefault?: number;
+  limitDefault?: number;
+  sortDefault?: string;
   debounceTime?: number;
 }) {
   const router = useRouter();
   const pathname = usePathname();
   const paramsSearch = useSearchParams(); // Read-only current URL params
+  const [isPending, startTransition] = useTransition();
 
   // State Management
-  const filterStateInitial = filterConfigs.reduce(
-    (accumulator, filter) => {
-      accumulator[filter.param] = paramsSearch.get(filter.param) || "";
-      return accumulator;
-    },
-    {} as Record<string, string>,
-  );
+  const [filterState, setFilterState] = useState(() => {
+    const state: SelectOptions & { [key: string]: string | number } = {};
 
-  const [filterState, setFilterState] = useState(filterStateInitial);
+    filterConfigs.forEach((filterConfig) => {
+      state[filterConfig.param] = paramsSearch.get(filterConfig.param) || "";
+    });
+
+    const page = paramsSearch.get("page");
+    state.page =
+      page !== null && page !== "" ? parseInt(page, 10) : pageDefault;
+
+    const limit = paramsSearch.get("limit");
+    state.limit =
+      limit !== null && limit !== "" ? parseInt(limit, 10) : limitDefault;
+
+    const sort = paramsSearch.get("sort");
+    state.sort = sort !== null && sort !== "" ? sort : sortDefault;
+
+    return state;
+  });
 
   const filterSearch = filterConfigs.find((filter) => filter.type === "search");
 
@@ -66,17 +87,41 @@ export const FilterControls = function FilterControls({
     // Creating a new URLSearchParams object based on current state
     const newParams = new URLSearchParams();
 
-    filterConfigs.forEach((filter) => {
-      let value = filterState[filter.param];
+    filterConfigs.forEach((filterConfig) => {
+      let value = filterState[filterConfig.param];
 
       // Using debounce value for filters with search type
-      if (filter.type === "search") value = filterDebounceSearch;
+      if (filterConfig.type === "search") value = filterDebounceSearch;
 
       // Setting parameter is it has a non-empty value
-      if (value) newParams.set(filter.param, value);
+      if (value) newParams.set(filterConfig.param, value.toString());
     });
 
-    newParams.set("page", "1"); // Setting page to 1 when filters change
+    // Setting standard parameters (page, limit, sort) from state
+    const page = filterState.page || pageDefault;
+    if (
+      page &&
+      !Number.isNaN(page) &&
+      page > 0 &&
+      filterState.page &&
+      filterState.page !== pageDefault
+    )
+      newParams.set("page", filterState.page.toString());
+
+    const limit = filterState.limit || limitDefault;
+    if (
+      limit &&
+      !Number.isNaN(limit) &&
+      limit > 0 &&
+      filterState.limit &&
+      filterState.limit !== limitDefault
+    )
+      newParams.set("limit", filterState.limit.toString());
+
+    const sort = filterState.sort || sortDefault;
+    if (sort && filterState.sort && filterState.sort !== sortDefault)
+      newParams.set("sort", filterState.sort);
+
     newParams.sort(); // Sorting parameters for consistent URL and string comparison
 
     // Getting current URL params string (sorted for comparison)
@@ -92,7 +137,7 @@ export const FilterControls = function FilterControls({
       const query = newStringSearch ? ["?", newStringSearch].join("") : "";
 
       startTransition(() => {
-        router.push([pathname, query].join(""));
+        router.replace([pathname, query].join(""));
       });
     }
   }, [
@@ -102,6 +147,9 @@ export const FilterControls = function FilterControls({
     paramsSearch,
     filterState,
     filterDebounceSearch,
+    pageDefault,
+    limitDefault,
+    sortDefault,
   ]);
 
   useEffect(() => {
@@ -115,18 +163,41 @@ export const FilterControls = function FilterControls({
   return (
     <Fragment>
       {filterConfigs.map((filter) => (
-        <div key={filter.param}>
+        <div
+          key={filter.param}
+          className="flex flex-col items-start justify-start gap-3">
           <Label htmlFor={filter.param}>{filter.label}</Label>
           {filter.type === "search" ? (
             <Input
               id={filter.param}
               type="text"
-              placeholder={filter.placeholder || ""}
               value={filterState[filter.param]}
+              placeholder={filter.placeholder || ""}
+              disabled={isPending}
               onChange={(event) =>
                 handleChange(filter.param, event.target.value)
               }
             />
+          ) : null}
+
+          {filter.type === "select" ? (
+            <Select
+              defaultValue={filterState[filter.param].toString()}
+              onValueChange={(value) => handleChange(filter.param, value)}
+              disabled={isPending}>
+              <SelectTrigger>
+                {filter.options.find(
+                  (option) => option.value === filterState[filter.param],
+                )?.label || ["Select", filter.param].join(" ")}
+              </SelectTrigger>
+              <SelectContent>
+                {filter.options.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           ) : null}
         </div>
       ))}
