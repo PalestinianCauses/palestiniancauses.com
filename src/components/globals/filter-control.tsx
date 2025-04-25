@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -12,12 +12,15 @@ import {
 } from "react";
 
 import { useDebounce } from "@/hooks/use-debounce";
+import { motions } from "@/lib/motion";
 import { SelectOptions } from "@/lib/payload/types";
 import { selectDefaults } from "@/lib/payload/utils";
 
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
+
+import { MotionDiv } from "./motion";
 
 // Defining a structure for configuring a single filter control
 export type FilterConfig =
@@ -137,7 +140,7 @@ export const FilterControls = function FilterControls({
       const query = newStringSearch ? ["?", newStringSearch].join("") : "";
 
       startTransition(() => {
-        router.replace([pathname, query].join(""));
+        router.replace([pathname, query].join(""), { scroll: false });
       });
     }
   }, [
@@ -163,8 +166,13 @@ export const FilterControls = function FilterControls({
   return (
     <Fragment>
       {filterConfigs.map((filter) => (
-        <div
+        <MotionDiv
           key={filter.param}
+          id={`filter-control-${filter.param}`}
+          viewport={{ once: true }}
+          initial={motions.fadeIn.initial}
+          whileInView={motions.fadeIn.whileInView}
+          transition={motions.transition({})}
           className="flex flex-col items-start justify-start gap-3">
           <Label htmlFor={filter.param}>{filter.label}</Label>
           {filter.type === "search" ? (
@@ -173,7 +181,6 @@ export const FilterControls = function FilterControls({
               type="text"
               value={filterState[filter.param]}
               placeholder={filter.placeholder || ""}
-              disabled={isPending}
               onChange={(event) =>
                 handleChange(filter.param, event.target.value)
               }
@@ -199,7 +206,7 @@ export const FilterControls = function FilterControls({
               </SelectContent>
             </Select>
           ) : null}
-        </div>
+        </MotionDiv>
       ))}
     </Fragment>
   );

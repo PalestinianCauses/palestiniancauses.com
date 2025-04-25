@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import Link from "next/link";
 
@@ -52,7 +52,8 @@ export const Intro = function Intro() {
               initial={motions.fadeIn.initial}
               whileInView={motions.fadeIn.whileInView}
               transition={motions.transition({ delay: index * 0.1 })}
-              className={cn("whitespace-break-spaces")}>
+              className={cn("whitespace-break-spaces")}
+              style={{ willChange: "transform, opacity" }}>
               {word}
             </MotionSpan>
           ))}
