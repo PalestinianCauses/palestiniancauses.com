@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { CollectionConfig } from "payload";
 
@@ -33,7 +33,7 @@ export const DiaryEntries: CollectionConfig = {
       label: "Content",
       name: "content",
       type: "textarea",
-      maxLength: 2500,
+      minLength: 2500,
       required: true,
     },
     {

@@ -1,6 +1,10 @@
-// REVIEWED - 01
+// REVIEWED - 02
+
+import { GeneratedTypes } from "payload";
 
 import { User } from "@/payload-types";
+
+export type CollectionTypes = keyof GeneratedTypes["collections"];
 
 export type SelectOptions = {
   page?: number;

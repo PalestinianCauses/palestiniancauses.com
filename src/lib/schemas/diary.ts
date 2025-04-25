@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { z } from "zod";
 
@@ -13,7 +13,7 @@ export const diaryEntrySchema = z.object({
       new Date(Date.now() - 24 * 60 * 60 * 1000),
       messages.forms.date("Oct 10, 2023", "yesterday"),
     ),
-  content: z.string().min(2, messages.forms.content),
+  content: z.string().min(2500, messages.forms.content),
   isAuthentic: z.boolean(),
   isAnonymous: z.boolean(),
 });
