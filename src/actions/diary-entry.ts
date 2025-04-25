@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { httpStatusesMessages, messages } from "@/lib/errors";
 import { payload } from "@/lib/payload";
@@ -61,4 +61,18 @@ export const createDiaryEntry = async function createDiaryEntry(
   }
 
   return diaryEntryData;
+};
+
+export const getAuthor = async function getAuthor(id: number) {
+  const response = await actionTryCatch(
+    payload.find({
+      collection: "users",
+      where: { id: { equals: id } },
+      select: { firstName: true, lastName: true },
+    }),
+  );
+
+  if (!response.data || response.error) return null;
+
+  return response.data.docs[0];
 };
