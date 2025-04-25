@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { motions } from "@/lib/motion";
 
@@ -26,8 +26,8 @@ export const About = function About() {
             &ldquo;A Human But From Gaza&ldquo;
           </span>{" "}
           is a vital testament to the Gazan experience. It offers a raw,
-          unfiltered collection of voices illuminating the human realities often
-          obscured in narratives about Gaza. This project amplifies the
+          un-filtered collection of voices illuminating the human realities
+          often obscured in narratives about Gaza. This project amplifies the
           profoundly personal diaries of M. and L., two women demonstrating
           immense resilience while living through the recent war, presented
           alongside the powerful and evocative artwork of N. Together, their

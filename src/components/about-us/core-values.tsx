@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { motions } from "@/lib/motion";
 
@@ -14,7 +14,7 @@ const values = [
   {
     title: "Authenticity",
     description:
-      "We are committed to sharing genuine, unfiltered narratives and perspectives directly from Gaza, ensuring the truth of the lived experience is central to all our work.",
+      "We are committed to sharing genuine, un-filtered narratives and perspectives directly from Gaza, ensuring the truth of the lived experience is central to all our work.",
   },
   {
     title: "Solidarity",

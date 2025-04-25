@@ -1,32 +1,33 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
-import { GeneratedTypes, PaginatedDocs, PopulateType, Where } from "payload";
+import { GeneratedTypes, PaginatedDocs, Where } from "payload";
 
 import { messages } from "@/lib/errors";
 import { payload } from "@/lib/payload";
-import { SelectOptions } from "@/lib/payload/types";
+import { CollectionTypes, SelectOptions } from "@/lib/payload/types";
 import { selectDefaults } from "@/lib/payload/utils";
 import { actionTryCatch } from "@/lib/utils";
 
-type CollectionOptions<TSlug extends keyof GeneratedTypes["collections"]> = {
+type CollectionOptions<TSlug extends CollectionTypes> = {
   collection: TSlug;
   selects: SelectOptions;
   fields?: (keyof GeneratedTypes["collections"][TSlug])[];
-  populate?: PopulateType;
+  depth?: number;
 };
 
-type CollectionResponseData<TSlug extends keyof GeneratedTypes["collections"]> =
-  PaginatedDocs<GeneratedTypes["collections"][TSlug]>;
+type CollectionResponseData<TSlug extends CollectionTypes> = PaginatedDocs<
+  GeneratedTypes["collections"][TSlug]
+>;
 
-type CollectionResponse<TSlug extends keyof GeneratedTypes["collections"]> = {
+type CollectionResponse<TSlug extends CollectionTypes> = {
   data: CollectionResponseData<TSlug> | null;
   error: string | null;
 };
 
 export const getCollection = async function getCollection<
-  TSlug extends keyof GeneratedTypes["collections"],
+  TSlug extends CollectionTypes,
 >({
   collection,
   selects: {
@@ -37,7 +38,7 @@ export const getCollection = async function getCollection<
     ...otherSelects
   },
   fields,
-  populate,
+  depth = 0,
 }: CollectionOptions<TSlug>): Promise<CollectionResponse<TSlug>> {
   const response: CollectionResponse<TSlug> = {
     data: null,
@@ -65,14 +66,15 @@ export const getCollection = async function getCollection<
     limit,
     sort,
     where,
-    populate,
+    depth,
   });
 
   const collectionResponse = await actionTryCatch(collectionPromise);
 
-  if (collectionResponse.error) return response;
+  if (!collectionResponse.data || collectionResponse.error) return response;
 
   response.data = collectionResponse.data;
+  response.error = null;
 
   return response;
 };
