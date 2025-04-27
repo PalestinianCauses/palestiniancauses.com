@@ -1,9 +1,10 @@
-// REVIEWED - 05
+// REVIEWED - 06
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import { httpStatusesMessages, messages } from "./errors";
 
+// Styles
 export const toHEX = function toHEX(color: string) {
   const rgb = color.split(" ").map(Number);
   const hex = rgb.map((value) => value.toString(16).padStart(2, "0")).join("");
@@ -15,6 +16,7 @@ export const cn = function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 };
 
+// Strings
 export const ensureStartsWith = function ensureStartsWith(
   stringToCheck: string,
   startsWith: string,
@@ -24,62 +26,76 @@ export const ensureStartsWith = function ensureStartsWith(
     : [startsWith, stringToCheck].join("");
 };
 
-export type ActionResponseTryCatch<D, E> = {
-  data: D | null;
-  error: E | null | unknown;
+export const splitByFlexibleNewLines = function splitByFlexibleNewLines(
+  string: string,
+) {
+  if (!string.trim()) return [];
+
+  const separateRegex = /\s*\n+\s*/;
+  const stringFiltered = string.split(separateRegex).filter(Boolean);
+  return stringFiltered;
 };
 
-export const actionTryCatch = async function actionTryCatch<D, E>(
-  action: Promise<D>,
-): Promise<ActionResponseTryCatch<D, E>> {
-  const result: ActionResponseTryCatch<D, E> = {
-    data: null,
-    error: null,
-  };
+// Actions
+export type ActionSafeExecute<D, E> =
+  | { data: D; error: null }
+  | { data: null; error: string }
+  | { data: null; error: E };
 
+export const actionSafeExecute = async function actionSafeExecute<
+  D,
+  E = string,
+>(
+  action: Promise<D>,
+  errorDefault: string,
+  isErrorFromTypeE?: (error: unknown) => error is E,
+): Promise<ActionSafeExecute<D, E>> {
   try {
     const data = await action;
-    result.data = data;
+    return { data, error: null };
   } catch (error) {
-    result.error = error;
-  }
+    if (isErrorFromTypeE && isErrorFromTypeE(error))
+      return { data: null, error };
 
-  return result;
+    // Add Sentry Log Here
+    return { data: null, error: errorDefault };
+  }
 };
 
-export const httpTryCatch = async function httpTryCatch<D, E>(
+// HTTPs
+export const httpSafeExecute = async function httpSafeExecute<D, E = string>(
   http: Promise<Response>,
-): Promise<ActionResponseTryCatch<D, E>> {
-  const result: ActionResponseTryCatch<D, E> = {
-    data: null,
-    error: null,
-  };
+  errorDefault: string,
+  isDataFromTypeD?: (data: unknown) => data is D,
+  isErrorFromTypeE?: (error: unknown) => error is E,
+): Promise<ActionSafeExecute<D, E>> {
+  try {
+    const response = await http;
 
-  const response = await actionTryCatch(http);
+    if (!response.ok) {
+      const result = { data: null, error: errorDefault };
 
-  if (response.error) {
-    result.error = messages.http.serverError;
-    return result;
-  }
-
-  if (response.data) {
-    if (!response.data.ok) {
       if (
-        response.data.status === 401 ||
-        response.data.status === 403 ||
-        response.data.status === 404
+        response.status === 401 ||
+        response.status === 403 ||
+        response.status === 404
       )
-        result.error = httpStatusesMessages[response.data.status].http;
-      else result.error = messages.http.serverError;
+        result.error = httpStatusesMessages[response.status].http;
 
       return result;
     }
 
-    const data = (await response.data.json()) as D;
-    result.data = data;
-  }
+    const data = await response.json();
 
-  return result;
+    if (!isDataFromTypeD || !isDataFromTypeD(data))
+      return { data: null, error: messages.http.typeError };
+
+    return { data, error: null };
+  } catch (error) {
+    if (isErrorFromTypeE && isErrorFromTypeE(error))
+      return { data: null, error };
+    return { data: null, error: errorDefault };
+  }
 };
 
 export const isResilientPassword = function isResilientPassword(
