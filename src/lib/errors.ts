@@ -1,12 +1,15 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 export const messages = {
   http: {
     unAuthorized: "Could not authorize request.",
     unAuthenticated: "Could not authenticate request. Please sign in first.",
-    notFound: "Could not find requested resource. Please try another resource.",
+    notFound:
+      "Could not find requested resource. Please try a different resource.",
     serverError:
       "An error occurred while sending request. Please try again later.",
+    typeError:
+      "An error occurred while parsing request's response to its correct type. Please try again later.",
   },
   actions: {
     user: {
@@ -54,28 +57,41 @@ export const messages = {
           "An error occurred while signing out. Please try again later.",
       },
     },
-    diaryEntry: {
-      pending: "Sharing your diary...",
-      success:
-        "Thank you for sharing your side of the truth! Your diary has been received and is now part of a growing testimony. While we are reviewing it with care keep an eye on our Instagram updates on when the museum doors swing open!",
-      unAuthorized: "You are not authorized to share a diary.",
-      unAuthenticated: "You are not authenticated to share a diary.",
-      serverError:
-        "An error occurred while sharing your diary. Please try again later.",
-      unique: (title: string) =>
-        `"${title}" - what a poignant title! It appears another resilient author has already used this exact title for their story. To ensure your unique testimony shines brightly, could you please choose a different title?`,
-    },
     collection: {
       serverError:
         "An error occurred while getting collection. Please try again later.",
+    },
+    diaryEntry: {
+      pending: "Sharing your diary...",
+      success:
+        'Thank you for sharing your authentic testimony with PalestinianCauses. Your diary is received and valued. We\'ll review it carefully before adding it to "The Truth Museum"—check back soon!',
+      unique: (title: string) =>
+        `"${title}" - A powerful title! Another resilient author used this exact one for "The Truth Museum." To ensure your unique testimony stands out, could you please provide an alternative title? Thank you!`,
+      unAuthorized: "You are not authorized to share a diary.",
+      unAuthenticated:
+        "You are not authenticated to share a diary. Please sign in first.",
+      notFound: "Could not find diary entry. Please try again later.",
+      serverErrorShare:
+        "An error occurred while sharing your diary. Please try again later.",
+      serverErrorGet:
+        "An error occurred while getting diary entry. Please try again later.",
+      author: {
+        serverError:
+          "An error occurred while getting author. Please try again later.",
+      },
     },
   },
   forms: {
     required: (field: string) => `Please enter your ${field}`,
     valid: (field: string) => `Please enter a valid ${field}`,
-    date: (min: string, max: string) =>
-      `Please enter a valid date between ${min} and ${max}.`,
-    content: "Please write a diary that is long enough to be in our museum.",
+    maxLength: (field: string, length: number) =>
+      `Please enter a ${field} with less than ${length} characters.`,
+    diaryEntry: {
+      date: (min: string, max: string) =>
+        `Please enter a valid date between ${min} and ${max}.`,
+      content:
+        "Please write a diary that is long enough to be in our museum (2500 characters minimum).",
+    },
   },
 };
 
@@ -106,6 +122,6 @@ export const httpStatusesMessages = {
     signIn: messages.actions.auth.signIn.serverError,
     signUp: messages.actions.auth.signUp.serverError,
     signOut: messages.actions.auth.signOut.serverError,
-    diaryEntry: messages.actions.diaryEntry.serverError,
+    diaryEntry: messages.actions.diaryEntry.serverErrorShare,
   },
 };
