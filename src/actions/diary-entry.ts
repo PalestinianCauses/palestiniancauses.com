@@ -1,78 +1,90 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { httpStatusesMessages, messages } from "@/lib/errors";
 import { payload } from "@/lib/payload";
+import { ErrorPayload } from "@/lib/payload/types";
 import { isError } from "@/lib/payload/utils";
-import { ActionResponseTryCatch, actionTryCatch } from "@/lib/utils";
-import { DiaryEntry } from "@/payload-types";
+import { ActionSafeExecute, actionSafeExecute } from "@/lib/utils";
+import { DiaryEntry, User } from "@/payload-types";
 
 export const createDiaryEntry = async function createDiaryEntry(
   data: Omit<DiaryEntry, "id" | "status" | "createdAt" | "updatedAt">,
-) {
-  const response: ActionResponseTryCatch<string, string> = {
-    data: null,
-    error: null,
-  };
+): Promise<ActionSafeExecute<string, string>> {
+  const author = typeof data.author === "object" ? data.author : null;
 
-  const user = typeof data.author === "object" ? data.author : null;
-
-  if (!user) {
-    response.error = messages.actions.diaryEntry.unAuthenticated;
-    return response;
+  if (!author) {
+    return {
+      data: null,
+      error: messages.actions.diaryEntry.unAuthenticated,
+    };
   }
 
-  const { data: diaryEntryData, error: diaryEntryError } = await actionTryCatch(
+  const responseDiaryEntry = await actionSafeExecute<DiaryEntry, ErrorPayload>(
     payload.create({
       collection: "diary-entries",
-      data: { ...data, status: "pending", author: data.author },
-      req: { user: { ...user, collection: "users" } },
-      overrideAccess: false,
+      data: {
+        ...data,
+        status:
+          author.role === "admin" || author.role === "system-user"
+            ? "approved"
+            : "pending",
+        author,
+      },
     }),
+    messages.actions.diaryEntry.serverErrorShare,
+    isError,
   );
 
-  if (diaryEntryError) {
-    if (
-      isError(diaryEntryError) &&
-      (diaryEntryError.status === 400 ||
-        diaryEntryError.status === 401 ||
-        diaryEntryError.status === 403)
-    )
-      response.error =
-        diaryEntryError.status === 400
-          ? messages.actions.diaryEntry.unique(data.title)
-          : httpStatusesMessages[diaryEntryError.status].diaryEntry;
-    else response.error = httpStatusesMessages[500].diaryEntry;
+  if (!responseDiaryEntry.data || responseDiaryEntry.error) {
+    const response = {
+      data: null,
+      error: messages.actions.diaryEntry.serverErrorShare,
+    };
+
+    if (typeof responseDiaryEntry.error !== "string")
+      if (responseDiaryEntry.error.status === 400)
+        response.error = messages.actions.diaryEntry.unique(data.title);
+      else if (
+        responseDiaryEntry.error.status === 401 ||
+        responseDiaryEntry.error.status === 403
+      )
+        response.error =
+          httpStatusesMessages[responseDiaryEntry.error.status].diaryEntry;
 
     return response;
   }
 
-  if (diaryEntryData) {
-    response.data = messages.actions.diaryEntry.success;
-    return response;
-  }
-
-  if (
-    (response.data && response.error) ||
-    (!response.data && !response.error)
-  ) {
-    response.error = httpStatusesMessages[500].http;
-  }
-
-  return diaryEntryData;
+  return { data: messages.actions.diaryEntry.success, error: null };
 };
 
-export const getAuthor = async function getAuthor(id: number) {
-  const response = await actionTryCatch(
-    payload.find({
-      collection: "users",
-      where: { id: { equals: id } },
-      select: { firstName: true, lastName: true },
+export const getDiaryEntry = async function getDiaryEntry(
+  id: number,
+): Promise<ActionSafeExecute<DiaryEntry, string>> {
+  const response = await actionSafeExecute(
+    payload.findByID({
+      collection: "diary-entries",
+      id,
+      depth: 0,
     }),
+    messages.actions.diaryEntry.serverErrorGet,
   );
 
-  if (!response.data || response.error) return null;
+  return response;
+};
 
-  return response.data.docs[0];
+export const getDiaryEntryAuthor = async function getDiaryEntryAuthor(
+  id: number,
+): Promise<ActionSafeExecute<Partial<User>, string>> {
+  const response = await actionSafeExecute(
+    payload.findByID({
+      collection: "users",
+      id,
+      select: { firstName: true, lastName: true, role: true },
+    }),
+    messages.actions.diaryEntry.author.serverError,
+  );
+
+  return response;
 };
