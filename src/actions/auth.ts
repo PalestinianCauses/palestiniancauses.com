@@ -1,16 +1,22 @@
 "use server";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { PaginatedDocs } from "payload";
 
 import { messages } from "@/lib/errors";
 import { payload } from "@/lib/payload";
-import { AuthenticationResponse } from "@/lib/payload/types";
+import {
+  AuthenticationResponse,
+  AuthenticationResponseData,
+  ErrorPayload,
+  ErrorPlusDataPayload,
+} from "@/lib/payload/types";
 import { isError, isErrorHasDataPlusErrors } from "@/lib/payload/utils";
 import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
-import { actionTryCatch, isResilientPassword } from "@/lib/utils";
+import { actionSafeExecute, isResilientPassword } from "@/lib/utils";
 import { User } from "@/payload-types";
 
 const verifyUserPayload = async function verifyUserPayload({
@@ -63,45 +69,53 @@ const setUserCookies = async function setUserCookies(
 };
 
 export const getAuth = async function getAuth() {
-  const response = await actionTryCatch(
+  const responseAuth = await actionSafeExecute(
     payload.auth({ headers: await headers() }),
+    messages.actions.user.serverError,
   );
 
-  if (response.error) return null;
+  if (!responseAuth.data || responseAuth.error) return null;
 
-  return response.data;
+  return responseAuth.data;
 };
 
 export const signIn = async function signIn(
   signInData: SignInSchema,
 ): Promise<AuthenticationResponse> {
-  const response: AuthenticationResponse = {
-    data: null,
-    error: messages.actions.auth.signIn.serverError,
-  };
-
-  const { data: dataPayload, error: errorPayload } = await actionTryCatch(
+  const responsePayload = await actionSafeExecute<PaginatedDocs<User>, string>(
     verifyUserPayload({ email: signInData.email }),
+    messages.actions.auth.signIn.serverError,
   );
 
-  if (errorPayload || !dataPayload) return response;
+  if (!responsePayload.data || responsePayload.error)
+    return { data: responsePayload.data, error: responsePayload.error };
 
-  if (dataPayload.docs.length === 0) {
-    response.error = messages.actions.auth.signIn.notFound(signInData.email);
-    return response;
-  }
+  if (responsePayload.data.docs.length === 0)
+    return {
+      data: null,
+      error: messages.actions.auth.signIn.notFound(signInData.email),
+    };
 
-  const { data: userDataPayload, error: userErrorPayload } =
-    await actionTryCatch(
-      signInUserPayload({
-        email: signInData.email,
-        password: signInData.password,
-      }),
-    );
+  const responseUserPayload = await actionSafeExecute<
+    AuthenticationResponseData,
+    ErrorPayload
+  >(
+    signInUserPayload({
+      email: signInData.email,
+      password: signInData.password,
+    }),
+    messages.actions.auth.signIn.serverError,
+    isError,
+  );
 
-  if (userErrorPayload) {
-    if (isError(userErrorPayload))
-      if (userErrorPayload.name === "AuthenticationError")
+  if (!responseUserPayload.data || responseUserPayload.error) {
+    const response = {
+      data: null,
+      error: messages.actions.auth.signIn.serverError,
+    };
+
+    if (typeof responseUserPayload.error !== "string")
+      if (responseUserPayload.error.name === "AuthenticationError")
         response.error = messages.actions.auth.signIn.unAuthenticated(
           signInData.email,
         );
@@ -109,38 +123,35 @@ export const signIn = async function signIn(
     return response;
   }
 
-  if (!userDataPayload || !userDataPayload.user || !userDataPayload.token)
-    return response;
+  if (!responseUserPayload.data.user || !responseUserPayload.data.token)
+    return { data: null, error: messages.actions.auth.signIn.serverError };
 
-  await setUserCookies("payload-token", userDataPayload.token);
-  response.data = userDataPayload;
-  response.error = null;
-
-  return response;
+  await setUserCookies("payload-token", responseUserPayload.data.token);
+  return responseUserPayload;
 };
 
 export const signUp = async function signUp(
   signUpData: SignUpSchema,
 ): Promise<AuthenticationResponse> {
-  const response: AuthenticationResponse = {
-    data: null,
-    error: messages.actions.auth.signUp.serverError,
-  };
+  if (!isResilientPassword(signUpData.password))
+    return { data: null, error: messages.actions.auth.signUp.validation };
 
-  if (!isResilientPassword(signUpData.password)) {
-    response.error = messages.actions.auth.signUp.validation;
-    return response;
-  }
-
-  const { error: errorPayload } = await actionTryCatch(
+  const responsePayload = await actionSafeExecute<User, ErrorPlusDataPayload>(
     createUserPayload({ ...signUpData, role: "website-user" }),
+    messages.actions.auth.signUp.serverError,
+    isErrorHasDataPlusErrors,
   );
 
-  if (errorPayload) {
-    if (isErrorHasDataPlusErrors(errorPayload))
+  if (!responsePayload.data || responsePayload.error) {
+    const response = {
+      data: null,
+      error: messages.actions.auth.signUp.serverError,
+    };
+
+    if (typeof responsePayload.error !== "string")
       if (
-        errorPayload.name === "ValidationError" &&
-        errorPayload.data.errors[0].path === "email"
+        responsePayload.error.name === "ValidationError" &&
+        responsePayload.error.data.errors[0].path === "email"
       )
         response.error = messages.actions.auth.signUp.duplication(
           signUpData.email,
@@ -149,27 +160,25 @@ export const signUp = async function signUp(
     return response;
   }
 
-  const { data: userDataPayload, error: userErrorPayload } =
-    await actionTryCatch(
-      signInUserPayload({
-        email: signUpData.email,
-        password: signUpData.password,
-      }),
-    );
+  const responseUserPayload = await actionSafeExecute(
+    signInUserPayload({
+      email: signUpData.email,
+      password: signUpData.password,
+    }),
+    messages.actions.auth.signIn.serverError,
+  );
 
   if (
-    userErrorPayload ||
-    !userDataPayload ||
-    !userDataPayload.user ||
-    !userDataPayload.token
+    !responseUserPayload.data ||
+    !responseUserPayload.data.user ||
+    !responseUserPayload.data.token ||
+    responseUserPayload.error
   )
     redirect("/signin");
 
-  await setUserCookies("payload-token", userDataPayload.token);
-  response.data = userDataPayload;
-  response.error = null;
+  await setUserCookies("payload-token", responseUserPayload.data.token);
 
-  return response;
+  return responseUserPayload;
 };
 
 export const signOut = async function signOut() {
