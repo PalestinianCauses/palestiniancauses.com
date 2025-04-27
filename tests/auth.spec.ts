@@ -1,9 +1,9 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { expect, test } from "@playwright/test";
 
 import { messages } from "@/lib/errors";
-import { httpTryCatch } from "@/lib/utils";
+import { httpSafeExecute } from "@/lib/utils";
 
 let userTestingEmail: string | null = null;
 let userTestingPassword: string | null = null;
@@ -25,7 +25,7 @@ test.describe("Authentication: Sign Up Flows", () => {
       page.getByText(messages.actions.auth.signUp.success),
     ).toBeVisible();
 
-    const response = await httpTryCatch(
+    const response = await httpSafeExecute<string, string>(
       fetch("http://localhost:3000/api/user", {
         method: "DELETE",
 
@@ -36,6 +36,8 @@ test.describe("Authentication: Sign Up Flows", () => {
 
         body: JSON.stringify({ email: userTestingEmail }),
       }),
+      messages.http.serverError,
+      (data) => typeof data === "string",
     );
 
     if (response.error) console.log(response.error);
