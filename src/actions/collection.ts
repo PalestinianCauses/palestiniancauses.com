@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { GeneratedTypes, PaginatedDocs, Where } from "payload";
 
@@ -8,7 +8,7 @@ import { messages } from "@/lib/errors";
 import { payload } from "@/lib/payload";
 import { CollectionTypes, SelectOptions } from "@/lib/payload/types";
 import { selectDefaults } from "@/lib/payload/utils";
-import { actionTryCatch } from "@/lib/utils";
+import { actionSafeExecute } from "@/lib/utils";
 
 type CollectionOptions<TSlug extends CollectionTypes> = {
   collection: TSlug;
@@ -21,10 +21,9 @@ type CollectionResponseData<TSlug extends CollectionTypes> = PaginatedDocs<
   GeneratedTypes["collections"][TSlug]
 >;
 
-type CollectionResponse<TSlug extends CollectionTypes> = {
-  data: CollectionResponseData<TSlug> | null;
-  error: string | null;
-};
+type CollectionResponse<TSlug extends CollectionTypes> =
+  | { data: CollectionResponseData<TSlug>; error: null }
+  | { data: null; error: string };
 
 export const getCollection = async function getCollection<
   TSlug extends CollectionTypes,
@@ -40,11 +39,6 @@ export const getCollection = async function getCollection<
   fields,
   depth = 0,
 }: CollectionOptions<TSlug>): Promise<CollectionResponse<TSlug>> {
-  const response: CollectionResponse<TSlug> = {
-    data: null,
-    error: messages.actions.collection.serverError,
-  };
-
   const where: Where = {};
 
   if (search && fields && fields.length > 0) {
@@ -60,21 +54,19 @@ export const getCollection = async function getCollection<
     }
   }
 
-  const collectionPromise = payload.find({
-    collection,
-    page,
-    limit,
-    sort,
-    where,
-    depth,
-  });
+  const response = await actionSafeExecute(
+    payload.find({
+      collection,
+      page,
+      limit,
+      sort,
+      where,
+      depth,
+    }),
+    messages.actions.collection.serverError,
+  );
 
-  const collectionResponse = await actionTryCatch(collectionPromise);
-
-  if (!collectionResponse.data || collectionResponse.error) return response;
-
-  response.data = collectionResponse.data;
-  response.error = null;
+  if (!response.data || response.error) return response;
 
   return response;
 };
