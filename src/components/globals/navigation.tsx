@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { motions } from "@/lib/motion";
 
@@ -26,13 +26,7 @@ export const navigation = [
   },
   {
     label: "Support Us",
-    href: [
-      "https://www.paypal.com/donate/",
-      [
-        "hosted_button_id",
-        process.env.NEXT_PUBLIC_PAYPAL_HOSTED_BUTTON_ID,
-      ].join("="),
-    ].join("?"),
+    href: "/support",
     target: "_blank",
     recent: false,
     coming: false,

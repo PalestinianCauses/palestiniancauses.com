@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { ArrowUpRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -48,16 +48,7 @@ export const CTA = function CTA({ product }: { product: Product }) {
       {
         title: "Support Our Mission",
         action: () => {
-          window.open(
-            [
-              "https://www.paypal.com/donate/",
-              [
-                "hosted_button_id",
-                process.env.NEXT_PUBLIC_PAYPAL_HOSTED_BUTTON_ID,
-              ].join("="),
-            ].join("?"),
-            "_blank",
-          );
+          window.open("https://palestiniancauses.com/support", "_blank");
         },
       },
       {

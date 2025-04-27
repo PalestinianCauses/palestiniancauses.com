@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -109,6 +109,7 @@ export const SignUpForm = function SignUpForm() {
                   <Input
                     {...field}
                     disabled={signUp.isPending}
+                    autoComplete="email"
                     data-testid="email-input"
                   />
                 </FormControl>
@@ -133,6 +134,7 @@ export const SignUpForm = function SignUpForm() {
                     {...field}
                     type="password"
                     disabled={signUp.isPending}
+                    autoComplete="new-password"
                     data-testid="password-input"
                   />
                 </FormControl>

@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { HTMLAttributes } from "react";
 
@@ -128,7 +128,7 @@ export const Paragraph = function Paragraph({
       whileInView={motions.fadeIn.whileInView}
       transition={motions.transition({ delay })}
       className={cn(
-        "text-xl font-normal !leading-relaxed text-muted-foreground",
+        "font-normal !leading-relaxed text-muted-foreground",
         small ? "text-lg xl:text-xl" : "text-xl lg:text-2xl",
         className,
       )}>
