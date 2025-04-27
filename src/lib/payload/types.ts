@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { GeneratedTypes } from "payload";
 
@@ -14,13 +14,13 @@ export type SelectOptions = {
   [key: string]: string | number | undefined;
 };
 
-export type Error = {
+export type ErrorPayload = {
   status: number;
   name: string;
   message: string;
 };
 
-export type ErrorPlusData = Error & {
+export type ErrorPlusDataPayload = ErrorPayload & {
   data: { errors: { message: string; path: string }[] };
 };
 
@@ -29,7 +29,6 @@ export type AuthenticationResponseData = {
   token: string | null;
 };
 
-export type AuthenticationResponse = {
-  data: AuthenticationResponseData | null;
-  error: string | null;
-};
+export type AuthenticationResponse =
+  | { data: AuthenticationResponseData; error: null }
+  | { data: null; error: string };

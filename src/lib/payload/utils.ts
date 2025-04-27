@@ -1,6 +1,6 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
-import { Error, ErrorPlusData, SelectOptions } from "./types";
+import { ErrorPayload, ErrorPlusDataPayload, SelectOptions } from "./types";
 
 export const selectDefaults: SelectOptions = {
   page: 1,
@@ -9,7 +9,7 @@ export const selectDefaults: SelectOptions = {
   search: "",
 };
 
-export const isError = function isError(error: unknown): error is Error {
+export const isError = function isError(error: unknown): error is ErrorPayload {
   return (
     error !== null &&
     typeof error === "object" &&
@@ -21,13 +21,19 @@ export const isError = function isError(error: unknown): error is Error {
 
 export const isErrorHasDataPlusErrors = function isErrorHasDataPlusErrors(
   error: unknown,
-): error is ErrorPlusData {
+): error is ErrorPlusDataPayload {
   return (
     isError(error) &&
     "data" in error &&
     error.data !== null &&
     typeof error.data === "object" &&
     "errors" in error.data &&
-    Array.isArray(error.data.errors)
+    Array.isArray(error.data.errors) &&
+    error.data.errors.every(
+      (errorObject) =>
+        typeof errorObject === "object" &&
+        "message" in errorObject &&
+        "path" in errorObject,
+    )
   );
 };
