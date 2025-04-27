@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -8,7 +8,7 @@ import { getAuth, signIn, signOut, signUp } from "@/actions/auth";
 import { queryClient } from "@/app/(app)/providers";
 import { messages } from "@/lib/errors";
 import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
-import { actionTryCatch, httpTryCatch } from "@/lib/utils";
+import { httpSafeExecute } from "@/lib/utils";
 
 export const useUser = function useUser() {
   const router = useRouter();
@@ -20,12 +20,11 @@ export const useUser = function useUser() {
   } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const response = await actionTryCatch(getAuth());
+      const response = await getAuth();
 
-      if (!response || !response.data || !response.data.user || response.error)
-        return null;
+      if (!response || !response.user) return null;
 
-      return response.data.user;
+      return response.user;
     },
   });
 
@@ -35,13 +34,14 @@ export const useUser = function useUser() {
       return response;
     },
     onSuccess: (response) => {
-      if (response.error) toast.error(response.error);
-
-      if (response.data) {
-        toast.success(messages.actions.auth.signIn.success);
-        queryClient.setQueryData(["user"], response.data.user);
-        router.push("/");
+      if (!response.data || response.error) {
+        toast.error(response.error);
+        return;
       }
+
+      toast.success(messages.actions.auth.signIn.success);
+      queryClient.setQueryData(["user"], response.data.user);
+      router.push("/");
     },
   });
 
@@ -51,38 +51,40 @@ export const useUser = function useUser() {
       return response;
     },
     onSuccess: (response) => {
-      if (response.error) toast.error(response.error);
-
-      if (response.data) {
-        toast.success(messages.actions.auth.signUp.success);
-        queryClient.setQueryData(["user"], response.data.user);
-        router.push("/");
+      if (!response.data || response.error) {
+        toast.error(response.error);
+        return;
       }
+
+      toast.success(messages.actions.auth.signUp.success);
+      queryClient.setQueryData(["user"], response.data.user);
+      router.push("/");
     },
   });
 
   const signOutMutation = useMutation({
     mutationFn: async () => {
-      const response = await httpTryCatch<{ message: string }, string>(
+      const response = await httpSafeExecute(
         fetch("/api/users/logout", {
           method: "POST",
           credentials: "include",
         }),
+        messages.actions.auth.signOut.serverError,
       );
 
       return response;
     },
     onSuccess: async (response) => {
-      if (response.error && typeof response.error === "string")
+      if (!response.data || response.error) {
         toast.error(response.error);
-
-      if (response.data) {
-        await signOut();
-
-        toast.success(messages.actions.auth.signOut.success);
-        queryClient.setQueryData(["user"], null);
-        router.refresh();
+        return;
       }
+
+      await signOut();
+
+      toast.success(messages.actions.auth.signOut.success);
+      queryClient.setQueryData(["user"], null);
+      router.refresh();
     },
   });
 
