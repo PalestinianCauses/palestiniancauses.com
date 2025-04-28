@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CollectionConfig } from "payload";
 
@@ -12,7 +12,7 @@ export const Products: CollectionConfig = {
     update: isAdmin,
     delete: isAdmin,
   },
-  admin: { useAsTitle: "title" },
+  admin: { useAsTitle: "title", defaultColumns: ["title", "price", "type"] },
   labels: { singular: "Product", plural: "Products" },
   fields: [
     {
@@ -38,18 +38,23 @@ export const Products: CollectionConfig = {
       name: "price",
       label: "Price",
       type: "number",
+      min: 0,
+      defaultValue: 0,
       required: true,
     },
     {
-      admin: { position: "sidebar" },
-      name: "isDownloadable",
-      label: "Is Downloadable",
-      type: "checkbox",
-      defaultValue: false,
+      name: "type",
+      label: "Type",
+      type: "select",
+      options: [
+        { label: "File", value: "file" },
+        { label: "External Resource", value: "external" },
+      ],
+      required: true,
     },
     {
       admin: {
-        condition: (_, dataSibling) => dataSibling.isDownloadable,
+        condition: (_, dataSibling) => dataSibling.type === "file",
         position: "sidebar",
       },
       labels: { singular: "File", plural: "Files" },
@@ -71,6 +76,19 @@ export const Products: CollectionConfig = {
           required: true,
         },
       ],
+    },
+    {
+      admin: { condition: (_, dataSibling) => dataSibling.type === "external" },
+      name: "link",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "authors",
+      label: "Authors",
+      type: "relationship",
+      relationTo: "users",
+      hasMany: true,
     },
   ],
 };
