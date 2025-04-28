@@ -1,4 +1,4 @@
-# REVIEWED - 04
+# REVIEWED - 05
 
 name: CI and Deployment
 on:
@@ -32,6 +32,8 @@ jobs:
           NODE_ENV: production
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
 
       - name: Run PlayWright Tests
         run: pnpm exec playwright test
@@ -41,6 +43,7 @@ jobs:
           PLAYWRIGHT_TESTING_USER_EMAIL: ${{ secrets.PLAYWRIGHT_TESTING_USER_EMAIL }}
           PLAYWRIGHT_TESTING_USER_PASSWORD: ${{ secrets.PLAYWRIGHT_TESTING_USER_PASSWORD }}
           PLAYWRIGHT_TESTING_USER_CLEAN_UP_SECRET: ${{ secrets.PLAYWRIGHT_TESTING_USER_CLEAN_UP_SECRET }}
+          PORT: 3000
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
