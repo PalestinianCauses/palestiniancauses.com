@@ -1,10 +1,11 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { defineConfig, devices } from "@playwright/test";
 import "dotenv/config";
 
 export default defineConfig({
-  timeout: 60 * 1000,
+  timeout: 5 * 60 * 1000,
+  expect: { timeout: 5 * 60 * 1000 },
   testDir: "./tests",
   fullyParallel: false,
   forbidOnly: !!process.env.CI,

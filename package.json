@@ -1,5 +1,5 @@
 {
-  "reviewed": "true - 19",
+  "reviewed": "true - 20",
   "name": "palestiniancauses.com",
   "version": "1.0.0",
   "private": true,
@@ -13,7 +13,7 @@
     "payload:migrate": "payload migrate",
     "payload:migrate:create": "payload migrate:create",
     "payload:types": "payload generate:types",
-    "playwright:test": "playwright test --ui",
+    "playwright:test": "playwright test",
     "format": "prettier --write ."
   },
   "dependencies": {
