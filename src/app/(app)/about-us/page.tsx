@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Metadata } from "next";
 
@@ -63,6 +63,21 @@ const sequence = [
 
 export const metadata: Metadata = {
   title: "About Us",
+
+  openGraph: {
+    images: [
+      {
+        url: "https://palestiniancauses.com/og-2.jpg",
+        width: 1200,
+        height: 630,
+        alt: "PalestinianCauses About Us Thumbnail",
+      },
+    ],
+  },
+
+  twitter: {
+    images: ["https://palestiniancauses.com/og-2.jpg"],
+  },
 };
 
 export default async function AboutPage() {

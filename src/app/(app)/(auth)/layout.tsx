@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -20,12 +20,14 @@ export default async function AuthLayout({ children }: PropsWithChildren) {
         <MotionDiv
           initial={motions.fadeIn.initial}
           animate={motions.fadeIn.whileInView}
-          transition={motions.transition({ duration: "fast" })}>
+          transition={motions.transition({ duration: "fast" })}
+          className="relative">
           <Image
             src="/pc-logo-primary-foreground.png"
             alt="PalestinianCauses Logo"
-            sizes="3rem"
+            priority
             fill
+            sizes="3rem"
             className="!static mx-auto mb-6 !h-auto !w-24 object-cover"
           />
         </MotionDiv>

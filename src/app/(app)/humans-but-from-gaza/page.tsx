@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { Metadata } from "next";
 import Link from "next/link";
@@ -23,6 +23,21 @@ export const metadata: Metadata = {
   title: "The Truth Museum: Humans But From Gaza",
   description:
     "Welcome to The Truth Museum, the diary archive for our Humans But From Gaza initiative. Explore un-filtered narratives shared directly by individuals navigating life during the war in Gaza, revealing daily survival, loss, resilience, and hope under siege. Engage respectfully with these authentic testimonies to connect with the human experience often overlooked and deepen your understanding of Gaza.",
+
+  openGraph: {
+    images: [
+      {
+        url: "https://palestiniancauses.com/og-4.jpg",
+        width: 1200,
+        height: 630,
+        alt: "PalestinianCauses Humans But From Gaza Thumbnail",
+      },
+    ],
+  },
+
+  twitter: {
+    images: ["https://palestiniancauses.com/og-4.jpg"],
+  },
 };
 
 export default async function HumansButFromGazaPage(props: {
