@@ -1,4 +1,4 @@
-# REVIEWED - 02
+# REVIEWED - 03
 
 name: CI and Deployment
 on:
@@ -27,7 +27,7 @@ jobs:
         run: pnpm exec playwright install --with-deps
 
       - name: Build Next.JS App
-        run: pnpm run build
+        run: pnpm run payload:types && pnpm run build
         env:
           NODE_ENV: production
 
