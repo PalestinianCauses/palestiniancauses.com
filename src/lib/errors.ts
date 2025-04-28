@@ -1,4 +1,4 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
 export const messages = {
   http: {
@@ -65,6 +65,7 @@ export const messages = {
       pending: "Sharing your diary...",
       success:
         'Thank you for sharing your authentic testimony with PalestinianCauses. Your diary is received and valued. We\'ll review it carefully before adding it to "The Truth Museum"—check back soon!',
+      successPCAuthor: "Diary entry shared successfully.",
       unique: (title: string) =>
         `"${title}" - A powerful title! Another resilient author used this exact one for "The Truth Museum." To ensure your unique testimony stands out, could you please provide an alternative title? Thank you!`,
       unAuthorized: "You are not authorized to share a diary.",

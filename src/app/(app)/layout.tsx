@@ -1,4 +1,4 @@
-// REVIEWED - 18
+// REVIEWED - 19
 import type { Metadata } from "next";
 import { PropsWithChildren } from "react";
 
@@ -40,8 +40,9 @@ export const metadata: Metadata = {
 
   robots: { index: true, follow: true },
 
+  icons: "/pc-logo-primary-foreground.png",
+
   openGraph: {
-    // type: "website",
     siteName: "PalestinianCauses",
     url: "https://palestiniancauses.com",
     images: [

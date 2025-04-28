@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { ArrowUpRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -98,8 +98,8 @@ export const CTA = function CTA({ product }: { product: Product }) {
               variant="outline"
               disabled={isPending}
               onClick={action}
-              className="h-full w-full justify-start gap-5 whitespace-break-spaces p-10 text-left font-normal">
-              <ArrowUpRight className="!h-10 !w-10" />
+              className="h-full w-full justify-start gap-5 whitespace-break-spaces p-5 text-left font-normal md:p-10">
+              <ArrowUpRight className="!h-7 !w-7 stroke-[1.5] md:!h-10 md:!w-10" />
               <SubSectionHeading
                 as="p"
                 className="font-normal !leading-relaxed">

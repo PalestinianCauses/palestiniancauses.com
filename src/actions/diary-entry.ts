@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { httpStatusesMessages, messages } from "@/lib/errors";
 import { payload } from "@/lib/payload";
@@ -56,7 +56,13 @@ export const createDiaryEntry = async function createDiaryEntry(
     return response;
   }
 
-  return { data: messages.actions.diaryEntry.success, error: null };
+  return {
+    data:
+      author.role === "admin" || author.role === "system-user"
+        ? messages.actions.diaryEntry.successPCAuthor
+        : messages.actions.diaryEntry.success,
+    error: null,
+  };
 };
 
 export const getDiaryEntry = async function getDiaryEntry(

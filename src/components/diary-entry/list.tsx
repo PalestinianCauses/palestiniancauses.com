@@ -1,9 +1,9 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useQuery } from "@tanstack/react-query";
-import { FileIcon, Loader2Icon } from "lucide-react";
+import { FileDiffIcon } from "lucide-react";
 import Link from "next/link";
 import { GeneratedTypes } from "payload";
 
@@ -144,10 +144,7 @@ export const DiaryEntryList = function DiaryEntryList({
           whileInView={motions.fadeIn.whileInView}
           transition={motions.transition({})}
           className="relative mb-6 flex w-max items-end lg:mb-8">
-          <FileIcon className="relative h-20 w-20 stroke-[1] lg:h-28 lg:w-28" />
-          <div className="absolute left-1/2 top-[58%] -translate-x-1/2 -translate-y-1/2">
-            <Loader2Icon className="h-7 w-7 animate-spin stroke-[1.5] lg:h-10 lg:w-10" />
-          </div>
+          <FileDiffIcon className="relative h-20 w-20 stroke-[1] lg:h-28 lg:w-28" />
         </MotionDiv>
         <SubSectionHeading className="mb-4 lg:mb-6">
           Diary entries are being reviewed...
