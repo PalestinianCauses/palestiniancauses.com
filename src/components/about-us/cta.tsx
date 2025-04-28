@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { ArrowUpRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -39,7 +39,7 @@ export const CTA = function CTA({ product }: { product: Product }) {
             await insertItem("internal-cart-id", product.variants[0].id);
 
             const checkoutUrl = await getCheckoutUrl("internal-cart-id");
-            window.open(checkoutUrl, "_blank");
+            window.location.href = checkoutUrl;
 
             await removeCartPlusRemoveCookie("internal-cart-id");
           });
@@ -48,13 +48,13 @@ export const CTA = function CTA({ product }: { product: Product }) {
       {
         title: "Support Our Mission",
         action: () => {
-          window.open("https://palestiniancauses.com/support", "_blank");
+          window.location.href = "https://palestiniancauses.com/support";
         },
       },
       {
         title: "Amplify Our Voice: Follow and Share",
         action: () => {
-          window.open("https://www.instagram.com/palestiniancauses", "_blank");
+          window.location.href = "https://www.instagram.com/palestiniancauses";
         },
       },
       {

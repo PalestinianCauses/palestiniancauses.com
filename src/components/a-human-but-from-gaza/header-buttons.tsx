@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { ArrowRightIcon, HeartIcon } from "lucide-react";
 import Link from "next/link";
@@ -44,7 +44,7 @@ export const HeaderButtons = function HeaderButtons({
               await insertItem("internal-cart-id", product.variants[0].id);
 
               const checkoutUrl = await getCheckoutUrl("internal-cart-id");
-              window.open(checkoutUrl, "_blank");
+              window.location.href = checkoutUrl;
 
               await removeCartPlusRemoveCookie("internal-cart-id");
             });
