@@ -1,4 +1,4 @@
-# REVIEWED - 03
+# REVIEWED - 04
 
 name: CI and Deployment
 on:
@@ -30,6 +30,8 @@ jobs:
         run: pnpm run payload:types && pnpm run build
         env:
           NODE_ENV: production
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
 
       - name: Run PlayWright Tests
         run: pnpm exec playwright test
