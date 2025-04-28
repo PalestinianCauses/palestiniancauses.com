@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { notFound } from "next/navigation";
 
@@ -10,8 +10,12 @@ import { Paragraph, SectionHeading } from "@/components/globals/typography";
 import { splitByFlexibleNewLines } from "@/lib/utils";
 
 /* eslint-disable-next-line func-style  */
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const diaryEntry = await getDiaryEntry(parseInt(params.id, 10));
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const diaryEntry = await getDiaryEntry(parseInt((await params).id, 10));
 
   if (!diaryEntry.data || diaryEntry.error)
     return { title: "Diary Entry Not Found" };
@@ -22,8 +26,8 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 }
 
 export default async function HumanButFromGazaPage(props: {
-  params: { id: string };
-  searchParams: { author: string };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ author: string }>;
 }) {
   /* eslint-disable react/destructuring-assignment */
   const params = await props.params;

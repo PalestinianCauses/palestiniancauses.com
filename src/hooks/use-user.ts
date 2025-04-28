@@ -1,8 +1,9 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { z } from "zod";
 
 import { getAuth, signIn, signOut, signUp } from "@/actions/auth";
 import { queryClient } from "@/app/(app)/providers";
@@ -64,12 +65,19 @@ export const useUser = function useUser() {
 
   const signOutMutation = useMutation({
     mutationFn: async () => {
-      const response = await httpSafeExecute(
+      const response = await httpSafeExecute<{ message: string }, string>(
         fetch("/api/users/logout", {
           method: "POST",
           credentials: "include",
         }),
         messages.actions.auth.signOut.serverError,
+        (d): d is { message: string } => {
+          const validate = z.object({ message: z.string() }).safeParse(d);
+
+          if (!validate.success) return false;
+
+          return true;
+        },
       );
 
       return response;

@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { Metadata } from "next";
 import Link from "next/link";
@@ -115,6 +115,7 @@ export default async function HumansButFromGazaPage(props: {
             pageDefault={selects.page}
             limitDefault={selects.limit}
             sortDefault={selects.sort}
+            debounceTime={500}
           />
         </div>
         <MotionDiv
