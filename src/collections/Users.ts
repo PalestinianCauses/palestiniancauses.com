@@ -1,4 +1,4 @@
-// REVIEWED - 0٦
+// REVIEWED - 07
 import type { CollectionConfig } from "payload";
 
 import { isAdminOrSystemUserOrSelf } from "@/access/diary-entry";
@@ -13,6 +13,7 @@ export const Users: CollectionConfig = {
     delete: isAdmin,
   },
   admin: { useAsTitle: "email" },
+  labels: { singular: "User", plural: "Users" },
   auth: {
     cookies: {
       sameSite: "Strict",
