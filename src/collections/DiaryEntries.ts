@@ -1,45 +1,27 @@
-// REVIEWED - 03
+// REVIEWED - 06
 
-import { Access, CollectionConfig, FieldAccess } from "payload";
+import { revalidatePath } from "next/cache";
+import { CollectionConfig } from "payload";
 
-export const isAdmin: FieldAccess = function isAdmin({ req: { user } }) {
-  if (!user) return false;
-
-  return user.role === "admin";
-};
-
-const isAuthenticated: Access = function isAuthenticated({ req: { user } }) {
-  if (!user) return false;
-
-  return true;
-};
-
-const isAuthorized: Access = function isAuthorized({ req: { user } }) {
-  if (!user) return false;
-
-  if (user.role === "admin" || user.role === "system-user") return true;
-
-  return {
-    author: {
-      equals: user.id,
-    },
-  };
-};
+import { isAdminOrSystemUserOrSelf } from "@/access/diary-entry";
+import { isAdmin, isAdminOrSystemUserField } from "@/access/global";
+import { messages } from "@/lib/errors";
 
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
   access: {
-    read: () => true,
-    create: isAuthenticated,
-    update: isAuthorized,
-    delete: isAuthorized,
+    create: isAdmin,
+    read: isAdminOrSystemUserOrSelf,
+    update: isAdminOrSystemUserOrSelf,
+    delete: isAdminOrSystemUserOrSelf,
   },
-  admin: { hidden: true, useAsTitle: "title" },
+  admin: { useAsTitle: "title" },
   fields: [
     {
       label: "Title",
       name: "title",
       type: "text",
+      minLength: 2,
       maxLength: 100,
       required: true,
       unique: true,
@@ -49,16 +31,45 @@ export const DiaryEntries: CollectionConfig = {
       name: "date",
       type: "date",
       required: true,
+      validate: (value) => {
+        if (!value) return messages.forms.required("diary date");
+
+        const date = new Date(value);
+        date.setUTCHours(0, 0, 0, 0);
+
+        if (!(date instanceof Date) || Number.isNaN(date.getTime()))
+          return messages.forms.valid("diary date");
+
+        const today = new Date();
+        today.setUTCHours(0, 0, 0, 0);
+
+        const yesterday = new Date(today);
+        yesterday.setUTCDate(today.getDate() - 1);
+
+        const october7th2023 = new Date(2023, 9, 7);
+        october7th2023.setUTCHours(0, 0, 0, 0);
+
+        if (
+          date.getTime() > yesterday.getTime() ||
+          date.getTime() <= october7th2023.getTime()
+        )
+          return messages.forms.diaryEntry.date("Oct 7th. 2023", "yesterday");
+
+        return true;
+      },
     },
     {
       label: "Content",
       name: "content",
       type: "textarea",
-      maxLength: 2500,
+      minLength: 2500,
       required: true,
     },
     {
-      access: { update: isAdmin },
+      access: {
+        read: isAdminOrSystemUserField,
+        update: isAdminOrSystemUserField,
+      },
       label: "Status",
       name: "status",
       type: "select",
@@ -66,14 +77,16 @@ export const DiaryEntries: CollectionConfig = {
         { label: "Pending", value: "pending" },
         { label: "Rejected", value: "rejected" },
         { label: "Approved", value: "approved" },
-        { label: "Published", value: "published" },
         { label: "Archived", value: "archived" },
       ],
       defaultValue: "pending",
       required: true,
     },
     {
-      access: { update: isAdmin },
+      access: {
+        read: isAdminOrSystemUserField,
+        update: isAdminOrSystemUserField,
+      },
       label: "Author",
       name: "author",
       type: "relationship",
@@ -93,4 +106,24 @@ export const DiaryEntries: CollectionConfig = {
       required: true,
     },
   ],
+  hooks: {
+    beforeChange: [
+      async ({ req, data }) => {
+        const document = data;
+        if (
+          req.user &&
+          (req.user.role === "admin" || req.user.role === "system-user")
+        )
+          document.status = "approved";
+
+        return document;
+      },
+    ],
+    afterChange: [
+      async () => {
+        revalidatePath("/humans-but-from-gaza");
+        console.log("Route Revalidated.");
+      },
+    ],
+  },
 };

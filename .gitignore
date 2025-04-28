@@ -1,4 +1,4 @@
-# REVIEWED - 03
+# REVIEWED - 04
 # dependencies
 /node_modules
 package-lock.json
@@ -26,3 +26,10 @@ next-env.d.ts
 
 # payload
 payload-types.ts
+
+# playwright
+/playwright/.cache/
+/playwright-report/
+/blob-report/
+/test-results/
+

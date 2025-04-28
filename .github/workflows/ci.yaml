@@ -1,0 +1,53 @@
+# REVIEWED - 05
+
+name: CI and Deployment
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+jobs:
+  test_and_deploy:
+    name: Test and Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.JS
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install Dependencies
+        run: npm install -g pnpm && pnpm install
+
+      - name: Install PlayWright Browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Build Next.JS App
+        run: pnpm run payload:types && pnpm run build
+        env:
+          NODE_ENV: production
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
+          SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
+
+      - name: Run PlayWright Tests
+        run: pnpm exec playwright test
+        env:
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          PLAYWRIGHT_TESTING_USER_EMAIL: ${{ secrets.PLAYWRIGHT_TESTING_USER_EMAIL }}
+          PLAYWRIGHT_TESTING_USER_PASSWORD: ${{ secrets.PLAYWRIGHT_TESTING_USER_PASSWORD }}
+          PLAYWRIGHT_TESTING_USER_CLEAN_UP_SECRET: ${{ secrets.PLAYWRIGHT_TESTING_USER_CLEAN_UP_SECRET }}
+          PORT: 3000
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

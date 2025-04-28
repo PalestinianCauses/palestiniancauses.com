@@ -1,63 +1,96 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 05
 
 import { httpStatusesMessages, messages } from "@/lib/errors";
-import { isErrorPayload, payload } from "@/lib/payload";
-import { actionTryCatch, ActionTryCatchReturn } from "@/lib/utils";
-import { DiaryEntry } from "@/payload-types";
+import { payload } from "@/lib/payload";
+import { ErrorPayload } from "@/lib/payload/types";
+import { isError } from "@/lib/payload/utils";
+import { ActionSafeExecute, actionSafeExecute } from "@/lib/utils";
+import { DiaryEntry, User } from "@/payload-types";
 
 export const createDiaryEntry = async function createDiaryEntry(
   data: Omit<DiaryEntry, "id" | "status" | "createdAt" | "updatedAt">,
-) {
-  const response: ActionTryCatchReturn<string, string> = {
-    data: null,
-    error: null,
-  };
+): Promise<ActionSafeExecute<string, string>> {
+  const author = typeof data.author === "object" ? data.author : null;
 
-  const user = typeof data.author === "object" ? data.author : null;
-
-  if (!user) {
-    response.error = messages.actions.diaryEntry.unAuthenticated;
-    return response;
+  if (!author) {
+    return {
+      data: null,
+      error: messages.actions.diaryEntry.unAuthenticated,
+    };
   }
 
-  const { data: diaryEntryData, error: diaryEntryError } = await actionTryCatch(
+  const responseDiaryEntry = await actionSafeExecute<DiaryEntry, ErrorPayload>(
     payload.create({
       collection: "diary-entries",
-      data: { ...data, status: "pending", author: data.author },
-      req: { user: { ...user, collection: "users" } },
-      overrideAccess: false,
+      data: {
+        ...data,
+        status:
+          author.role === "admin" || author.role === "system-user"
+            ? "approved"
+            : "pending",
+        author,
+      },
     }),
+    messages.actions.diaryEntry.serverErrorShare,
+    isError,
   );
 
-  if (diaryEntryError) {
-    if (
-      isErrorPayload(diaryEntryError) &&
-      (diaryEntryError.status === 400 ||
-        diaryEntryError.status === 401 ||
-        diaryEntryError.status === 403)
-    )
-      response.error =
-        diaryEntryError.status === 400
-          ? messages.actions.diaryEntry.unique(data.title)
-          : httpStatusesMessages[diaryEntryError.status].diaryEntry;
-    else response.error = httpStatusesMessages[500].diaryEntry;
+  if (!responseDiaryEntry.data || responseDiaryEntry.error) {
+    const response = {
+      data: null,
+      error: messages.actions.diaryEntry.serverErrorShare,
+    };
+
+    if (typeof responseDiaryEntry.error !== "string")
+      if (responseDiaryEntry.error.status === 400)
+        response.error = messages.actions.diaryEntry.unique(data.title);
+      else if (
+        responseDiaryEntry.error.status === 401 ||
+        responseDiaryEntry.error.status === 403
+      )
+        response.error =
+          httpStatusesMessages[responseDiaryEntry.error.status].diaryEntry;
 
     return response;
   }
 
-  if (diaryEntryData) {
-    response.data = messages.actions.diaryEntry.success;
-    return response;
-  }
+  return {
+    data:
+      author.role === "admin" || author.role === "system-user"
+        ? messages.actions.diaryEntry.successPCAuthor
+        : messages.actions.diaryEntry.success,
+    error: null,
+  };
+};
 
-  if (
-    (response.data && response.error) ||
-    (!response.data && !response.error)
-  ) {
-    response.error = httpStatusesMessages[500].http;
-  }
+export const getDiaryEntry = async function getDiaryEntry(
+  id: number,
+): Promise<ActionSafeExecute<DiaryEntry, string>> {
+  const response = await actionSafeExecute(
+    payload.findByID({
+      collection: "diary-entries",
+      id,
+      depth: 0,
+    }),
+    messages.actions.diaryEntry.serverErrorGet,
+  );
 
-  return diaryEntryData;
+  return response;
+};
+
+export const getDiaryEntryAuthor = async function getDiaryEntryAuthor(
+  id: number,
+): Promise<ActionSafeExecute<Partial<User>, string>> {
+  const response = await actionSafeExecute(
+    payload.findByID({
+      collection: "users",
+      id,
+      select: { firstName: true, lastName: true, role: true },
+    }),
+    messages.actions.diaryEntry.author.serverError,
+  );
+
+  return response;
 };

@@ -1,7 +1,7 @@
 {
-  "reviewed": "true - 14",
-  "name": "shawqi-stack",
-  "version": "0.1.0",
+  "reviewed": "true - 20",
+  "name": "palestiniancauses.com",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.15.0",
@@ -13,6 +13,7 @@
     "payload:migrate": "payload migrate",
     "payload:migrate:create": "payload migrate:create",
     "payload:types": "payload generate:types",
+    "playwright:test": "playwright test",
     "format": "prettier --write ."
   },
   "dependencies": {
@@ -24,6 +25,7 @@
     "@payloadcms/next": "3.30.0",
     "@payloadcms/payload-cloud": "3.30.0",
     "@payloadcms/richtext-lexical": "3.30.0",
+    "@payloadcms/ui": "3.30.0",
     "@radix-ui/react-accordion": "1.2.1",
     "@radix-ui/react-alert-dialog": "1.1.2",
     "@radix-ui/react-aspect-ratio": "1.1.0",
@@ -57,13 +59,16 @@
     "clsx": "2.1.1",
     "cmdk": "1.0.0",
     "date-fns": "4.1.0",
+    "dotenv": "16.5.0",
     "embla-carousel-react": "8.5.1",
     "frappe-js-sdk": "1.8.0",
     "frappe-react-sdk": "1.11.0",
     "graphql": "16.9.0",
     "input-otp": "1.4.1",
+    "jwt-decode": "4.0.0",
     "lucide-react": "0.460.0",
-    "next": "15.0.3",
+    "motion": "12.6.3",
+    "next": "15.2.5",
     "next-themes": "0.4.3",
     "payload": "3.30.0",
     "react": "19.0.0-rc-66855b96-20241106",
@@ -81,6 +86,7 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
+    "@playwright/test": "1.52.0",
     "@types/node": "20",
     "@types/react": "18",
     "@types/react-dom": "18",

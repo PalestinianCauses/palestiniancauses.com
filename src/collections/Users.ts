@@ -1,17 +1,18 @@
-// REVIEWED - 05
+// REVIEWED - 0٦
 import type { CollectionConfig } from "payload";
 
-import { isAdmin } from "./DiaryEntries";
+import { isAdminOrSystemUserOrSelf } from "@/access/diary-entry";
+import { isAdmin, isAdminField } from "@/access/global";
 
 export const Users: CollectionConfig = {
   slug: "users",
   access: {
-    read: () => true,
     create: isAdmin,
-    update: isAdmin,
+    read: isAdmin,
+    update: isAdminOrSystemUserOrSelf,
     delete: isAdmin,
   },
-  admin: { hidden: true, useAsTitle: "email" },
+  admin: { useAsTitle: "email" },
   auth: {
     cookies: {
       sameSite: "Strict",
@@ -40,35 +41,13 @@ export const Users: CollectionConfig = {
       defaultValue: "",
     },
     {
-      admin: { hidden: true },
+      access: { update: isAdminField },
       label: "Role",
       name: "role",
       type: "select",
       options: ["admin", "system-user", "website-user"],
       defaultValue: "website-user",
       required: true,
-    },
-    {
-      admin: { hidden: true },
-      label: "Frappe User ID",
-      name: "frappeUserId",
-      type: "text",
-      required: true,
-      unique: true,
-    },
-    {
-      admin: { hidden: true },
-      label: "Frappe User Role",
-      name: "frappeUserRole",
-      type: "text",
-      required: true,
-    },
-    {
-      admin: { hidden: true },
-      label: "Is Synced With Frappe?",
-      name: "isSyncedWithFrappe",
-      type: "checkbox",
-      defaultValue: false,
     },
   ],
 };

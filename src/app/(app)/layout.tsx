@@ -1,45 +1,74 @@
-// REVIEWED - 13
+// REVIEWED - 19
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { PropsWithChildren } from "react";
+
+import { BackButton } from "@/components/globals/back-button";
+import { Toaster } from "@/components/ui/sonner";
+
 import "./globals.css";
-
-import { Announcement } from "@/components/globals/announcement";
-import { Navbar } from "@/components/globals/navbar";
-import { Footer } from "@/components/layout/footer";
-import { CartProvider } from "@/contexts/cart";
-import { ProductProvider } from "@/contexts/product";
-import { getCart } from "@/lib/shopify";
-
-import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: { template: "%s | PalestinianCauses", default: "PalestinianCauses" },
   description:
-    "PalestinianCauses LLC is a U.S.-registered company that creates innovative digital solutions and e-commerce experiences driven by Palestinians with specialized expertise and a unique perspective. Our platform is structured around 'rooms,' each offering exceptional content, services, or products. Our current project features the book A Human But From Gaza, and we have long-term plans to develop team members' rooms to showcase their digital solutions and tech-based services. We aim to foster meaningful connections and global awareness through storytelling, creativity, and technology.",
+    'PalestinianCauses LLC is a mission-driven creative and digital platform dedicated to illuminating the Gazan experience, with an urgent focus on amplifying authentic voices and realities from Gaza during the current crisis. Through compelling storytelling, evocative artwork (as we showcased in our project "A Human But From Gaza"), and innovative digital solutions developed by our dedicated team, we strive to build global solidarity and foster deep empathy.',
+
+  keywords: [
+    "palestine",
+    "palestinians",
+    "gaza",
+    "gazans",
+    "palestinian causes",
+    "palestiniancauses",
+    "a human but from gaza",
+    "humans but from gaza",
+    "creative",
+    "digital",
+    "platform",
+    "dedicated",
+    "authentic",
+    "crisis",
+    "storytelling",
+    "artwork",
+    "innovative",
+    "solutions",
+    "global",
+    "solidarity",
+    "empathy",
+    "shawqicauses",
+    "shawqi",
+  ],
+
+  robots: { index: true, follow: true },
+
+  icons: "/pc-logo-primary-foreground.png",
+
+  openGraph: {
+    siteName: "PalestinianCauses",
+    url: "https://palestiniancauses.com",
+    images: [
+      {
+        url: "https://palestiniancauses.com/og-1.jpg",
+        width: 1200,
+        height: 630,
+        alt: "PalestinianCauses Website Thumbnail",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    site: "@palestiniancauses",
+    images: ["https://palestiniancauses.com/og-1.jpg"],
+  },
 };
 
 const RootLayout = async function RootLayout({ children }: PropsWithChildren) {
-  const cartId = (await cookies()).get("cartId")?.value;
-  const cart = getCart(cartId);
-
   return (
     <html lang="en" className="dark">
       <body>
-        <CartProvider cartPromise={cart}>
-          <ProductProvider>
-            <Providers>
-              <Navbar />
-              {children}
-              <Footer />
-              <Announcement />
-            </Providers>
-          </ProductProvider>
-        </CartProvider>
-        <script
-          async
-          src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js"
-        />
+        <BackButton />
+        {children}
+        <Toaster richColors />
       </body>
     </html>
   );

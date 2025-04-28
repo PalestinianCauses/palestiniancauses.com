@@ -1,28 +1,31 @@
-// REVIEWED - 03
+// REVIEWED - 07
 
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { z } from "zod";
 
-import { signIn, signOut, signUp } from "@/actions/auth";
+import { getAuth, signIn, signOut, signUp } from "@/actions/auth";
 import { queryClient } from "@/app/(app)/providers";
-import { AuthResponsePayload } from "@/lib/payload";
+import { messages } from "@/lib/errors";
 import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
-import { httpTryCatch } from "@/lib/utils";
+import { httpSafeExecute } from "@/lib/utils";
 
 export const useUser = function useUser() {
+  const router = useRouter();
+
   const {
     isLoading: isPending,
-    data: user,
+    data,
     refetch,
   } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const response = await httpTryCatch<AuthResponsePayload, unknown>(
-        fetch("/api/users/me", { credentials: "include" }),
-      );
+      const response = await getAuth();
 
-      if (response.data && response.data.user && !response.error)
-        return response.data.user;
-      return null;
+      if (!response || !response.user) return null;
+
+      return response.user;
     },
   });
 
@@ -32,9 +35,14 @@ export const useUser = function useUser() {
       return response;
     },
     onSuccess: (response) => {
-      if (response.data && !response.error) {
-        queryClient.setQueryData(["user"], response.data.user);
+      if (!response.data || response.error) {
+        toast.error(response.error);
+        return;
       }
+
+      toast.success(messages.actions.auth.signIn.success);
+      queryClient.setQueryData(["user"], response.data.user);
+      router.push("/");
     },
   });
 
@@ -44,34 +52,53 @@ export const useUser = function useUser() {
       return response;
     },
     onSuccess: (response) => {
-      if (response.data && !response.error) {
-        queryClient.setQueryData(["user"], response.data.user);
+      if (!response.data || response.error) {
+        toast.error(response.error);
+        return;
       }
+
+      toast.success(messages.actions.auth.signUp.success);
+      queryClient.setQueryData(["user"], response.data.user);
+      router.push("/");
     },
   });
 
   const signOutMutation = useMutation({
     mutationFn: async () => {
-      const response = await httpTryCatch(
+      const response = await httpSafeExecute<{ message: string }, string>(
         fetch("/api/users/logout", {
           method: "POST",
           credentials: "include",
         }),
+        messages.actions.auth.signOut.serverError,
+        (d): d is { message: string } => {
+          const validate = z.object({ message: z.string() }).safeParse(d);
+
+          if (!validate.success) return false;
+
+          return true;
+        },
       );
 
       return response;
     },
     onSuccess: async (response) => {
-      if (response.data && !response.error) {
-        await signOut();
-        queryClient.setQueryData(["user"], null);
+      if (!response.data || response.error) {
+        toast.error(response.error);
+        return;
       }
+
+      await signOut();
+
+      toast.success(messages.actions.auth.signOut.success);
+      queryClient.setQueryData(["user"], null);
+      router.refresh();
     },
   });
 
   return {
     isPending,
-    user,
+    data,
     refetch,
     signIn: signInMutation,
     signUp: signUpMutation,

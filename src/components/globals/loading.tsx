@@ -1,13 +1,20 @@
-// REVIEWED
+// REVIEWED - 02
 
 import { Loader2 } from "lucide-react";
+import { HTMLAttributes } from "react";
 
-export const Loading = function Loading() {
+import { cn } from "@/lib/utils";
+
+export const Loading = function Loading({
+  className,
+}: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className="h-full max-h-screen min-h-[40rem] w-full">
-      <div className="flex h-full w-full items-center justify-center">
-        <Loader2 className="h-7 w-7 animate-spin text-secondary" />
-      </div>
+    <div
+      className={cn(
+        "flex h-full max-h-screen min-h-[40rem] w-full items-center justify-center",
+        className,
+      )}>
+      <Loader2 className="h-10 w-10 animate-spin stroke-1 text-primary" />
     </div>
   );
 };

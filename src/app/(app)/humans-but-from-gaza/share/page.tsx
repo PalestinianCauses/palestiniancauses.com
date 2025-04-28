@@ -1,38 +1,46 @@
-// REVIEWED - 02
+// REVIEWED - 04
 
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-import { Protected } from "@/components/auth/protected";
+import { getAuth } from "@/actions/auth";
 import { CreateDiaryEntryForm } from "@/components/diary-entry/forms/create-diary-entry";
 import { Container } from "@/components/globals/container";
+import { Footer } from "@/components/globals/footer";
+import { Paragraph, SectionHeading } from "@/components/globals/typography";
+
+import { QueryProvider } from "../../providers";
 
 export const metadata: Metadata = {
-  title: "Share Your Diary With The Truth Museum.",
+  title: "Share Your Diary With The Truth Museum",
   description:
-    "Your voice matters. Share your diary entries from Gaza's war with The Truth Museum and help us preserve and amplify these crucial stories.",
+    'Sharing your Gaza war experiences is profound. We stand in solidarity. Contribute your diary to "The Truth Museum" to amplify authentic voices and build our collective testimony. Together, we illuminate truth.',
 };
 
-export default function SharePage() {
+export default async function SharePage() {
+  const auth = await getAuth();
+
+  if (!auth || !auth.user) redirect("/signin");
+
   return (
-    <Protected>
-      <main className="flex flex-col items-center justify-center py-48 xs:py-40">
-        <Container>
-          <div className="mx-auto mb-10 flex w-full flex-col items-center justify-center gap-3">
-            <h1
-              className="font-stretch mt-10 w-full max-w-3xl text-pretty bg-gradient-to-b from-foreground/25 via-foreground to-foreground/50 bg-cover bg-clip-text bg-center bg-no-repeat text-center text-5xl font-bold tracking-tight text-foreground sm:text-7xl"
-              style={{ WebkitTextFillColor: "transparent" }}>
-              Share Your Diary With The Truth Museum.
-            </h1>
-            <p className="mx-auto w-full max-w-4xl text-center leading-normal text-muted-foreground">
-              We understand the weight of sharing experiences from Gaza&apos;s
-              war. Like you, our team has witnessed the same heartache. Join us
-              in amplifying Gaza&apos;s stories and ensuring every voice is
-              heard. Together, we can make a difference.
-            </p>
-          </div>
-          <CreateDiaryEntryForm />
-        </Container>
-      </main>
-    </Protected>
+    <main className="relative pt-24 lg:pt-32 xl:pt-48">
+      <Container className="mb-8 max-w-7xl xl:mb-12">
+        <SectionHeading className="mb-4 !max-w-none lg:mb-8 lg:!max-w-xl xl:!max-w-3xl">
+          Share Your Diary With The Truth Museum.
+        </SectionHeading>
+        <Paragraph className="!max-w-5xl">
+          Sharing your Gaza war experiences is profound. We stand in solidarity.
+          Contribute your diary to &ldquo;The Truth Museum&ldquo; to amplify
+          authentic voices and build our collective testimony. Together, we
+          illuminate truth.
+        </Paragraph>
+      </Container>
+      <Container className="mb-12 max-w-7xl xl:mb-24">
+        <QueryProvider>
+          <CreateDiaryEntryForm user={auth.user} />
+        </QueryProvider>
+      </Container>
+      <Footer />
+    </main>
   );
 }
