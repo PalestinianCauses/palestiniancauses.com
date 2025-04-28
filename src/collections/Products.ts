@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CollectionConfig } from "payload";
 
@@ -35,6 +35,7 @@ export const Products: CollectionConfig = {
       required: true,
     },
     {
+      admin: { position: "sidebar" },
       name: "price",
       label: "Price",
       type: "number",
@@ -43,6 +44,7 @@ export const Products: CollectionConfig = {
       required: true,
     },
     {
+      admin: { position: "sidebar" },
       name: "type",
       label: "Type",
       type: "select",
@@ -78,7 +80,10 @@ export const Products: CollectionConfig = {
       ],
     },
     {
-      admin: { condition: (_, dataSibling) => dataSibling.type === "external" },
+      admin: {
+        condition: (_, dataSibling) => dataSibling.type === "external",
+        position: "sidebar",
+      },
       name: "link",
       type: "text",
       required: true,
