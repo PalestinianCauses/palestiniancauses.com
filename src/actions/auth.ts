@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -115,7 +115,7 @@ export const signIn = async function signIn(
     };
 
     if (typeof responseUserPayload.error !== "string")
-      if (responseUserPayload.error.name === "AuthenticationError")
+      if (responseUserPayload.error.status === 401)
         response.error = messages.actions.auth.signIn.unAuthenticated(
           signInData.email,
         );
@@ -150,7 +150,7 @@ export const signUp = async function signUp(
 
     if (typeof responsePayload.error !== "string")
       if (
-        responsePayload.error.name === "ValidationError" &&
+        responsePayload.error.status === 400 &&
         responsePayload.error.data.errors[0].path === "email"
       )
         response.error = messages.actions.auth.signUp.duplication(
