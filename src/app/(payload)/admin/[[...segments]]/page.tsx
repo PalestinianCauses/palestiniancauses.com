@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 /* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
 /* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
 import { RootPage, generatePageMetadata } from "@payloadcms/next/views";
@@ -24,7 +24,8 @@ export const generateMetadata = ({
 const Page = async ({ params, searchParams }: Args) => {
   const auth = await getAuth();
 
-  if (!auth || !auth.user) redirect("/signin");
+  if (!auth || !auth.user)
+    redirect(["/signin", "?", "redirect", "=", "/admin"].join(""));
 
   return RootPage({ config, params, searchParams, importMap });
 };

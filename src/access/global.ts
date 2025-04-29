@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 import { Access, FieldAccess } from "payload";
 
 export const isAuthenticated: Access = function isAuthenticated({
@@ -16,6 +16,11 @@ export const isAdminOrSystemUser: Access = function isAdminOrSystemUser({
 }) {
   return isAdmin({ req }) || req.user?.role === "system-user";
 };
+
+export const isAdminOrSystemUserOrSelf: Access =
+  function isAdminOrSystemUserOrSelf({ req }) {
+    return isAdminOrSystemUser({ req }) || { user: { equals: req.user?.id } };
+  };
 
 export const isAdminField: FieldAccess = function isAdminField({ req }) {
   return isAuthenticated({ req }) && req.user?.role === "admin";

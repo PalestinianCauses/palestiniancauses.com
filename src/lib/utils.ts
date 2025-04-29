@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -17,6 +17,10 @@ export const cn = function cn(...inputs: ClassValue[]) {
 };
 
 // Strings
+export const isString = function isString(value: unknown): value is string {
+  return typeof value === "string";
+};
+
 export const ensureStartsWith = function ensureStartsWith(
   stringToCheck: string,
   startsWith: string,
@@ -34,6 +38,11 @@ export const splitByFlexibleNewLines = function splitByFlexibleNewLines(
   const separateRegex = /\s*\n+\s*/;
   const stringFiltered = string.split(separateRegex).filter(Boolean);
   return stringFiltered;
+};
+
+// Numbers
+export const isNumber = function isNumber(value: unknown): value is number {
+  return typeof value === "number";
 };
 
 // Actions

@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { Metadata } from "next";
 
@@ -11,7 +11,6 @@ import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
 import { SectionHeading } from "@/components/globals/typography";
 import { VideoOutroScene } from "@/components/globals/video-outro-scene";
-import { getProduct } from "@/lib/shopify";
 
 const sequence = [
   {
@@ -81,9 +80,6 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const product = await getProduct("a-human-but-from-gaza-e-book");
-  if (!product) return null;
-
   return (
     <main className="relative">
       <Container className="max-w-7xl pb-12 pt-24 xl:pb-24 xl:pt-32">
@@ -101,7 +97,7 @@ export default async function AboutPage() {
       <Vision />
       <CoreValues />
 
-      <CTA product={product} />
+      <CTA />
 
       <Footer />
     </main>

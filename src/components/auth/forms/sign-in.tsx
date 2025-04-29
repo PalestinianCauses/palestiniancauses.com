@@ -4,6 +4,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -25,6 +26,11 @@ import { motions } from "@/lib/motion";
 import { signInSchema, SignInSchema } from "@/lib/schemas/auth";
 
 export const SignInForm = function SignInForm() {
+  const searchParams = useSearchParams();
+  let redirectParam = searchParams.get("redirect");
+
+  if (!redirectParam || !redirectParam.startsWith("/")) redirectParam = "/";
+
   const { signIn } = useUser();
 
   const form = useForm<SignInSchema>({
@@ -118,7 +124,16 @@ export const SignInForm = function SignInForm() {
             Not a family member yet?{" "}
             <Button variant="link" className="h-auto p-0" asChild>
               <Label>
-                <Link href="/signup">Be one</Link>
+                <Link
+                  href={
+                    redirectParam !== "/"
+                      ? ["/signup", "?", "redirect", "=", redirectParam].join(
+                          "",
+                        )
+                      : "/signup"
+                  }>
+                  Be one
+                </Link>
               </Label>
             </Button>
             .

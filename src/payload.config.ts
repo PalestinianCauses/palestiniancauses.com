@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 06
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -9,6 +9,8 @@ import sharp from "sharp";
 
 import { DiaryEntries } from "@/collections/DiaryEntries";
 import { Media } from "@/collections/Media";
+import { Orders } from "@/collections/Orders";
+import { Products } from "@/collections/Products";
 import { Users } from "@/collections/Users";
 
 const filename = fileURLToPath(import.meta.url);
@@ -22,7 +24,7 @@ export default buildConfig({
   typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },
   editor: lexicalEditor(),
   admin: { user: Users.slug, importMap: { baseDir: path.resolve(dirname) } },
-  collections: [Media, Users, DiaryEntries],
+  collections: [Media, Users, Products, Orders, DiaryEntries],
   sharp,
   plugins: [],
 });

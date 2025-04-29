@@ -1,19 +1,11 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { ArrowUpRight } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useMemo, useTransition } from "react";
+import Link from "next/link";
 
-import {
-  createCartPlusSetCookie,
-  getCheckoutUrl,
-  insertItem,
-  removeCartPlusRemoveCookie,
-} from "@/actions/cart";
 import { motions } from "@/lib/motion";
-import { Product } from "@/lib/shopify/types";
 
 import { Container } from "../globals/container";
 import { MotionLi } from "../globals/motion";
@@ -25,48 +17,26 @@ import {
 } from "../globals/typography";
 import { Button } from "../ui/button";
 
-export const CTA = function CTA({ product }: { product: Product }) {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+const ctas = [
+  {
+    title: 'Get "A Human But From Gaza"',
+    href: "/a-human-but-from-gaza",
+  },
+  {
+    title: "Support Our Mission",
+    href: "https://palestiniancauses.com/support",
+  },
+  {
+    title: "Amplify Our Voice: Follow and Share",
+    href: "https://www.instagram.com/palestiniancauses",
+  },
+  {
+    title: "Contact Us",
+    href: "mailto:palestiniancauses.com",
+  },
+];
 
-  const ctas = useMemo(
-    () => [
-      {
-        title: 'Get "A Human But From Gaza"',
-        action: () => {
-          startTransition(async () => {
-            await createCartPlusSetCookie("internal-cart-id");
-            await insertItem("internal-cart-id", product.variants[0].id);
-
-            const checkoutUrl = await getCheckoutUrl("internal-cart-id");
-            window.location.href = checkoutUrl;
-
-            await removeCartPlusRemoveCookie("internal-cart-id");
-          });
-        },
-      },
-      {
-        title: "Support Our Mission",
-        action: () => {
-          window.location.href = "https://palestiniancauses.com/support";
-        },
-      },
-      {
-        title: "Amplify Our Voice: Follow and Share",
-        action: () => {
-          window.location.href = "https://www.instagram.com/palestiniancauses";
-        },
-      },
-      {
-        title: "Contact Us",
-        action: () => {
-          router.push("/contact-us");
-        },
-      },
-    ],
-    [router, product.variants],
-  );
-
+export const CTA = function CTA() {
   return (
     <Container as="section" className="my-12 max-w-7xl xl:my-24">
       <SectionHeadingBadge as="h2" number="05" className="mb-8">
@@ -87,7 +57,7 @@ export const CTA = function CTA({ product }: { product: Product }) {
         self-sufficient future.
       </Paragraph>
       <ul className="grid h-full grid-rows-4">
-        {ctas.map(({ title, action }) => (
+        {ctas.map(({ title, href }) => (
           <MotionLi
             key={title}
             viewport={{ once: true }}
@@ -96,15 +66,16 @@ export const CTA = function CTA({ product }: { product: Product }) {
             transition={motions.transition({})}>
             <Button
               variant="outline"
-              disabled={isPending}
-              onClick={action}
-              className="h-full w-full justify-start gap-5 whitespace-break-spaces p-5 text-left font-normal md:p-10">
-              <ArrowUpRight className="!h-7 !w-7 stroke-[1.5] md:!h-10 md:!w-10" />
-              <SubSectionHeading
-                as="p"
-                className="font-normal !leading-relaxed">
-                {title}
-              </SubSectionHeading>
+              className="h-full w-full justify-start gap-5 whitespace-break-spaces p-5 text-left font-normal md:p-10"
+              asChild>
+              <Link href={href}>
+                <ArrowUpRight className="!h-7 !w-7 stroke-[1.5] md:!h-10 md:!w-10" />
+                <SubSectionHeading
+                  as="p"
+                  className="font-normal !leading-relaxed">
+                  {title}
+                </SubSectionHeading>
+              </Link>
             </Button>
           </MotionLi>
         ))}

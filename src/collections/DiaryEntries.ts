@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { revalidatePath } from "next/cache";
 import { CollectionConfig } from "payload";
@@ -16,6 +16,7 @@ export const DiaryEntries: CollectionConfig = {
     delete: isAdminOrSystemUserOrSelf,
   },
   admin: { useAsTitle: "title" },
+  labels: { singular: "Diary Entry", plural: "Diary Entries" },
   fields: [
     {
       label: "Title",

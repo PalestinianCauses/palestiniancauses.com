@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -20,7 +20,10 @@ export const metadata: Metadata = {
 export default async function SharePage() {
   const auth = await getAuth();
 
-  if (!auth || !auth.user) redirect("/signin");
+  if (!auth || !auth.user)
+    redirect(
+      ["/signin", "?", "redirect", "=", "/humans-but-from-gaza"].join(""),
+    );
 
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">

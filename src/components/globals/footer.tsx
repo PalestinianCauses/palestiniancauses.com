@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import Image from "next/image";
 import Link from "next/link";
@@ -39,7 +39,6 @@ const lists = [
       {
         href: "https://instagram.com/palestiniancauses",
         label: "Instagram",
-        target: "_blank",
       },
     ],
   },
@@ -94,7 +93,7 @@ export const Footer = function Footer() {
                   {list.title}
                 </Paragraph>
                 <ul className="flex flex-col items-start justify-start gap-4">
-                  {list.links.map(({ href, label, target }, index) => (
+                  {list.links.map(({ href, label }, index) => (
                     <li key={href}>
                       <MotionDiv
                         viewport={{ once: true }}
@@ -103,9 +102,7 @@ export const Footer = function Footer() {
                         transition={motions.transition({ delay: index * 0.1 })}
                         className="flex items-center justify-center">
                         <Button variant="link" className="p-0" asChild>
-                          <Link href={href} target={target}>
-                            {label}
-                          </Link>
+                          <Link href={href}>{label}</Link>
                         </Button>
                       </MotionDiv>
                     </li>
