@@ -1,7 +1,7 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -13,6 +13,10 @@ import { httpSafeExecute } from "@/lib/utils";
 
 export const useUser = function useUser() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  let redirectParam = searchParams.get("redirect");
+
+  if (!redirectParam || !redirectParam.startsWith("/")) redirectParam = "/";
 
   const {
     isLoading: isPending,
@@ -42,7 +46,7 @@ export const useUser = function useUser() {
 
       toast.success(messages.actions.auth.signIn.success);
       queryClient.setQueryData(["user"], response.data.user);
-      router.push("/");
+      router.push(redirectParam);
     },
   });
 
@@ -59,7 +63,7 @@ export const useUser = function useUser() {
 
       toast.success(messages.actions.auth.signUp.success);
       queryClient.setQueryData(["user"], response.data.user);
-      router.push("/");
+      router.push(redirectParam);
     },
   });
 
