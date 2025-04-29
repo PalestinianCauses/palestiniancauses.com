@@ -1,15 +1,16 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { ArrowRightIcon, DownloadIcon, HeartIcon } from "lucide-react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
-import { getFreeProductFiles } from "@/actions/product";
+import { getProductFreeLinksExternal } from "@/actions/product";
+import { messages } from "@/lib/errors";
 import { motions } from "@/lib/motion";
-import { Media } from "@/payload-types";
+import { Product } from "@/payload-types";
 
 import { MotionDiv } from "../globals/motion";
 import { navigation } from "../globals/navigation";
@@ -18,9 +19,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 export const HeaderButtons = function HeaderButtons() {
   const [isPending, startTransition] = useTransition();
-  const [files, setFiles] = useState<
-    { title: string; file: Omit<Media, "url"> & { url: string } }[]
-  >([]);
+  const [dataLinks, setDataLinks] = useState<Pick<Product, "links">>({
+    links: [],
+  });
+
+  if (!dataLinks.links) return null;
 
   return (
     <div className="flex w-full flex-col items-stretch justify-center gap-2.5 sm:w-max sm:flex-row sm:items-center sm:gap-5">
@@ -30,57 +33,63 @@ export const HeaderButtons = function HeaderButtons() {
         animate={motions.fadeIn.whileInView}
         transition={motions.transition({ delay: 0.4 })}
         className="w-full">
-        <Popover defaultOpen={files.length > 0}>
+        <Popover defaultOpen={dataLinks.links.length > 0 || false}>
           <PopoverTrigger asChild>
             <Button
               size="lg"
               disabled={isPending}
               className="w-full"
               onClick={() => {
-                if (files.length) return;
+                if (dataLinks && dataLinks.links && dataLinks.links.length)
+                  return;
 
                 startTransition(async () => {
-                  const responseProductFiles = await getFreeProductFiles(
-                    "a-human-but-from-gaza",
-                    "/a-human-but-from-gaza",
-                  );
+                  const responseProductLinks =
+                    await getProductFreeLinksExternal(
+                      "a-human-but-from-gaza",
+                      "/a-human-but-from-gaza",
+                    );
 
                   if (
-                    !responseProductFiles.data ||
-                    responseProductFiles.error
+                    !responseProductLinks.data ||
+                    !responseProductLinks.data.links ||
+                    !responseProductLinks.data.links.length ||
+                    responseProductLinks.error
                   ) {
-                    toast.error(responseProductFiles.error);
+                    toast.error(
+                      responseProductLinks.error ||
+                        messages.actions.product.external.serverError,
+                    );
                     return;
                   }
 
-                  setFiles(responseProductFiles.data);
+                  setDataLinks(responseProductLinks.data);
                 });
               }}>
               {isPending ? "Ordering..." : "Order For Free"}
               <ArrowRightIcon />
             </Button>
           </PopoverTrigger>
-          {files.length > 0 && (
+          {dataLinks.links.length > 0 && (
             <PopoverContent
               side="top"
               align="start"
               sideOffset={12}
               className="w-72 max-w-lg p-0 sm:w-[32rem]">
               <ul>
-                {files.filter(Boolean).map((file) => (
-                  <li key={file.file.id}>
+                {dataLinks.links.filter(Boolean).map((link) => (
+                  <li key={link.id || link.url}>
                     <Button
                       variant="ghost"
                       size="lg"
                       className="w-full justify-between"
                       asChild>
-                      <Link href={file.file.url}>
+                      <Link href={link.url} download={link.isFile && link.url}>
                         <span className="truncate">
-                          {file.title}
-                          {file.file.filesize ? (
+                          {link.title}
+                          {link.isFile && link.fileSize ? (
                             <span className="ml-2 font-mono text-sm text-muted-foreground">
-                              ({Math.round(file.file.filesize / 1024 / 1024)}{" "}
-                              MB)
+                              ({Math.round(link.fileSize)} MB)
                             </span>
                           ) : null}
                         </span>

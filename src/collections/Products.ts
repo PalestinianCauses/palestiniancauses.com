@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { CollectionConfig } from "payload";
 
@@ -78,9 +78,36 @@ export const Products: CollectionConfig = {
     },
     {
       admin: { condition: (_, dataSibling) => dataSibling.type === "external" },
-      name: "link",
-      type: "text",
-      required: true,
+      name: "links",
+      type: "array",
+      fields: [
+        {
+          name: "title",
+          label: "Title",
+          type: "text",
+          required: true,
+        },
+        {
+          name: "isFile",
+          label: "Is File",
+          type: "checkbox",
+          defaultValue: true,
+        },
+        {
+          admin: { condition: (_, dataSibling) => dataSibling.isFile },
+          name: "fileSize",
+          label: "File Size (MB)",
+          type: "number",
+          min: 0,
+          defaultValue: 0,
+        },
+        {
+          name: "url",
+          label: "URL",
+          type: "text",
+          required: true,
+        },
+      ],
     },
     {
       name: "authors",

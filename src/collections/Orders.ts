@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CollectionConfig } from "payload";
 
@@ -66,6 +66,7 @@ export const Orders: CollectionConfig = {
       defaultValue: "pending",
     },
     {
+      admin: { readOnly: true },
       name: "items",
       label: "Items",
       type: "array",

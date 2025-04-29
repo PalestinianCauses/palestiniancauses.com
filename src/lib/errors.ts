@@ -1,4 +1,4 @@
-// REVIEWED - 11
+// REVIEWED - 12
 
 export const messages = {
   http: {
@@ -62,6 +62,14 @@ export const messages = {
         unAuthenticated:
           "You are not authenticated to access product's files. Please sign in first.",
         notFound: "Could not find product's files. Please try again later.",
+      },
+      external: {
+        unAuthenticated:
+          "You are not authenticated to access product's external links. Please sign in first.",
+        notFound:
+          "Could not find product's external links. Please try again later.",
+        serverError:
+          "An error occurred while getting product's external links. Please try again later.",
       },
       notFound: "Could not find product. Please try again later.",
       serverError:
