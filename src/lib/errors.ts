@@ -1,4 +1,4 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
 export const messages = {
   http: {
@@ -56,6 +56,20 @@ export const messages = {
         serverError:
           "An error occurred while signing out. Please try again later.",
       },
+    },
+    product: {
+      file: {
+        unAuthenticated:
+          "You are not authenticated to access product's files. Please sign in first.",
+        notFound: "Could not find product's files. Please try again later.",
+      },
+      notFound: "Could not find product. Please try again later.",
+      serverError:
+        "An error occurred while getting product. Please try again later.",
+    },
+    order: {
+      serverError:
+        "An error occurred while creating order. Please try again later.",
     },
     collection: {
       serverError:
