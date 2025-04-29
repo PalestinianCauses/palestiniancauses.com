@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { ArrowLeftIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -11,7 +11,7 @@ export const BackButton = function BackButton() {
   const pathname = usePathname();
   const router = useRouter();
 
-  if (pathname === "/") return null;
+  if (pathname === "/" || pathname === "/instagram") return null;
 
   return (
     <Button

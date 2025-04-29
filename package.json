@@ -1,5 +1,5 @@
 {
-  "reviewed": "true - 20",
+  "reviewed": "true - 21",
   "name": "palestiniancauses.com",
   "version": "1.0.0",
   "private": true,
@@ -64,6 +64,7 @@
     "frappe-js-sdk": "1.8.0",
     "frappe-react-sdk": "1.11.0",
     "graphql": "16.9.0",
+    "html-to-image": "1.11.13",
     "input-otp": "1.4.1",
     "jwt-decode": "4.0.0",
     "lucide-react": "0.460.0",
