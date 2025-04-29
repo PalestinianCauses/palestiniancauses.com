@@ -1,9 +1,8 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import Image from "next/image";
 
 import { motions } from "@/lib/motion";
-import { Product } from "@/lib/shopify/types";
 import { cn } from "@/lib/utils";
 
 import { Container } from "../globals/container";
@@ -34,7 +33,7 @@ const pagesImages = [
   { name: "Image - 18", image: "/a-human-but-from-gaza/C-52.jpg" },
 ];
 
-export const Header = function Header({ product }: { product: Product }) {
+export const Header = function Header() {
   return (
     <header>
       <Container className="my-32">
@@ -91,7 +90,7 @@ export const Header = function Header({ product }: { product: Product }) {
             voices and stand in solidarity—order your copy today to support our
             mission.
           </MotionP>
-          <HeaderButtons product={product} />
+          <HeaderButtons />
         </div>
       </Container>
       <MotionDiv

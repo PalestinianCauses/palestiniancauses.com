@@ -12,7 +12,10 @@ export const Orders: CollectionConfig = {
     update: isAdmin,
     delete: isAdmin,
   },
-  admin: { useAsTitle: "id", defaultColumns: ["id", "user", "product"] },
+  admin: {
+    useAsTitle: "id",
+    defaultColumns: ["id", "user", "type", "status", "total"],
+  },
   labels: { singular: "Order", plural: "Orders" },
   fields: [
     {
@@ -100,7 +103,7 @@ export const Orders: CollectionConfig = {
       name: "orderedAt",
       label: "Ordered At",
       type: "date",
-      defaultValue: new Date(),
+      defaultValue: new Date(Date.now()).toLocaleString(),
       required: true,
     },
   ],

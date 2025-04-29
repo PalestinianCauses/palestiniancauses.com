@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CollectionConfig } from "payload";
 
@@ -55,13 +55,10 @@ export const Products: CollectionConfig = {
       required: true,
     },
     {
-      admin: {
-        condition: (_, dataSibling) => dataSibling.type === "file",
-        position: "sidebar",
-      },
+      admin: { condition: (_, dataSibling) => dataSibling.type === "file" },
       labels: { singular: "File", plural: "Files" },
-      name: "filesDownloadable",
-      label: "Downloadable Files",
+      name: "files",
+      label: "Files",
       type: "array",
       fields: [
         {
@@ -80,10 +77,7 @@ export const Products: CollectionConfig = {
       ],
     },
     {
-      admin: {
-        condition: (_, dataSibling) => dataSibling.type === "external",
-        position: "sidebar",
-      },
+      admin: { condition: (_, dataSibling) => dataSibling.type === "external" },
       name: "link",
       type: "text",
       required: true,
