@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -21,21 +21,20 @@ import {
   SectionHeadingBadge,
 } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/hooks/use-user";
 import { cn } from "@/lib/utils";
 
-export type Properties = "bg" | "text" | "fill" | "stroke";
-export type ThemeStyles = "fill" | "stroke";
-export type ThemeColors =
+type Properties = "bg" | "text" | "fill" | "stroke";
+type ThemeStyles = "fill" | "stroke";
+type ThemeColors =
   | "primary"
   | "primary-foreground"
   | "secondary"
   | "tertiary"
   | "tertiary-2"
   | "transparent";
-export type Dimensions = "book" | "1:1" | "4:5" | "16:9" | "9:16";
+type Dimensions = "book" | "open-graph" | "1:1" | "4:5" | "16:9" | "9:16";
 
-export const themeClasses: {
+const themeClasses: {
   [K in ThemeColors]: { [K in Properties]: string };
 } = {
   "primary": {
@@ -76,8 +75,9 @@ export const themeClasses: {
   },
 };
 
-export const dimensionsClasses: { [K in Dimensions]: string } = {
+const dimensionsClasses: { [K in Dimensions]: string } = {
   "book": "max-w-[117.1875rem] w-[117.1875rem] h-[173.4375rem]",
+  "open-graph": "w-[75rem] h-[39.375rem]",
   "1:1": "w-[67.5rem] aspect-square",
   "4:5": "w-[67.5rem] aspect-[4/5]",
   "16:9": "w-[67.5rem] aspect-[16/9]",
@@ -96,7 +96,7 @@ type PCLogoProps = {
   };
 };
 
-export const PCLogo = function PCLogo({
+const PCLogo = function PCLogo({
   style = "fill",
   color = "primary",
   elements = {},
@@ -143,7 +143,7 @@ export const PCLogo = function PCLogo({
   );
 };
 
-export type ImageFrame = {
+type ImageFrame = {
   id: string;
   ref: RefObject<HTMLDivElement>;
   as?: "jpeg" | "png";
@@ -153,7 +153,7 @@ type ImageFrameRenderProps = {
   frames: ImageFrame[];
 };
 
-export const ImageFrameRender = function ImageFrameRender({
+const ImageFrameRender = function ImageFrameRender({
   frames,
 }: ImageFrameRenderProps) {
   const render = function render(imageFrames: ImageFrame[]) {
@@ -229,7 +229,7 @@ const FrameImagesGrid = function FrameImagesGrid({
 
 const InstagramStudioPage = function InstagramStudioPage() {
   // Followers from my GitHub profile, please ignore this :)
-  const { data: user } = useUser();
+  // const { data: user } = useUser();
 
   const frames: ImageFrame[] = [
     {
@@ -274,7 +274,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
     },
   ];
 
-  if (!user) return null;
+  // if (!user) return null;
 
   return (
     <main>
@@ -544,6 +544,91 @@ const InstagramStudioPage = function InstagramStudioPage() {
             className="!text-4xl font-medium !leading-relaxed text-primary-foreground">
             Explore now and be part of the change.
           </Paragraph>
+        </FrameContent>
+      </Frame>
+      <Frame dimensions="open-graph" color="primary-foreground">
+        <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
+          <div className="mx-auto flex h-full w-60 items-center justify-center">
+            <PCLogo />
+          </div>
+          <div className="col-span-2">
+            <SectionHeading
+              isMotion={false}
+              className="!text-7xl font-semibold text-primary lg:!leading-none xl:!leading-none">
+              Passionate and Creative{" "}
+              <span className="relative z-10 inline-block font-bold text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary">
+                Individuals
+              </span>{" "}
+              United By One{" "}
+              <span className="relative z-10 inline-block font-bold text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary">
+                Mission.
+              </span>
+            </SectionHeading>
+          </div>
+        </FrameContent>
+      </Frame>
+      <Frame dimensions="open-graph" color="primary">
+        <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
+          <div className="mx-auto flex h-full w-60 items-center justify-center">
+            <PCLogo color="primary-foreground" />
+          </div>
+          <div className="col-span-2">
+            <SectionHeading
+              isMotion={false}
+              className="!text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
+              Discover Our{" "}
+              <span className="relative z-10 inline-block pl-1 font-bold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
+                Core
+              </span>{" "}
+              Project: A Human But From{" "}
+              <span className="relative z-10 inline-block pl-1 font-bold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
+                Gaza.
+              </span>
+            </SectionHeading>
+          </div>
+        </FrameContent>
+      </Frame>
+      <Frame dimensions="open-graph" color="primary-foreground">
+        <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
+          <div className="mx-auto flex h-full w-60 items-center justify-center">
+            <PCLogo />
+          </div>
+          <div className="col-span-2">
+            <SectionHeading
+              isMotion={false}
+              className="!text-7xl font-semibold text-primary lg:!leading-none xl:!leading-none">
+              The Truth <br />
+              <span className="relative z-10 inline-block font-bold text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary">
+                Museum:
+              </span>{" "}
+              Humans <br />
+              But From{" "}
+              <span className="relative z-10 inline-block pl-1 font-bold text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary">
+                Gaza.
+              </span>
+            </SectionHeading>
+          </div>
+        </FrameContent>
+      </Frame>
+      <Frame dimensions="open-graph" color="primary">
+        <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
+          <div className="mx-auto flex h-full w-60 items-center justify-center">
+            <PCLogo color="primary-foreground" />
+          </div>
+          <div className="col-span-2">
+            <SectionHeading
+              isMotion={false}
+              className="!text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
+              Identity, Mission, Vision, and{" "}
+              <span className="relative z-10 inline-block pl-1 font-bold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
+                Values:
+              </span>{" "}
+              <span className="relative z-10 inline-block pl-1 font-bold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
+                About
+              </span>{" "}
+              Palestinian-Causes.
+            </SectionHeading>
+          </div>
         </FrameContent>
       </Frame>
     </main>
