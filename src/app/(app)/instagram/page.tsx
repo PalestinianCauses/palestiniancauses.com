@@ -1,11 +1,10 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
 import { toJpeg, toPng } from "html-to-image";
-import { ArrowRightIcon, GlobeIcon } from "lucide-react";
 import Image from "next/image";
 import {
   forwardRef,
@@ -16,7 +15,6 @@ import {
 } from "react";
 
 import {
-  Paragraph,
   SectionHeading,
   SectionHeadingBadge,
 } from "@/components/globals/typography";
@@ -234,42 +232,47 @@ const InstagramStudioPage = function InstagramStudioPage() {
 
   const frames: ImageFrame[] = [
     {
-      id: "i-g-01-01",
+      id: "open-graph-01",
       ref: useRef<HTMLDivElement>(null),
       as: "png",
     },
     {
-      id: "i-g-01-02",
+      id: "open-graph-02",
       ref: useRef<HTMLDivElement>(null),
       as: "png",
     },
     {
-      id: "i-g-01-03",
+      id: "open-graph-03",
       ref: useRef<HTMLDivElement>(null),
       as: "png",
     },
     {
-      id: "i-g-01-04",
+      id: "open-graph-04",
       ref: useRef<HTMLDivElement>(null),
       as: "png",
     },
     {
-      id: "i-g-01-05",
+      id: "profile-01",
       ref: useRef<HTMLDivElement>(null),
       as: "png",
     },
     {
-      id: "i-g-01-06",
+      id: "profile-02",
       ref: useRef<HTMLDivElement>(null),
       as: "png",
     },
     {
-      id: "i-g-01-07",
+      id: "i-g-story-template-01",
       ref: useRef<HTMLDivElement>(null),
       as: "png",
     },
     {
-      id: "i-g-01-08",
+      id: "i-g-story-template-02",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "github-01",
       ref: useRef<HTMLDivElement>(null),
       as: "png",
     },
@@ -279,275 +282,12 @@ const InstagramStudioPage = function InstagramStudioPage() {
 
   return (
     <main>
+      {/* Open Graph */}
       <ImageFrameRender frames={frames} />
-      <Frame ref={frames[0].ref} dimensions="4:5" color="primary">
-        <FrameContent className="gap-8">
-          <SectionHeadingBadge
-            isMotion={false}
-            className="text-lg text-primary-foreground">
-            Dear PalestinianCauses&apos; Family{" "}
-          </SectionHeadingBadge>
-          <SectionHeading
-            isMotion={false}
-            className="!text-9xl font-bold text-primary-foreground lg:!leading-[0.9] xl:!leading-[0.9]">
-            We are <br /> announcing our new digital{" "}
-            <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary-foreground">
-              identity.
-            </span>
-          </SectionHeading>
-          <div className="mt-auto flex h-28 w-28 items-center justify-center bg-primary-foreground">
-            <ArrowRightIcon className="h-16 w-16 stroke-1" />
-          </div>
-        </FrameContent>
-        <FrameImagesGrid>
-          <div className="relative col-start-4 col-end-13 row-start-8 row-end-13">
-            <Image
-              src="/i-g-01.png"
-              alt="Screen Shot 01"
-              fill
-              sizes="42rem"
-              className="!relative bg-primary-foreground object-cover object-[top_left]"
-            />
-          </div>
-        </FrameImagesGrid>
-      </Frame>
-      <Frame ref={frames[1].ref} dimensions="4:5" color="primary-foreground">
-        <FrameContent className="justify-center">
-          <Paragraph
-            isMotion={false}
-            className="!text-4xl !leading-relaxed text-primary">
-            We are incredibly excited to announce the launch of our brand new
-            website
-          </Paragraph>
-          <SectionHeadingBadge
-            isMotion={false}
-            as="h2"
-            className="p-6 text-5xl text-primary">
-            <div className="flex items-center gap-5">
-              <GlobeIcon className="h-12 w-12 shrink-0 stroke-1" />
-              <span>PalestinianCauses.com</span>
-              <span className="self-end font-mono text-2xl font-normal">
-                1.0.0
-              </span>
-            </div>
-          </SectionHeadingBadge>
-          <Paragraph
-            isMotion={false}
-            className="!text-4xl !leading-relaxed text-primary">
-            This marks a significant step in expanding our reach and creating a
-            dedicated online space to illuminate the Gazan experience, share
-            authentic narratives, and connect with global solidarity.
-          </Paragraph>
-          <div className="mt-auto flex items-center gap-5 self-end bg-primary px-10 py-5 text-4xl text-primary-foreground">
-            <Paragraph
-              isMotion={false}
-              className="!text-4xl font-medium !leading-relaxed text-primary-foreground">
-              Swipe through to get a first look
-            </Paragraph>
-            <ArrowRightIcon className="h-12 w-12 shrink-0 stroke-[1.5]" />
-          </div>
-        </FrameContent>
-      </Frame>
-      <Frame ref={frames[2].ref} dimensions="4:5" color="primary">
-        <FrameContent className="gap-8">
-          <SectionHeadingBadge
-            isMotion={false}
-            number="1"
-            className="text-lg text-primary-foreground">
-            Our Core Project &ldquo;A Human But From Gaza&ldquo;
-          </SectionHeadingBadge>
-          <SectionHeading
-            isMotion={false}
-            className="!text-8xl font-bold text-primary-foreground lg:!leading-[0.9] xl:!leading-[0.9]">
-            Takes center{" "}
-            <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-[55%] before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-primary-foreground">
-              stage
-            </span>
-            on our new <span className="relative z-10">website</span>.
-          </SectionHeading>
-          <Paragraph
-            isMotion={false}
-            className="!text-4xl font-medium !leading-relaxed text-primary-foreground">
-            Featured with dedicated and clear sections. Explore its powerful
-            diaries and art. Crucially, you can now get your free copy directly
-            from our website. We&apos;ve made accessing these vital stories
-            easier than ever: just sign in for a quick process. Connect with
-            authentic voices and amplify truth.
-          </Paragraph>
-        </FrameContent>
-        <FrameImagesGrid>
-          <div className="relative col-start-7 col-end-12 row-start-8 row-end-13 p-2.5 ring-2 ring-primary-foreground">
-            <div className="to transparent absolute left-2.5 right-2.5 top-2.5 z-10 h-60 bg-gradient-to-b from-background" />
-            <Image
-              src="/i-g-ui-01.png"
-              alt="Screen Shot UI 01"
-              fill
-              sizes="42rem"
-              className="!relative bg-primary-foreground object-cover object-center"
-            />
-          </div>
-        </FrameImagesGrid>
-      </Frame>
-      <Frame ref={frames[3].ref} dimensions="4:5" color="primary-foreground">
-        <FrameImagesGrid className="gap-10">
-          <div className="relative col-start-2 col-end-7 row-start-2 row-end-10 p-2.5 ring-2 ring-primary">
-            <Image
-              src="/i-g-ui-02.png"
-              alt="Screen Shot UI 02"
-              fill
-              sizes="42rem"
-              className="!relative bg-primary-foreground object-cover object-center"
-            />
-          </div>
-          <div className="relative col-start-7 col-end-12 row-start-4 row-end-12 p-2.5 ring-2 ring-primary">
-            <Image
-              src="/i-g-ui-03.png"
-              alt="Screen Shot UI 03"
-              fill
-              sizes="42rem"
-              className="!relative bg-primary-foreground object-cover object-center"
-            />
-          </div>
-        </FrameImagesGrid>
-      </Frame>
-      <Frame ref={frames[4].ref} dimensions="4:5" color="primary-foreground">
-        <FrameContent className="gap-8">
-          <SectionHeadingBadge
-            isMotion={false}
-            number="2"
-            numberClassName="border-primary/20"
-            className="text-lg ring-primary/20">
-            The Truth Museum: Humans But From Gaza
-          </SectionHeadingBadge>
-          <SectionHeading
-            isMotion={false}
-            className="!text-8xl font-bold text-primary lg:!leading-[0.9] xl:!leading-[0.9]">
-            Where silence ends and truth finds its
-            <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-[55%] before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-primary">
-              archive.
-            </span>
-          </SectionHeading>
-          <Paragraph
-            isMotion={false}
-            className="!text-4xl !leading-relaxed text-primary">
-            This new section is our collective diary archive. Witness
-            un-filtered personal stories shared directly by individuals
-            navigating the war in Gaza. Soon, our own PalestinianCauses authors
-            will also begin sharing their diaries here. Share your vital
-            testimony to add your unique truth to this growing record. It&apos;s
-            a place to connect with and amplify authentic voices from Gaza.
-          </Paragraph>
-        </FrameContent>
-      </Frame>
-      <Frame ref={frames[5].ref} dimensions="4:5" color="primary">
-        <FrameContent className="gap-8">
-          <SectionHeadingBadge
-            isMotion={false}
-            number="3"
-            className="text-lg text-primary-foreground">
-            Get to Know PalestinianCauses
-          </SectionHeadingBadge>
-          <SectionHeading
-            isMotion={false}
-            className="!text-8xl font-bold text-primary-foreground lg:!leading-[0.9] xl:!leading-[0.9]">
-            Identity, mission, vision, and{" "}
-            <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-[55%] before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-primary-foreground">
-              values.
-            </span>
-          </SectionHeading>
-          <Paragraph
-            isMotion={false}
-            className="!text-4xl font-medium !leading-relaxed text-primary-foreground">
-            Discover the heart of PalestinianCauses on our About Us page. Learn
-            about the team dedicated to our mission: standing with Gaza, sharing
-            vital stories, and building sustainable futures. Understand the
-            vision and values that guide every step we take. Find out who we are
-            and what drives us – and explore much more about our work throughout
-            the website.
-          </Paragraph>
-        </FrameContent>
-        <FrameImagesGrid>
-          <div className="relative col-start-3 col-end-13 row-start-8 row-end-13 translate-y-16 p-2.5 ring-2 ring-primary-foreground">
-            <Image
-              src="/i-g-ui-04.png"
-              alt="Screen Shot UI 04"
-              fill
-              sizes="42rem"
-              className="!relative bg-primary-foreground object-cover object-top"
-            />
-          </div>
-        </FrameImagesGrid>
-      </Frame>
-      <Frame ref={frames[6].ref} dimensions="4:5" color="primary-foreground">
-        <FrameImagesGrid className="gap-10">
-          <div className="relative col-start-2 col-end-12 row-start-1 row-end-4 p-2.5 ring-2 ring-primary">
-            <Image
-              src="/i-g-ui-06.png"
-              alt="Screen Shot UI 06"
-              fill
-              sizes="42rem"
-              className="!relative bg-primary-foreground object-cover object-top"
-            />
-          </div>
-          <div className="relative col-start-2 col-end-12 row-start-4 row-end-9 p-2.5 ring-2 ring-primary">
-            <Image
-              src="/i-g-ui-05.png"
-              alt="Screen Shot UI 05"
-              fill
-              sizes="42rem"
-              className="!relative bg-primary-foreground object-cover object-center"
-            />
-          </div>
-          <div className="relative col-start-2 col-end-12 row-start-9 row-end-13 p-2.5 ring-2 ring-primary">
-            <Image
-              src="/i-g-ui-07.png"
-              alt="Screen Shot UI 07"
-              fill
-              sizes="42rem"
-              className="!relative bg-primary-foreground object-cover object-bottom"
-            />
-          </div>
-        </FrameImagesGrid>
-      </Frame>
-      <Frame ref={frames[7].ref} dimensions="4:5" color="primary">
-        <FrameContent className="gap-8">
-          <SectionHeadingBadge
-            isMotion={false}
-            number="4"
-            className="text-lg text-primary-foreground">
-            Dear PalestinianCauses&apos; Family
-          </SectionHeadingBadge>
-          <SectionHeading
-            isMotion={false}
-            className="!text-8xl font-bold text-primary-foreground lg:!leading-[0.9] xl:!leading-[0.9]">
-            Our website <br /> is your digital home <br /> for{" "}
-            <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-[55%] before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-primary-foreground">
-              truth.
-            </span>
-          </SectionHeading>
-          <Paragraph
-            isMotion={false}
-            className="!text-4xl font-medium !leading-relaxed text-primary-foreground">
-            This new website is your vital digital home for Gazan truth and
-            resilience.
-          </Paragraph>
-          <Paragraph
-            isMotion={false}
-            className="!text-4xl font-medium !leading-relaxed text-primary-foreground">
-            Visit PalestinianCauses.com to explore the raw narratives in The
-            Truth Museum, engage with &ldquo;A Human But From Gaza,&ldquo; and
-            learn how you can stand with us. Every visit amplifies authentic
-            voices and fuels our mission to foster a future of justice and
-            empowerment.
-          </Paragraph>
-          <Paragraph
-            isMotion={false}
-            className="!text-4xl font-medium !leading-relaxed text-primary-foreground">
-            Explore now and be part of the change.
-          </Paragraph>
-        </FrameContent>
-      </Frame>
-      <Frame dimensions="open-graph" color="primary-foreground">
+      <Frame
+        ref={frames[0].ref}
+        dimensions="open-graph"
+        color="primary-foreground">
         <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
           <div className="mx-auto flex h-full w-60 items-center justify-center">
             <PCLogo />
@@ -568,8 +308,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
           </div>
         </FrameContent>
       </Frame>
-      {/* Open Graph */}
-      <Frame dimensions="open-graph" color="primary">
+      <Frame ref={frames[1].ref} dimensions="open-graph" color="primary">
         <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
           <div className="mx-auto flex h-full w-60 items-center justify-center">
             <PCLogo color="primary-foreground" />
@@ -590,7 +329,10 @@ const InstagramStudioPage = function InstagramStudioPage() {
           </div>
         </FrameContent>
       </Frame>
-      <Frame dimensions="open-graph" color="primary-foreground">
+      <Frame
+        ref={frames[2].ref}
+        dimensions="open-graph"
+        color="primary-foreground">
         <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
           <div className="mx-auto flex h-full w-60 items-center justify-center">
             <PCLogo />
@@ -612,7 +354,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
           </div>
         </FrameContent>
       </Frame>
-      <Frame dimensions="open-graph" color="primary">
+      <Frame ref={frames[3].ref} dimensions="open-graph" color="primary">
         <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
           <div className="mx-auto flex h-full w-60 items-center justify-center">
             <PCLogo color="primary-foreground" />
@@ -634,29 +376,29 @@ const InstagramStudioPage = function InstagramStudioPage() {
         </FrameContent>
       </Frame>
       {/* Social Media Avatars */}
-      <Frame dimensions="1:1" color="primary-foreground">
+      <Frame ref={frames[4].ref} dimensions="1:1" color="primary-foreground">
         <div className="w-[47.5rem]">
           <PCLogo color="primary" />
         </div>
       </Frame>
-      <Frame dimensions="1:1" color="primary">
+      <Frame ref={frames[5].ref} dimensions="1:1" color="primary">
         <div className="w-[47.5rem]">
           <PCLogo color="primary-foreground" />
         </div>
       </Frame>
       {/* Social Media Templates */}
-      <Frame dimensions="9:16" color="primary-foreground">
+      <Frame ref={frames[6].ref} dimensions="9:16" color="primary-foreground">
         <div className="mb-52 mt-auto w-[10rem]">
           <PCLogo color="primary" />
         </div>
       </Frame>
-      <Frame dimensions="9:16" color="primary">
+      <Frame ref={frames[7].ref} dimensions="9:16" color="primary">
         <div className="mb-52 mt-auto w-[10rem]">
           <PCLogo color="primary-foreground" />
         </div>
       </Frame>
       {/* GitHub */}
-      <Frame dimensions="github" color="primary">
+      <Frame ref={frames[8].ref} dimensions="github" color="primary">
         <FrameContent className="h-[32rem] w-[70rem]">
           <SectionHeading
             isMotion={false}
