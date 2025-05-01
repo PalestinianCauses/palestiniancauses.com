@@ -1,10 +1,10 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
-import { toJpeg, toPng } from "dom-to-image";
+import { DomToImage } from "dom-to-image";
 import Image from "next/image";
 import {
   forwardRef,
@@ -158,7 +158,7 @@ const ImageFrameRender = function ImageFrameRender({
     imageFrames.forEach((imageFrame) => {
       if (!imageFrame.ref.current) return;
 
-      const functions = { jpeg: toJpeg, png: toPng };
+      const functions = { jpeg: DomToImage.toJpeg, png: DomToImage.toPng };
 
       functions[imageFrame.as || "jpeg"](imageFrame.ref.current, {
         cacheBust: true,
