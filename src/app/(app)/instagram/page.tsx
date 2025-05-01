@@ -21,6 +21,7 @@ import {
   SectionHeadingBadge,
 } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/hooks/use-user";
 import { cn } from "@/lib/utils";
 
 type Properties = "bg" | "text" | "fill" | "stroke";
@@ -32,7 +33,7 @@ type ThemeColors =
   | "tertiary"
   | "tertiary-2"
   | "transparent";
-type Dimensions = "book" | "open-graph" | "1:1" | "4:5" | "16:9" | "9:16";
+type Dimensions = "open-graph" | "github" | "1:1" | "4:5" | "16:9" | "9:16";
 
 const themeClasses: {
   [K in ThemeColors]: { [K in Properties]: string };
@@ -76,8 +77,8 @@ const themeClasses: {
 };
 
 const dimensionsClasses: { [K in Dimensions]: string } = {
-  "book": "max-w-[117.1875rem] w-[117.1875rem] h-[173.4375rem]",
   "open-graph": "w-[75rem] h-[39.375rem]",
+  "github": "w-[80rem] aspect-[2/1]",
   "1:1": "w-[67.5rem] aspect-square",
   "4:5": "w-[67.5rem] aspect-[4/5]",
   "16:9": "w-[67.5rem] aspect-[16/9]",
@@ -229,7 +230,7 @@ const FrameImagesGrid = function FrameImagesGrid({
 
 const InstagramStudioPage = function InstagramStudioPage() {
   // Followers from my GitHub profile, please ignore this :)
-  // const { data: user } = useUser();
+  const { data: user } = useUser();
 
   const frames: ImageFrame[] = [
     {
@@ -274,7 +275,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
     },
   ];
 
-  // if (!user) return null;
+  if (!user) return null;
 
   return (
     <main>
@@ -567,6 +568,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
           </div>
         </FrameContent>
       </Frame>
+      {/* Open Graph */}
       <Frame dimensions="open-graph" color="primary">
         <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
           <div className="mx-auto flex h-full w-60 items-center justify-center">
@@ -577,11 +579,11 @@ const InstagramStudioPage = function InstagramStudioPage() {
               isMotion={false}
               className="!text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
               Discover Our{" "}
-              <span className="relative z-10 inline-block pl-1 font-bold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
+              <span className="relative z-10 inline-block pl-1 font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
                 Core
               </span>{" "}
               Project: A Human But From{" "}
-              <span className="relative z-10 inline-block pl-1 font-bold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
+              <span className="relative z-10 inline-block pl-1 font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
                 Gaza.
               </span>
             </SectionHeading>
@@ -620,16 +622,71 @@ const InstagramStudioPage = function InstagramStudioPage() {
               isMotion={false}
               className="!text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
               Identity, Mission, Vision, and{" "}
-              <span className="relative z-10 inline-block pl-1 font-bold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
+              <span className="relative z-10 inline-block pl-1 font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
                 Values:
               </span>{" "}
-              <span className="relative z-10 inline-block pl-1 font-bold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
+              <span className="relative z-10 inline-block pl-1 font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
                 About
               </span>{" "}
               Palestinian-Causes.
             </SectionHeading>
           </div>
         </FrameContent>
+      </Frame>
+      {/* Social Media Avatars */}
+      <Frame dimensions="1:1" color="primary-foreground">
+        <div className="w-[47.5rem]">
+          <PCLogo color="primary" />
+        </div>
+      </Frame>
+      <Frame dimensions="1:1" color="primary">
+        <div className="w-[47.5rem]">
+          <PCLogo color="primary-foreground" />
+        </div>
+      </Frame>
+      {/* Social Media Templates */}
+      <Frame dimensions="9:16" color="primary-foreground">
+        <div className="mb-52 mt-auto w-[10rem]">
+          <PCLogo color="primary" />
+        </div>
+      </Frame>
+      <Frame dimensions="9:16" color="primary">
+        <div className="mb-52 mt-auto w-[10rem]">
+          <PCLogo color="primary-foreground" />
+        </div>
+      </Frame>
+      {/* GitHub */}
+      <Frame dimensions="github" color="primary">
+        <FrameContent className="h-[32rem] w-[70rem]">
+          <SectionHeading
+            isMotion={false}
+            className="!max-w-none !text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
+            Join our open-source <br />
+            <span className="relative z-10 mr-2 inline-block font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
+              mission.
+            </span>{" "}
+            Contribute to strengthen PalestinianCauses{" "}
+            <span className="relative z-10 inline-block pl-1 font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
+              identity.
+            </span>{" "}
+          </SectionHeading>
+          <SectionHeadingBadge
+            isMotion={false}
+            className="text-lg text-primary-foreground">
+            Maintained By Shawqi Hatem (@shawqicauses)
+          </SectionHeadingBadge>
+        </FrameContent>
+        <FrameImagesGrid>
+          <div className="relative col-start-7 col-end-13 row-start-6 row-end-13 translate-y-2.5 p-2.5 ring-2 ring-primary">
+            <Image
+              src="/i-g-01.png"
+              alt="Screen Shot UI 07"
+              fill
+              sizes="42rem"
+              className="!relative bg-primary-foreground object-cover object-center"
+            />
+          </div>
+        </FrameImagesGrid>
       </Frame>
     </main>
   );
