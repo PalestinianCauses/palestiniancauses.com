@@ -1,10 +1,10 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
-import { toJpeg, toPng } from "html-to-image";
+import { toJpeg, toPng } from "dom-to-image";
 import Image from "next/image";
 import {
   forwardRef,
@@ -19,7 +19,6 @@ import {
   SectionHeadingBadge,
 } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/hooks/use-user";
 import { cn } from "@/lib/utils";
 
 type Properties = "bg" | "text" | "fill" | "stroke";
@@ -228,57 +227,57 @@ const FrameImagesGrid = function FrameImagesGrid({
 
 const InstagramStudioPage = function InstagramStudioPage() {
   // Followers from my GitHub profile, please ignore this :)
-  const { data: user } = useUser();
+  // const { data: user } = useUser();
 
   const frames: ImageFrame[] = [
     {
       id: "open-graph-01",
       ref: useRef<HTMLDivElement>(null),
-      as: "png",
+      as: "jpeg",
     },
     {
       id: "open-graph-02",
       ref: useRef<HTMLDivElement>(null),
-      as: "png",
+      as: "jpeg",
     },
     {
       id: "open-graph-03",
       ref: useRef<HTMLDivElement>(null),
-      as: "png",
+      as: "jpeg",
     },
     {
       id: "open-graph-04",
       ref: useRef<HTMLDivElement>(null),
-      as: "png",
+      as: "jpeg",
     },
     {
       id: "profile-01",
       ref: useRef<HTMLDivElement>(null),
-      as: "png",
+      as: "jpeg",
     },
     {
       id: "profile-02",
       ref: useRef<HTMLDivElement>(null),
-      as: "png",
+      as: "jpeg",
     },
     {
       id: "i-g-story-template-01",
       ref: useRef<HTMLDivElement>(null),
-      as: "png",
+      as: "jpeg",
     },
     {
       id: "i-g-story-template-02",
       ref: useRef<HTMLDivElement>(null),
-      as: "png",
+      as: "jpeg",
     },
     {
       id: "github-01",
       ref: useRef<HTMLDivElement>(null),
-      as: "png",
+      as: "jpeg",
     },
   ];
 
-  if (!user) return null;
+  // if (!user) return null;
 
   return (
     <main>
@@ -378,7 +377,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
       {/* Social Media Avatars */}
       <Frame ref={frames[4].ref} dimensions="1:1" color="primary-foreground">
         <div className="w-[47.5rem]">
-          <PCLogo color="primary" />
+          <PCLogo />
         </div>
       </Frame>
       <Frame ref={frames[5].ref} dimensions="1:1" color="primary">
@@ -389,7 +388,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
       {/* Social Media Templates */}
       <Frame ref={frames[6].ref} dimensions="9:16" color="primary-foreground">
         <div className="mb-52 mt-auto w-[10rem]">
-          <PCLogo color="primary" />
+          <PCLogo />
         </div>
       </Frame>
       <Frame ref={frames[7].ref} dimensions="9:16" color="primary">
