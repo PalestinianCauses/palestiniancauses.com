@@ -1,10 +1,10 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
-import { DomToImage } from "dom-to-image";
+import DomToImage from "dom-to-image";
 import Image from "next/image";
 import {
   forwardRef,
@@ -19,7 +19,6 @@ import {
   SectionHeadingBadge,
 } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/hooks/use-user";
 import { cn } from "@/lib/utils";
 
 type Properties = "bg" | "text" | "fill" | "stroke";
@@ -228,7 +227,7 @@ const FrameImagesGrid = function FrameImagesGrid({
 
 const InstagramStudioPage = function InstagramStudioPage() {
   // Followers from my GitHub profile, please ignore this :)
-  const { data: user } = useUser();
+  // const { data: user } = useUser();
 
   const frames: ImageFrame[] = [
     {
@@ -270,22 +269,22 @@ const InstagramStudioPage = function InstagramStudioPage() {
 
   const profileImagesFrames: ImageFrame[] = [
     {
-      id: "profile-primary-01",
-      ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
-    },
-    {
-      id: "profile-primary-foreground-02",
-      ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
-    },
-    {
-      id: "logo-primary-01",
+      id: "profile-primary",
       ref: useRef<HTMLDivElement>(null),
       as: "png",
     },
     {
-      id: "profile-primary-02",
+      id: "profile-primary-foreground",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "logo-primary",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "logo-primary-foreground",
       ref: useRef<HTMLDivElement>(null),
       as: "png",
     },
@@ -309,7 +308,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
     },
   ];
 
-  if (!user || user.role !== "admin") return null;
+  // if (!user || user.role !== "admin") return null;
 
   return (
     <main>
