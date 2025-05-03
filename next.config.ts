@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 import { withPayload } from "@payloadcms/next/withPayload";
 import { NextConfig } from "next";
 
@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "https",
         hostname: process.env.UPLOADTHING_DOMAIN!,
         pathname: "/f/**",
       },
