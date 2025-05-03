@@ -1,4 +1,4 @@
-// REVIEWED - 19
+// REVIEWED - 20
 import type { Metadata } from "next";
 import { PropsWithChildren } from "react";
 
@@ -40,14 +40,14 @@ export const metadata: Metadata = {
 
   robots: { index: true, follow: true },
 
-  icons: "/pc-logo-primary-foreground.png",
+  icons: "/logo-primary.png",
 
   openGraph: {
     siteName: "PalestinianCauses",
     url: "https://palestiniancauses.com",
     images: [
       {
-        url: "https://palestiniancauses.com/og-1.jpg",
+        url: "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXfJafovpKAixQkOwjFU9IWn4ZtucV2dL16J7T",
         width: 1200,
         height: 630,
         alt: "PalestinianCauses Website Thumbnail",
@@ -58,7 +58,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     site: "@palestiniancauses",
-    images: ["https://palestiniancauses.com/og-1.jpg"],
+    images: [
+      "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXfJafovpKAixQkOwjFU9IWn4ZtucV2dL16J7T",
+    ],
   },
 };
 

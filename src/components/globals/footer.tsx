@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import Image from "next/image";
 import Link from "next/link";
@@ -57,7 +57,7 @@ export const Footer = function Footer() {
             className="relative flex flex-col items-start justify-start">
             <div className="relative mb-4 flex items-center gap-5">
               <Image
-                src="/pc-logo-primary-foreground.png"
+                src="/logo-primary.png"
                 alt="PalestinianCauses LLC"
                 priority
                 fill

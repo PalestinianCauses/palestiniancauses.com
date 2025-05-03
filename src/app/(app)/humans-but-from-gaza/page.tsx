@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { Metadata } from "next";
 import Link from "next/link";
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: "https://palestiniancauses.com/og-4.jpg",
+        url: "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXC1oaVJSjsK7EiPGHV1uLXdr0eRnvWfxmt5qM",
         width: 1200,
         height: 630,
         alt: "PalestinianCauses Humans But From Gaza Thumbnail",
@@ -36,7 +36,9 @@ export const metadata: Metadata = {
   },
 
   twitter: {
-    images: ["https://palestiniancauses.com/og-4.jpg"],
+    images: [
+      "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXC1oaVJSjsK7EiPGHV1uLXdr0eRnvWfxmt5qM",
+    ],
   },
 };
 

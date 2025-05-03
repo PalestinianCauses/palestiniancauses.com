@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import Image from "next/image";
 
@@ -13,24 +13,24 @@ import { Badge } from "../ui/badge";
 import { HeaderButtons } from "./header-buttons";
 
 const pagesImages = [
-  { name: "Image - 01", image: "/a-human-but-from-gaza/B-3.jpg" },
-  { name: "Image - 02", image: "/a-human-but-from-gaza/B-6.jpg" },
-  { name: "Image - 03", image: "/a-human-but-from-gaza/C-32.jpg" },
-  { name: "Image - 04", image: "/a-human-but-from-gaza/C-35.jpg" },
-  { name: "Image - 05", image: "/a-human-but-from-gaza/B-9.jpg" },
-  { name: "Image - 06", image: "/a-human-but-from-gaza/B-14.jpg" },
-  { name: "Image - 07", image: "/a-human-but-from-gaza/C-39.jpg" },
-  { name: "Image - 08", image: "/a-human-but-from-gaza/C-42.jpg" },
-  { name: "Image - 09", image: "/a-human-but-from-gaza/B-22.jpg" },
-  { name: "Image - 10", image: "/a-human-but-from-gaza/B-11.jpg" },
-  { name: "Image - 11", image: "/a-human-but-from-gaza/C-49.jpg" },
-  { name: "Image - 12", image: "/a-human-but-from-gaza/C-36.jpg" },
-  { name: "Image - 13", image: "/a-human-but-from-gaza/B-12.jpg" },
-  { name: "Image - 14", image: "/a-human-but-from-gaza/B-19.jpg" },
-  { name: "Image - 15", image: "/a-human-but-from-gaza/C-44.jpg" },
-  { name: "Image - 16", image: "/a-human-but-from-gaza/C-54.jpg" },
-  { name: "Image - 17", image: "/a-human-but-from-gaza/B-21.jpg" },
-  { name: "Image - 18", image: "/a-human-but-from-gaza/C-52.jpg" },
+  "ZhaM3m5tNWzXupgUsZLFqycP4WndTLzN26OfBisgHhIwDFav",
+  "ZhaM3m5tNWzXqACWVcoriXRGFUCYnM4VwQyupegDHlAcjkT8",
+  "ZhaM3m5tNWzXAZmqxTDQWCpYGiEKfnoVha73B9vycUm0dxFZ",
+  "ZhaM3m5tNWzXNCfjDfI7pnld02TUuYBj7h5Z1wqxA9gG6cDe",
+  "ZhaM3m5tNWzXWb2OVaBkCMB5ZmsTXvzQHedpJjhFnL4YtDuK",
+  "ZhaM3m5tNWzXArrT0o9DQWCpYGiEKfnoVha73B9vycUm0dxF",
+  "ZhaM3m5tNWzX7SKzcq1OKos6ixXJGbYR43yLadmgSvBOFfl0",
+  "ZhaM3m5tNWzXfuzkuvpKAixQkOwjFU9IWn4ZtucV2dL16J7T",
+  "ZhaM3m5tNWzXdgqPPtyQkBL6hsVXJ3nmARKb4U2IwHSCzt1N",
+  "ZhaM3m5tNWzXK1bewQHqXTwp4Vz1i9W8E3u0snmYxkfd7ahP",
+  "ZhaM3m5tNWzXXnaZizs3lQmOn3hCbpRi5076Djr1AqsM9WBY",
+  "ZhaM3m5tNWzXlfKFA20VZU69xYRotjidFMf4EhzTDLlqwOpI",
+  "ZhaM3m5tNWzXkXGSQsAurkPfhlS3pDOV7QXy4iLsB2xmwTzC",
+  "ZhaM3m5tNWzXo1eOxqdL5FXyV96KwuQdHgNcAWroZRBaTbGM",
+  "ZhaM3m5tNWzXuLZRmrFqycP4WndTLzN26OfBisgHhIwDFav0",
+  "ZhaM3m5tNWzX5Nj1IAwVqz7pxkfvArRudnclJCswjP4WT0ay",
+  "ZhaM3m5tNWzXLvJtjpXnNKVPyc6o1z4dOY8xjIQJgDWbMhaq",
+  "ZhaM3m5tNWzX3TANHSvoJu8t0hRbWUeg4IxwMXVrS2KzfdY5",
 ];
 
 export const Header = function Header() {
@@ -106,7 +106,7 @@ export const Header = function Header() {
             transition={motions.transition({ delay: 0.3 })}
             className="relative h-full w-full border border-muted">
             <Image
-              src="/a-human-but-from-gaza/book-cover.jpeg"
+              src="https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXWVdlmfBkCMB5ZmsTXvzQHedpJjhFnL4YtDuK"
               alt="Book Cover"
               priority
               fill
@@ -116,11 +116,11 @@ export const Header = function Header() {
           </MotionDiv>
         </div>
         <InfiniteMarquee speed={80}>
-          {pagesImages.map(({ name, image }, index) => (
-            <MarqueeItem key={name} delay={index * 0.1}>
+          {pagesImages.map((image, index) => (
+            <MarqueeItem key={image} delay={index * 0.1}>
               <Image
-                src={image}
-                alt={name}
+                src={`https://qwvvvruhbe.ufs.sh/f/${image}`}
+                alt={`Book Image ${index.toString()}`}
                 priority
                 fill
                 sizes="15rem"

@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -23,7 +23,7 @@ export default async function AuthLayout({ children }: PropsWithChildren) {
           transition={motions.transition({ duration: "fast" })}
           className="relative">
           <Image
-            src="/pc-logo-primary-foreground.png"
+            src="/logo-primary.png"
             alt="PalestinianCauses Logo"
             priority
             fill

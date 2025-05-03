@@ -1,5 +1,5 @@
 {
-  "reviewed": "true - 22",
+  "reviewed": "true - 23",
   "name": "palestiniancauses.com",
   "version": "1.0.0",
   "private": true,
@@ -62,8 +62,6 @@
     "dom-to-image": "2.6.0",
     "dotenv": "16.5.0",
     "embla-carousel-react": "8.5.1",
-    "frappe-js-sdk": "1.8.0",
-    "frappe-react-sdk": "1.11.0",
     "graphql": "16.9.0",
     "html-to-image": "1.11.13",
     "input-otp": "1.4.1",
