@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Metadata } from "next";
 
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: "https://palestiniancauses.com/og-2.jpg",
+        url: "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXSuH99qlsn0FbZuLtPqh2VI6Qs7jcgKfzwkTX",
         width: 1200,
         height: 630,
         alt: "PalestinianCauses About Us Thumbnail",
@@ -75,7 +75,9 @@ export const metadata: Metadata = {
   },
 
   twitter: {
-    images: ["https://palestiniancauses.com/og-2.jpg"],
+    images: [
+      "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXSuH99qlsn0FbZuLtPqh2VI6Qs7jcgKfzwkTX",
+    ],
   },
 };
 

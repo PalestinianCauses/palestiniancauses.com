@@ -1,8 +1,8 @@
-<!-- REVIEWED -->
+<!-- REVIEWED - 01 -->
 
 # PalestinianCauses.com
 
-![GitHub Preview Image](./public/github-01.jpeg)
+![GitHub Preview Image](./github-01.jpeg)
 
 Welcome to the open-source repository for the PalestinianCauses website! This platform is a digital home to illuminate the Gazan experience, amplify authentic voices, and build solidarity.
 

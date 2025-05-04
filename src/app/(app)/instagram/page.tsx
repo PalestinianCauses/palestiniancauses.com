@@ -1,10 +1,10 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 08
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
-import { DomToImage } from "dom-to-image";
+import DomToImage from "dom-to-image";
 import Image from "next/image";
 import {
   forwardRef,
@@ -252,16 +252,6 @@ const InstagramStudioPage = function InstagramStudioPage() {
       as: "jpeg",
     },
     {
-      id: "profile-01",
-      ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
-    },
-    {
-      id: "profile-02",
-      ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
-    },
-    {
       id: "i-g-story-template-01",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
@@ -278,12 +268,54 @@ const InstagramStudioPage = function InstagramStudioPage() {
     },
   ];
 
+  const profileImagesFrames: ImageFrame[] = [
+    {
+      id: "profile-primary",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "profile-primary-foreground",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "logo-primary",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "logo-primary-foreground",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+  ];
+
+  const hoodiesFrames: ImageFrame[] = [
+    {
+      id: "black-hoodie-back",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "white-hoodie-back",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "red-hoodie-back",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+  ];
+
   if (!user || user.role !== "admin") return null;
 
   return (
     <main>
       {/* Open Graph */}
-      <ImageFrameRender frames={frames} />
+      <ImageFrameRender frames={profileImagesFrames} />
+      <ImageFrameRender frames={hoodiesFrames} />
       <Frame
         ref={frames[0].ref}
         dimensions="open-graph"
@@ -375,14 +407,36 @@ const InstagramStudioPage = function InstagramStudioPage() {
           </div>
         </FrameContent>
       </Frame>
-      {/* Social Media Avatars */}
-      <Frame ref={frames[4].ref} dimensions="1:1" color="primary-foreground">
-        <div className="w-[47.5rem]">
+      {/* Logo */}
+      <Frame
+        ref={profileImagesFrames[2].ref}
+        dimensions="1:1"
+        color="primary-foreground"
+        className="bg-transparent">
+        <div className="-mb-16 w-[56.625rem]">
           <PCLogo />
         </div>
       </Frame>
-      <Frame ref={frames[5].ref} dimensions="1:1" color="primary">
-        <div className="w-[47.5rem]">
+      <Frame
+        ref={profileImagesFrames[3].ref}
+        dimensions="1:1"
+        color="primary"
+        className="bg-transparent">
+        <div className="-mb-16 w-[56.625rem]">
+          <PCLogo color="primary-foreground" />
+        </div>
+      </Frame>
+      {/* Social Media Avatars */}
+      <Frame
+        ref={profileImagesFrames[0].ref}
+        dimensions="1:1"
+        color="primary-foreground">
+        <div className="-mb-16 w-[47.5rem]">
+          <PCLogo />
+        </div>
+      </Frame>
+      <Frame ref={profileImagesFrames[1].ref} dimensions="1:1" color="primary">
+        <div className="-mb-16 w-[47.5rem]">
           <PCLogo color="primary-foreground" />
         </div>
       </Frame>
@@ -392,13 +446,13 @@ const InstagramStudioPage = function InstagramStudioPage() {
           <PCLogo />
         </div>
       </Frame>
-      <Frame ref={frames[7].ref} dimensions="9:16" color="primary">
+      <Frame ref={frames[5].ref} dimensions="9:16" color="primary">
         <div className="mb-52 mt-auto w-[10rem]">
           <PCLogo color="primary-foreground" />
         </div>
       </Frame>
       {/* GitHub */}
-      <Frame ref={frames[8].ref} dimensions="github" color="primary">
+      <Frame ref={frames[6].ref} dimensions="github" color="primary">
         <FrameContent className="h-[32rem] w-[70rem]">
           <SectionHeading
             isMotion={false}
@@ -429,6 +483,89 @@ const InstagramStudioPage = function InstagramStudioPage() {
             />
           </div>
         </FrameImagesGrid>
+      </Frame>
+      {/* Hoodies */}
+      <Frame
+        ref={hoodiesFrames[0].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-transparent">
+        <SectionHeading isMotion={false} className="!text-9xl">
+          CODE <br />
+          <span className="relative z-10 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
+            WRITTEN
+          </span>{" "}
+          <br />
+          WITH
+          <br />
+          THE{" "}
+          <span className="relative z-10 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
+            SOUND
+          </span>{" "}
+          <br /> OF <br />
+          <span className="relative z-10 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
+            BOMBS.
+          </span>{" "}
+          <br />{" "}
+          <span className="text-7xl font-medium italic tracking-normal text-primary/20">
+            (Still Transmitting Truth).
+          </span>
+        </SectionHeading>
+      </Frame>
+      <Frame
+        ref={hoodiesFrames[1].ref}
+        dimensions="4:5"
+        color="primary"
+        className="bg-transparent">
+        <SectionHeading
+          isMotion={false}
+          className="!text-9xl text-primary-foreground">
+          <span className="relative z-10 inline-block pl-2 font-extrabold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary-foreground">
+            RUINS
+          </span>{" "}
+          <br />
+          AT
+          <br />
+          <span className="relative z-10 inline-block pl-2 font-extrabold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary-foreground">
+            DUSK
+          </span>{" "}
+          <br />
+          REBUILDING
+          <br />
+          AT{" "}
+          <span className="relative z-10 inline-block pl-2 font-extrabold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary-foreground">
+            DAWN.
+          </span>{" "}
+          <br />{" "}
+          <span className="text-7xl font-semibold italic tracking-normal text-primary-foreground/20">
+            (Gaza Strip).
+          </span>
+        </SectionHeading>
+      </Frame>
+      <Frame
+        ref={hoodiesFrames[2].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-transparent">
+        <SectionHeading isMotion={false} className="!text-9xl">
+          UNDER <br />
+          <span className="relative z-10 ml-40 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
+            ASHES.
+          </span>{" "}
+          <br />
+          BUILDING{" "}
+          <span className="relative z-10 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
+            THE
+          </span>{" "}
+          <br /> NEXT
+          <span className="relative z-10 ml-40 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
+            SUN.
+          </span>{" "}
+          <br />{" "}
+          <span className="text-7xl font-medium italic tracking-normal text-primary/20">
+            (GAZA&apos;S LIGHT).
+          </span>
+        </SectionHeading>
       </Frame>
     </main>
   );

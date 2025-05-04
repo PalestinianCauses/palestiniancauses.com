@@ -1,13 +1,16 @@
-# REVIEWED - 05
+# REVIEWED - 06
 
 name: CI and Deployment
 on:
-  push:
-    branches: [main, master]
   pull_request:
     branches: [main, master]
+
+permissions:
+  checks: write
+  contents: read
+
 jobs:
-  test_and_deploy:
+  run_tests:
     name: Test and Deploy
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -32,14 +35,14 @@ jobs:
           NODE_ENV: production
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
-          SHOPIFY_STORE_DOMAIN: ${{ secrets.SHOPIFY_STORE_DOMAIN }}
-          SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
+          UPLOADTHING_DOMAIN: ${{ secrets.UPLOADTHING_DOMAIN }}
 
       - name: Run PlayWright Tests
         run: pnpm exec playwright test
         env:
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          UPLOADTHING_DOMAIN: ${{ secrets.UPLOADTHING_DOMAIN }}
           PLAYWRIGHT_TESTING_USER_EMAIL: ${{ secrets.PLAYWRIGHT_TESTING_USER_EMAIL }}
           PLAYWRIGHT_TESTING_USER_PASSWORD: ${{ secrets.PLAYWRIGHT_TESTING_USER_PASSWORD }}
           PLAYWRIGHT_TESTING_USER_CLEAN_UP_SECRET: ${{ secrets.PLAYWRIGHT_TESTING_USER_CLEAN_UP_SECRET }}

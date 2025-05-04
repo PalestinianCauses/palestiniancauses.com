@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import Image from "next/image";
 import Link from "next/link";
@@ -22,7 +22,8 @@ const testimonials = [
   {
     name: "@Gym_Rat_in_Gaza",
     link: "https://instagram.com/gym_rat_in_gaza",
-    image: "/a-human-but-from-gaza/e-01.png",
+    image:
+      "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXW93bbpcBkCMB5ZmsTXvzQHedpJjhFnL4YtDu",
     paragraphs: [
       "As a Gazan who has been through all the difficulties and atrocities, anyone could imagine (and not imagine). I never thought anyone could express our feelings and thoughts through everything we have lived so far, but I am glad this book disappointed me.",
       "Reading this book and going through its chapters felt like a journey, even to me, someone who lived these feelings and emotions. And I can only imagine how deeply it will affect everyone who reads it.",
@@ -32,7 +33,8 @@ const testimonials = [
   {
     name: "@NadaSenjer2000",
     link: "https://instagram.com/nadasenjer2000",
-    image: "/a-human-but-from-gaza/e-02.jpg",
+    image:
+      "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXBBY7XniURiVThKwfP1r7jOXmvSnFxes8qp4y",
     paragraphs: [
       'I deeply understand that language can not accurately describe our emotions, which is precisely why we often say, "Only the Gazan can truly understand another Gazan" one who has experienced the same conditions of war and tasted its bitterness with all their senses. As a Gazan, this book was a magnificent attempt to describe the most challenging and delicate human emotions the Gazans still faces. The authors expressed themselves with great courage amidst all these circumstances.',
       "As I write these words, I feel genuinely proud. I am honored to have had the opportunity to read the diaries of three Gazan women twice through the magic of words. Once through the magic of art and painting, and having witnessed this war and lived through it firsthand, I know very well how difficult it is to produce anything or think about anything else other than what you will eat during the day!",

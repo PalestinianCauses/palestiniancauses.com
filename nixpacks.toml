@@ -1,7 +1,0 @@
-providers = ["node"]
-
-[phases.install]
-cmds = ["npm install -g corepack", "corepack enable", "corepack prepare pnpm@9.15.0 --activate", "pnpm install"]
-
-[phases.build]
-cmds = ["pnpm run payload:types", "pnpm run payload:migrate", "pnpm run build"]
