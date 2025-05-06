@@ -1,4 +1,4 @@
-# REVIEWED - 04
+# REVIEWED - 05
 # dependencies
 /node_modules
 package-lock.json
@@ -33,3 +33,4 @@ payload-types.ts
 /blob-report/
 /test-results/
 
+certificates

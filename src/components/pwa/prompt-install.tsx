@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { DownloadIcon, PlusSquareIcon, ShareIcon } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
@@ -156,7 +156,7 @@ export const PWAPromptInstall = function PWAPromptInstall() {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetContent side="bottom">
-        <SheetHeader className="mb-5 text-left">
+        <SheetHeader className="mb-8 text-left md:mb-12">
           <SheetTitle>
             {/* eslint-disable-next-line no-nested-ternary */}
             Install our app on your {isIOS
@@ -171,22 +171,20 @@ export const PWAPromptInstall = function PWAPromptInstall() {
             device.
           </SheetDescription>
         </SheetHeader>
-        <SheetFooter>
-          <div className="flex flex-col items-start justify-stretch gap-2.5">
+        <SheetFooter className="sm:justify-start">
+          <div className="flex w-full flex-col items-start justify-stretch gap-2.5 md:w-max md:flex-row">
             {/* eslint-disable-next-line no-nested-ternary */}
             {isIOS ? (
               <Fragment>
                 <Button
                   variant="outline"
-                  size="lg"
-                  className="pointer-events-none w-full">
+                  className="pointer-events-none w-full gap-2 px-8 py-3.5 text-base md:gap-1.5 md:px-6 md:py-2.5 md:text-sm">
                   Click on <ShareIcon className="!h-5 !w-5" /> icon in your
                   browser.
                 </Button>
                 <Button
                   variant="ghost"
-                  size="lg"
-                  className="pointer-events-none w-full">
+                  className="pointer-events-none w-full gap-2 px-8 py-3.5 text-base md:gap-1.5 md:px-6 md:py-2.5 md:text-sm">
                   Then click on <PlusSquareIcon className="!h-5 !w-5" /> add to
                   home page.
                 </Button>
@@ -195,17 +193,15 @@ export const PWAPromptInstall = function PWAPromptInstall() {
               <Fragment>
                 <Button
                   variant="default"
-                  size="lg"
                   onClick={() => handleInstall()}
-                  className="w-full">
+                  className="w-full gap-2 px-8 py-3.5 text-base md:gap-1.5 md:px-6 md:py-2.5 md:text-sm">
                   <DownloadIcon className="!h-5 !w-5" /> Install
                   PalestinianCauses
                 </Button>
                 <Button
                   variant="ghost"
-                  size="lg"
                   onClick={() => setIsOpen(false)}
-                  className="w-full">
+                  className="w-full gap-2 px-8 py-3.5 text-base md:gap-1.5 md:px-6 md:py-2.5 md:text-sm">
                   I will do it later
                 </Button>
               </Fragment>
