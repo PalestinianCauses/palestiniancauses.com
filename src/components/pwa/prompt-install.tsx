@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import {
   EllipsisVerticalIcon,
@@ -124,7 +124,6 @@ export const PWAPromptInstall = function PWAPromptInstall() {
     }
 
     setPromptType("mobile-able-to-auto-install");
-    setIsOpen(true);
   }, []);
 
   useEffect(() => {
@@ -193,10 +192,10 @@ export const PWAPromptInstall = function PWAPromptInstall() {
               <span className="w-full">Scroll down and select:</span>{" "}
               <Button
                 variant="outline"
-                className="pointer-events-none w-full flex-col justify-start gap-2 whitespace-break-spaces px-8 py-3.5 text-left md:w-max md:gap-1.5 md:px-6 md:py-2.5">
-                <span className="flex w-full items-center justify-start gap-2.5">
-                  <PlusSquareIcon className="!h-6 !w-6 shrink-0 stroke-[1.5]" />{" "}
-                  Add to Home Screen.
+                className="pointer-events-none w-full flex-col justify-start gap-2 whitespace-break-spaces px-3.5 py-3.5 text-left md:w-max md:gap-1.5 md:px-6 md:py-2.5">
+                <span className="flex w-full items-center justify-between gap-2.5">
+                  <span>Add to Home Screen.</span>
+                  <PlusSquareIcon className="!h-6 !w-6 shrink-0 stroke-[1.5]" />
                 </span>
               </Button>
             </SheetFooter>
@@ -245,7 +244,10 @@ export const PWAPromptInstall = function PWAPromptInstall() {
                 browser.
               </span>
               <span className="flex w-full items-center justify-start gap-2.5">
-                Tap <PlusIcon className="!h-6 !w-6 shrink-0" /> Add page to.
+                Tap{" "}
+                <Button variant="outline" className="p-2.5 pr-4">
+                  <PlusIcon className="!h-6 !w-6 shrink-0" /> Add page to
+                </Button>
               </span>
               <span>Choose Home screen or Install as web app.</span>
             </SheetFooter>
@@ -259,8 +261,8 @@ export const PWAPromptInstall = function PWAPromptInstall() {
             <SheetHeader className="mb-8 space-y-2 text-left">
               <SheetTitle>Install PalestinianCauses Now!</SheetTitle>
               <SheetDescription>
-                Get quick access and a better experience with the
-                PalestinianCauses app.
+                Get quick access and a better experience with PalestinianCauses
+                app.
               </SheetDescription>
             </SheetHeader>
             <SheetFooter className="flex flex-col gap-2.5 sm:flex-col md:flex-row md:gap-0.5">
