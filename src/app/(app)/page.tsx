@@ -1,8 +1,9 @@
-// REVIEWED - 06
+// REVIEWED - 07
 import { Metadata } from "next";
 
 import { Intro } from "@/components/globals/intro";
 import { Navigation } from "@/components/globals/navigation";
+import { PWAPromptInstall } from "@/components/pwa/prompt-install";
 
 import { ServiceWorkerRegistrationLogger } from "./providers";
 
@@ -18,6 +19,7 @@ const HomePage = async function HomePage() {
       <Intro />
       <Navigation />
       <ServiceWorkerRegistrationLogger />
+      <PWAPromptInstall />
     </main>
   );
 };
