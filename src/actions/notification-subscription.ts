@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { Where } from "payload";
 import {
@@ -82,7 +82,7 @@ export const notifySubscribers = async function notifySubscribers(
     data: { primaryKey?: string; dateOfArrival?: number; url: string };
     // eslint-disable-next-line no-undef
   } & NotificationOptions,
-  where: Where,
+  where?: Where,
 ) {
   const subscriptions = await actionSafeExecute(
     payload.find({ collection: "notification-subscriptions", where }),
