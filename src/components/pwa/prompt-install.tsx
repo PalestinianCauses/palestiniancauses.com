@@ -1,15 +1,17 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import {
   EllipsisVerticalIcon,
   MenuIcon,
   PlusIcon,
-  PlusSquareIcon,
   ShareIcon,
+  SmartphoneIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+
+import { useUserAgentInfo } from "@/hooks/use-user-agent-info";
 
 import { Button } from "../ui/button";
 import {
@@ -21,122 +23,46 @@ import {
   SheetTitle,
 } from "../ui/sheet";
 
-interface BeforePromptEventInstall extends Event {
-  prompt(): Promise<void>;
-  readonly platforms: string[];
-  readonly userChoice: Promise<{
-    outcome: "accepted" | "dismissed";
-    platform: string;
-  }>;
-}
-
-// Store deferred prompt event globally or outside component state.
-// so it persists across re-renders if needed.
-let promptEvent: BeforePromptEventInstall | null = null;
-
-// Helper function to check if app is currently running in standalone mode (PWA installed)
-const isRunningPWA = function isRunningPWA() {
-  // Check standard `display-mode` media query AND older `navigator.standalone` for iOS
-  return (
-    window.matchMedia("(display-mode: standalone)").matches ||
-    (window.navigator as { standalone?: boolean }).standalone ||
-    document.referrer.includes("android-app://")
-  );
-};
-
-const isAppleMobile = function isAppleMobile() {
-  const userAgent = window.navigator.userAgent.toLowerCase() || "";
-  return /iphone|ipad|ipod/.test(userAgent);
-};
-
-const isMobile = function isMobile() {
-  const userAgent = window.navigator.userAgent.toLowerCase() || "";
-  return /(android|blackberry|windows phone)/i.test(userAgent);
-};
-
-const isMobileBrowserSupported = function isMobileBrowserSupported() {
-  const userAgent = window.navigator.userAgent.toLowerCase() || "";
-  return /(chrome|firefox|samsungbrowser)/i.test(userAgent);
-};
-
-const isMobileUCBrowser = function isMobileUCBrowser() {
-  const userAgent = window.navigator.userAgent.toLowerCase() || "";
-  return /(ucbrowser)/i.test(userAgent);
-};
-
-const isMobileBrowserSamsung = function isMobileBrowserSamsung() {
-  const userAgent = window.navigator.userAgent.toLowerCase() || "";
-  return /samsungbrowser/i.test(userAgent);
-};
-
 export const PWAPromptInstall = function PWAPromptInstall() {
-  /*
-  Cases:
-  - iOS iPhone or iPad mobile device: showing installing instructions from browser.
-  - not iOS but mobile device: showing installing prompt from browser.
-  - samsung browser but mobile device: showing browser changing instructions.
-  - not browser supported but mobile device: showing browser changing instructions. 
-  - not mobile device: not showing anything.
-  */
+  const userAgentInfo = useUserAgentInfo();
 
+  const [prompt, setPrompt] = useState<Event | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [promptType, setPromptType] = useState<
-    | "pwa-application"
-    | "apple-mobile"
-    | "not-mobile"
-    | "not-mobile-browser-supported"
-    | "mobile-browser-samsung"
-    | "mobile-able-to-auto-install"
-  >("apple-mobile");
 
   useEffect(() => {
-    // 1. if application is running as PWA do not do or show anything.
-    if (isRunningPWA()) return;
+    if (userAgentInfo.isRunningOnPWA) return;
 
-    if (isMobileUCBrowser()) {
-      setPromptType("not-mobile-browser-supported");
-      setIsOpen(true);
+    if (!userAgentInfo.isMobile) return;
+
+    if (
+      userAgentInfo.isMobileBrowserSupported &&
+      userAgentInfo.mobileOS === "android" &&
+      userAgentInfo.mobileBrowser === "chrome"
+    )
       return;
-    }
 
-    // 3. detecting device type and browser type.
-    if (isAppleMobile()) {
-      setPromptType("apple-mobile");
-      setIsOpen(true);
-      return;
-    }
-
-    if (!isMobile()) {
-      setPromptType("not-mobile");
-      return;
-    }
-
-    if (!isMobileBrowserSupported()) {
-      setPromptType("not-mobile-browser-supported");
-      setIsOpen(true);
-      return;
-    }
-
-    if (isMobileBrowserSamsung()) {
-      setPromptType("mobile-browser-samsung");
-      setIsOpen(true);
-      return;
-    }
-
-    setPromptType("mobile-able-to-auto-install");
-  }, []);
+    setIsOpen(true);
+  }, [userAgentInfo]);
 
   useEffect(() => {
-    if (promptType !== "mobile-able-to-auto-install") return;
+    if (userAgentInfo.isRunningOnPWA) return;
+
+    if (!userAgentInfo.isMobile) return;
+
+    if (
+      !userAgentInfo.isMobileBrowserSupported ||
+      userAgentInfo.mobileOS !== "android" ||
+      userAgentInfo.mobileBrowser !== "chrome"
+    )
+      return;
 
     const handleBeforePromptInstall = function handleBeforePromptInstall(
       event: Event,
     ) {
-      console.log("Firing before install prompt event.");
+      console.log("Initializing before install prompt event.");
 
       event.preventDefault();
-
-      promptEvent = event as BeforePromptEventInstall;
+      setPrompt(event);
 
       setTimeout(() => {
         setIsOpen(true);
@@ -152,137 +78,242 @@ export const PWAPromptInstall = function PWAPromptInstall() {
         handleBeforePromptInstall,
       );
     };
-  }, [promptType]);
+  }, [userAgentInfo]);
+
+  if (userAgentInfo.isRunningOnPWA || !userAgentInfo.isMobile) return null;
 
   const handleInstall = async function handleInstall() {
-    if (promptType !== "mobile-able-to-auto-install") return;
-
-    // When `promptEvent` is not available do not show prompt.
-    if (!promptEvent) return;
+    if (!prompt) return;
 
     setIsOpen(false);
 
-    promptEvent.prompt();
-    const { outcome } = await promptEvent.userChoice;
+    if ("prompt" in prompt && typeof prompt.prompt === "function")
+      prompt.prompt();
 
-    console.log(`User responded to install prompt with: ${outcome}`);
+    if (
+      "userChoice" in prompt &&
+      prompt.userChoice instanceof Promise &&
+      "outcome" in (await prompt.userChoice) &&
+      typeof (await prompt.userChoice).outcome === "string"
+    ) {
+      const { outcome } = await prompt.userChoice;
+      console.log(`User responded to install prompt with: ${outcome}`);
+    }
 
-    promptEvent = null;
+    setPrompt(null);
   };
 
-  switch (promptType) {
-    case "apple-mobile":
-      return (
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetContent side="bottom">
-            <SheetHeader className="mb-8 space-y-2 text-left">
-              <SheetTitle>
-                Add PalestinianCauses to your iOS Home Screen!
-              </SheetTitle>
-              <SheetDescription>
-                For a smoother experience, install PalestinianCauses directly on
-                your iPhone or iPad. Here&apos;s how:
-              </SheetDescription>
-            </SheetHeader>
-            <SheetFooter className="flex flex-col gap-2.5 sm:flex-col sm:justify-start sm:space-x-0 md:gap-4">
-              <span className="flex w-full items-center justify-start gap-2.5">
-                Tap <ShareIcon className="!h-6 w-6 shrink-0 stroke-[1.5]" />{" "}
-                icon in your browser.
-              </span>
-              <span className="w-full">Scroll down and select:</span>{" "}
-              <Button
-                variant="outline"
-                className="pointer-events-none w-full flex-col justify-start gap-2 whitespace-break-spaces px-3.5 py-3.5 text-left md:w-max md:gap-1.5 md:px-6 md:py-2.5">
-                <span className="flex w-full items-center justify-between gap-2.5">
-                  <span>Add to Home Screen.</span>
-                  <PlusSquareIcon className="!h-6 !w-6 shrink-0 stroke-[1.5]" />
-                </span>
-              </Button>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
-      );
-    case "not-mobile-browser-supported":
-      return (
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetContent side="bottom">
-            <SheetHeader className="mb-8 space-y-2 text-left">
-              <SheetTitle>Browser Not Supported</SheetTitle>
-              <SheetDescription>
-                For best experience, please use Chrome, Firefox, or Safari to
-                install PalestinianCauses app.
-              </SheetDescription>
-            </SheetHeader>
-            <SheetFooter className="flex flex-col gap-2.5 sm:flex-col md:flex-row md:gap-0.5">
-              <Button
-                variant="outline"
-                className="w-full gap-2 whitespace-break-spaces px-8 py-3.5 md:w-max md:gap-1.5 md:px-6 md:py-2.5"
-                onClick={() => setIsOpen(false)}>
-                Continue Browsing
-              </Button>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
-      );
-    case "mobile-browser-samsung":
-      return (
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetContent side="bottom">
-            <SheetHeader className="mb-8 space-y-2 text-left">
-              <SheetTitle>
-                Install PalestinianCauses on your Samsung Device!
-              </SheetTitle>
-              <SheetDescription>
-                Enjoy a more integrated experience by installing
-                PalestinianCauses as an app.
-              </SheetDescription>
-            </SheetHeader>
-            <SheetFooter className="flex flex-col gap-2.5 sm:flex-col sm:justify-start sm:space-x-0 md:gap-4">
-              <span className="flex w-full items-center justify-start gap-2.5">
-                Find <EllipsisVerticalIcon className="!h-6 !w-6 shrink-0" /> or{" "}
-                <MenuIcon className="!h-6 !w-6 shrink-0" /> icon in your
-                browser.
-              </span>
-              <span className="flex w-full items-center justify-start gap-2.5">
-                Tap{" "}
-                <Button variant="outline" className="p-2.5 pr-4">
-                  <PlusIcon className="!h-6 !w-6 shrink-0" /> Add page to
-                </Button>
-              </span>
-              <span>Choose Home screen or Install as web app.</span>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
-      );
-    case "mobile-able-to-auto-install":
-      return (
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetContent side="bottom">
-            <SheetHeader className="mb-8 space-y-2 text-left">
-              <SheetTitle>Install PalestinianCauses Now!</SheetTitle>
-              <SheetDescription>
-                Get quick access and a better experience with PalestinianCauses
-                app.
-              </SheetDescription>
-            </SheetHeader>
-            <SheetFooter className="flex flex-col gap-2.5 sm:flex-col md:flex-row md:gap-0.5">
-              <Button
-                variant="default"
-                className="w-full gap-2 whitespace-break-spaces px-8 py-3.5 md:w-max md:gap-1.5 md:px-6 md:py-2.5"
-                onClick={() => handleInstall()}>
-                Install PalestinianCauses
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full gap-2 whitespace-break-spaces px-8 py-3.5 md:w-max md:gap-1.5 md:px-6 md:py-2.5"
-                onClick={() => setIsOpen(false)}>
-                Continue Browsing
-              </Button>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
-      );
-    default:
-      return null;
-  }
+  if (!userAgentInfo.isMobileBrowserSupported)
+    return (
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent side="bottom">
+          <SheetHeader className="mb-8 text-left">
+            <SheetTitle>Browser Not Supported 🙁</SheetTitle>
+            <SheetDescription>
+              Looks like your current browser does not fully support app
+              installation. For the best experience, try Chrome, FireFox, or
+              Safari!
+            </SheetDescription>
+          </SheetHeader>
+          <SheetFooter className="flex-col sm:flex-col sm:justify-start">
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => setIsOpen(false)}>
+              Continue Browsing
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+    );
+
+  if (userAgentInfo.mobileOS === "ios")
+    return (
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent side="bottom">
+          <SheetHeader className="mb-8 text-left">
+            <SheetTitle>
+              Add PalestinianCauses to your iOS Home Screen! 🚀
+            </SheetTitle>
+            <SheetDescription>
+              Enjoy a full-screen, native app-like experience on your iPhone or
+              iPad in seconds! Here is how:
+            </SheetDescription>
+          </SheetHeader>
+          <SheetFooter className="flex-col sm:flex-col sm:justify-start">
+            <ul className="mb-8 flex flex-col gap-5">
+              <li className="flex flex-col gap-1.5">
+                <h3 className="flex items-center gap-2.5 text-base font-medium tracking-normal">
+                  <span className="font-mono text-sm font-normal text-muted-foreground">
+                    1.
+                  </span>
+                  Tap the <ShareIcon className="h-5 w-5 stroke-[1.5]" /> icon.
+                </h3>
+                <p className="text-sm font-normal leading-relaxed text-muted-foreground">
+                  It is usually at the top or bottom of your screen.
+                </p>
+              </li>
+              <li className="flex flex-col gap-1.5">
+                <h3 className="flex items-center gap-2.5 text-base font-medium tracking-normal">
+                  <span className="font-mono text-sm font-normal text-muted-foreground">
+                    2.
+                  </span>
+                  Tap <PlusIcon className="h-5 w-5 stroke-[1.5]" /> &quot;Add to
+                  Home Screen&quot;.
+                </h3>
+                <p className="text-sm font-normal leading-relaxed text-muted-foreground">
+                  You might need to scroll down to find it.
+                </p>
+              </li>
+            </ul>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => setIsOpen(false)}>
+              Continue Browsing
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+    );
+
+  if (userAgentInfo.mobileBrowser === "chrome")
+    return (
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent side="bottom">
+          <SheetHeader className="mb-8 text-left">
+            <SheetTitle>Install the PalestinianCauses App! 📲</SheetTitle>
+            <SheetDescription>
+              Get a full-screen, native app-like experience and stay updated on
+              the go!
+            </SheetDescription>
+          </SheetHeader>
+          <SheetFooter className="flex-col gap-2.5 sm:flex-col sm:justify-start">
+            <Button
+              variant="default"
+              className="w-full"
+              onClick={() => handleInstall()}>
+              Install App
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => setIsOpen(false)}>
+              Continue Browsing
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+    );
+
+  if (userAgentInfo.mobileBrowser === "firefox")
+    return (
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent side="bottom">
+          <SheetHeader className="mb-8 text-left">
+            <SheetTitle>
+              Add PalestinianCauses to your Home Screen! 🦊
+            </SheetTitle>
+            <SheetDescription>
+              Enjoy a fast, native app-like experience directly from your home
+              screen.
+            </SheetDescription>
+          </SheetHeader>
+          <SheetFooter className="flex-col sm:flex-col sm:justify-start">
+            <ul className="mb-8 flex flex-col gap-5">
+              <li className="flex flex-col gap-1.5">
+                <h3 className="flex items-center gap-2.5 text-base font-medium tracking-normal">
+                  <span className="font-mono text-sm font-normal text-muted-foreground">
+                    1.
+                  </span>
+                  Tap the{" "}
+                  <EllipsisVerticalIcon className="h-5 w-5 stroke-[1.5]" />{" "}
+                  icon.
+                </h3>
+                <p className="text-sm font-normal leading-relaxed text-muted-foreground">
+                  It is usually in the top right corner.
+                </p>
+              </li>
+              <li className="flex flex-col gap-1.5">
+                <h3 className="flex items-center gap-2.5 text-base font-medium tracking-normal">
+                  <span className="font-mono text-sm font-normal text-muted-foreground">
+                    2.
+                  </span>
+                  Tap <SmartphoneIcon className="h-5 w-5 stroke-[1.5]" />{" "}
+                  &quot;Install app&quot;.
+                </h3>
+              </li>
+            </ul>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => setIsOpen(false)}>
+              Continue Browsing
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+    );
+
+  if (userAgentInfo.mobileBrowser === "samsungbrowser")
+    return (
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent side="bottom">
+          <SheetHeader className="mb-8 text-left">
+            <SheetTitle>
+              Add PalestinianCauses to your Samsung Home Screen! 📱
+            </SheetTitle>
+            <SheetDescription>
+              Get quick access and a full-screen, native app-like experience on
+              your Samsung device.
+            </SheetDescription>
+          </SheetHeader>
+          <SheetFooter className="flex-col sm:flex-col sm:justify-start">
+            <ul className="mb-8 flex flex-col gap-5">
+              <li className="flex flex-col gap-1.5">
+                <h3 className="flex items-center gap-2.5 text-base font-medium tracking-normal">
+                  <span className="font-mono text-sm font-normal text-muted-foreground">
+                    1.
+                  </span>
+                  Tap the{" "}
+                  <EllipsisVerticalIcon className="h-5 w-5 stroke-[1.5]" /> or{" "}
+                  <MenuIcon className="h-5 w-5 stroke-[1.5]" /> icon.
+                </h3>
+                <p className="text-sm font-normal leading-relaxed text-muted-foreground">
+                  It is usually at the top or bottom of your screen.
+                </p>
+              </li>
+              <li className="flex flex-col gap-1.5">
+                <h3 className="flex items-center gap-2.5 text-base font-medium tracking-normal">
+                  <span className="font-mono text-sm font-normal text-muted-foreground">
+                    2.
+                  </span>
+                  Tap <PlusIcon className="h-5 w-5 stroke-[1.5]" /> &quot;Add
+                  page to&quot;.
+                </h3>
+              </li>
+              <li className="flex flex-col gap-1.5">
+                <h3 className="flex items-center gap-2.5 text-base font-medium tracking-normal">
+                  <span className="font-mono text-sm font-normal text-muted-foreground">
+                    3.
+                  </span>
+                  Select &quot;Install as web app&quot;.
+                </h3>
+
+                <p className="text-sm font-normal leading-relaxed text-muted-foreground">
+                  In case you do not see it, or installation fails, choose
+                  &ldquo;Add to Home screen&ldquo; instead.
+                </p>
+              </li>
+            </ul>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => setIsOpen(false)}>
+              Continue Browsing
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+    );
 };
