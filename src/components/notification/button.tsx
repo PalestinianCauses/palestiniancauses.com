@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useNotificationSubscription } from "@/hooks/use-notification-subscription";
 import { useUserAgentInfo } from "@/hooks/use-user-agent-info";
@@ -53,7 +53,7 @@ export const NotificationButton = function NotificationButton() {
       <Button
         variant="link"
         className="mr-1.5 p-0"
-        disabled={subscribe.isPending}
+        disabled={unsubscribe.isPending}
         onClick={() => unsubscribe.mutate()}>
         Unsubscribe from updates.
       </Button>
