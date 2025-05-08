@@ -1,0 +1,52 @@
+{
+  "id": "https://palestiniancauses.com",
+  "name": "PalestinianCauses",
+  "short_name": "PC",
+  "description": "PalestinianCauses LLC is a mission-driven creative and digital platform dedicated to illuminating the Gazan experience, with an urgent focus on amplifying authentic voices and realities from Gaza during the current crisis.",
+  "scope": "/",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#18181b",
+  "theme_color": "#18181b",
+  "icons": [
+    {
+      "src": "/manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "form_factor": "wide",
+      "src": "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXfJafovpKAixQkOwjFU9IWn4ZtucV2dL16J7T",
+      "type": "image/png",
+      "sizes": "1200x630"
+    },
+    {
+      "form_factor": "narrow",
+      "src": "/manifest-screenshot-01.png",
+      "type": "image/png",
+      "sizes": "850x1850"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 05
+// REVIEWED - 0٧
 
 import { httpStatusesMessages, messages } from "@/lib/errors";
 import { payload } from "@/lib/payload";
@@ -8,6 +8,8 @@ import { ErrorPayload } from "@/lib/payload/types";
 import { isError } from "@/lib/payload/utils";
 import { ActionSafeExecute, actionSafeExecute } from "@/lib/utils";
 import { DiaryEntry, User } from "@/payload-types";
+
+import { notifySubscribers } from "./notification-subscription";
 
 export const createDiaryEntry = async function createDiaryEntry(
   data: Omit<DiaryEntry, "id" | "status" | "createdAt" | "updatedAt">,
@@ -55,6 +57,13 @@ export const createDiaryEntry = async function createDiaryEntry(
 
     return response;
   }
+
+  if (author.role === "admin" || author.role === "system-user")
+    await notifySubscribers({
+      title: data.title,
+      body: "A new diary entry has been published.",
+      data: { url: `/humans-but-from-gaza/${responseDiaryEntry.data.id}` },
+    });
 
   return {
     data:

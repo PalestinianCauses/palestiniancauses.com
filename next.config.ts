@@ -1,5 +1,6 @@
-// REVIEWED - 09
+// REVIEWED - 11
 import { withPayload } from "@payloadcms/next/withPayload";
+import withSerwistInit from "@serwist/next";
 import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -19,4 +20,9 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPayload(nextConfig);
+const withPWAConfig = withSerwistInit({
+  swDest: "public/sw.js",
+  swSrc: "src/app/(app)/sw.ts",
+});
+
+export default withPWAConfig(withPayload(nextConfig));

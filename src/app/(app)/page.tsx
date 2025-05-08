@@ -1,8 +1,9 @@
-// REVIEWED - 05
+// REVIEWED - 08
 import { Metadata } from "next";
 
 import { Intro } from "@/components/globals/intro";
 import { Navigation } from "@/components/globals/navigation";
+import { PWAPromptInstall } from "@/components/pwa/prompt-install";
 
 export const metadata: Metadata = {
   title: "Home | PalestinianCauses",
@@ -15,6 +16,7 @@ const HomePage = async function HomePage() {
     <main className="grid h-screen max-h-screen min-h-[48rem] snap-y snap-mandatory grid-cols-1 divide-y divide-muted overflow-y-scroll lg:snap-none lg:grid-cols-2 lg:divide-x lg:divide-y-0 [&_>_*]:h-screen [&_>_*]:max-h-screen [&_>_*]:min-h-[48rem] [@media_(max-height:48rem)]:snap-none">
       <Intro />
       <Navigation />
+      <PWAPromptInstall />
     </main>
   );
 };
