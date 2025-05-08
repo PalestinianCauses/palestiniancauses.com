@@ -1,4 +1,4 @@
-// REVIEWED - 13
+// REVIEWED - 14
 
 export const messages = {
   http: {
@@ -17,6 +17,8 @@ export const messages = {
       successDelete: "Successfully unsubscribed from receiving notifications.",
       successNotify: "Successfully notified subscribers.",
       duplication: "You are already subscribed to receive notifications.",
+      notFound:
+        "Could not find notification subscription. Please try again later.",
       serverError:
         "An error occurred while creating notification subscription. Please try again later.",
       serverErrorGet:

@@ -1,22 +1,9 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { PropsWithChildren, useEffect } from "react";
-
-export const ServiceWorkerRegistrationLogger =
-  function ServiceWorkerRegistrationLogger() {
-    useEffect(() => {
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.ready
-          .then((register) => console.log("[Service Worker]: Ready:", register))
-          .catch((error) => console.error("[Service Worker]: Error:", error));
-      }
-    }, []);
-
-    return null;
-  };
+import { PropsWithChildren } from "react";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
