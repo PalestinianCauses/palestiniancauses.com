@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Where } from "payload";
 import {
@@ -127,10 +127,11 @@ export const notifySubscribers = async function notifySubscribers(
 
   await Promise.all(notifications);
 
-  console.log(
-    messages.actions.notificationSubscription.successNotify,
-    notifications,
-  );
+  console.log(messages.actions.notificationSubscription.successNotify);
+
+  subscriptions.data.docs.forEach((subscription) => {
+    console.log(subscription.id, options.title, options.body);
+  });
 
   return {
     data: messages.actions.notificationSubscription.successNotify,

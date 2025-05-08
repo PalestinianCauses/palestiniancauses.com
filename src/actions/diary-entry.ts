@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 06
+// REVIEWED - 0٧
 
 import { httpStatusesMessages, messages } from "@/lib/errors";
 import { payload } from "@/lib/payload";
@@ -61,7 +61,7 @@ export const createDiaryEntry = async function createDiaryEntry(
   if (author.role === "admin" || author.role === "system-user")
     await notifySubscribers({
       title: data.title,
-      body: "A new diary entry has been publish.",
+      body: "A new diary entry has been published.",
       data: { url: `/humans-but-from-gaza/${responseDiaryEntry.data.id}` },
     });
 

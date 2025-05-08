@@ -1,13 +1,13 @@
 {
-  "reviewed": "true - 25",
+  "reviewed": "true - 26",
   "name": "palestiniancauses.com",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "dev": "next dev --turbopack",
-    "dev:https": "next dev --experimental-https --turbopack",
+    "dev": "next dev",
+    "dev:https": "next dev --experimental-https",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

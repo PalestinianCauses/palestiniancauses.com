@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -31,8 +31,6 @@ export const useNotificationSubscription =
         queryKey: ["notification-subscription"],
         queryFn: async () => {
           try {
-            if (!isAvailable) return null;
-
             const serviceWorker = await navigator.serviceWorker.ready;
             const serviceWorkerSubscription =
               await serviceWorker.pushManager.getSubscription();
@@ -51,6 +49,7 @@ export const useNotificationSubscription =
             return null;
           }
         },
+        enabled: isAvailable,
       });
 
     const subscribe = useMutation({
@@ -66,15 +65,7 @@ export const useNotificationSubscription =
 
         const { userAgent } = navigator;
         const response = await subscribeToNotifications({
-          endpoint: registrationSubscription.endpoint,
-          keys: {
-            p256dh: JSON.parse(
-              JSON.stringify(registrationSubscription.getKey("p256dh")),
-            ),
-            auth: JSON.parse(
-              JSON.stringify(registrationSubscription.getKey("auth")),
-            ),
-          },
+          ...JSON.parse(JSON.stringify(registrationSubscription)),
           userAgent,
         });
 
@@ -91,14 +82,18 @@ export const useNotificationSubscription =
           queryKey: ["notification-subscription"],
         });
 
-        await notifySubscribers(
-          {
-            title: "Welcome to Our Notifications!",
-            body: "You are now subscribed and ready to receive updates!",
-            data: { url: "/" },
-          },
-          { endpoint: { equals: registrationSubscription.endpoint } },
-        );
+        if (
+          response.data !==
+          messages.actions.notificationSubscription.duplication
+        )
+          await notifySubscribers(
+            {
+              title: "Thank you for Subscribing!",
+              body: "You are now subscribed to receive timely updates and important news!",
+              data: { url: "/" },
+            },
+            { endpoint: { equals: registrationSubscription.endpoint } },
+          );
       },
     });
 
