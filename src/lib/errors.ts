@@ -1,4 +1,4 @@
-// REVIEWED - 12
+// REVIEWED - 13
 
 export const messages = {
   http: {
@@ -12,6 +12,20 @@ export const messages = {
       "An error occurred while parsing request's response to its correct type. Please try again later.",
   },
   actions: {
+    notificationSubscription: {
+      success: "Successfully subscribed to receive notifications.",
+      successDelete: "Successfully unsubscribed from receiving notifications.",
+      successNotify: "Successfully notified subscribers.",
+      duplication: "You are already subscribed to receive notifications.",
+      serverError:
+        "An error occurred while creating notification subscription. Please try again later.",
+      serverErrorGet:
+        "An error occurred while getting notification subscription. Please try again later.",
+      serverErrorDelete:
+        "An error occurred while deleting notification subscription. Please try again later.",
+      serverErrorNotify:
+        "An error occurred while notifying subscribers. Please try again later.",
+    },
     user: {
       unAuthorized: "You are not authorized to perform this action.",
       unAuthenticated:
