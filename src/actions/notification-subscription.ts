@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { Where } from "payload";
 import {
@@ -19,8 +19,32 @@ configVapid(
   process.env.VAPID_PRIVATE_KEY!,
 );
 
+export const getNotificationSubscription =
+  async function getNotificationSubscription(
+    subscription: Pick<NotificationSubscription, "endpoint">,
+  ): Promise<ActionSafeExecute<NotificationSubscription, string>> {
+    const response = await actionSafeExecute(
+      payload.find({
+        collection: "notification-subscriptions",
+        where: { endpoint: { equals: subscription.endpoint } },
+      }),
+      messages.actions.notificationSubscription.serverErrorGet,
+    );
+
+    if (!response.data || response.data.docs.length !== 1 || response.error)
+      return {
+        data: null,
+        error: messages.actions.notificationSubscription.notFound,
+      };
+
+    return { data: response.data.docs[0], error: null };
+  };
+
 export const subscribeToNotifications = async function subscribeToNotifications(
-  subscription: NotificationSubscription,
+  subscription: Omit<
+    NotificationSubscription,
+    "id" | "createdAt" | "updatedAt"
+  >,
 ): Promise<ActionSafeExecute<string, string>> {
   const subscriptionExisting = await actionSafeExecute(
     payload.find({
@@ -55,9 +79,9 @@ export const subscribeToNotifications = async function subscribeToNotifications(
   };
 };
 
-export const unsubscribeToNotifications =
-  async function unsubscribeToNotifications(
-    subscription: NotificationSubscription,
+export const unsubscribeFromNotifications =
+  async function unsubscribeFromNotifications(
+    subscription: Pick<NotificationSubscription, "endpoint">,
   ): Promise<ActionSafeExecute<string, string>> {
     const response = await actionSafeExecute(
       payload.delete({
@@ -103,7 +127,10 @@ export const notifySubscribers = async function notifySubscribers(
 
   await Promise.all(notifications);
 
-  console.log(messages.actions.notificationSubscription.successNotify);
+  console.log(
+    messages.actions.notificationSubscription.successNotify,
+    notifications,
+  );
 
   return {
     data: messages.actions.notificationSubscription.successNotify,

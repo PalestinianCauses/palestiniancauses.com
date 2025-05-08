@@ -1,7 +1,7 @@
-// REVIEWED - 10
+// REVIEWED - 11
 import { withPayload } from "@payloadcms/next/withPayload";
+import withSerwistInit from "@serwist/next";
 import { NextConfig } from "next";
-import withPWA from "next-pwa";
 
 const nextConfig: NextConfig = {
   eslint: { ignoreDuringBuilds: true },
@@ -20,14 +20,9 @@ const nextConfig: NextConfig = {
   },
 };
 
-const withPWAConfig = withPWA({
-  dest: "public",
-  register: true,
-  skipWaiting: true,
-  disable: false,
-  importScripts: ["./worker/index.js"],
-  customWorkerDir: "worker",
-  buildExcludes: [/middleware-manifest\.json$/],
+const withPWAConfig = withSerwistInit({
+  swDest: "public/sw.js",
+  swSrc: "src/app/(app)/sw.ts",
 });
 
 export default withPWAConfig(withPayload(nextConfig));

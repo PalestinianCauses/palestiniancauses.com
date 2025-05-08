@@ -1,4 +1,4 @@
-# REVIEWED - 05
+# REVIEWED - 07
 # dependencies
 /node_modules
 package-lock.json
@@ -34,3 +34,6 @@ payload-types.ts
 /test-results/
 
 certificates
+
+public/sw*
+public/swe-worker*
