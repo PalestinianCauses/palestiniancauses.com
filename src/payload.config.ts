@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -12,6 +12,7 @@ import { Media } from "@/collections/Media";
 import { NotificationSubscriptions } from "@/collections/NotificationSubscriptions";
 import { Orders } from "@/collections/Orders";
 import { Products } from "@/collections/Products";
+import { Rooms } from "@/collections/Rooms";
 import { Users } from "@/collections/Users";
 
 const filename = fileURLToPath(import.meta.url);
@@ -32,6 +33,7 @@ export default buildConfig({
     Products,
     Orders,
     DiaryEntries,
+    Rooms,
   ],
   sharp,
   plugins: [],

@@ -1,4 +1,4 @@
-// REVIEWED - 14
+// REVIEWED - 15
 
 export const messages = {
   http: {
@@ -121,8 +121,8 @@ export const messages = {
     },
   },
   forms: {
-    required: (field: string) => `Please enter your ${field}`,
-    valid: (field: string) => `Please enter a valid ${field}`,
+    required: (field: string) => `Please enter your ${field}.`,
+    valid: (field: string) => `Please enter a valid ${field}.`,
     maxLength: (field: string, length: number) =>
       `Please enter a ${field} with less than ${length} characters.`,
     diaryEntry: {
@@ -130,6 +130,12 @@ export const messages = {
         `Please enter a valid date between ${min} and ${max}.`,
       content:
         "Please write a diary that is long enough to be in our museum (2500 characters minimum).",
+    },
+    rooms: {
+      education: {
+        yearEnd: (yearStart: number) =>
+          `Please enter a valid year after ${yearStart}.`,
+      },
     },
   },
 };
