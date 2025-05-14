@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CollectionConfig } from "payload";
 import slugify from "slugify";
@@ -137,9 +137,6 @@ export const Rooms: CollectionConfig = {
           validate: (value, { siblingData }) => {
             if (!value) return messages.forms.required("graduation year");
 
-            if (typeof value !== "number")
-              return messages.forms.valid("graduation year");
-
             if (!("yearStart" in siblingData))
               return messages.forms.required("start year");
 
@@ -147,7 +144,8 @@ export const Rooms: CollectionConfig = {
               return messages.forms.valid("start year");
 
             if (value <= siblingData.yearStart)
-              return messages.forms.rooms.education.yearEnd(
+              return messages.forms.rooms.valid.year(
+                "after",
                 siblingData.yearStart,
               );
 
@@ -163,19 +161,51 @@ export const Rooms: CollectionConfig = {
       ],
     },
     {
-      label: "Employments",
-      name: "employments",
+      label: "Experience",
+      name: "experience",
       type: "array",
       required: true,
       fields: [
         {
+          label: "Type",
+          name: "type",
+          type: "select",
+          options: [
+            { label: "Employment", value: "employment" },
+            { label: "External Activities", value: "activity" },
+          ],
+          defaultValue: "employment",
+          required: true,
+        },
+        {
+          admin: {
+            condition: (_, siblingData) => siblingData.type === "employment",
+          },
           label: "Company",
           name: "company",
           type: "text",
           required: true,
         },
         {
-          label: "Position",
+          admin: {
+            condition: (_, siblingData) => siblingData.type === "activity",
+          },
+          label: "Organization",
+          name: "organization",
+          type: "text",
+          required: true,
+        },
+        {
+          admin: {
+            condition: (_, siblingData) => siblingData.type === "activity",
+          },
+          label: "Activity Title",
+          name: "title",
+          type: "text",
+          required: true,
+        },
+        {
+          label: "Position (e.g. Full-Stack Developer)",
           name: "position",
           type: "text",
           required: true,
@@ -196,8 +226,8 @@ export const Rooms: CollectionConfig = {
           required: true,
         },
         {
-          label: "Start Date",
-          name: "dateStart",
+          label: "Start Year",
+          name: "yearStart",
           type: "number",
           min: 2010,
           max: new Date().getFullYear() + 10,
@@ -213,9 +243,41 @@ export const Rooms: CollectionConfig = {
           admin: {
             condition: (_, siblingData) => siblingData.isCurrent === false,
           },
-          label: "End Date",
-          name: "dateEnd",
-          type: "date",
+          label: "End Year",
+          name: "yearEnd",
+          type: "number",
+          hasMany: false,
+          min: 2010,
+          max: new Date().getFullYear() + 10,
+          required: true,
+          validate: (value, { siblingData }) => {
+            if (!value) return messages.forms.required("end year");
+
+            if (!("yearStart" in siblingData))
+              return messages.forms.required("start year");
+
+            if (typeof siblingData.yearStart !== "number")
+              return messages.forms.valid("start year");
+
+            if (value <= siblingData.yearStart)
+              return messages.forms.rooms.valid.year(
+                "after",
+                siblingData.yearStart,
+              );
+
+            return true;
+          },
+        },
+        {
+          label: "Link (e.g. Websites, Social Media Posts, etc.)",
+          name: "link",
+          type: "text",
+          required: true,
+        },
+        {
+          label: "Description",
+          name: "description",
+          type: "textarea",
           required: true,
         },
       ],
