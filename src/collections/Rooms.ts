@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { CollectionConfig } from "payload";
 import slugify from "slugify";
@@ -39,7 +39,10 @@ export const Rooms: CollectionConfig = {
   },
   fields: [
     {
-      admin: { readOnly: true },
+      admin: {
+        readOnly: true,
+        description: "The unique identifier for this room",
+      },
       label: "Room Name",
       name: "name",
       type: "text",
@@ -47,7 +50,10 @@ export const Rooms: CollectionConfig = {
       required: true,
     },
     {
-      admin: { readOnly: true },
+      admin: {
+        readOnly: true,
+        description: "URL-friendly version of the room name",
+      },
       label: "Room Slug",
       name: "slug",
       type: "text",
@@ -55,29 +61,45 @@ export const Rooms: CollectionConfig = {
       required: true,
     },
     {
+      admin: {
+        description:
+          "Personal and professional information displayed at the top of the room",
+      },
       label: "Hero Section",
       name: "hero",
       type: "group",
       fields: [
         {
-          label: "Name (e.g. Shawqi H.)",
+          admin: {
+            description:
+              "Your full name as you want it to appear professionally",
+          },
+          label: "Name",
           name: "nameProfessional",
           type: "text",
           required: true,
         },
         {
-          label: "Professional Title (e.g. Full-Stack Developer)",
+          admin: { description: "Your current professional role or title" },
+          label: "Professional Title",
           name: "titleProfessional",
           type: "text",
           required: true,
         },
         {
+          admin: {
+            description:
+              "A brief overview of your professional background and expertise",
+          },
           label: "Professional Description",
           name: "descriptionProfessional",
           type: "textarea",
           required: true,
         },
         {
+          admin: {
+            description: "Optional professional head-shot or profile picture",
+          },
           label: "Professional Image",
           name: "imageProfessional",
           type: "upload",
@@ -88,24 +110,30 @@ export const Rooms: CollectionConfig = {
       ],
     },
     {
+      admin: {
+        description: "Your academic background and educational achievements",
+      },
       label: "Education",
       name: "education",
       type: "array",
       required: true,
       fields: [
         {
+          admin: { description: "Name of the educational institution" },
           label: "Institution",
           name: "institution",
           type: "text",
           required: true,
         },
         {
+          admin: { description: "Degree or qualification earned" },
           label: "Degree",
           name: "degree",
           type: "text",
           required: true,
         },
         {
+          admin: { description: "Current status of your education" },
           label: "Status",
           name: "status",
           type: "select",
@@ -118,6 +146,7 @@ export const Rooms: CollectionConfig = {
         },
         {
           admin: {
+            description: "When you started this educational program",
             date: {
               pickerAppearance: "monthOnly",
               minDate: new Date(2010, 0, 1, 0, 0, 0, 0),
@@ -136,6 +165,7 @@ export const Rooms: CollectionConfig = {
         {
           admin: {
             condition: (_, siblingData) => siblingData.status !== "in-progress",
+            description: "When you completed or ended this educational program",
             date: { pickerAppearance: "monthOnly" },
           },
           label: "End Date",
@@ -168,6 +198,7 @@ export const Rooms: CollectionConfig = {
           },
         },
         {
+          admin: { description: "Details about your studies and achievements" },
           label: "Description",
           name: "description",
           type: "textarea",
@@ -176,12 +207,14 @@ export const Rooms: CollectionConfig = {
       ],
     },
     {
+      admin: { description: "Your work history and professional activities" },
       label: "Experience",
       name: "experience",
       type: "array",
       required: true,
       fields: [
         {
+          admin: { description: "Type of experience you want to add" },
           label: "Type",
           name: "type",
           type: "select",
@@ -195,6 +228,7 @@ export const Rooms: CollectionConfig = {
         {
           admin: {
             condition: (_, siblingData) => siblingData.type === "employment",
+            description: "Name of the company you worked for",
           },
           label: "Company",
           name: "company",
@@ -204,6 +238,7 @@ export const Rooms: CollectionConfig = {
         {
           admin: {
             condition: (_, siblingData) => siblingData.type === "activity",
+            description: "Name of the organization you were involved with",
           },
           label: "Organization",
           name: "organization",
@@ -213,6 +248,8 @@ export const Rooms: CollectionConfig = {
         {
           admin: {
             condition: (_, siblingData) => siblingData.type === "activity",
+            description:
+              "Name of the activity or project you were involved with",
           },
           label: "Activity Title",
           name: "title",
@@ -220,12 +257,14 @@ export const Rooms: CollectionConfig = {
           required: true,
         },
         {
-          label: "Position (e.g. Full-Stack Developer)",
+          admin: { description: "Your position or role in this experience" },
+          label: "Position",
           name: "position",
           type: "text",
           required: true,
         },
         {
+          admin: { description: "Indicate if this was a remote position" },
           label: "Is Remote",
           name: "isRemote",
           type: "checkbox",
@@ -234,6 +273,7 @@ export const Rooms: CollectionConfig = {
         {
           admin: {
             condition: (_, siblingData) => siblingData.isRemote === false,
+            description: "Physical location of the work-place",
           },
           label: "Location",
           name: "location",
@@ -242,6 +282,7 @@ export const Rooms: CollectionConfig = {
         },
         {
           admin: {
+            description: "When you started this position",
             date: {
               pickerAppearance: "monthOnly",
               minDate: new Date(2010, 0, 1, 0, 0, 0, 0),
@@ -258,6 +299,7 @@ export const Rooms: CollectionConfig = {
           required: true,
         },
         {
+          admin: { description: "Indicate if this is your current position" },
           label: "Is Current/On Going",
           name: "isCurrent",
           type: "checkbox",
@@ -266,6 +308,7 @@ export const Rooms: CollectionConfig = {
         {
           admin: {
             condition: (_, siblingData) => siblingData.isCurrent === false,
+            description: "When you ended this position",
             date: { pickerAppearance: "monthOnly" },
           },
           label: "End Date",
@@ -298,12 +341,20 @@ export const Rooms: CollectionConfig = {
           },
         },
         {
-          label: "Link (e.g. Websites, Social Media Posts, etc.)",
+          admin: {
+            description:
+              "Add a URL to the company's website, social media profile, or official announcement",
+          },
+          label: "Link",
           name: "link",
           type: "text",
           required: true,
         },
         {
+          admin: {
+            description:
+              "Provide a detailed description of your work, achievements, and responsibilities",
+          },
           label: "Description",
           name: "description",
           type: "textarea",
@@ -312,25 +363,37 @@ export const Rooms: CollectionConfig = {
       ],
     },
     {
-      label: "Qualifications (e.g. Courses and Certifications)",
+      admin: {
+        description:
+          "List your professional qualifications' courses and certifications",
+      },
+      label: "Qualifications",
       name: "qualification",
       type: "array",
       required: true,
       fields: [
         {
+          admin: {
+            description: "Enter the full title of your course or certification",
+          },
           label: "Title",
           name: "title",
           type: "text",
           required: true,
         },
         {
-          label: "Issuer (e.g. Udemy, Coursera, etc.)",
+          admin: {
+            description:
+              "Name of the organization or platform that issued the qualification",
+          },
+          label: "Issuer",
           name: "issuer",
           type: "text",
           required: true,
         },
         {
           admin: {
+            description: "When you started this qualification",
             date: {
               pickerAppearance: "monthOnly",
               minDate: new Date(2010, 0, 1, 0, 0, 0, 0),
@@ -348,9 +411,8 @@ export const Rooms: CollectionConfig = {
         },
         {
           admin: {
-            date: {
-              pickerAppearance: "monthOnly",
-            },
+            description: "When you completed or received this qualification",
+            date: { pickerAppearance: "monthOnly" },
           },
           label: "End Date",
           name: "dateEnd",
@@ -382,12 +444,19 @@ export const Rooms: CollectionConfig = {
           },
         },
         {
-          label: "Link (e.g. Course Website)",
+          admin: {
+            description: "Optional URL to the organization or course page",
+          },
+          label: "Link",
           name: "link",
           type: "text",
           required: false,
         },
         {
+          admin: {
+            description:
+              "Indicate if you received a certificate for this qualification",
+          },
           label: "Has Certificate",
           name: "hasCertificate",
           type: "checkbox",
@@ -396,6 +465,7 @@ export const Rooms: CollectionConfig = {
         {
           admin: {
             condition: (_, siblingData) => siblingData.hasCertificate === true,
+            description: "Upload your certificate document or image",
           },
           label: "Certificate",
           name: "certificate",
@@ -405,6 +475,10 @@ export const Rooms: CollectionConfig = {
           required: true,
         },
         {
+          admin: {
+            description:
+              "Describe what you learned and achieved through this qualification",
+          },
           label: "Description",
           name: "description",
           type: "textarea",
