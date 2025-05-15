@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { CollectionConfig } from "payload";
 import slugify from "slugify";
@@ -483,6 +483,54 @@ export const Rooms: CollectionConfig = {
           name: "description",
           type: "textarea",
           required: true,
+        },
+      ],
+    },
+    {
+      admin: { description: "List your skills and expertise levels" },
+      label: "Skills",
+      name: "skills",
+      type: "array",
+      required: true,
+      fields: [
+        {
+          admin: { description: "Group your skills into categories" },
+          label: "Category",
+          name: "category",
+          type: "text",
+          required: true,
+        },
+        {
+          admin: { description: "List individual skills within this category" },
+          label: "skills",
+          name: "skills",
+          type: "array",
+          required: true,
+          fields: [
+            {
+              admin: { description: "Enter the name of your skill" },
+              label: "Name",
+              name: "name",
+              type: "text",
+              required: true,
+            },
+            {
+              admin: {
+                description: "Select your proficiency level for this skill",
+              },
+              label: "Level",
+              name: "level",
+              type: "select",
+              options: [
+                { label: "Beginner", value: "beginner" },
+                { label: "Intermediate", value: "intermediate" },
+                { label: "Advanced", value: "advanced" },
+                { label: "Expert", value: "expert" },
+              ],
+              defaultValue: "expert",
+              required: true,
+            },
+          ],
         },
       ],
     },
