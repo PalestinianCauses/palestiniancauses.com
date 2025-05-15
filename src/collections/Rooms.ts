@@ -1,10 +1,11 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CollectionConfig } from "payload";
 import slugify from "slugify";
 
 import { isAdminOrSystemUser } from "@/access/global";
 import { messages } from "@/lib/errors";
+import { validateDateInRange } from "@/lib/utils";
 
 export const Rooms: CollectionConfig = {
   slug: "rooms",
@@ -116,40 +117,56 @@ export const Rooms: CollectionConfig = {
           required: true,
         },
         {
-          label: "Start Year",
-          name: "yearStart",
-          type: "number",
-          min: 2010,
-          max: new Date().getFullYear(),
+          label: "Start Date",
+          name: "dateStart",
+          type: "date",
           required: true,
+          validate: (value) => {
+            const start = new Date(2010, 0, 1);
+            const end = new Date();
+            end.setUTCDate(end.getUTCDate() - 1);
+
+            return validateDateInRange(
+              value,
+              start,
+              end,
+              messages.forms.required("start date"),
+              messages.forms.valid("start date"),
+              messages.forms.date(start.toLocaleDateString(), "yesterday"),
+            );
+          },
         },
         {
           admin: {
             condition: (_, siblingData) => siblingData.status !== "in-progress",
           },
-          label: "End Year",
-          name: "yearEnd",
-          type: "number",
-          hasMany: false,
-          min: 2011,
-          max: new Date().getFullYear() + 10,
+          label: "End Date",
+          name: "dateEnd",
+          type: "date",
           required: true,
           validate: (value, { siblingData }) => {
-            if (!value) return messages.forms.required("graduation year");
+            if (
+              !("dateStart" in siblingData) ||
+              !siblingData.dateStart ||
+              !(
+                siblingData.dateStart instanceof Date ||
+                typeof siblingData.dateStart === "string"
+              )
+            )
+              return messages.forms.required("start date");
 
-            if (!("yearStart" in siblingData))
-              return messages.forms.required("start year");
+            const start = new Date(siblingData.dateStart);
+            const end = new Date();
+            end.setUTCDate(end.getUTCDate() - 1);
 
-            if (typeof siblingData.yearStart !== "number")
-              return messages.forms.valid("start year");
-
-            if (value <= siblingData.yearStart)
-              return messages.forms.rooms.valid.year(
-                "after",
-                siblingData.yearStart,
-              );
-
-            return true;
+            return validateDateInRange(
+              value,
+              start,
+              end,
+              messages.forms.required("end date"),
+              messages.forms.valid("end date"),
+              messages.forms.date(start.toLocaleDateString(), "yesterday"),
+            );
           },
         },
         {
@@ -226,12 +243,24 @@ export const Rooms: CollectionConfig = {
           required: true,
         },
         {
-          label: "Start Year",
-          name: "yearStart",
-          type: "number",
-          min: 2010,
-          max: new Date().getFullYear() + 10,
+          label: "Start Date",
+          name: "dateStart",
+          type: "date",
           required: true,
+          validate: (value) => {
+            const start = new Date(2010, 0, 1);
+            const end = new Date();
+            end.setUTCDate(end.getUTCDate() - 1);
+
+            return validateDateInRange(
+              value,
+              start,
+              end,
+              messages.forms.required("start date"),
+              messages.forms.valid("start date"),
+              messages.forms.date(start.toLocaleDateString(), "yesterday"),
+            );
+          },
         },
         {
           label: "Is Current/On Going",
@@ -243,29 +272,33 @@ export const Rooms: CollectionConfig = {
           admin: {
             condition: (_, siblingData) => siblingData.isCurrent === false,
           },
-          label: "End Year",
-          name: "yearEnd",
-          type: "number",
-          hasMany: false,
-          min: 2010,
-          max: new Date().getFullYear() + 10,
+          label: "End Date",
+          name: "dateEnd",
+          type: "date",
           required: true,
           validate: (value, { siblingData }) => {
-            if (!value) return messages.forms.required("end year");
+            if (
+              !("dateStart" in siblingData) ||
+              !siblingData.dateStart ||
+              !(
+                siblingData.dateStart instanceof Date ||
+                typeof siblingData.dateStart === "string"
+              )
+            )
+              return messages.forms.required("start date");
 
-            if (!("yearStart" in siblingData))
-              return messages.forms.required("start year");
+            const start = new Date(siblingData.dateStart);
+            const end = new Date();
+            end.setUTCDate(end.getUTCDate() - 1);
 
-            if (typeof siblingData.yearStart !== "number")
-              return messages.forms.valid("start year");
-
-            if (value <= siblingData.yearStart)
-              return messages.forms.rooms.valid.year(
-                "after",
-                siblingData.yearStart,
-              );
-
-            return true;
+            return validateDateInRange(
+              value,
+              start,
+              end,
+              messages.forms.required("end date"),
+              messages.forms.valid("end date"),
+              messages.forms.date(start.toLocaleDateString(), "yesterday"),
+            );
           },
         },
         {

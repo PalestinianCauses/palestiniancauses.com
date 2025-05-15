@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { revalidatePath } from "next/cache";
 import { CollectionConfig } from "payload";
@@ -6,6 +6,7 @@ import { CollectionConfig } from "payload";
 import { isAdminOrSystemUserOrSelf } from "@/access/diary-entry";
 import { isAdmin, isAdminOrSystemUserField } from "@/access/global";
 import { messages } from "@/lib/errors";
+import { validateDateInRange } from "@/lib/utils";
 
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
@@ -33,30 +34,18 @@ export const DiaryEntries: CollectionConfig = {
       type: "date",
       required: true,
       validate: (value) => {
-        if (!value) return messages.forms.required("diary date");
+        const start = new Date(2023, 9, 7);
+        const end = new Date();
+        end.setUTCDate(end.getUTCDate() - 1);
 
-        const date = new Date(value);
-        date.setUTCHours(0, 0, 0, 0);
-
-        if (!(date instanceof Date) || Number.isNaN(date.getTime()))
-          return messages.forms.valid("diary date");
-
-        const today = new Date();
-        today.setUTCHours(0, 0, 0, 0);
-
-        const yesterday = new Date(today);
-        yesterday.setUTCDate(today.getDate() - 1);
-
-        const october7th2023 = new Date(2023, 9, 7);
-        october7th2023.setUTCHours(0, 0, 0, 0);
-
-        if (
-          date.getTime() > yesterday.getTime() ||
-          date.getTime() <= october7th2023.getTime()
-        )
-          return messages.forms.diaryEntry.date("Oct 7th. 2023", "yesterday");
-
-        return true;
+        return validateDateInRange(
+          value,
+          start,
+          end,
+          messages.forms.required("diary date"),
+          messages.forms.valid("diary date"),
+          messages.forms.date(start.toLocaleDateString(), "yesterday"),
+        );
       },
     },
     {

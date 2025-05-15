@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { z } from "zod";
 
@@ -24,23 +24,20 @@ export const diaryEntrySchema = z.object({
     )
     .refine(
       (date) => {
-        const today = new Date();
-        today.setUTCHours(0, 0, 0, 0);
+        const end = new Date();
+        end.setUTCDate(end.getUTCDate() - 1);
+        end.setUTCHours(0, 0, 0, 0);
 
-        const yesterday = new Date(today);
-        yesterday.setUTCDate(today.getUTCDate() - 1);
-
-        const october7th2023 = new Date(2023, 9, 7);
-        october7th2023.setUTCHours(0, 0, 0, 0);
+        const start = new Date(2023, 9, 7);
+        start.setUTCHours(0, 0, 0, 0);
 
         return (
-          date.getTime() <= yesterday.getTime() &&
-          date.getTime() > october7th2023.getTime()
+          date.getTime() > start.getTime() && date.getTime() <= end.getTime()
         );
       },
       {
-        message: messages.forms.diaryEntry.date(
-          "October 7th. 2023",
+        message: messages.forms.date(
+          new Date(2023, 9, 7).toLocaleDateString(),
           "yesterday",
         ),
       },
