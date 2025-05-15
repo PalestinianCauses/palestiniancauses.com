@@ -1,4 +1,4 @@
-// REVIEWED - 09
+// REVIEWED - 10
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -82,7 +82,7 @@ export const validateDateInRange = function validateDateInRange(
   start.setUTCHours(0, 0, 0, 0);
   end.setUTCHours(0, 0, 0, 0);
 
-  if (date.getTime() <= start.getTime() || date.getTime() > end.getTime())
+  if (date.getTime() < start.getTime() || date.getTime() > end.getTime())
     return errorRange;
 
   return true;

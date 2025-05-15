@@ -1,16 +1,16 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CollectionConfig } from "payload";
 import slugify from "slugify";
 
-import { isAdminOrSystemUser } from "@/access/global";
+import { isAdminOrSelf, isAdminOrSystemUser } from "@/access/global";
 import { messages } from "@/lib/errors";
 import { validateDateInRange } from "@/lib/utils";
 
 export const Rooms: CollectionConfig = {
   slug: "rooms",
   access: {
-    read: () => true,
+    read: isAdminOrSelf,
     create: async ({ req }) => {
       const { user } = req;
       if (!user) return false;
@@ -117,28 +117,26 @@ export const Rooms: CollectionConfig = {
           required: true,
         },
         {
+          admin: {
+            date: {
+              pickerAppearance: "monthOnly",
+              minDate: new Date(2010, 0, 1, 0, 0, 0, 0),
+              maxDate: new Date(
+                new Date(
+                  new Date().setUTCDate(new Date().getUTCDate() - 1),
+                ).setUTCHours(0, 0, 0, 0),
+              ),
+            },
+          },
           label: "Start Date",
           name: "dateStart",
           type: "date",
           required: true,
-          validate: (value) => {
-            const start = new Date(2010, 0, 1);
-            const end = new Date();
-            end.setUTCDate(end.getUTCDate() - 1);
-
-            return validateDateInRange(
-              value,
-              start,
-              end,
-              messages.forms.required("start date"),
-              messages.forms.valid("start date"),
-              messages.forms.date(start.toLocaleDateString(), "yesterday"),
-            );
-          },
         },
         {
           admin: {
             condition: (_, siblingData) => siblingData.status !== "in-progress",
+            date: { pickerAppearance: "monthOnly" },
           },
           label: "End Date",
           name: "dateEnd",
@@ -243,24 +241,21 @@ export const Rooms: CollectionConfig = {
           required: true,
         },
         {
+          admin: {
+            date: {
+              pickerAppearance: "monthOnly",
+              minDate: new Date(2010, 0, 1, 0, 0, 0, 0),
+              maxDate: new Date(
+                new Date(
+                  new Date().setUTCDate(new Date().getUTCDate() - 1),
+                ).setUTCHours(0, 0, 0, 0),
+              ),
+            },
+          },
           label: "Start Date",
           name: "dateStart",
           type: "date",
           required: true,
-          validate: (value) => {
-            const start = new Date(2010, 0, 1);
-            const end = new Date();
-            end.setUTCDate(end.getUTCDate() - 1);
-
-            return validateDateInRange(
-              value,
-              start,
-              end,
-              messages.forms.required("start date"),
-              messages.forms.valid("start date"),
-              messages.forms.date(start.toLocaleDateString(), "yesterday"),
-            );
-          },
         },
         {
           label: "Is Current/On Going",
@@ -271,6 +266,7 @@ export const Rooms: CollectionConfig = {
         {
           admin: {
             condition: (_, siblingData) => siblingData.isCurrent === false,
+            date: { pickerAppearance: "monthOnly" },
           },
           label: "End Date",
           name: "dateEnd",
@@ -305,6 +301,107 @@ export const Rooms: CollectionConfig = {
           label: "Link (e.g. Websites, Social Media Posts, etc.)",
           name: "link",
           type: "text",
+          required: true,
+        },
+        {
+          label: "Description",
+          name: "description",
+          type: "textarea",
+          required: true,
+        },
+      ],
+    },
+    {
+      label: "Qualifications (e.g. Courses and Certifications)",
+      name: "qualification",
+      type: "array",
+      required: true,
+      fields: [
+        {
+          label: "Title",
+          name: "title",
+          type: "text",
+          required: true,
+        },
+        {
+          label: "Issuer (e.g. Udemy, Coursera, etc.)",
+          name: "issuer",
+          type: "text",
+          required: true,
+        },
+        {
+          admin: {
+            date: {
+              pickerAppearance: "monthOnly",
+              minDate: new Date(2010, 0, 1, 0, 0, 0, 0),
+              maxDate: new Date(
+                new Date(
+                  new Date().setUTCDate(new Date().getUTCDate() - 1),
+                ).setUTCHours(0, 0, 0, 0),
+              ),
+            },
+          },
+          label: "Start Date",
+          name: "dateStart",
+          type: "date",
+          required: true,
+        },
+        {
+          admin: {
+            date: {
+              pickerAppearance: "monthOnly",
+            },
+          },
+          label: "End Date",
+          name: "dateEnd",
+          type: "date",
+          required: true,
+          validate: (value, { siblingData }) => {
+            if (
+              !("dateStart" in siblingData) ||
+              !siblingData.dateStart ||
+              !(
+                siblingData.dateStart instanceof Date ||
+                typeof siblingData.dateStart === "string"
+              )
+            )
+              return messages.forms.required("start date");
+
+            const start = new Date(siblingData.dateStart);
+            const end = new Date();
+            end.setUTCDate(end.getUTCDate() - 1);
+
+            return validateDateInRange(
+              value,
+              start,
+              end,
+              messages.forms.required("end date"),
+              messages.forms.valid("end date"),
+              messages.forms.date(start.toLocaleDateString(), "yesterday"),
+            );
+          },
+        },
+        {
+          label: "Link (e.g. Course Website)",
+          name: "link",
+          type: "text",
+          required: false,
+        },
+        {
+          label: "Has Certificate",
+          name: "hasCertificate",
+          type: "checkbox",
+          defaultValue: false,
+        },
+        {
+          admin: {
+            condition: (_, siblingData) => siblingData.hasCertificate === true,
+          },
+          label: "Certificate",
+          name: "certificate",
+          type: "upload",
+          relationTo: "media",
+          hasMany: false,
           required: true,
         },
         {
