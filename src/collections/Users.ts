@@ -1,7 +1,6 @@
-// REVIEWED - 07
+// REVIEWED - 08
 import type { CollectionConfig } from "payload";
 
-import { isAdminOrSystemUserOrSelf } from "@/access/diary-entry";
 import { isAdmin, isAdminField } from "@/access/global";
 
 export const Users: CollectionConfig = {
@@ -9,10 +8,14 @@ export const Users: CollectionConfig = {
   access: {
     create: isAdmin,
     read: isAdmin,
-    update: isAdminOrSystemUserOrSelf,
+    update: isAdmin,
     delete: isAdmin,
   },
-  admin: { useAsTitle: "email" },
+  admin: {
+    group: "Database",
+    defaultColumns: ["id", "email", "firstName", "role", "createdAt"],
+    useAsTitle: "email",
+  },
   labels: { singular: "User", plural: "Users" },
   auth: {
     cookies: {

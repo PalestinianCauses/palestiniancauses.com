@@ -1,22 +1,23 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { revalidatePath } from "next/cache";
 import { CollectionConfig } from "payload";
 
-import { isAdminOrSystemUserOrSelf } from "@/access/diary-entry";
 import { isAdmin, isAdminOrSystemUserField } from "@/access/global";
-import { messages } from "@/lib/errors";
-import { validateDateInRange } from "@/lib/utils";
 
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
   access: {
     create: isAdmin,
-    read: isAdminOrSystemUserOrSelf,
-    update: isAdminOrSystemUserOrSelf,
-    delete: isAdminOrSystemUserOrSelf,
+    read: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
   },
-  admin: { useAsTitle: "title" },
+  admin: {
+    group: "Content",
+    defaultColumns: ["id", "title", "date", "status", "author", "createdAt"],
+    useAsTitle: "title",
+  },
   labels: { singular: "Diary Entry", plural: "Diary Entries" },
   fields: [
     {
@@ -29,24 +30,21 @@ export const DiaryEntries: CollectionConfig = {
       unique: true,
     },
     {
+      admin: {
+        date: {
+          pickerAppearance: "dayOnly",
+          minDate: new Date(2023, 9, 7, 0, 0, 0, 0),
+          maxDate: new Date(
+            new Date(
+              new Date().setUTCDate(new Date().getUTCDate() - 1),
+            ).setUTCHours(0, 0, 0, 0),
+          ),
+        },
+      },
       label: "Date",
       name: "date",
       type: "date",
       required: true,
-      validate: (value) => {
-        const start = new Date(2023, 9, 7);
-        const end = new Date();
-        end.setUTCDate(end.getUTCDate() - 1);
-
-        return validateDateInRange(
-          value,
-          start,
-          end,
-          messages.forms.required("diary date"),
-          messages.forms.valid("diary date"),
-          messages.forms.date(start.toLocaleDateString(), "yesterday"),
-        );
-      },
     },
     {
       label: "Content",

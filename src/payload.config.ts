@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -7,6 +7,7 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 
+import { Comments } from "@/collections/Comments";
 import { DiaryEntries } from "@/collections/DiaryEntries";
 import { Media } from "@/collections/Media";
 import { NotificationSubscriptions } from "@/collections/NotificationSubscriptions";
@@ -34,6 +35,7 @@ export default buildConfig({
     Orders,
     DiaryEntries,
     Rooms,
+    Comments,
   ],
   sharp,
   plugins: [],

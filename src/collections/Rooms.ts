@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { CollectionConfig } from "payload";
 import slugify from "slugify";
@@ -34,7 +34,8 @@ export const Rooms: CollectionConfig = {
     delete: isAdminOrSystemUser,
   },
   admin: {
-    group: "Website Content",
+    group: "Content",
+    defaultColumns: ["id", "name", "slug", "createdAt"],
     useAsTitle: "name",
   },
   fields: [
@@ -502,8 +503,8 @@ export const Rooms: CollectionConfig = {
         },
         {
           admin: { description: "List individual skills within this category" },
-          label: "skills",
-          name: "skills",
+          label: "Category Skills",
+          name: "skillsCategorized",
           type: "array",
           required: true,
           fields: [
