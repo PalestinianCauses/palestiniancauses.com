@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { User } from "@/payload-types";
 
@@ -10,6 +10,19 @@ export const createUser = async function createUser(
   userData: Omit<User, "id" | "createdAt" | "updatedAt" | "sizes">,
 ) {
   const user = await payload.create({ collection: "users", data: userData });
+
+  return user;
+};
+
+export const verifyUser = async function verifyUser({
+  email,
+}: {
+  email: string;
+}) {
+  const user = await payload.find({
+    collection: "users",
+    where: { email: { equals: email } },
+  });
 
   return user;
 };
