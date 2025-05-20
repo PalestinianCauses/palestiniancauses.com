@@ -1,4 +1,4 @@
-// REVIEWED - 16
+// REVIEWED - 17
 
 export const messages = {
   http: {
@@ -71,6 +71,13 @@ export const messages = {
         expired: "Your session has ended. Please sign in to continue.",
         serverError:
           "An error occurred while signing out. Please try again later.",
+      },
+      refreshToken: {
+        pending: "Refreshing your session...",
+        success: "Session refreshed successfully.",
+        notFound: "Could not find your session's token. Please sign in again.",
+        serverError:
+          "An error occurred while refreshing your session. Please sign in again.",
       },
     },
     product: {
