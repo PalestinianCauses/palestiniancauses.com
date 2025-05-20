@@ -1,22 +1,22 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-import { getUserCookies, signOut } from "@/actions/auth";
-import { queryClient } from "@/app/(app)/providers";
-import { messages } from "@/lib/errors";
+import { signOut } from "@/actions/auth";
+import { messages } from "@/lib/messages";
+import { getCookie } from "@/lib/network/cookies";
 
 import { useUser } from "./use-user";
 
 export const useAutoRedirectOnTokenExpire =
   function useAutoRedirectOnTokenExpire() {
     const router = useRouter();
-    const { data: user } = useUser();
+    const { data: user, refetch } = useUser();
 
     useEffect(() => {
       if (!user) return;
@@ -24,7 +24,7 @@ export const useAutoRedirectOnTokenExpire =
       let ignore = false;
 
       const cb = async function cb() {
-        const token = await getUserCookies("payload-token");
+        const token = await getCookie("payload-token");
 
         if (!token || !token.value) return;
 
@@ -40,7 +40,7 @@ export const useAutoRedirectOnTokenExpire =
           await signOut();
 
           toast.warning(messages.actions.auth.signOut.expired);
-          queryClient.setQueryData(["user"], null);
+          refetch();
           router.refresh();
 
           return;
@@ -63,7 +63,7 @@ export const useAutoRedirectOnTokenExpire =
             await signOut();
 
             toast.warning(messages.actions.auth.signOut.expired);
-            queryClient.setQueryData(["user"], null);
+            refetch();
             router.refresh();
           }, tokenExpirationTimeOut);
 
@@ -85,5 +85,5 @@ export const useAutoRedirectOnTokenExpire =
 
         if (timerCleanUp) clearTimeout(timerCleanUp);
       };
-    }, [user, router]);
+    }, [user, refetch, router]);
   };
