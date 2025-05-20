@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import {
   ErrorPayload,
@@ -51,3 +51,13 @@ export const isResponseErrorHasDataPlusErrors =
       )
     );
   };
+
+// Strings
+export const isString = function isString(value: unknown): value is string {
+  return typeof value === "string";
+};
+
+// Numbers
+export const isNumber = function isNumber(value: unknown): value is number {
+  return typeof value === "number";
+};
