@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { NextRequest, NextResponse } from "next/server";
 
@@ -28,7 +28,12 @@ export const middleware = async function middleware({
     PATHS_AUTHENTICATION.some((path) => pathname.startsWith(path)) &&
     isAuthenticated
   ) {
-    return NextResponse.redirect(new URL("/", RequestURL));
+    let redirectTo = new URL("/", RequestURL);
+    const redirect = NextURL.searchParams.get("redirect");
+
+    if (redirect) redirectTo = new URL(redirect, RequestURL);
+
+    return NextResponse.redirect(redirectTo);
   }
 
   return NextResponse.next();
