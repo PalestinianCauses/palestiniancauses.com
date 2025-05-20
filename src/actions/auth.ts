@@ -1,72 +1,31 @@
 "use server";
 
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { PaginatedDocs } from "payload";
 
-import { messages } from "@/lib/errors";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute, httpSafeExecute } from "@/lib/network";
+import { getCookie, setCookie } from "@/lib/network/cookies";
 import { payload } from "@/lib/payload";
+import { createUser, signInUser, verifyUser } from "@/lib/payload/users";
+import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
 import {
-  AuthenticationResponse,
-  AuthenticationResponseData,
   ErrorPayload,
   ErrorPlusDataPayload,
-} from "@/lib/payload/types";
-import { isError, isErrorHasDataPlusErrors } from "@/lib/payload/utils";
-import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
-import { actionSafeExecute, isResilientPassword } from "@/lib/utils";
+  ResponseDataAuthenticationRefreshedTokenPayload,
+  ResponseDataAuthenticationTokenPayload,
+  ResponseSafeExecute,
+} from "@/lib/types";
+import {
+  isResponseDataAuthenticationHasRefreshedToken,
+  isResponseError,
+  isResponseErrorHasDataPlusErrors,
+} from "@/lib/types/guards";
+import { isResilientPassword } from "@/lib/utils/passwords";
 import { User } from "@/payload-types";
-
-const verifyUserPayload = async function verifyUserPayload({
-  email,
-}: {
-  email: string;
-}) {
-  const user = await payload.find({
-    collection: "users",
-    where: { email: { equals: email } },
-  });
-
-  return user;
-};
-
-const createUserPayload = async function createUserPayload(
-  userData: Omit<User, "id" | "createdAt" | "updatedAt" | "sizes">,
-) {
-  const user = await payload.create({ collection: "users", data: userData });
-
-  return user;
-};
-
-const signInUserPayload = async function signInUserPayload(
-  signInData: SignInSchema,
-) {
-  const response = await payload.login({
-    collection: "users",
-    data: signInData,
-  });
-
-  return { token: response.token || null, user: response.user || null };
-};
-
-export const getUserCookies = async function getUserCookies(name: string) {
-  return (await cookies()).get(name);
-};
-
-const setUserCookies = async function setUserCookies(
-  name: string,
-  value: string,
-) {
-  (await cookies()).set({
-    name,
-    value,
-    secure: true,
-    httpOnly: true,
-    path: "/",
-  });
-};
 
 export const getAuth = async function getAuth() {
   const responseAuth = await actionSafeExecute(
@@ -81,9 +40,9 @@ export const getAuth = async function getAuth() {
 
 export const signIn = async function signIn(
   signInData: SignInSchema,
-): Promise<AuthenticationResponse> {
+): Promise<ResponseSafeExecute<ResponseDataAuthenticationTokenPayload>> {
   const responsePayload = await actionSafeExecute<PaginatedDocs<User>, string>(
-    verifyUserPayload({ email: signInData.email }),
+    verifyUser({ email: signInData.email }),
     messages.actions.auth.signIn.serverError,
   );
 
@@ -97,15 +56,15 @@ export const signIn = async function signIn(
     };
 
   const responseUserPayload = await actionSafeExecute<
-    AuthenticationResponseData,
+    ResponseDataAuthenticationTokenPayload,
     ErrorPayload
   >(
-    signInUserPayload({
+    signInUser({
       email: signInData.email,
       password: signInData.password,
     }),
     messages.actions.auth.signIn.serverError,
-    isError,
+    isResponseError,
   );
 
   if (!responseUserPayload.data || responseUserPayload.error) {
@@ -126,20 +85,20 @@ export const signIn = async function signIn(
   if (!responseUserPayload.data.user || !responseUserPayload.data.token)
     return { data: null, error: messages.actions.auth.signIn.serverError };
 
-  await setUserCookies("payload-token", responseUserPayload.data.token);
+  await setCookie("payload-token", responseUserPayload.data.token);
   return responseUserPayload;
 };
 
 export const signUp = async function signUp(
   signUpData: SignUpSchema,
-): Promise<AuthenticationResponse> {
+): Promise<ResponseSafeExecute<ResponseDataAuthenticationTokenPayload>> {
   if (!isResilientPassword(signUpData.password))
     return { data: null, error: messages.actions.auth.signUp.validation };
 
   const responsePayload = await actionSafeExecute<User, ErrorPlusDataPayload>(
-    createUserPayload({ ...signUpData, role: "website-user" }),
+    createUser({ ...signUpData, role: "website-user" }),
     messages.actions.auth.signUp.serverError,
-    isErrorHasDataPlusErrors,
+    isResponseErrorHasDataPlusErrors,
   );
 
   if (!responsePayload.data || responsePayload.error) {
@@ -161,7 +120,7 @@ export const signUp = async function signUp(
   }
 
   const responseUserPayload = await actionSafeExecute(
-    signInUserPayload({
+    signInUser({
       email: signUpData.email,
       password: signUpData.password,
     }),
@@ -176,11 +135,46 @@ export const signUp = async function signUp(
   )
     redirect("/signin");
 
-  await setUserCookies("payload-token", responseUserPayload.data.token);
+  await setCookie("payload-token", responseUserPayload.data.token);
 
   return responseUserPayload;
 };
 
 export const signOut = async function signOut() {
   (await cookies()).delete("payload-token");
+};
+
+export const refreshToken = async function refreshToken(): Promise<
+  ResponseSafeExecute<ResponseDataAuthenticationRefreshedTokenPayload>
+> {
+  const token = await getCookie("payload-token");
+
+  if (!token || !token.value) {
+    return {
+      data: null,
+      error: messages.actions.auth.refreshToken.notFound,
+    };
+  }
+
+  const response = await httpSafeExecute(
+    fetch("/api/users/refresh-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    }),
+    messages.actions.auth.refreshToken.serverError,
+    isResponseDataAuthenticationHasRefreshedToken,
+  );
+
+  if (!response.data || response.error)
+    return { data: null, error: response.error };
+
+  if (!response.data.user || !response.data.refreshedToken)
+    return {
+      data: null,
+      error: messages.actions.auth.refreshToken.serverError,
+    };
+
+  await setCookie("payload-token", response.data.refreshedToken);
+  return response;
 };
