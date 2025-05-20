@@ -1,8 +1,8 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { z } from "zod";
 
-import { messages } from "../errors";
+import { messages } from "../messages";
 
 export const signInSchema = z.object({
   email: z

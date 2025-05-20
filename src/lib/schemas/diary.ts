@@ -1,8 +1,8 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { z } from "zod";
 
-import { messages } from "../errors";
+import { messages } from "../messages";
 
 export const diaryEntrySchema = z.object({
   title: z
