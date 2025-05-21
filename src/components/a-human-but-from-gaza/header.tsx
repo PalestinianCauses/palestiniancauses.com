@@ -1,9 +1,9 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import Image from "next/image";
 
 import { motions } from "@/lib/motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/styles";
 
 import { Container } from "../globals/container";
 import { InfiniteMarquee, MarqueeItem } from "../globals/marquee";

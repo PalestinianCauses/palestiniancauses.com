@@ -1,13 +1,13 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 import { PropsWithChildren, useEffect, useState } from "react";
 
 import { motions } from "@/lib/motion";
-import { cn, toHEX } from "@/lib/utils";
+import { cn, toHEX } from "@/lib/utils/styles";
 
 import { Badge } from "../ui/badge";
 

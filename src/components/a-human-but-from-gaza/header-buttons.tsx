@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { ArrowRightIcon, DownloadIcon, HeartIcon } from "lucide-react";
 import Link from "next/link";
@@ -8,7 +8,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { getProductFreeLinksExternal } from "@/actions/product";
-import { messages } from "@/lib/errors";
+import { messages } from "@/lib/messages";
 import { motions } from "@/lib/motion";
 import { Product } from "@/payload-types";
 

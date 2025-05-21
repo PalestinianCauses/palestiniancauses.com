@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import {
   CalendarFoldIcon,
@@ -16,7 +16,7 @@ import {
 } from "react";
 
 import { motions } from "@/lib/motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/styles";
 import { User } from "@/payload-types";
 
 import { MotionDiv } from "../globals/motion";

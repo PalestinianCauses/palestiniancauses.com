@@ -1,10 +1,10 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import Link from "next/link";
 
 import { QueryProvider } from "@/app/(app)/providers";
 import { motions } from "@/lib/motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/styles";
 
 import { AuthButtons } from "../auth/buttons";
 import { NotificationButton } from "../notification/button";
@@ -31,9 +31,7 @@ export const Intro = function Intro() {
             <Link href="/">PalestinianCauses.</Link>
           </Label>
         </MotionDiv>
-        <QueryProvider>
-          <AuthButtons />
-        </QueryProvider>
+        <AuthButtons />
       </nav>
       <div className="flex flex-col items-start justify-center">
         <h1 className="flex w-full max-w-2xl flex-wrap gap-x-3 text-6xl leading-none tracking-tight sm:text-8xl lg:text-7xl xl:text-8xl [@media_(max-height:48rem)_and_(max-width:27rem)]:text-5xl [@media_(max-height:48rem)_and_(min-width:40rem)]:text-7xl">

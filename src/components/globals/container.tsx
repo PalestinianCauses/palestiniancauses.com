@@ -1,8 +1,8 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { forwardRef, HTMLAttributes } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/styles";
 
 export const Container = forwardRef<
   HTMLDivElement,

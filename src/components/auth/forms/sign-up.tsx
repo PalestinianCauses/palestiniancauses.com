@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -21,7 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/use-user";
-import { messages } from "@/lib/errors";
+import { messages } from "@/lib/messages";
 import { motions } from "@/lib/motion";
 import { signUpSchema, SignUpSchema } from "@/lib/schemas/auth";
 

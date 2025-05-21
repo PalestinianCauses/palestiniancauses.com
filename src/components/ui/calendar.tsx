@@ -7,7 +7,7 @@ import * as React from "react";
 import { DayPicker } from "react-day-picker";
 
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/styles";
 
 const IconLeft = function IconLeft({ ...props }) {
   return <ChevronLeft className="h-4 w-4" {...props} />;

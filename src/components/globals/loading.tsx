@@ -1,9 +1,9 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Loader2 } from "lucide-react";
 import { HTMLAttributes } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/styles";
 
 export const Loading = function Loading({
   className,
