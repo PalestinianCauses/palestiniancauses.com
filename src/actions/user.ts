@@ -1,10 +1,11 @@
 "server-only";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
-import { messages } from "@/lib/errors";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
-import { ActionSafeExecute, actionSafeExecute } from "@/lib/utils";
+import { ResponseSafeExecute } from "@/lib/types";
 
 const deleteUserPayload = async function deleteUserPayload(email: string) {
   const response = await payload.delete({
@@ -17,7 +18,7 @@ const deleteUserPayload = async function deleteUserPayload(email: string) {
 
 export const deleteUser = async function deleteUser(
   email: string,
-): Promise<ActionSafeExecute<string, string>> {
+): Promise<ResponseSafeExecute<string>> {
   const responsePayload = await actionSafeExecute(
     deleteUserPayload(email),
     messages.actions.user.delete.serverError,
