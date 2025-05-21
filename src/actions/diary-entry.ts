@@ -1,19 +1,19 @@
 "use server";
 
-// REVIEWED - 0٧
+// REVIEWED - 08
 
-import { httpStatusesMessages, messages } from "@/lib/errors";
+import { httpStatusesMessages, messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
-import { ErrorPayload } from "@/lib/payload/types";
-import { isError } from "@/lib/payload/utils";
-import { ActionSafeExecute, actionSafeExecute } from "@/lib/utils";
+import { ErrorPayload, ResponseSafeExecute } from "@/lib/types";
+import { isResponseError } from "@/lib/types/guards";
 import { DiaryEntry, User } from "@/payload-types";
 
 import { notifySubscribers } from "./notification-subscription";
 
 export const createDiaryEntry = async function createDiaryEntry(
   data: Omit<DiaryEntry, "id" | "status" | "createdAt" | "updatedAt">,
-): Promise<ActionSafeExecute<string, string>> {
+): Promise<ResponseSafeExecute<string>> {
   const author = typeof data.author === "object" ? data.author : null;
 
   if (!author) {
@@ -36,7 +36,7 @@ export const createDiaryEntry = async function createDiaryEntry(
       },
     }),
     messages.actions.diaryEntry.serverErrorShare,
-    isError,
+    isResponseError,
   );
 
   if (!responseDiaryEntry.data || responseDiaryEntry.error) {
@@ -76,7 +76,7 @@ export const createDiaryEntry = async function createDiaryEntry(
 
 export const getDiaryEntry = async function getDiaryEntry(
   id: number,
-): Promise<ActionSafeExecute<DiaryEntry, string>> {
+): Promise<ResponseSafeExecute<DiaryEntry>> {
   const response = await actionSafeExecute(
     payload.findByID({
       collection: "diary-entries",
@@ -91,7 +91,7 @@ export const getDiaryEntry = async function getDiaryEntry(
 
 export const getDiaryEntryAuthor = async function getDiaryEntryAuthor(
   id: number,
-): Promise<ActionSafeExecute<Partial<User>, string>> {
+): Promise<ResponseSafeExecute<Partial<User>>> {
   const response = await actionSafeExecute(
     payload.findByID({
       collection: "users",
