@@ -1,21 +1,17 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { getAuth, signIn, signOut, signUp } from "@/actions/auth";
+import { getAuth, refreshToken, signIn, signOut, signUp } from "@/actions/auth";
 import { messages } from "@/lib/messages";
 import { httpSafeExecute } from "@/lib/network";
 import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
 
 export const useUser = function useUser() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  let redirectParam = searchParams.get("redirect");
-
-  if (!redirectParam || !redirectParam.startsWith("/")) redirectParam = "/";
 
   const {
     isLoading: isPending,
@@ -45,7 +41,7 @@ export const useUser = function useUser() {
 
       toast.success(messages.actions.auth.signIn.success);
       refetch();
-      router.push(redirectParam);
+      router.refresh();
     },
   });
 
@@ -62,7 +58,7 @@ export const useUser = function useUser() {
 
       toast.success(messages.actions.auth.signUp.success);
       refetch();
-      router.push(redirectParam);
+      router.refresh();
     },
   });
 
@@ -99,6 +95,23 @@ export const useUser = function useUser() {
     },
   });
 
+  const refreshTokenMutation = useMutation({
+    mutationFn: async () => {
+      const response = await refreshToken();
+      return response;
+    },
+    onSuccess: (response) => {
+      if (!response.data || response.error) {
+        toast.error(response.error);
+        return;
+      }
+
+      toast.success(response.data);
+      refetch();
+      router.refresh();
+    },
+  });
+
   return {
     isPending,
     data,
@@ -106,5 +119,6 @@ export const useUser = function useUser() {
     signIn: signInMutation,
     signUp: signUpMutation,
     signOut: signOutMutation,
+    refreshToken: refreshTokenMutation,
   };
 };

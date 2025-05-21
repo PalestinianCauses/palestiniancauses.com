@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
@@ -8,8 +8,8 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 
 import { signOut } from "@/actions/auth";
+import { getCookie } from "@/actions/cookies";
 import { messages } from "@/lib/messages";
-import { getCookie } from "@/lib/network/cookies";
 
 import { useUser } from "./use-user";
 
@@ -38,10 +38,9 @@ export const useAutoRedirectOnTokenExpire =
           if (ignore) return;
 
           await signOut();
-
-          toast.warning(messages.actions.auth.signOut.expired);
           refetch();
           router.refresh();
+          toast.warning(messages.actions.auth.signOut.expired);
 
           return;
         }
@@ -61,10 +60,9 @@ export const useAutoRedirectOnTokenExpire =
 
           const timer = setTimeout(async () => {
             await signOut();
-
-            toast.warning(messages.actions.auth.signOut.expired);
             refetch();
             router.refresh();
+            toast.warning(messages.actions.auth.signOut.expired);
           }, tokenExpirationTimeOut);
 
           /* eslint-disable-next-line consistent-return */
