@@ -1,9 +1,9 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { expect, test } from "@playwright/test";
 
-import { messages } from "@/lib/errors";
-import { httpSafeExecute } from "@/lib/utils";
+import { messages } from "@/lib/messages";
+import { httpSafeExecute } from "@/lib/network";
 
 let userTestingEmail: string | null = null;
 let userTestingPassword: string | null = null;

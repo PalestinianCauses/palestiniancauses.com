@@ -1,8 +1,8 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { NextRequest, NextResponse } from "next/server";
 
-const PATHS_PROTECTED = ["/admin", "/humans-but-from-gaza"];
+const PATHS_PROTECTED = ["/admin", "/humans-but-from-gaza/share"];
 const PATHS_AUTHENTICATION = ["/signin", "/signup"];
 
 export const middleware = async function middleware({
