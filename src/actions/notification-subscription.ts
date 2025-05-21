@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { Where } from "payload";
 import {
@@ -8,9 +8,10 @@ import {
   sendNotification as notify,
 } from "web-push";
 
-import { messages } from "@/lib/errors";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
-import { ActionSafeExecute, actionSafeExecute } from "@/lib/utils";
+import { ResponseSafeExecute } from "@/lib/types";
 import { NotificationSubscription } from "@/payload-types";
 
 configVapid(
@@ -22,7 +23,7 @@ configVapid(
 export const getNotificationSubscription =
   async function getNotificationSubscription(
     subscription: Pick<NotificationSubscription, "endpoint">,
-  ): Promise<ActionSafeExecute<NotificationSubscription, string>> {
+  ): Promise<ResponseSafeExecute<NotificationSubscription>> {
     const response = await actionSafeExecute(
       payload.find({
         collection: "notification-subscriptions",
@@ -45,7 +46,7 @@ export const subscribeToNotifications = async function subscribeToNotifications(
     NotificationSubscription,
     "id" | "createdAt" | "updatedAt"
   >,
-): Promise<ActionSafeExecute<string, string>> {
+): Promise<ResponseSafeExecute<string>> {
   const subscriptionExisting = await actionSafeExecute(
     payload.find({
       collection: "notification-subscriptions",
@@ -82,7 +83,7 @@ export const subscribeToNotifications = async function subscribeToNotifications(
 export const unsubscribeFromNotifications =
   async function unsubscribeFromNotifications(
     subscription: Pick<NotificationSubscription, "endpoint">,
-  ): Promise<ActionSafeExecute<string, string>> {
+  ): Promise<ResponseSafeExecute<string>> {
     const response = await actionSafeExecute(
       payload.delete({
         collection: "notification-subscriptions",
