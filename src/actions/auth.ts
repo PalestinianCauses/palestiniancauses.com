@@ -1,21 +1,20 @@
 "use server";
 
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { PaginatedDocs } from "payload";
 
+import { getCookie, setCookie } from "@/actions/cookies";
 import { messages } from "@/lib/messages";
 import { actionSafeExecute, httpSafeExecute } from "@/lib/network";
-import { getCookie, setCookie } from "@/lib/network/cookies";
 import { payload } from "@/lib/payload";
 import { createUser, signInUser, verifyUser } from "@/lib/payload/users";
 import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
 import {
   ErrorPayload,
   ErrorPlusDataPayload,
-  ResponseDataAuthenticationRefreshedTokenPayload,
   ResponseDataAuthenticationTokenPayload,
   ResponseSafeExecute,
 } from "@/lib/types";
@@ -28,14 +27,14 @@ import { isResilientPassword } from "@/lib/utils/passwords";
 import { User } from "@/payload-types";
 
 export const getAuth = async function getAuth() {
-  const responseAuth = await actionSafeExecute(
+  const response = await actionSafeExecute(
     payload.auth({ headers: await headers() }),
     messages.actions.user.serverError,
   );
 
-  if (!responseAuth.data || responseAuth.error) return null;
+  if (!response.data || response.error) return null;
 
-  return responseAuth.data;
+  return response.data;
 };
 
 export const signIn = async function signIn(
@@ -145,7 +144,7 @@ export const signOut = async function signOut() {
 };
 
 export const refreshToken = async function refreshToken(): Promise<
-  ResponseSafeExecute<ResponseDataAuthenticationRefreshedTokenPayload>
+  ResponseSafeExecute<string>
 > {
   const token = await getCookie("payload-token");
 
@@ -176,5 +175,8 @@ export const refreshToken = async function refreshToken(): Promise<
     };
 
   await setCookie("payload-token", response.data.refreshedToken);
-  return response;
+  return {
+    data: messages.actions.auth.refreshToken.success,
+    error: null,
+  };
 };
