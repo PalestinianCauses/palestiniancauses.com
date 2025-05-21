@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -13,8 +13,8 @@ import {
 
 import { useDebounce } from "@/hooks/use-debounce";
 import { motions } from "@/lib/motion";
-import { selectOptionsDefaults } from "@/lib/payload";
 import { SelectOptions } from "@/lib/types";
+import { selectOptionsDefaults } from "@/lib/utils/filters";
 
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";

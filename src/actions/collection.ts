@@ -1,13 +1,14 @@
 "use server";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { GeneratedTypes, PaginatedDocs, Where } from "payload";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
-import { payload, selectOptionsDefaults } from "@/lib/payload";
+import { payload } from "@/lib/payload";
 import { CollectionTypes, SelectOptions } from "@/lib/types";
+import { selectOptionsDefaults } from "@/lib/utils/filters";
 
 type CollectionOptions<TSlug extends CollectionTypes> = {
   collection: TSlug;
