@@ -1,6 +1,5 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
-import { revalidatePath } from "next/cache";
 import { CollectionConfig } from "payload";
 
 import { isAdmin, isAdminOrSystemUserField } from "@/access/global";
@@ -105,12 +104,6 @@ export const DiaryEntries: CollectionConfig = {
           document.status = "approved";
 
         return document;
-      },
-    ],
-    afterChange: [
-      async () => {
-        revalidatePath("/humans-but-from-gaza");
-        console.log("Route Revalidated.");
       },
     ],
   },

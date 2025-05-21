@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 import type { CollectionConfig } from "payload";
 
 import { isAdmin, isAdminField } from "@/access/global";
@@ -18,6 +18,7 @@ export const Users: CollectionConfig = {
   },
   labels: { singular: "User", plural: "Users" },
   auth: {
+    tokenExpiration: 60,
     cookies: {
       sameSite: "Strict",
       domain: "palestiniancauses.com",

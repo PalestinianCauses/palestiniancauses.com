@@ -1,11 +1,11 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { CollectionConfig } from "payload";
 import slugify from "slugify";
 
 import { isAdminOrSelf, isAdminOrSystemUser } from "@/access/global";
-import { messages } from "@/lib/errors";
-import { validateDateInRange } from "@/lib/utils";
+import { messages } from "@/lib/messages";
+import { validateDateInRange } from "@/lib/utils/dates";
 
 export const Rooms: CollectionConfig = {
   slug: "rooms",
