@@ -1,4 +1,4 @@
-// REVIEWED - 21
+// REVIEWED - 22
 import type { Metadata, Viewport } from "next";
 import { PropsWithChildren } from "react";
 import colors from "tailwindcss/colors";
@@ -7,6 +7,7 @@ import { BackButton } from "@/components/globals/back-button";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
+import { QueryProvider, TokenProvider } from "./providers";
 
 export const metadata: Metadata = {
   applicationName: "PalestinianCauses",
@@ -126,6 +127,9 @@ const RootLayout = async function RootLayout({ children }: PropsWithChildren) {
       </head>
       <body>
         <BackButton />
+        <QueryProvider>
+          <TokenProvider />
+        </QueryProvider>
         {children}
         <Toaster richColors />
       </body>

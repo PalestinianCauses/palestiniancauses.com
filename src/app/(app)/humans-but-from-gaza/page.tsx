@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { Metadata } from "next";
 import Link from "next/link";
@@ -15,7 +15,7 @@ import { Paragraph, SectionHeading } from "@/components/globals/typography";
 import { VideoOutroScene } from "@/components/globals/video-outro-scene";
 import { Button } from "@/components/ui/button";
 import { motions } from "@/lib/motion";
-import { SelectOptions } from "@/lib/payload/types";
+import { SelectOptions } from "@/lib/types";
 
 import { QueryProvider } from "../providers";
 

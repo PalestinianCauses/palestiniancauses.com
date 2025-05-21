@@ -1,7 +1,7 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { deleteUser } from "@/actions/user";
-import { messages } from "@/lib/errors";
+import { messages } from "@/lib/messages";
 
 export const DELETE = async function DELETE(request: Request) {
   const { headers, json } = request;

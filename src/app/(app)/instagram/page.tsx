@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 08
+// REVIEWED - 09
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -20,7 +20,7 @@ import {
 } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/use-user";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/styles";
 
 type Properties = "bg" | "text" | "fill" | "stroke";
 type ThemeStyles = "fill" | "stroke";
