@@ -1,4 +1,5 @@
-// REVIEWED - 22
+// REVIEWED - 23
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { Metadata, Viewport } from "next";
 import { PropsWithChildren } from "react";
 import colors from "tailwindcss/colors";
@@ -7,7 +8,7 @@ import { BackButton } from "@/components/globals/back-button";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
-import { QueryProvider, TokenProvider } from "./providers";
+import { ActivityProvider, QueryProvider } from "./providers";
 
 export const metadata: Metadata = {
   applicationName: "PalestinianCauses",
@@ -128,10 +129,11 @@ const RootLayout = async function RootLayout({ children }: PropsWithChildren) {
       <body>
         <BackButton />
         <QueryProvider>
-          <TokenProvider />
+          <ReactQueryDevtools />
+          <ActivityProvider />
         </QueryProvider>
         {children}
-        <Toaster richColors />
+        <Toaster theme="dark" richColors />
       </body>
     </html>
   );
