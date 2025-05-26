@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -54,7 +54,10 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm({
   });
 
   const handleSubmit = function handleSubmit(data: DiaryEntrySchema) {
-    toast.info(messages.actions.diaryEntry.pending);
+    toast.loading(messages.actions.diaryEntry.pending, {
+      id: "create-diary-entry",
+    });
+
     createDiaryEntry.mutate({
       ...data,
       date: [

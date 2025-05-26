@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -40,7 +40,10 @@ export const SignInForm = function SignInForm() {
   });
 
   const handleSubmit = function handleSubmit(data: SignInSchema) {
-    toast.info(messages.actions.auth.signIn.pending);
+    toast.loading(messages.actions.auth.signIn.pending, {
+      id: "sign-in",
+    });
+
     signIn.mutate({
       email: data.email.trim().toLowerCase(),
       password: data.password,
