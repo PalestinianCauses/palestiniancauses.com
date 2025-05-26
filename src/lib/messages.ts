@@ -1,7 +1,8 @@
-// REVIEWED - 17
+// REVIEWED - 18
 
 export const messages = {
   http: {
+    skip: "Requested request was skipped.",
     unAuthorized: "Could not authorize request.",
     unAuthenticated: "Could not authenticate request. Please sign in first.",
     notFound:
@@ -57,7 +58,8 @@ export const messages = {
         success: "Signed up successfully.",
         duplication: (email: string) =>
           `User with ${email}, email is already a family member. May be sign in instead?`,
-        validation: "Password entered is not as resilient as Gaza's people.",
+        validation: "Fields entered are not valid.",
+        password: "Password entered is not as resilient as Gaza's people.",
         signIn:
           "Signed up successfully, but could not sign you in automatically. Please try signing in.",
         serverError:
@@ -66,18 +68,20 @@ export const messages = {
       signOut: {
         pending: "Signing out...",
         success: "Signed out successfully.",
-        timer: (time: string) =>
-          `Your session will expire at ${time}. Make the most of your time!`,
-        expired: "Your session has ended. Please sign in to continue.",
         serverError:
           "An error occurred while signing out. Please try again later.",
       },
-      refreshToken: {
+      tokenRefresh: {
         pending: "Refreshing your session...",
         success: "Session refreshed successfully.",
+        expired: "Your session has ended. Please sign in to continue.",
         notFound: "Could not find your session's token. Please sign in again.",
         serverError:
           "An error occurred while refreshing your session. Please sign in again.",
+        decodeError:
+          "An error occurred while decoding your session's token. Please sign in again.",
+        expirationTypeError:
+          "An error occurred while checking your session's expiration time. Please sign in again.",
       },
     },
     product: {
@@ -148,32 +152,32 @@ export const messages = {
 };
 
 export const httpStatusesMessages = {
-  401: {
-    http: messages.http.unAuthorized,
-    signIn: (email: string) =>
-      messages.actions.auth.signIn.unAuthenticated(email),
-    diaryEntry: messages.actions.diaryEntry.unAuthorized,
+  http: {
+    401: messages.http.unAuthorized,
+    403: messages.http.unAuthenticated,
+    404: messages.http.notFound,
+    500: messages.http.serverError,
   },
-  403: {
-    http: messages.http.unAuthenticated,
-    user: messages.actions.user.unAuthenticated,
-    diaryEntry: messages.actions.diaryEntry.unAuthenticated,
+  signIn: {
+    401: (email: string) => messages.actions.auth.signIn.unAuthenticated(email),
+    404: (email: string) => messages.actions.auth.signIn.notFound(email),
+    500: messages.actions.auth.signIn.serverError,
   },
-  404: {
-    http: messages.http.notFound,
-    signIn: (email: string) => messages.actions.auth.signIn.notFound(email),
+  signUp: {
+    409: (email: string) => messages.actions.auth.signUp.duplication(email),
+    417: messages.actions.auth.signUp.validation,
+    500: messages.actions.auth.signUp.serverError,
   },
-  409: {
-    signUp: (email: string) => messages.actions.auth.signUp.duplication(email),
+  signOut: {
+    500: messages.actions.auth.signOut.serverError,
   },
-  417: {
-    signUp: messages.actions.auth.signUp.validation,
+  user: {
+    403: messages.actions.user.unAuthenticated,
   },
-  500: {
-    http: messages.http.serverError,
-    signIn: messages.actions.auth.signIn.serverError,
-    signUp: messages.actions.auth.signUp.serverError,
-    signOut: messages.actions.auth.signOut.serverError,
-    diaryEntry: messages.actions.diaryEntry.serverErrorShare,
+  diaryEntry: {
+    401: messages.actions.diaryEntry.unAuthorized,
+    403: messages.actions.diaryEntry.unAuthenticated,
+    404: messages.actions.diaryEntry.notFound,
+    500: messages.actions.diaryEntry.serverErrorShare,
   },
 };

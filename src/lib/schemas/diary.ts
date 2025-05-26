@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { z } from "zod";
 
@@ -42,7 +42,7 @@ export const diaryEntrySchema = z.object({
         ),
       },
     ),
-  content: z.string().min(2500, messages.forms.diaryEntry.content),
+  content: z.string().min(1500, messages.forms.diaryEntry.content),
   isAuthentic: z.boolean(),
   isAnonymous: z.boolean(),
 });

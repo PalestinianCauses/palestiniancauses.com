@@ -1,12 +1,27 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import {
   ErrorPayload,
   ErrorPlusDataPayload,
   ResponseDataAuthenticationRefreshedTokenPayload,
+  ResponseDataAuthenticationTokenPayload,
 } from ".";
 
 // PayLoad CMS
+export const isResponseDataAuthentication =
+  function isResponseDataAuthentication(
+    response: unknown,
+  ): response is ResponseDataAuthenticationTokenPayload {
+    return (
+      typeof response === "object" &&
+      response !== null &&
+      "user" in response &&
+      typeof response.user === "object" &&
+      response.user !== null &&
+      "token" in response
+    );
+  };
+
 export const isResponseDataAuthenticationHasRefreshedToken =
   function isResponseDataAuthenticationHasRefreshedToken(
     response: unknown,
@@ -51,6 +66,16 @@ export const isResponseErrorHasDataPlusErrors =
       )
     );
   };
+
+// Actions/HTTPs
+export class SafeExecuteError extends Error {
+  name: string;
+
+  constructor(message: string) {
+    super(message);
+    this.name = "SafeExecuteError";
+  }
+}
 
 // Strings
 export const isString = function isString(value: unknown): value is string {

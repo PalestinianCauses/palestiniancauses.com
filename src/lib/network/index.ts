@@ -1,6 +1,8 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { httpStatusesMessages, messages } from "../messages";
+import { ResponseSafeExecute, SafeExecuteConfig } from "../types";
+import { SafeExecuteError } from "../types/guards";
 
 // Actions
 export const actionSafeExecute = async function actionSafeExecute<
@@ -10,7 +12,7 @@ export const actionSafeExecute = async function actionSafeExecute<
   action: Promise<D>,
   errorDefault: string,
   isErrorFromTypeE?: (error: unknown) => error is E,
-) {
+): Promise<ResponseSafeExecute<D, E | string>> {
   try {
     const data = await action;
     return { data, error: null };
@@ -18,43 +20,72 @@ export const actionSafeExecute = async function actionSafeExecute<
     if (isErrorFromTypeE && isErrorFromTypeE(error))
       return { data: null, error };
 
+    if (error instanceof SafeExecuteError)
+      return { data: null, error: error.message };
+
     // Add Sentry Log Here
     return { data: null, error: errorDefault };
   }
 };
 
+type HTTPSafeExecute<D, E> = {
+  http: Promise<Response>;
+  errorDefault: string;
+  isData?: (data: unknown) => data is D;
+  isError?: (error: unknown) => error is E;
+  config?: SafeExecuteConfig;
+};
+
 // HTTPs
-export const httpSafeExecute = async function httpSafeExecute<D, E = string>(
-  http: Promise<Response>,
-  errorDefault: string,
-  isDataFromTypeD?: (data: unknown) => data is D,
-  isErrorFromTypeE?: (error: unknown) => error is E,
-) {
+export const httpSafeExecute = async function httpSafeExecute<D, E = string>({
+  http,
+  errorDefault,
+  isData,
+  isError,
+  config,
+}: HTTPSafeExecute<D, E>): Promise<
+  ResponseSafeExecute<D, E | string | number>
+> {
   try {
-    const response = await http;
+    let response: Response | null = null;
+
+    response = await http;
 
     if (!response.ok) {
-      const result = { data: null, error: errorDefault };
+      const result: ResponseSafeExecute<D, E | string | number> = {
+        data: null,
+        error: errorDefault,
+      };
+
+      // Skip HTTP response error and return it as a status code number to use it some where else
+      if (
+        config &&
+        config.skip &&
+        config.skip.errors &&
+        config.skip.errors.includes(response.status)
+      ) {
+        result.error = response.status;
+        return result;
+      }
 
       if (
         response.status === 401 ||
         response.status === 403 ||
         response.status === 404
       )
-        result.error = httpStatusesMessages[response.status].http;
+        result.error = httpStatusesMessages.http[response.status];
 
       return result;
     }
 
     const data = await response.json();
 
-    if (!isDataFromTypeD || !isDataFromTypeD(data))
+    if (!isData || !isData(data))
       return { data: null, error: messages.http.typeError };
 
     return { data, error: null };
   } catch (error) {
-    if (isErrorFromTypeE && isErrorFromTypeE(error))
-      return { data: null, error };
+    if (isError && isError(error)) return { data: null, error };
     return { data: null, error: errorDefault };
   }
 };

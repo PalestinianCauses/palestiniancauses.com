@@ -1,7 +1,8 @@
-// REVIEWED
+// REVIEWED - 01
+
+import { GeneratedTypes } from "payload";
 
 import { User } from "@/payload-types";
-import { GeneratedTypes } from "payload";
 
 // PayLoad CMS
 export type CollectionTypes = keyof GeneratedTypes["collections"];
@@ -45,3 +46,10 @@ export type ResponseSafeExecuteError<E = string> = { data: null; error: E };
 export type ResponseSafeExecute<D, E = string> =
   | { data: D; error: null }
   | ResponseSafeExecuteError<E>;
+
+export type SafeExecuteConfig = {
+  skip?: {
+    http?: boolean;
+    errors?: number[];
+  };
+};
