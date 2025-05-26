@@ -1,12 +1,13 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 import Link from "next/link";
 
+import { getAuthentication } from "@/actions/auth";
 import { QueryProvider } from "@/app/(app)/providers";
 import { motions } from "@/lib/motion";
 import { cn } from "@/lib/utils/styles";
 
-import { AuthButtons } from "../auth/buttons";
+import { AuthenticationButtons } from "../auth/buttons";
 import { NotificationButton } from "../notification/button";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
@@ -18,7 +19,9 @@ const navigation = [
   { label: "Terms of Service", href: "/terms-of-service" },
 ];
 
-export const Intro = function Intro() {
+export const Intro = async function Intro() {
+  const authentication = await getAuthentication();
+
   return (
     <section className="grid snap-start grid-rows-[max-content_1fr_max-content] gap-5 p-5 xl:gap-10 xl:p-10">
       <nav className="flex flex-wrap items-center justify-between gap-5">
@@ -31,7 +34,11 @@ export const Intro = function Intro() {
             <Link href="/">PalestinianCauses.</Link>
           </Label>
         </MotionDiv>
-        <AuthButtons />
+        <QueryProvider>
+          <AuthenticationButtons
+            serverState={Boolean(authentication && authentication.user)}
+          />
+        </QueryProvider>
       </nav>
       <div className="flex flex-col items-start justify-center">
         <h1 className="flex w-full max-w-2xl flex-wrap gap-x-3 text-6xl leading-none tracking-tight sm:text-8xl lg:text-7xl xl:text-8xl [@media_(max-height:48rem)_and_(max-width:27rem)]:text-5xl [@media_(max-height:48rem)_and_(min-width:40rem)]:text-7xl">

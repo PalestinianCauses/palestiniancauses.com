@@ -1,20 +1,31 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
-import Link from "next/link";
+"use client";
 
-import { getAuth } from "@/actions/auth";
-import { QueryProvider } from "@/app/(app)/providers";
+import { useEffect, useState } from "react";
+
+import { useUser } from "@/hooks/use-user";
 import { motions } from "@/lib/motion";
 
 import { MotionDiv } from "../globals/motion";
-import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 
-import { SignOutButton } from "./forms/sign-out-button";
+import { AuthenticatedButtons } from "./authenticated-buttons";
+import { UnAuthenticatedButtons } from "./un-authenticated-buttons";
 
-export const AuthButtons = async function AuthButtons() {
-  const auth = await getAuth();
+export const AuthenticationButtons = function AuthenticationButtons({
+  serverState,
+}: {
+  serverState: boolean;
+}) {
+  const { isPending, data: user, signOut } = useUser();
+  const [isAuthenticated, setIsAuthenticated] = useState(serverState);
 
-  if (!auth || !auth.user)
+  useEffect(() => {
+    if (!isPending) setIsAuthenticated(Boolean(user));
+  }, [isPending, user]);
+
+  if (isPending && isAuthenticated !== Boolean(user))
     return (
       <MotionDiv
         viewport={{ once: true }}
@@ -22,27 +33,14 @@ export const AuthButtons = async function AuthButtons() {
         whileInView={motions.fadeIn.whileInView}
         transition={motions.transition({ delay: 0.1 })}>
         <ul className="flex flex-row items-center justify-center gap-2.5">
-          <Button variant="outline" asChild>
-            <Link href="/signup">Sign up</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/signin">Sign in</Link>
-          </Button>
+          <Skeleton className="h-10 w-24" />
+          <Skeleton className="h-10 w-24" />
         </ul>
       </MotionDiv>
     );
 
-  return (
-    <MotionDiv
-      viewport={{ once: true }}
-      initial={motions.fadeIn.initial}
-      whileInView={motions.fadeIn.whileInView}
-      transition={motions.transition({ delay: 0.1 })}>
-      <ul className="flex flex-row items-center justify-center gap-2.5">
-        <QueryProvider>
-          <SignOutButton />
-        </QueryProvider>
-      </ul>
-    </MotionDiv>
-  );
+  if (isAuthenticated && user)
+    return <AuthenticatedButtons user={user} signOut={signOut} />;
+
+  return <UnAuthenticatedButtons />;
 };

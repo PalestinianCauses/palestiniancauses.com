@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,7 @@ import {
   ErrorPayload,
   ResponseDataAuthenticationTokenPayload,
   ResponseSafeExecute,
+  SafeExecuteConfig,
 } from "@/lib/types";
 import {
   isResponseDataAuthentication,
@@ -177,11 +178,9 @@ export const useUser = function useUser() {
   });
 
   const signOut = useMutation({
-    mutationFn: async (config?: {
-      skip?: { http?: boolean; errors?: number[] };
-    }) => {
+    mutationFn: async (config?: SafeExecuteConfig) => {
       const response =
-        config && config.skip && !config.skip.http
+        !config || !config.skip || !config.skip.http
           ? await httpSafeExecute<{ message: string }>({
               http: fetch("/api/users/logout", {
                 method: "POST",
