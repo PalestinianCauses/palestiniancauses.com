@@ -1,29 +1,38 @@
-// REVIEWED - 09
+// REVIEWED - 10
 import type { CollectionConfig } from "payload";
 
-import { isAdmin, isAdminField } from "@/access/global";
+import { isAdmin, isAdminField, isAdminOrSelf } from "@/access/global";
 
 export const Users: CollectionConfig = {
   slug: "users",
   access: {
-    create: isAdmin,
-    read: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    create: ({ req }) => {
+      if (!req.user) return true;
+      return isAdmin({ req });
+    },
+    read: ({ req }) => {
+      if (
+        !req.user &&
+        req.query.email &&
+        typeof req.query.email === "object" &&
+        "equals" in req.query.email &&
+        typeof req.query.email.equals === "string"
+      )
+        return true;
+      return isAdminOrSelf({ req });
+    },
+    update: isAdminOrSelf,
+    delete: isAdminOrSelf,
   },
   admin: {
     group: "Database",
     defaultColumns: ["id", "email", "firstName", "role", "createdAt"],
     useAsTitle: "email",
+    hidden: ({ user }) => user.role !== "admin",
   },
   labels: { singular: "User", plural: "Users" },
   auth: {
-    tokenExpiration: 60,
-    cookies: {
-      sameSite: "Strict",
-      domain: "palestiniancauses.com",
-      secure: true,
-    },
+    tokenExpiration: 24 * 60 * 60,
   },
   fields: [
     {
