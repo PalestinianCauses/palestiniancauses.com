@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { redirect } from "next/navigation";
 
@@ -10,14 +10,14 @@ import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
 import { Product } from "@/payload-types";
 
-import { getAuth } from "./auth";
+import { getAuthentication } from "./auth";
 
 export const getProductFreeLinksExternal =
   async function getProductFreeLinksExternal(
     productSlug: string,
     redirectTo: string,
   ): Promise<ResponseSafeExecute<Pick<Product, "links">>> {
-    const auth = await getAuth();
+    const auth = await getAuthentication();
 
     if (!auth || !auth.user)
       redirect(["/signin", "?", "redirect", "=", redirectTo].join(""));

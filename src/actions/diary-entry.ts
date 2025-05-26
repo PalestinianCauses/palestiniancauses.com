@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { httpStatusesMessages, messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -53,7 +53,7 @@ export const createDiaryEntry = async function createDiaryEntry(
         responseDiaryEntry.error.status === 403
       )
         response.error =
-          httpStatusesMessages[responseDiaryEntry.error.status].diaryEntry;
+          httpStatusesMessages.diaryEntry[responseDiaryEntry.error.status];
 
     return response;
   }
