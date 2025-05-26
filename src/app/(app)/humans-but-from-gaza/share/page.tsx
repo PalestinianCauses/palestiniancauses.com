@@ -1,9 +1,9 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { getAuth } from "@/actions/auth";
+import { getAuthentication } from "@/actions/auth";
 import { CreateDiaryEntryForm } from "@/components/diary-entry/forms/create-diary-entry";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function SharePage() {
-  const auth = await getAuth();
+  const auth = await getAuthentication();
 
   if (!auth || !auth.user)
     redirect(

@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 import { CollectionConfig } from "payload";
 
 import { isAdminOrSelf, isAdminOrSystemUser } from "@/access/global";
@@ -17,7 +17,7 @@ export const Blog: CollectionConfig = {
     useAsTitle: "title",
     preview: (doc) => {
       if (doc.slug)
-        return [process.env.NEXT_PUBLIC_SITE_URL! + doc.slug].join("/blogs/");
+        return [process.env.NEXT_PUBLIC_URL! + doc.slug].join("/blogs/");
       return null;
     },
   },
