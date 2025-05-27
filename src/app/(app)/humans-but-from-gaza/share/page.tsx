@@ -1,9 +1,8 @@
-// REVIEWED - 05
+// REVIEWED - 07
 
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
 
-import { getAuth } from "@/actions/auth";
+import { getAuthentication } from "@/actions/auth";
 import { CreateDiaryEntryForm } from "@/components/diary-entry/forms/create-diary-entry";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
@@ -18,12 +17,9 @@ export const metadata: Metadata = {
 };
 
 export default async function SharePage() {
-  const auth = await getAuth();
+  const auth = await getAuthentication();
 
-  if (!auth || !auth.user)
-    redirect(
-      ["/signin", "?", "redirect", "=", "/humans-but-from-gaza"].join(""),
-    );
+  if (!auth || !auth.user) return null;
 
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">

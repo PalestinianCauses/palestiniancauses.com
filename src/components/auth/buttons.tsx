@@ -1,98 +1,51 @@
+// REVIEWED - 07
+
 "use client";
 
-// REVIEWED - 03
+import { useEffect, useState } from "react";
 
-import Link from "next/link";
-import { Fragment, startTransition } from "react";
-
-import { useAutoRedirectOnTokenExpire } from "@/hooks/use-auto-redirect-on-token-expire";
 import { useUser } from "@/hooks/use-user";
-import { messages } from "@/lib/errors";
 import { motions } from "@/lib/motion";
 
 import { MotionDiv } from "../globals/motion";
-import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 
-export const AuthButtons = function AuthButtons() {
-  const { isPending, data: user, signOut } = useUser();
-  useAutoRedirectOnTokenExpire();
+import { AuthenticatedButtons } from "./authenticated-buttons";
+import { UnAuthenticatedButtons } from "./un-authenticated-buttons";
 
-  if (isPending)
+export const AuthenticationButtons = function AuthenticationButtons({
+  serverState,
+}: {
+  serverState: boolean;
+}) {
+  const { isPending, data: user, signOut } = useUser();
+  const [isAuthenticated, setIsAuthenticated] = useState(serverState);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    if (!isPending) setIsAuthenticated(Boolean(user));
+    setIsMounted(true);
+  }, [isPending, user]);
+
+  if (!isMounted || isPending || isAuthenticated !== Boolean(user))
     return (
-      <div className="flex flex-row items-center justify-center gap-2.5">
-        <MotionDiv
-          viewport={{ once: true }}
-          initial={motions.fadeIn.initial}
-          whileInView={motions.fadeIn.whileInView}
-          transition={motions.transition({ delay: 0.1 })}>
-          <Skeleton className="h-10 w-24" />
-        </MotionDiv>
-        <MotionDiv
-          viewport={{ once: true }}
-          initial={motions.fadeIn.initial}
-          whileInView={motions.fadeIn.whileInView}
-          transition={motions.transition({ delay: 0.2 })}>
-          <Skeleton className="h-10 w-24" />
-        </MotionDiv>
-      </div>
+      <MotionDiv
+        viewport={{ once: true }}
+        initial={motions.fadeIn.initial}
+        whileInView={motions.fadeIn.whileInView}
+        transition={motions.transition({ delay: 0.1 })}>
+        <ul className="flex flex-row items-center justify-center gap-2.5">
+          <li>
+            <Skeleton className="h-10 w-24" />
+          </li>
+          <li>
+            <Skeleton className="h-10 w-24" />
+          </li>
+        </ul>
+      </MotionDiv>
     );
 
-  return (
-    <ul className="flex flex-row items-center justify-center gap-2.5">
-      {user && (user.role === "admin" || user.role === "system-user") ? (
-        <MotionDiv
-          viewport={{ once: true }}
-          initial={motions.fadeIn.initial}
-          whileInView={motions.fadeIn.whileInView}
-          transition={motions.transition({ delay: 0.1 })}>
-          <Button variant="link" asChild>
-            <Link href="/admin">Dashboard</Link>
-          </Button>
-        </MotionDiv>
-      ) : null}
-      {user ? (
-        <MotionDiv
-          viewport={{ once: true }}
-          initial={motions.fadeIn.initial}
-          whileInView={motions.fadeIn.whileInView}
-          transition={motions.transition({ delay: 0.2 })}>
-          <Button
-            variant="outline"
-            disabled={signOut.isPending}
-            onClick={() => {
-              startTransition(() => {
-                signOut.mutate();
-              });
-            }}>
-            {signOut.isPending
-              ? messages.actions.auth.signOut.pending
-              : "Sign out"}
-          </Button>
-        </MotionDiv>
-      ) : null}
-      {!user ? (
-        <Fragment>
-          <MotionDiv
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({ delay: 0.1 })}>
-            <Button variant="outline" asChild>
-              <Link href="/signup">Sign up</Link>
-            </Button>
-          </MotionDiv>
-          <MotionDiv
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({ delay: 0.2 })}>
-            <Button asChild>
-              <Link href="/signin">Sign in</Link>
-            </Button>
-          </MotionDiv>
-        </Fragment>
-      ) : null}
-    </ul>
-  );
+  if (user) return <AuthenticatedButtons user={user} signOut={signOut} />;
+
+  return <UnAuthenticatedButtons />;
 };

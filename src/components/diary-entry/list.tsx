@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 04
 
 import { useQuery } from "@tanstack/react-query";
 import { FileDiffIcon } from "lucide-react";
@@ -10,8 +10,9 @@ import { GeneratedTypes } from "payload";
 import { getCollection } from "@/actions/collection";
 import { getDiaryEntryAuthor } from "@/actions/diary-entry";
 import { motions } from "@/lib/motion";
-import { SelectOptions } from "@/lib/payload/types";
-import { cn, splitByFlexibleNewLines } from "@/lib/utils";
+import { SelectOptions } from "@/lib/types";
+import { splitByFlexibleNewLines } from "@/lib/utils/strings";
+import { cn } from "@/lib/utils/styles";
 import { DiaryEntry } from "@/payload-types";
 
 import { Container } from "../globals/container";
@@ -49,7 +50,7 @@ export const DiaryEntryListItem = function DiaryEntryListItem({
       transition={motions.transition({})}
       className="relative border-l border-input pl-5 ring-0">
       {isLoading ? (
-        <div className={cn("flex items-center gap-2.5 md:gap-5")}>
+        <div className={cn("mb-4 flex items-center gap-2.5 md:gap-5")}>
           <Skeleton className="h-5 w-full max-w-24 md:max-w-32 xl:max-w-40" />
           <Skeleton className="h-5 w-full max-w-24 md:max-w-32 xl:max-w-40" />
         </div>

@@ -1,9 +1,9 @@
-// REVIEWED - 02
+// REVIEWED - 04
 
 import { expect, test } from "@playwright/test";
 
-import { messages } from "@/lib/errors";
-import { httpSafeExecute } from "@/lib/utils";
+import { messages } from "@/lib/messages";
+import { httpSafeExecute } from "@/lib/network";
 
 let userTestingEmail: string | null = null;
 let userTestingPassword: string | null = null;
@@ -20,13 +20,14 @@ test.describe("Authentication: Sign Up Flows", () => {
     await page.getByTestId("password-input").fill(userTestingPassword);
     await page.getByTestId("signup-button").click();
 
-    await expect(page).toHaveURL("/");
     await expect(
-      page.getByText(messages.actions.auth.signUp.success),
+      page.getByText(messages.actions.auth.signIn.success),
     ).toBeVisible();
 
-    const response = await httpSafeExecute<string, string>(
-      fetch("http://localhost:3000/api/user", {
+    await expect(page).toHaveURL("/");
+
+    const response = await httpSafeExecute<string, string>({
+      http: fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`, {
         method: "DELETE",
 
         headers: {
@@ -36,9 +37,9 @@ test.describe("Authentication: Sign Up Flows", () => {
 
         body: JSON.stringify({ email: userTestingEmail }),
       }),
-      messages.http.serverError,
-      (data) => typeof data === "string",
-    );
+      errorDefault: messages.http.serverError,
+      isData: (data) => typeof data === "string",
+    });
 
     if (response.error) console.log(response.error);
     if (response.data) console.log(response.data);
@@ -61,8 +62,10 @@ test.describe("Authentication: Sign Up Flows", () => {
     await page.getByTestId("signup-button").click();
 
     await expect(
-      page.getByText(messages.actions.auth.signUp.validation),
+      page.getByText(messages.actions.auth.signUp.password),
     ).toBeVisible();
+
+    await expect(page).toHaveURL("/signup");
 
     userTestingEmail = null;
     userTestingPassword = null;
@@ -93,6 +96,8 @@ test.describe("Authentication: Sign Up Flows", () => {
         ),
       ),
     ).toBeVisible();
+
+    await expect(page).toHaveURL("/signup");
   });
 });
 
@@ -106,10 +111,11 @@ test.describe("Authentication: Sign In Flows", () => {
     await page.getByTestId("password-input").fill(userTestingPassword);
     await page.getByTestId("signin-button").click();
 
-    await expect(page).toHaveURL("/");
     await expect(
       page.getByText(messages.actions.auth.signIn.success),
     ).toBeVisible();
+
+    await expect(page).toHaveURL("/");
   });
 
   test("should show error when user is not yet a family member", async ({
@@ -123,10 +129,11 @@ test.describe("Authentication: Sign In Flows", () => {
     await page.getByTestId("password-input").fill(userTestingPassword);
     await page.getByTestId("signin-button").click();
 
-    await expect(page).toHaveURL("/signin");
     await expect(
       page.getByText(messages.actions.auth.signIn.notFound(userTestingEmail)),
     ).toBeVisible();
+
+    await expect(page).toHaveURL("/signin");
   });
 
   test("should show error when user's password entered is not correct", async ({
@@ -140,11 +147,12 @@ test.describe("Authentication: Sign In Flows", () => {
     await page.getByTestId("password-input").fill(userTestingPassword);
     await page.getByTestId("signin-button").click();
 
-    await expect(page).toHaveURL("/signin");
     await expect(
       page.getByText(
         messages.actions.auth.signIn.unAuthenticated(userTestingEmail),
       ),
     ).toBeVisible();
+
+    await expect(page).toHaveURL("/signin");
   });
 });

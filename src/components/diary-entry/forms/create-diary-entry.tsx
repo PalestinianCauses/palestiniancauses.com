@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 06
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -28,10 +28,10 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { useDiaryEntry } from "@/hooks/use-diary-entry";
-import { messages } from "@/lib/errors";
+import { messages } from "@/lib/messages";
 import { motions } from "@/lib/motion";
 import { diaryEntrySchema, DiaryEntrySchema } from "@/lib/schemas/diary";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/styles";
 import { User } from "@/payload-types";
 
 export const CreateDiaryEntryForm = function CreateDiaryEntryForm({
@@ -54,7 +54,10 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm({
   });
 
   const handleSubmit = function handleSubmit(data: DiaryEntrySchema) {
-    toast.info(messages.actions.diaryEntry.pending);
+    toast.loading(messages.actions.diaryEntry.pending, {
+      id: "create-diary-entry",
+    });
+
     createDiaryEntry.mutate({
       ...data,
       date: [

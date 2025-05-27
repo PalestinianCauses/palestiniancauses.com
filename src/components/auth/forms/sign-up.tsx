@@ -1,10 +1,9 @@
 "use client";
 
-// REVIEWED - 07
+// REVIEWED - 10
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -21,16 +20,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/use-user";
-import { messages } from "@/lib/errors";
+import { messages } from "@/lib/messages";
 import { motions } from "@/lib/motion";
 import { signUpSchema, SignUpSchema } from "@/lib/schemas/auth";
 
 export const SignUpForm = function SignUpForm() {
-  const searchParams = useSearchParams();
-  let redirectParam = searchParams.get("redirect");
-
-  if (!redirectParam || !redirectParam.startsWith("/")) redirectParam = "/";
-
   const { signUp } = useUser();
 
   const form = useForm<SignUpSchema>({
@@ -40,7 +34,10 @@ export const SignUpForm = function SignUpForm() {
   });
 
   const handleSubmit = async function handleSubmit(data: SignUpSchema) {
-    toast.info(messages.actions.auth.signUp.pending);
+    toast.loading(messages.actions.auth.signUp.pending, {
+      id: "sign-up",
+    });
+
     signUp.mutate({
       ...data,
       email: data.email.trim().toLowerCase(),
@@ -165,16 +162,7 @@ export const SignUpForm = function SignUpForm() {
             A family member already?{" "}
             <Button variant="link" className="h-auto p-0" asChild>
               <Label>
-                <Link
-                  href={
-                    redirectParam !== "/"
-                      ? ["/signin", "?", "redirect", "=", redirectParam].join(
-                          "",
-                        )
-                      : "/signin"
-                  }>
-                  Sign in
-                </Link>
+                <Link href="/sign-in">Sign in</Link>
               </Label>
             </Button>
             .

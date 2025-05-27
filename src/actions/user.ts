@@ -1,34 +1,68 @@
-"server-only";
+"use server";
 
-// REVIEWED - 03
+// REVIEWED - 07
 
-import { messages } from "@/lib/errors";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
-import { ActionSafeExecute, actionSafeExecute } from "@/lib/utils";
+import { SignUpSchema } from "@/lib/schemas/auth";
+import { ResponseSafeExecute } from "@/lib/types";
+import { isResponseErrorHasDataPlusErrors } from "@/lib/types/guards";
+import { isResilientPassword } from "@/lib/utils/passwords";
+import { User } from "@/payload-types";
 
-const deleteUserPayload = async function deleteUserPayload(email: string) {
-  const response = await payload.delete({
+export const getUserByEmail = async function getUserByEmail(email: string) {
+  const query = { email: { equals: email } };
+  const response = await payload.find({
     collection: "users",
-    where: { email: { equals: email } },
+    where: query,
+    overrideAccess: false,
+    req: { query },
   });
 
   return response;
 };
 
-export const deleteUser = async function deleteUser(
-  email: string,
-): Promise<ActionSafeExecute<string, string>> {
-  const responsePayload = await actionSafeExecute(
-    deleteUserPayload(email),
-    messages.actions.user.delete.serverError,
+export const createUser = async function createUser(
+  data: SignUpSchema,
+): Promise<ResponseSafeExecute<User, string>> {
+  if (
+    !isResilientPassword(data.password, 8) ||
+    !data.firstName ||
+    !data.lastName
+  )
+    return {
+      data: null,
+      error: messages.actions.auth.signUp.validation,
+    };
+
+  const response = await actionSafeExecute(
+    payload.create({
+      collection: "users",
+      data: { ...data, role: "website-user" },
+    }),
+    messages.actions.auth.signUp.serverError,
+    isResponseErrorHasDataPlusErrors,
   );
 
-  if (
-    !responsePayload.data ||
-    responsePayload.data.errors.length > 0 ||
-    responsePayload.error
-  )
-    return { data: null, error: messages.actions.user.delete.serverError };
+  if (!response.data || response.error) {
+    if (typeof response.error === "string")
+      return { data: null, error: response.error };
 
-  return { data: messages.actions.user.delete.success, error: null };
+    if (
+      response.error.status === 400 &&
+      response.error.data.errors[0].path === "email"
+    )
+      return {
+        data: null,
+        error: messages.actions.auth.signUp.duplication(data.email),
+      };
+
+    return {
+      data: null,
+      error: messages.actions.auth.signUp.serverError,
+    };
+  }
+
+  return response;
 };

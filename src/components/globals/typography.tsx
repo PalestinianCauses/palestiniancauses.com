@@ -1,9 +1,8 @@
-// REVIEWED - 03
-
+// REVIEWED - 04
 import { HTMLAttributes } from "react";
 
 import { motions } from "@/lib/motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/styles";
 
 import { Badge } from "../ui/badge";
 

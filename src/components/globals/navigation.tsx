@@ -1,8 +1,8 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { motions } from "@/lib/motion";
 
-import { MotionDiv } from "./motion";
+import { MotionSpan } from "./motion";
 import { NavigationLink } from "./navigation-link";
 
 export const navigation = [
@@ -51,7 +51,7 @@ export const Navigation = function Navigation() {
         <li
           key={href}
           className="flex w-full snap-start items-center justify-start overflow-hidden">
-          <MotionDiv
+          <MotionSpan
             viewport={{ once: true }}
             initial={motions.fadeIn.initial}
             whileInView={motions.fadeIn.whileInView}
@@ -61,7 +61,7 @@ export const Navigation = function Navigation() {
             <NavigationLink href={href} recent={recent} coming={coming}>
               {label}
             </NavigationLink>
-          </MotionDiv>
+          </MotionSpan>
         </li>
       ))}
     </ul>

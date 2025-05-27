@@ -1,22 +1,23 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 03
 
 import { redirect } from "next/navigation";
 
-import { messages } from "@/lib/errors";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
-import { ActionSafeExecute, actionSafeExecute } from "@/lib/utils";
+import { ResponseSafeExecute } from "@/lib/types";
 import { Product } from "@/payload-types";
 
-import { getAuth } from "./auth";
+import { getAuthentication } from "./auth";
 
 export const getProductFreeLinksExternal =
   async function getProductFreeLinksExternal(
     productSlug: string,
     redirectTo: string,
-  ): Promise<ActionSafeExecute<Pick<Product, "links">, string>> {
-    const auth = await getAuth();
+  ): Promise<ResponseSafeExecute<Pick<Product, "links">>> {
+    const auth = await getAuthentication();
 
     if (!auth || !auth.user)
       redirect(["/signin", "?", "redirect", "=", redirectTo].join(""));
@@ -69,7 +70,6 @@ export const getProductFreeLinksExternal =
                 price: 0,
               },
             ],
-            orderedAt: new Date(Date.now()).toLocaleString(),
           },
         }),
         messages.actions.order.serverError,

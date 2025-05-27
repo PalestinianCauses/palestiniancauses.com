@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CollectionConfig } from "payload";
 
@@ -12,7 +12,11 @@ export const NotificationSubscriptions: CollectionConfig = {
     update: isAdmin,
     delete: isAdmin,
   },
-  admin: { useAsTitle: "endpoint" },
+  admin: {
+    group: "Database",
+    defaultColumns: ["id", "userAgent", "createdAt"],
+    useAsTitle: "id",
+  },
   fields: [
     {
       label: "Endpoint",

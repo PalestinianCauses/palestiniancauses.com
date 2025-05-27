@@ -1,12 +1,13 @@
-// REVIEWED - 07
+// REVIEWED - 09
 
 import Link from "next/link";
 
+import { getAuthentication } from "@/actions/auth";
 import { QueryProvider } from "@/app/(app)/providers";
 import { motions } from "@/lib/motion";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/styles";
 
-import { AuthButtons } from "../auth/buttons";
+import { AuthenticationButtons } from "../auth/buttons";
 import { NotificationButton } from "../notification/button";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
@@ -18,7 +19,9 @@ const navigation = [
   { label: "Terms of Service", href: "/terms-of-service" },
 ];
 
-export const Intro = function Intro() {
+export const Intro = async function Intro() {
+  const authentication = await getAuthentication();
+
   return (
     <section className="grid snap-start grid-rows-[max-content_1fr_max-content] gap-5 p-5 xl:gap-10 xl:p-10">
       <nav className="flex flex-wrap items-center justify-between gap-5">
@@ -32,7 +35,9 @@ export const Intro = function Intro() {
           </Label>
         </MotionDiv>
         <QueryProvider>
-          <AuthButtons />
+          <AuthenticationButtons
+            serverState={Boolean(authentication && authentication.user)}
+          />
         </QueryProvider>
       </nav>
       <div className="flex flex-col items-start justify-center">

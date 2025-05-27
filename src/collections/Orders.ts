@@ -1,20 +1,21 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CollectionConfig } from "payload";
 
-import { isAdmin, isAdminOrSystemUserOrSelf } from "@/access/global";
+import { isAdmin } from "@/access/global";
 
 export const Orders: CollectionConfig = {
   slug: "orders",
   access: {
     create: isAdmin,
-    read: isAdminOrSystemUserOrSelf,
+    read: isAdmin,
     update: isAdmin,
     delete: isAdmin,
   },
   admin: {
+    group: "Database",
+    defaultColumns: ["id", "user", "type", "total", "status", "createdAt"],
     useAsTitle: "id",
-    defaultColumns: ["id", "user", "type", "status", "total"],
   },
   labels: { singular: "Order", plural: "Orders" },
   fields: [
@@ -98,14 +99,6 @@ export const Orders: CollectionConfig = {
           required: true,
         },
       ],
-    },
-    {
-      admin: { readOnly: true },
-      name: "orderedAt",
-      label: "Ordered At",
-      type: "date",
-      defaultValue: new Date(Date.now()).toLocaleString(),
-      required: true,
     },
   ],
 };

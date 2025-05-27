@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { CollectionConfig } from "payload";
 
@@ -12,7 +12,11 @@ export const Products: CollectionConfig = {
     update: isAdmin,
     delete: isAdmin,
   },
-  admin: { useAsTitle: "title", defaultColumns: ["title", "price", "type"] },
+  admin: {
+    group: "Database",
+    defaultColumns: ["id", "title", "price", "type", "createdAt"],
+    useAsTitle: "title",
+  },
   labels: { singular: "Product", plural: "Products" },
   fields: [
     {

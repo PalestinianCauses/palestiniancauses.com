@@ -1,15 +1,20 @@
-// REVIEWED - 02
+// REVIEWED - 03
 import type { CollectionConfig } from "payload";
 
-import { isAdmin, isAdminOrSystemUser } from "@/access/global";
+import { isAdmin } from "@/access/global";
 
 export const Media: CollectionConfig = {
   slug: "media",
   access: {
-    read: isAdminOrSystemUser,
+    read: isAdmin,
     create: isAdmin,
     update: isAdmin,
     delete: isAdmin,
+  },
+  admin: {
+    group: "Database",
+    defaultColumns: ["id", "alt", "createdAt"],
+    useAsTitle: "id",
   },
   upload: { staticDir: "./media" },
   fields: [

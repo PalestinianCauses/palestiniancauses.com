@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 10
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -7,11 +7,14 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 
+import { Blog } from "@/collections/Blog";
+import { Comments } from "@/collections/Comments";
 import { DiaryEntries } from "@/collections/DiaryEntries";
 import { Media } from "@/collections/Media";
 import { NotificationSubscriptions } from "@/collections/NotificationSubscriptions";
 import { Orders } from "@/collections/Orders";
 import { Products } from "@/collections/Products";
+import { Rooms } from "@/collections/Rooms";
 import { Users } from "@/collections/Users";
 
 const filename = fileURLToPath(import.meta.url);
@@ -32,6 +35,9 @@ export default buildConfig({
     Products,
     Orders,
     DiaryEntries,
+    Rooms,
+    Blog,
+    Comments,
   ],
   sharp,
   plugins: [],

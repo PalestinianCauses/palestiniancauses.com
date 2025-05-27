@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 06
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -13,8 +13,8 @@ import {
 
 import { useDebounce } from "@/hooks/use-debounce";
 import { motions } from "@/lib/motion";
-import { SelectOptions } from "@/lib/payload/types";
-import { selectDefaults } from "@/lib/payload/utils";
+import { SelectOptions } from "@/lib/types";
+import { selectOptionsDefaults } from "@/lib/utils/filters";
 
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -40,9 +40,9 @@ export type FilterConfig =
 
 export const FilterControls = function FilterControls({
   filterConfigs,
-  pageDefault = selectDefaults.page,
-  limitDefault = selectDefaults.limit,
-  sortDefault = selectDefaults.sort,
+  pageDefault = selectOptionsDefaults.page,
+  limitDefault = selectOptionsDefaults.limit,
+  sortDefault = selectOptionsDefaults.sort,
   debounceTime = 400,
 }: {
   filterConfigs: FilterConfig[];

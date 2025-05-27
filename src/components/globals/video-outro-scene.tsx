@@ -1,11 +1,11 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { AnimatePresence } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 
-import { cn, toHEX } from "@/lib/utils";
+import { cn, toHEX } from "@/lib/utils/styles";
 
 import { MotionDiv } from "./motion";
 

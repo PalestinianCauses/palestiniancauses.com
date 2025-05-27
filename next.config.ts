@@ -1,10 +1,18 @@
-// REVIEWED - 11
+// REVIEWED - 14
 import { withPayload } from "@payloadcms/next/withPayload";
 import withSerwistInit from "@serwist/next";
 import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // server
+  experimental: {
+    serverActions: {
+      allowedOrigins: [process.env.NEXT_PUBLIC_DOMAIN!],
+    },
+  },
+
   eslint: { ignoreDuringBuilds: true },
+
   images: {
     remotePatterns: [
       {
@@ -14,8 +22,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (config) => {
-    config.externals.push("cloudflare:sockets");
+
+  webpack: (config, { webpack }) => {
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^pg-native$|^cloudflare:sockets$/,
+      }),
+    );
+
     return config;
   },
 };

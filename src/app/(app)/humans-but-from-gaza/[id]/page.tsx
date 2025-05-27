@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { notFound } from "next/navigation";
 
@@ -7,7 +7,7 @@ import { DiaryEntryBadges } from "@/components/diary-entry/diary-entry-badges";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
 import { Paragraph, SectionHeading } from "@/components/globals/typography";
-import { splitByFlexibleNewLines } from "@/lib/utils";
+import { splitByFlexibleNewLines } from "@/lib/utils/strings";
 
 /* eslint-disable-next-line func-style  */
 export async function generateMetadata({

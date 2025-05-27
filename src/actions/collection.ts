@@ -1,14 +1,14 @@
 "use server";
 
-// REVIEWED - 04
+// REVIEWED - 06
 
 import { GeneratedTypes, PaginatedDocs, Where } from "payload";
 
-import { messages } from "@/lib/errors";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
-import { CollectionTypes, SelectOptions } from "@/lib/payload/types";
-import { selectDefaults } from "@/lib/payload/utils";
-import { actionSafeExecute } from "@/lib/utils";
+import { CollectionTypes, SelectOptions } from "@/lib/types";
+import { selectOptionsDefaults } from "@/lib/utils/filters";
 
 type CollectionOptions<TSlug extends CollectionTypes> = {
   collection: TSlug;
@@ -30,10 +30,10 @@ export const getCollection = async function getCollection<
 >({
   collection,
   selects: {
-    page = selectDefaults.page,
-    limit = selectDefaults.limit,
-    sort = selectDefaults.sort,
-    search = selectDefaults.search,
+    page = selectOptionsDefaults.page,
+    limit = selectOptionsDefaults.limit,
+    sort = selectOptionsDefaults.sort,
+    search = selectOptionsDefaults.search,
     ...otherSelects
   },
   fields,

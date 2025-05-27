@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -13,8 +13,8 @@ import {
   unsubscribeFromNotifications,
 } from "@/actions/notification-subscription";
 import { queryClient } from "@/app/(app)/providers";
-import { messages } from "@/lib/errors";
-import { base64ToUint8Array } from "@/lib/utils";
+import { messages } from "@/lib/messages";
+import { base64ToUint8Array } from "@/lib/utils/pwa";
 import { NotificationSubscription } from "@/payload-types";
 
 export const useNotificationSubscription =

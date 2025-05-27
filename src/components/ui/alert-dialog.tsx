@@ -1,12 +1,12 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 import * as React from "react";
 
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/styles";
 
 const AlertDialog = AlertDialogPrimitive.Root;
 
@@ -39,7 +39,7 @@ const AlertDialogContent = React.forwardRef<
     <AlertDialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state_=_open]:animate-in data-[state_=_closed]:animate-out data-[state_=_closed]:fade-out-0 data-[state_=_open]:fade-in-0 data-[state_=_closed]:zoom-out-95 data-[state_=_open]:zoom-in-95 data-[state_=_closed]:slide-out-to-left-1/2 data-[state_=_closed]:slide-out-to-top-[48%] data-[state_=_open]:slide-in-from-left-1/2 data-[state_=_open]:slide-in-from-top-[48%] sm:rounded-lg",
+        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 transition duration-300 ease-in-out data-[state_=_open]:animate-in data-[state_=_closed]:animate-out data-[state_=_closed]:fade-out-0 data-[state_=_open]:fade-in-0 data-[state_=_closed]:zoom-out-95 data-[state_=_open]:zoom-in-95 data-[state_=_closed]:slide-out-to-left-1/2 data-[state_=_closed]:slide-out-to-top-[48%] data-[state_=_open]:slide-in-from-left-1/2 data-[state_=_open]:slide-in-from-top-[48%]",
         className,
       )}
       {...props}

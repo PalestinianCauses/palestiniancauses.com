@@ -1,7 +1,8 @@
-// REVIEWED - 02
+// REVIEWED - 05
 
-import { deleteUser } from "@/actions/user";
-import { messages } from "@/lib/errors";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
 
 export const DELETE = async function DELETE(request: Request) {
   const { headers, json } = request;
@@ -16,15 +17,21 @@ export const DELETE = async function DELETE(request: Request) {
   }
 
   const body = (await json()) as { email: string };
-  const deleteResponse = await deleteUser(body.email);
+  const response = await actionSafeExecute(
+    payload.delete({
+      collection: "users",
+      where: { email: { equals: body.email } },
+    }),
+    messages.actions.user.delete.serverError,
+  );
 
-  if (!deleteResponse.data || deleteResponse.error) {
-    return new Response(JSON.stringify(deleteResponse.error), {
+  if (!response.data || response.data.errors.length > 0 || response.error) {
+    return new Response(JSON.stringify(response.error), {
       status: 400,
     });
   }
 
-  return new Response(JSON.stringify(deleteResponse.data), {
+  return new Response(JSON.stringify(messages.actions.user.delete.success), {
     status: 200,
   });
 };
