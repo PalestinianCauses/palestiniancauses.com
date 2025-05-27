@@ -1,5 +1,9 @@
-import * as migration_20250401_231101_02_04_2025 from "./20250401_231101_02_04_2025";
-import * as migration_20250420_225253_remove_frappe_columns_and_update_status_enum from "./20250420_225253_remove_frappe_columns_and_update_status_enum";
+// REVIEWED
+
+/* eslint-disable camelcase */
+
+import * as migration_20250401_231101 from "./20250401_231101";
+import * as migration_20250420_225253 from "./20250420_225253";
 import * as migration_20250427_213203 from "./20250427_213203";
 import * as migration_20250429_025646 from "./20250429_025646";
 import * as migration_20250429_123448 from "./20250429_123448";
@@ -8,14 +12,14 @@ import * as migration_20250527_013127 from "./20250527_013127";
 
 export const migrations = [
   {
-    up: migration_20250401_231101_02_04_2025.up,
-    down: migration_20250401_231101_02_04_2025.down,
-    name: "20250401_231101_02_04_2025",
+    up: migration_20250401_231101.up,
+    down: migration_20250401_231101.down,
+    name: "20250401_231101",
   },
   {
-    up: migration_20250420_225253_remove_frappe_columns_and_update_status_enum.up,
-    down: migration_20250420_225253_remove_frappe_columns_and_update_status_enum.down,
-    name: "20250420_225253_remove_frappe_columns_and_update_status_enum",
+    up: migration_20250420_225253.up,
+    down: migration_20250420_225253.down,
+    name: "20250420_225253",
   },
   {
     up: migration_20250427_213203.up,
