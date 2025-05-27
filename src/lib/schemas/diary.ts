@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { z } from "zod";
 
@@ -24,12 +24,14 @@ export const diaryEntrySchema = z.object({
     )
     .refine(
       (date) => {
-        const end = new Date();
-        end.setUTCDate(end.getUTCDate() - 1);
-        end.setUTCHours(0, 0, 0, 0);
+        date.setUTCHours(0, 0, 0, 0);
 
         const start = new Date(2023, 9, 7);
         start.setUTCHours(0, 0, 0, 0);
+
+        const end = new Date();
+        end.setUTCDate(end.getUTCDate() - 1);
+        end.setUTCHours(0, 0, 0, 0);
 
         return (
           date.getTime() > start.getTime() && date.getTime() <= end.getTime()
