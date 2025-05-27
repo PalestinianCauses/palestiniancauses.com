@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { httpStatusesMessages, messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -34,6 +34,8 @@ export const createDiaryEntry = async function createDiaryEntry(
             : "pending",
         author,
       },
+      req: { user: { collection: "users", ...author } },
+      overrideAccess: false,
     }),
     messages.actions.diaryEntry.serverErrorShare,
     isResponseError,
@@ -62,7 +64,9 @@ export const createDiaryEntry = async function createDiaryEntry(
     await notifySubscribers({
       title: data.title,
       body: "A new diary entry has been published.",
-      data: { url: `/humans-but-from-gaza/${responseDiaryEntry.data.id}` },
+      data: {
+        url: `${process.env.NEXT_PUBLIC_URL}/humans-but-from-gaza/${responseDiaryEntry.data.id}`,
+      },
     });
 
   return {

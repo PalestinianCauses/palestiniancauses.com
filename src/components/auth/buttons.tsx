@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 "use client";
 
@@ -33,8 +33,12 @@ export const AuthenticationButtons = function AuthenticationButtons({
         whileInView={motions.fadeIn.whileInView}
         transition={motions.transition({ delay: 0.1 })}>
         <ul className="flex flex-row items-center justify-center gap-2.5">
-          <Skeleton className="h-10 w-24" />
-          <Skeleton className="h-10 w-24" />
+          <li>
+            <Skeleton className="h-10 w-24" />
+          </li>
+          <li>
+            <Skeleton className="h-10 w-24" />
+          </li>
         </ul>
       </MotionDiv>
     );

@@ -1,16 +1,20 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { CollectionConfig } from "payload";
 
-import { isAdmin, isAdminOrSystemUserField } from "@/access/global";
+import {
+  isAdminOrSystemUserOrSelf,
+  isAdminOrSystemUserOrSelfOrPublished,
+} from "@/access/diary-entry";
+import { isAdminOrSystemUserField, isAuthenticated } from "@/access/global";
 
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
   access: {
-    create: isAdmin,
-    read: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    create: isAuthenticated,
+    read: isAdminOrSystemUserOrSelfOrPublished,
+    update: isAdminOrSystemUserOrSelf,
+    delete: isAdminOrSystemUserOrSelf,
   },
   admin: {
     group: "Content",

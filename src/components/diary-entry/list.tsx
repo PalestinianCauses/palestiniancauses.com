@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { useQuery } from "@tanstack/react-query";
 import { FileDiffIcon } from "lucide-react";
@@ -50,7 +50,7 @@ export const DiaryEntryListItem = function DiaryEntryListItem({
       transition={motions.transition({})}
       className="relative border-l border-input pl-5 ring-0">
       {isLoading ? (
-        <div className={cn("flex items-center gap-2.5 md:gap-5")}>
+        <div className={cn("mb-4 flex items-center gap-2.5 md:gap-5")}>
           <Skeleton className="h-5 w-full max-w-24 md:max-w-32 xl:max-w-40" />
           <Skeleton className="h-5 w-full max-w-24 md:max-w-32 xl:max-w-40" />
         </div>
