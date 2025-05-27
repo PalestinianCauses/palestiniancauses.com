@@ -1,10 +1,12 @@
-// REVIEWED
+// REVIEWED - 01
 
 "use client";
 
 import { UseMutationResult } from "@tanstack/react-query";
 import Link from "next/link";
+import { toast } from "sonner";
 
+import { messages } from "@/lib/messages";
 import { motions } from "@/lib/motion";
 import { SafeExecuteConfig } from "@/lib/types";
 import { User } from "@/payload-types";
@@ -51,7 +53,13 @@ export const AuthenticatedButtons = function AuthenticatedButtons({
           <Button
             variant="outline"
             disabled={signOut.isPending}
-            onClick={() => signOut.mutate({})}>
+            onClick={() => {
+              toast.loading(messages.actions.auth.signOut.pending, {
+                id: "sign-out",
+              });
+
+              signOut.mutate({});
+            }}>
             Sign out
           </Button>
         </li>

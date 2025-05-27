@@ -1,4 +1,4 @@
-// REVIEWED - 13
+// REVIEWED - 14
 import { withPayload } from "@payloadcms/next/withPayload";
 import withSerwistInit from "@serwist/next";
 import { NextConfig } from "next";
@@ -21,6 +21,16 @@ const nextConfig: NextConfig = {
         pathname: "/f/**",
       },
     ],
+  },
+
+  webpack: (config, { webpack }) => {
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^pg-native$|^cloudflare:sockets$/,
+      }),
+    );
+
+    return config;
   },
 };
 

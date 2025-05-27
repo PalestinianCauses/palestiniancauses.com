@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 "use client";
 
@@ -20,12 +20,14 @@ export const AuthenticationButtons = function AuthenticationButtons({
 }) {
   const { isPending, data: user, signOut } = useUser();
   const [isAuthenticated, setIsAuthenticated] = useState(serverState);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     if (!isPending) setIsAuthenticated(Boolean(user));
+    setIsMounted(true);
   }, [isPending, user]);
 
-  if (isPending && isAuthenticated !== Boolean(user))
+  if (!isMounted || isPending || isAuthenticated !== Boolean(user))
     return (
       <MotionDiv
         viewport={{ once: true }}
@@ -43,8 +45,7 @@ export const AuthenticationButtons = function AuthenticationButtons({
       </MotionDiv>
     );
 
-  if (isAuthenticated && user)
-    return <AuthenticatedButtons user={user} signOut={signOut} />;
+  if (user) return <AuthenticatedButtons user={user} signOut={signOut} />;
 
   return <UnAuthenticatedButtons />;
 };

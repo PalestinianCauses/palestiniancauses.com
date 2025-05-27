@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -31,7 +31,7 @@ export const DELETE = async function DELETE(request: Request) {
     });
   }
 
-  return new Response(JSON.stringify(response.data), {
+  return new Response(JSON.stringify(messages.actions.user.delete.success), {
     status: 200,
   });
 };

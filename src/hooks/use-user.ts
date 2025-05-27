@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 12
+// REVIEWED - 13
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -24,7 +24,6 @@ import {
   isResponseDataAuthentication,
   isResponseDataAuthenticationHasRefreshedToken,
   isResponseError,
-  isResponseErrorHasDataPlusErrors,
 } from "@/lib/types/guards";
 import { User } from "@/payload-types";
 
@@ -131,30 +130,10 @@ export const useUser = function useUser() {
     mutationFn: async (
       signUpData: SignUpSchema,
     ): Promise<ResponseSafeExecute<{ email: string; password: string }>> => {
-      const response = await actionSafeExecute(
-        createUser(signUpData),
-        messages.actions.auth.signUp.serverError,
-        isResponseErrorHasDataPlusErrors,
-      );
+      const response = await createUser(signUpData);
 
-      if (!response.data || response.error) {
-        if (typeof response.error === "string")
-          return { data: null, error: response.error };
-
-        if (
-          response.error.status === 400 &&
-          response.error.data.errors[0].path === "email"
-        )
-          return {
-            data: null,
-            error: messages.actions.auth.signUp.duplication(signUpData.email),
-          };
-
-        return {
-          data: null,
-          error: messages.actions.auth.signUp.serverError,
-        };
-      }
+      if (!response.data || response.error)
+        return { data: null, error: response.error };
 
       return {
         data: { email: signUpData.email, password: signUpData.password },
