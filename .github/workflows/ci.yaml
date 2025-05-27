@@ -35,6 +35,8 @@ jobs:
           NODE_ENV: production
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          NEXT_PUBLIC_DOMAIN: ${{ secrets.NEXT_PUBLIC_DOMAIN }}
+          NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
           UPLOADTHING_DOMAIN: ${{ secrets.UPLOADTHING_DOMAIN }}
 
       - name: Run PlayWright Tests
