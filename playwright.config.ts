@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { defineConfig, devices } from "@playwright/test";
 import "dotenv/config";
@@ -12,7 +12,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
-  use: { baseURL: "http://localhost:3000", trace: "on-first-retry" },
+  use: { baseURL: process.env.NEXT_PUBLIC_URL, trace: "on-first-retry" },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
     command: "npm run start",

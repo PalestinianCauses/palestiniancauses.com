@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 /* eslint-disable no-undef */
 /* eslint-disable no-underscore-dangle */
@@ -15,11 +15,13 @@ declare global {
 declare const self: ServiceWorkerGlobalScope;
 
 const serwist = new Serwist({
+  precacheEntries: self.__SW_MANIFEST,
+  precacheOptions: { cleanupOutdatedCaches: true, concurrency: 10 },
+  skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
-  skipWaiting: true,
-  precacheEntries: self.__SW_MANIFEST,
   runtimeCaching: defaultCache,
+  disableDevLogs: true,
 });
 
 self.addEventListener("push", (event) => {
