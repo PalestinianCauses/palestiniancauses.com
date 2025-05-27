@@ -38,6 +38,8 @@ jobs:
           NEXT_PUBLIC_DOMAIN: ${{ secrets.NEXT_PUBLIC_DOMAIN }}
           NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
           UPLOADTHING_DOMAIN: ${{ secrets.UPLOADTHING_DOMAIN }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${{ secrets.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
 
       - name: Run PlayWright Tests
         run: pnpm exec playwright test
@@ -50,6 +52,8 @@ jobs:
           PLAYWRIGHT_TESTING_USER_EMAIL: ${{ secrets.PLAYWRIGHT_TESTING_USER_EMAIL }}
           PLAYWRIGHT_TESTING_USER_PASSWORD: ${{ secrets.PLAYWRIGHT_TESTING_USER_PASSWORD }}
           PLAYWRIGHT_TESTING_USER_CLEAN_UP_SECRET: ${{ secrets.PLAYWRIGHT_TESTING_USER_CLEAN_UP_SECRET }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${{ secrets.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
           PORT: 3000
 
       - uses: actions/upload-artifact@v4
