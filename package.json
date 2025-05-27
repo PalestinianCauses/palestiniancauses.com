@@ -58,6 +58,8 @@
     "@serwist/next": "9.0.14",
     "@tanstack/react-query": "5.70.0",
     "@tanstack/react-query-devtools": "5.71.0",
+    "@vercel/analytics": "1.5.0",
+    "@vercel/speed-insights": "1.2.0",
     "babel-loader": "10.0.0",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
@@ -73,7 +75,6 @@
     "lucide-react": "0.460.0",
     "motion": "12.6.3",
     "next": "15.3.2",
-    "next-pwa": "5.6.0",
     "next-themes": "0.4.3",
     "payload": "3.30.0",
     "react": "19.1.0",
@@ -90,7 +91,6 @@
     "tailwindcss-animate": "1.0.7",
     "vaul": "1.1.1",
     "web-push": "3.6.7",
-    "webpack": "5.74.0",
     "zod": "3.23.8"
   },
   "devDependencies": {
@@ -116,11 +116,6 @@
     "prettier-plugin-tailwindcss": "0.6.9",
     "serwist": "9.0.14",
     "tailwindcss": "3.4.1",
-    "typescript": "5",
-    "workbox-core": "7.3.0",
-    "workbox-expiration": "7.3.0",
-    "workbox-precaching": "7.3.0",
-    "workbox-routing": "7.3.0",
-    "workbox-strategies": "7.3.0"
+    "typescript": "5"
   }
 }
