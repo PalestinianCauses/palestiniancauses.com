@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { expect, test } from "@playwright/test";
 
@@ -41,7 +41,6 @@ test.describe("Authentication: Sign Up Flows", () => {
       isData: (data) => typeof data === "string",
     });
 
-    if (response.error) console.log(response.error);
     if (response.data) console.log(response.data);
 
     userTestingEmail = null;

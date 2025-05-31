@@ -1,13 +1,13 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { CollectionConfig } from "payload";
 
-import { isAdmin } from "@/access/global";
+import { isAdmin, isAuthenticated } from "@/access/global";
 
 export const Orders: CollectionConfig = {
   slug: "orders",
   access: {
-    create: isAdmin,
+    create: isAuthenticated,
     read: isAdmin,
     update: isAdmin,
     delete: isAdmin,

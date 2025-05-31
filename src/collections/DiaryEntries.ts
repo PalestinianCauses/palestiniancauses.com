@@ -1,4 +1,4 @@
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { CollectionConfig } from "payload";
 
@@ -53,14 +53,11 @@ export const DiaryEntries: CollectionConfig = {
       label: "Content",
       name: "content",
       type: "textarea",
-      minLength: 2500,
+      minLength: 1500,
       required: true,
     },
     {
-      access: {
-        read: isAdminOrSystemUserField,
-        update: isAdminOrSystemUserField,
-      },
+      access: { update: isAdminOrSystemUserField },
       label: "Status",
       name: "status",
       type: "select",
@@ -74,10 +71,7 @@ export const DiaryEntries: CollectionConfig = {
       required: true,
     },
     {
-      access: {
-        read: isAdminOrSystemUserField,
-        update: isAdminOrSystemUserField,
-      },
+      access: { update: isAdminOrSystemUserField },
       label: "Author",
       name: "author",
       type: "relationship",

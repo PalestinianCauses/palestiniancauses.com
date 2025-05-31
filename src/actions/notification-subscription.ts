@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 04
+// REVIEWED - 06
 
 import { Where } from "payload";
 import {
@@ -12,6 +12,7 @@ import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
+import { isNotificationSubscriptionError } from "@/lib/types/guards";
 import { NotificationSubscription } from "@/payload-types";
 
 configVapid(
@@ -115,7 +116,7 @@ export const notifySubscribers = async function notifySubscribers(
   );
 
   if (!subscriptions.data || subscriptions.error) {
-    console.log(subscriptions.error);
+    console.error(subscriptions.error);
     return subscriptions;
   }
 
@@ -126,13 +127,20 @@ export const notifySubscribers = async function notifySubscribers(
     ),
   );
 
-  await Promise.all(notifications);
+  try {
+    await Promise.all(notifications);
+  } catch (error) {
+    if (isNotificationSubscriptionError(error)) {
+      console.error(
+        messages.actions.notificationSubscription.serverErrorNotify,
+        error.endpoint,
+      );
+    }
+
+    console.error(error);
+  }
 
   console.log(messages.actions.notificationSubscription.successNotify);
-
-  subscriptions.data.docs.forEach((subscription) => {
-    console.log(subscription.id, options.title, options.body);
-  });
 
   return {
     data: messages.actions.notificationSubscription.successNotify,

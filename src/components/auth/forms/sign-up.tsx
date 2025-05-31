@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 10
+// REVIEWED - 12
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -25,7 +25,7 @@ import { motions } from "@/lib/motion";
 import { signUpSchema, SignUpSchema } from "@/lib/schemas/auth";
 
 export const SignUpForm = function SignUpForm() {
-  const { signUp } = useUser();
+  const { signUp } = useUser(false);
 
   const form = useForm<SignUpSchema>({
     mode: "onBlur",
@@ -162,7 +162,7 @@ export const SignUpForm = function SignUpForm() {
             A family member already?{" "}
             <Button variant="link" className="h-auto p-0" asChild>
               <Label>
-                <Link href="/sign-in">Sign in</Link>
+                <Link href="/signin">Sign in</Link>
               </Label>
             </Button>
             .

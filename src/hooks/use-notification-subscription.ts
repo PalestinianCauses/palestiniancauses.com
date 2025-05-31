@@ -1,8 +1,8 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 04
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -12,13 +12,13 @@ import {
   subscribeToNotifications,
   unsubscribeFromNotifications,
 } from "@/actions/notification-subscription";
-import { queryClient } from "@/app/(app)/providers";
 import { messages } from "@/lib/messages";
 import { base64ToUint8Array } from "@/lib/utils/pwa";
 import { NotificationSubscription } from "@/payload-types";
 
 export const useNotificationSubscription =
   function useNotificationSubscription() {
+    const queryClient = useQueryClient();
     const [isAvailable, setIsAvailable] = useState(false);
 
     useEffect(() => {
@@ -45,7 +45,7 @@ export const useNotificationSubscription =
 
             return response.data;
           } catch (error) {
-            console.log(error);
+            console.error(error);
             return null;
           }
         },

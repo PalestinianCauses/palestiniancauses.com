@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 13
+// REVIEWED - 14
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -27,7 +27,7 @@ import {
 } from "@/lib/types/guards";
 import { User } from "@/payload-types";
 
-export const useUser = function useUser() {
+export const useUser = function useUser(enabled?: boolean) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -44,6 +44,7 @@ export const useUser = function useUser() {
 
       return response.user;
     },
+    enabled,
   });
 
   const signIn = useMutation({

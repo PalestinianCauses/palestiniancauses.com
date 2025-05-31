@@ -1,16 +1,16 @@
-// REVIEWED
+// REVIEWED - 02
 
 import { CollectionConfig } from "payload";
 
-import { isAdmin } from "@/access/global";
+import { isAdminOrSelf, isAuthenticated } from "@/access/global";
 
 export const Comments: CollectionConfig = {
   slug: "comments",
   access: {
-    read: isAdmin,
-    create: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    read: () => true,
+    create: isAuthenticated,
+    update: isAdminOrSelf,
+    delete: isAdminOrSelf,
   },
   admin: {
     group: "Content",

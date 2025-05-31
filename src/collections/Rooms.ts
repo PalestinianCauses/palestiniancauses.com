@@ -1,16 +1,15 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { CollectionConfig } from "payload";
 import slugify from "slugify";
 
-import { isAdminOrSelf, isAdminOrSystemUser } from "@/access/global";
+import { isAdminOrSelf } from "@/access/global";
 import { messages } from "@/lib/messages";
 import { validateDateInRange } from "@/lib/utils/dates";
 
 export const Rooms: CollectionConfig = {
   slug: "rooms",
   access: {
-    read: isAdminOrSelf,
     create: async ({ req }) => {
       const { user } = req;
       if (!user) return false;
@@ -30,8 +29,9 @@ export const Rooms: CollectionConfig = {
 
       return false;
     },
-    update: isAdminOrSystemUser,
-    delete: isAdminOrSystemUser,
+    read: isAdminOrSelf,
+    update: isAdminOrSelf,
+    delete: isAdminOrSelf,
   },
   admin: {
     group: "Content",

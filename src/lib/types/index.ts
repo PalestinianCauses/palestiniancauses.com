@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { GeneratedTypes } from "payload";
 
@@ -38,6 +38,13 @@ export type ResponseDataAuthenticationTokenPayload = {
 export type ResponseDataAuthenticationRefreshedTokenPayload = {
   user: User;
   refreshedToken: string | null;
+};
+
+// Notification Subscription
+export type NotificationSubscriptionError = {
+  statusCode: number;
+  body: string;
+  endpoint: string;
 };
 
 // Actions/HTTPs

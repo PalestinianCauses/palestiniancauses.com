@@ -1,8 +1,10 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Metadata } from "next";
 import Link from "next/link";
 
+import { getCollection } from "@/actions/collection";
 import { DiaryEntryList } from "@/components/diary-entry/list";
 import { Container } from "@/components/globals/container";
 import {
@@ -15,6 +17,7 @@ import { Paragraph, SectionHeading } from "@/components/globals/typography";
 import { VideoOutroScene } from "@/components/globals/video-outro-scene";
 import { Button } from "@/components/ui/button";
 import { motions } from "@/lib/motion";
+import { queryClient } from "@/lib/query";
 import { SelectOptions } from "@/lib/types";
 
 import { QueryProvider } from "../providers";
@@ -85,6 +88,21 @@ export default async function HumansButFromGazaPage(props: {
     },
   ];
 
+  queryClient.prefetchQuery({
+    queryKey: ["diary-entries", selects, ["title"]],
+    queryFn: async () => {
+      const response = await getCollection<"diary-entries">({
+        collection: "diary-entries",
+        selects,
+        fields: ["title"],
+      });
+
+      if (!response.data || response.error) return null;
+
+      return response.data;
+    },
+  });
+
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">
       <Container className="mb-12 max-w-7xl xl:mb-24">
@@ -133,7 +151,9 @@ export default async function HumansButFromGazaPage(props: {
       </Container>
       <Container className="mb-12 grid max-w-7xl grid-cols-1 gap-16 xl:mb-24">
         <QueryProvider>
-          <DiaryEntryList selects={selects} fields={["title"]} />
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <DiaryEntryList selects={selects} fields={["title"]} />
+          </HydrationBoundary>
         </QueryProvider>
       </Container>
       <VideoOutroScene
