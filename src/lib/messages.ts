@@ -1,4 +1,4 @@
-// REVIEWED - 18
+// REVIEWED - 19
 
 export const messages = {
   http: {
@@ -140,7 +140,7 @@ export const messages = {
       `Please enter a valid date between ${min} and ${max}.`,
     diaryEntry: {
       content:
-        "Please write a diary that is long enough to be in our museum (2500 characters minimum).",
+        "Please write a diary that is long enough to be in our museum (1500 characters minimum).",
     },
     rooms: {
       valid: {

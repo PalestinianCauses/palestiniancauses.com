@@ -1,8 +1,9 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import {
   ErrorPayload,
   ErrorPlusDataPayload,
+  NotificationSubscriptionError,
   ResponseDataAuthenticationRefreshedTokenPayload,
   ResponseDataAuthenticationTokenPayload,
 } from ".";
@@ -64,6 +65,23 @@ export const isResponseErrorHasDataPlusErrors =
           "message" in errorObject &&
           "path" in errorObject,
       )
+    );
+  };
+
+// Notification Subscription
+export const isNotificationSubscriptionError =
+  function isNotificationSubscriptionError(
+    error: unknown,
+  ): error is NotificationSubscriptionError {
+    return (
+      typeof error === "object" &&
+      error !== null &&
+      "statusCode" in error &&
+      typeof error.statusCode === "number" &&
+      "body" in error &&
+      typeof error.body === "string" &&
+      "endpoint" in error &&
+      typeof error.endpoint === "string"
     );
   };
 
