@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { httpStatusesMessages, messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -13,7 +13,7 @@ import { notifySubscribers } from "./notification-subscription";
 
 export const createDiaryEntry = async function createDiaryEntry(
   data: Omit<DiaryEntry, "id" | "status" | "createdAt" | "updatedAt">,
-): Promise<ResponseSafeExecute<string>> {
+): Promise<ResponseSafeExecute<string, string>> {
   const author = typeof data.author === "object" ? data.author : null;
 
   if (!author) {
@@ -23,7 +23,7 @@ export const createDiaryEntry = async function createDiaryEntry(
     };
   }
 
-  const responseDiaryEntry = await actionSafeExecute<DiaryEntry, ErrorPayload>(
+  const response = await actionSafeExecute<DiaryEntry, ErrorPayload>(
     payload.create({
       collection: "diary-entries",
       data: {
@@ -41,33 +41,33 @@ export const createDiaryEntry = async function createDiaryEntry(
     isResponseError,
   );
 
-  if (!responseDiaryEntry.data || responseDiaryEntry.error) {
-    const response = {
-      data: null,
-      error: messages.actions.diaryEntry.serverErrorShare,
-    };
+  if (!response.data || response.error) {
+    if (typeof response.error === "string")
+      return { data: null, error: response.error };
 
-    if (typeof responseDiaryEntry.error !== "string")
-      if (responseDiaryEntry.error.status === 400)
-        response.error = messages.actions.diaryEntry.unique(data.title);
-      else if (
-        responseDiaryEntry.error.status === 401 ||
-        responseDiaryEntry.error.status === 403
-      )
-        response.error =
-          httpStatusesMessages.diaryEntry[responseDiaryEntry.error.status];
+    if (response.error.status === 400)
+      return {
+        data: null,
+        error: messages.actions.diaryEntry.unique(data.title),
+      };
 
-    return response;
+    if (response.error.status === 401 || response.error.status === 403)
+      return {
+        data: null,
+        error: httpStatusesMessages.diaryEntry[response.error.status],
+      };
+
+    return { data: null, error: messages.actions.diaryEntry.serverErrorShare };
   }
 
-  if (author.role === "admin" || author.role === "system-user")
+  if (author.role === "admin" || author.role === "system-user") {
+    const url = `${process.env.NEXT_PUBLIC_URL}/humans-but-from-gaza/${response.data.id}`;
     await notifySubscribers({
       title: data.title,
       body: "A new diary entry has been published.",
-      data: {
-        url: `${process.env.NEXT_PUBLIC_URL}/humans-but-from-gaza/${responseDiaryEntry.data.id}`,
-      },
+      data: { url },
     });
+  }
 
   return {
     data:
