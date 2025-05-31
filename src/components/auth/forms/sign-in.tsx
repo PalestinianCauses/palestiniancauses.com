@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 13
+// REVIEWED - 14
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -25,7 +25,7 @@ import { motions } from "@/lib/motion";
 import { signInSchema, SignInSchema } from "@/lib/schemas/auth";
 
 export const SignInForm = function SignInForm() {
-  const { signIn } = useUser();
+  const { signIn } = useUser(false);
 
   const form = useForm<SignInSchema>({
     mode: "onBlur",
