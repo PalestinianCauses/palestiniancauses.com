@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { httpStatusesMessages, messages } from "../messages";
 import { ResponseSafeExecute, SafeExecuteConfig } from "../types";
@@ -17,6 +17,8 @@ export const actionSafeExecute = async function actionSafeExecute<
     const data = await action;
     return { data, error: null };
   } catch (error) {
+    console.error(error);
+
     if (isErrorFromTypeE && isErrorFromTypeE(error))
       return { data: null, error };
 

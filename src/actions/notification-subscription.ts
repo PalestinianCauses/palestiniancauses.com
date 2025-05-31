@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { Where } from "payload";
 import {
@@ -137,7 +137,7 @@ export const notifySubscribers = async function notifySubscribers(
       );
     }
 
-    console.log(error);
+    console.error(error);
   }
 
   console.log(messages.actions.notificationSubscription.successNotify);

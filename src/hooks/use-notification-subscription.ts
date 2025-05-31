@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -45,7 +45,7 @@ export const useNotificationSubscription =
 
             return response.data;
           } catch (error) {
-            console.log(error);
+            console.error(error);
             return null;
           }
         },
