@@ -1,16 +1,16 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CollectionConfig } from "payload";
 
-import { isAdmin } from "@/access/global";
+import { isAdminOrSelf, isAuthenticated } from "@/access/global";
 
 export const Comments: CollectionConfig = {
   slug: "comments",
   access: {
-    read: isAdmin,
-    create: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    read: () => true,
+    create: isAuthenticated,
+    update: isAdminOrSelf,
+    delete: isAdminOrSelf,
   },
   admin: {
     group: "Content",
@@ -51,7 +51,6 @@ export const Comments: CollectionConfig = {
       type: "select",
       options: [
         { label: "Approved", value: "approved" },
-        { label: "Pending", value: "pending" },
         { label: "Rejected", value: "rejected" },
       ],
       defaultValue: "approved",

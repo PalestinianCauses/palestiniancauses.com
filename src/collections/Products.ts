@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { CollectionConfig } from "payload";
 
@@ -7,7 +7,7 @@ import { isAdmin } from "@/access/global";
 export const Products: CollectionConfig = {
   slug: "products",
   access: {
-    read: isAdmin,
+    read: () => true,
     create: isAdmin,
     update: isAdmin,
     delete: isAdmin,

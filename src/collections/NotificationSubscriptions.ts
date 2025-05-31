@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CollectionConfig } from "payload";
 
@@ -7,7 +7,7 @@ import { isAdmin } from "@/access/global";
 export const NotificationSubscriptions: CollectionConfig = {
   slug: "notification-subscriptions",
   access: {
-    read: isAdmin,
+    read: () => true,
     create: isAdmin,
     update: isAdmin,
     delete: isAdmin,
