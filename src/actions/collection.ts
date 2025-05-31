@@ -1,8 +1,14 @@
 "use server";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
-import { GeneratedTypes, PaginatedDocs, PayloadRequest, Where } from "payload";
+import {
+  GeneratedTypes,
+  PaginatedDocs,
+  PayloadRequest,
+  User,
+  Where,
+} from "payload";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -11,7 +17,8 @@ import { CollectionTypes, SelectOptions } from "@/lib/types";
 import { selectOptionsDefaults } from "@/lib/utils/filters";
 
 type CollectionOptions<TSlug extends CollectionTypes> = {
-  req?: PayloadRequest;
+  req?: Partial<PayloadRequest>;
+  user?: User | null;
   collection: TSlug;
   selects: SelectOptions;
   fields?: (keyof GeneratedTypes["collections"][TSlug])[];
@@ -30,6 +37,7 @@ export const getCollection = async function getCollection<
   TSlug extends CollectionTypes,
 >({
   req,
+  user,
   collection,
   selects: {
     page = selectOptionsDefaults.page,
@@ -59,13 +67,14 @@ export const getCollection = async function getCollection<
   const response = await actionSafeExecute(
     payload.find({
       req,
+      user,
       collection,
       page,
       limit,
       sort,
       where,
       depth,
-      overrideAccess: false,
+      ...(user ? { overrideAccess: false } : {}),
     }),
     messages.actions.collection.serverError,
   );

@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CollectionConfig } from "payload";
 
@@ -51,6 +51,7 @@ export const Comments: CollectionConfig = {
       type: "select",
       options: [
         { label: "Approved", value: "approved" },
+        { label: "Pending", value: "pending" },
         { label: "Rejected", value: "rejected" },
       ],
       defaultValue: "approved",
