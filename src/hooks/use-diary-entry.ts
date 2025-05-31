@@ -1,15 +1,15 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { createDiaryEntry } from "@/actions/diary-entry";
-import { queryClient } from "@/app/(app)/providers";
 import { DiaryEntry } from "@/payload-types";
 
 export const useDiaryEntry = function useDiaryEntry() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const createDiaryEntryMutation = useMutation({
     mutationFn: async (

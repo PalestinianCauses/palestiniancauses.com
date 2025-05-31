@@ -1,7 +1,7 @@
 "use client";
 
-// REVIEWED - 07
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// REVIEWED - 08
+import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
 import {
@@ -16,15 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useActivity } from "@/hooks/use-activity";
 import { useUser } from "@/hooks/use-user";
-
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 60 * 60 * 1000,
-      refetchOnWindowFocus: true,
-    },
-  },
-});
+import { queryClient } from "@/lib/query";
 
 export const QueryProvider = function QueryProvider({
   children,
