@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 14
+// REVIEWED - 15
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -121,7 +121,7 @@ export const SignInForm = function SignInForm() {
             Not a family member yet?{" "}
             <Button variant="link" className="h-auto p-0" asChild>
               <Label>
-                <Link href="/sign-up">Be one</Link>
+                <Link href="/signup">Be one</Link>
               </Label>
             </Button>
             .
