@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { httpStatusesMessages, messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -25,6 +25,8 @@ export const createDiaryEntry = async function createDiaryEntry(
 
   const response = await actionSafeExecute<DiaryEntry, ErrorPayload>(
     payload.create({
+      req: { user: { collection: "users", ...author } },
+      user: author,
       collection: "diary-entries",
       data: {
         ...data,
@@ -34,7 +36,6 @@ export const createDiaryEntry = async function createDiaryEntry(
             : "pending",
         author,
       },
-      req: { user: { collection: "users", ...author } },
       overrideAccess: false,
     }),
     messages.actions.diaryEntry.serverErrorShare,
