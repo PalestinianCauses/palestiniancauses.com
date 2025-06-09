@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 11
+// REVIEWED - 13
 
 import { httpStatusesMessages, messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -9,33 +9,41 @@ import { ErrorPayload, ResponseSafeExecute } from "@/lib/types";
 import { isResponseError } from "@/lib/types/guards";
 import { DiaryEntry, User } from "@/payload-types";
 
+import { getAuthentication } from "./auth";
 import { notifySubscribers } from "./notification-subscription";
 
 export const createDiaryEntry = async function createDiaryEntry(
-  data: Omit<DiaryEntry, "id" | "status" | "createdAt" | "updatedAt">,
+  data: Omit<
+    DiaryEntry,
+    "id" | "status" | "author" | "createdAt" | "updatedAt"
+  >,
 ): Promise<ResponseSafeExecute<string, string>> {
-  const author = typeof data.author === "object" ? data.author : null;
+  const auth = await getAuthentication();
 
-  if (!author) {
+  if (!auth || !auth.user) {
     return {
       data: null,
       error: messages.actions.diaryEntry.unAuthenticated,
     };
   }
 
+  const { user } = auth;
+
   const response = await actionSafeExecute<DiaryEntry, ErrorPayload>(
     payload.create({
       collection: "diary-entries",
       data: {
-        ...data,
+        title: data.title,
+        date: data.date,
+        content: data.content,
         status:
-          author.role === "admin" || author.role === "system-user"
+          user.role === "admin" || user.role === "system-user"
             ? "approved"
             : "pending",
-        author,
+        author: user,
+        isAuthentic: data.isAuthentic,
+        isAnonymous: data.isAnonymous,
       },
-      req: { user: { collection: "users", ...author } },
-      overrideAccess: false,
     }),
     messages.actions.diaryEntry.serverErrorShare,
     isResponseError,
@@ -60,7 +68,7 @@ export const createDiaryEntry = async function createDiaryEntry(
     return { data: null, error: messages.actions.diaryEntry.serverErrorShare };
   }
 
-  if (author.role === "admin" || author.role === "system-user") {
+  if (user.role === "admin" || user.role === "system-user") {
     const url = `${process.env.NEXT_PUBLIC_URL}/humans-but-from-gaza/${response.data.id}`;
     await notifySubscribers({
       title: data.title,
@@ -71,7 +79,7 @@ export const createDiaryEntry = async function createDiaryEntry(
 
   return {
     data:
-      author.role === "admin" || author.role === "system-user"
+      user.role === "admin" || user.role === "system-user"
         ? messages.actions.diaryEntry.successPCAuthor
         : messages.actions.diaryEntry.success,
     error: null,

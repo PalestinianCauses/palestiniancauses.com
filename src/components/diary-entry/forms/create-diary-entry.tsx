@@ -32,13 +32,8 @@ import { messages } from "@/lib/messages";
 import { motions } from "@/lib/motion";
 import { diaryEntrySchema, DiaryEntrySchema } from "@/lib/schemas/diary";
 import { cn } from "@/lib/utils/styles";
-import { User } from "@/payload-types";
 
-export const CreateDiaryEntryForm = function CreateDiaryEntryForm({
-  user,
-}: {
-  user: User;
-}) {
+export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
   const { createDiaryEntry } = useDiaryEntry();
 
   const form = useForm<DiaryEntrySchema>({
@@ -60,12 +55,7 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm({
 
     createDiaryEntry.mutate({
       ...data,
-      date: [
-        data.date.toLocaleDateString().split("/")[2],
-        data.date.toLocaleDateString().split("/")[1],
-        data.date.toLocaleDateString().split("/")[0],
-      ].join("-"),
-      author: user,
+      date: data.date.toISOString(),
     });
   };
 

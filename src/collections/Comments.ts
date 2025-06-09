@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CollectionConfig } from "payload";
 
@@ -19,6 +19,15 @@ export const Comments: CollectionConfig = {
     enableRichTextRelationship: false,
   },
   fields: [
+    {
+      admin: { readOnly: true, position: "sidebar" },
+      label: "Commented On",
+      name: "on",
+      type: "relationship",
+      relationTo: ["diary-entries", "blogs"],
+      hasMany: false,
+      required: true,
+    },
     {
       admin: { readOnly: true, position: "sidebar" },
       label: "In Reply To",
@@ -42,6 +51,8 @@ export const Comments: CollectionConfig = {
       label: "Content",
       name: "content",
       type: "textarea",
+      minLength: 2,
+      maxLength: 1000,
       required: true,
     },
     {
@@ -83,4 +94,13 @@ export const Comments: CollectionConfig = {
       ],
     },
   ],
+  hooks: {
+    beforeChange: [
+      ({ req, data }) => {
+        const dataUpdated = data;
+        if (req.user && !data.user) dataUpdated.user = req.user.id;
+        return dataUpdated;
+      },
+    ],
+  },
 };
