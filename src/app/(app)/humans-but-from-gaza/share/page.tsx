@@ -1,8 +1,7 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { Metadata } from "next";
 
-import { getAuthentication } from "@/actions/auth";
 import { CreateDiaryEntryForm } from "@/components/diary-entry/forms/create-diary-entry";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
@@ -17,10 +16,6 @@ export const metadata: Metadata = {
 };
 
 export default async function SharePage() {
-  const auth = await getAuthentication();
-
-  if (!auth || !auth.user) return null;
-
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">
       <Container className="mb-8 max-w-7xl xl:mb-12">
@@ -36,7 +31,7 @@ export default async function SharePage() {
       </Container>
       <Container className="mb-12 max-w-7xl xl:mb-24">
         <QueryProvider>
-          <CreateDiaryEntryForm user={auth.user} />
+          <CreateDiaryEntryForm />
         </QueryProvider>
       </Container>
       <Footer />

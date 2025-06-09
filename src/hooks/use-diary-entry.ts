@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ export const useDiaryEntry = function useDiaryEntry() {
     mutationFn: async (
       diaryEntryData: Omit<
         DiaryEntry,
-        "id" | "status" | "createdAt" | "updatedAt"
+        "id" | "status" | "author" | "createdAt" | "updatedAt"
       >,
     ) => {
       const response = await createDiaryEntry(diaryEntryData);

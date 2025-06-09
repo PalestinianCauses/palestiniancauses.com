@@ -1,6 +1,6 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { getDiaryEntry, getDiaryEntryAuthor } from "@/actions/diary-entry";
 import { DiaryEntryBadges } from "@/components/diary-entry/diary-entry-badges";
@@ -33,8 +33,11 @@ export default async function HumanButFromGazaPage(props: {
   const params = await props.params;
   const searchParams = await props.searchParams;
 
+  const authorId = parseInt(searchParams.author, 10);
+  if (Number.isNaN(authorId)) redirect("/humans-but-from-gaza");
+
   const diaryEntry = await getDiaryEntry(parseInt(params.id, 10));
-  const author = await getDiaryEntryAuthor(parseInt(searchParams.author, 10));
+  const author = await getDiaryEntryAuthor(authorId);
 
   if (
     !diaryEntry.data ||
@@ -46,7 +49,7 @@ export default async function HumanButFromGazaPage(props: {
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">
       <Container className="mb-24 max-w-6xl lg:mb-32 xl:mb-48">
-        <Container className="mx-0 mb-12 max-w-5xl px-0">
+        <Container className="mx-0 mb-12 max-w-5xl px-0 lg:px-0">
           <DiaryEntryBadges
             isAnonymous={diaryEntry.data.isAnonymous}
             date={diaryEntry.data.date}
@@ -55,7 +58,7 @@ export default async function HumanButFromGazaPage(props: {
           />
           <SectionHeading>{diaryEntry.data.title}</SectionHeading>
         </Container>
-        <Container className="flex flex-col gap-8 px-0">
+        <Container className="flex flex-col gap-8 px-0 lg:px-0">
           {splitByFlexibleNewLines(diaryEntry.data.content).map(
             (text, index) => (
               /* eslint-disable-next-line react/no-array-index-key */
