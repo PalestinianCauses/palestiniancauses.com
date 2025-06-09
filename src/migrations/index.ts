@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 /* eslint-disable camelcase */
 
@@ -9,6 +9,7 @@ import * as migration_20250429_025646 from "./20250429_025646";
 import * as migration_20250429_123448 from "./20250429_123448";
 import * as migration_20250508_183800 from "./20250508_183800";
 import * as migration_20250527_013127 from "./20250527_013127";
+import * as migration_20250609_195604 from "./20250609_195604";
 
 export const migrations = [
   {
@@ -45,5 +46,10 @@ export const migrations = [
     up: migration_20250527_013127.up,
     down: migration_20250527_013127.down,
     name: "20250527_013127",
+  },
+  {
+    up: migration_20250609_195604.up,
+    down: migration_20250609_195604.down,
+    name: "20250609_195604",
   },
 ];
