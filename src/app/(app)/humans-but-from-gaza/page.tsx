@@ -1,6 +1,10 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -17,7 +21,6 @@ import { Paragraph, SectionHeading } from "@/components/globals/typography";
 import { VideoOutroScene } from "@/components/globals/video-outro-scene";
 import { Button } from "@/components/ui/button";
 import { motions } from "@/lib/motion";
-import { queryClient } from "@/lib/query";
 import { SelectOptions } from "@/lib/types";
 
 import { QueryProvider } from "../providers";
@@ -88,7 +91,8 @@ export default async function HumansButFromGazaPage(props: {
     },
   ];
 
-  queryClient.prefetchQuery({
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
     queryKey: ["diary-entries", selects, ["title"]],
     queryFn: async () => {
       const response = await getCollection<"diary-entries">({
