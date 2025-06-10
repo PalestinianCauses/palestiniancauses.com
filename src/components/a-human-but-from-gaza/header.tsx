@@ -1,37 +1,18 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import Image from "next/image";
 
 import { motions } from "@/lib/motion";
 import { cn } from "@/lib/utils/styles";
 
+/* eslint-disable import/extensions */
+import pagesImagesBlurHashes from "../../../data/book-pages-images-blur-hashes.json";
 import { Container } from "../globals/container";
 import { InfiniteMarquee, MarqueeItem } from "../globals/marquee";
 import { MotionDiv, MotionP, MotionSpan } from "../globals/motion";
 import { Badge } from "../ui/badge";
 
 import { HeaderButtons } from "./header-buttons";
-
-const pagesImages = [
-  "ZhaM3m5tNWzXupgUsZLFqycP4WndTLzN26OfBisgHhIwDFav",
-  "ZhaM3m5tNWzXqACWVcoriXRGFUCYnM4VwQyupegDHlAcjkT8",
-  "ZhaM3m5tNWzXAZmqxTDQWCpYGiEKfnoVha73B9vycUm0dxFZ",
-  "ZhaM3m5tNWzXNCfjDfI7pnld02TUuYBj7h5Z1wqxA9gG6cDe",
-  "ZhaM3m5tNWzXWb2OVaBkCMB5ZmsTXvzQHedpJjhFnL4YtDuK",
-  "ZhaM3m5tNWzXArrT0o9DQWCpYGiEKfnoVha73B9vycUm0dxF",
-  "ZhaM3m5tNWzX7SKzcq1OKos6ixXJGbYR43yLadmgSvBOFfl0",
-  "ZhaM3m5tNWzXfuzkuvpKAixQkOwjFU9IWn4ZtucV2dL16J7T",
-  "ZhaM3m5tNWzXdgqPPtyQkBL6hsVXJ3nmARKb4U2IwHSCzt1N",
-  "ZhaM3m5tNWzXK1bewQHqXTwp4Vz1i9W8E3u0snmYxkfd7ahP",
-  "ZhaM3m5tNWzXXnaZizs3lQmOn3hCbpRi5076Djr1AqsM9WBY",
-  "ZhaM3m5tNWzXlfKFA20VZU69xYRotjidFMf4EhzTDLlqwOpI",
-  "ZhaM3m5tNWzXkXGSQsAurkPfhlS3pDOV7QXy4iLsB2xmwTzC",
-  "ZhaM3m5tNWzXo1eOxqdL5FXyV96KwuQdHgNcAWroZRBaTbGM",
-  "ZhaM3m5tNWzXuLZRmrFqycP4WndTLzN26OfBisgHhIwDFav0",
-  "ZhaM3m5tNWzX5Nj1IAwVqz7pxkfvArRudnclJCswjP4WT0ay",
-  "ZhaM3m5tNWzXLvJtjpXnNKVPyc6o1z4dOY8xjIQJgDWbMhaq",
-  "ZhaM3m5tNWzX3TANHSvoJu8t0hRbWUeg4IxwMXVrS2KzfdY5",
-];
 
 export const Header = function Header() {
   return (
@@ -106,24 +87,27 @@ export const Header = function Header() {
             transition={motions.transition({ delay: 0.3 })}
             className="relative h-full w-full border border-muted">
             <Image
-              src="https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXWVdlmfBkCMB5ZmsTXvzQHedpJjhFnL4YtDuK"
+              src={`https://qwvvvruhbe.ufs.sh/f/${pagesImagesBlurHashes[0].id}`}
               alt="Book Cover"
               priority
               fill
-              sizes="18rem"
+              placeholder="blur"
+              blurDataURL={pagesImagesBlurHashes[0].base64}
+              sizes="(min-width: 1024px) 16rem, (min-width: 768px) 14rem, 12rem"
               className="!relative object-cover object-left"
             />
           </MotionDiv>
         </div>
         <InfiniteMarquee speed={80}>
-          {pagesImages.map((image, index) => (
-            <MarqueeItem key={image} delay={index * 0.1}>
+          {pagesImagesBlurHashes.slice(1).map(async (image, index) => (
+            <MarqueeItem key={image.id} delay={index * 0.1}>
               <Image
-                src={`https://qwvvvruhbe.ufs.sh/f/${image}`}
+                src={`https://qwvvvruhbe.ufs.sh/f/${image.id}`}
                 alt={`Book Image ${index.toString()}`}
-                priority
                 fill
-                sizes="15rem"
+                sizes="(min-width: 1024px) 12rem, (min-width: 768px) 10rem, 8rem"
+                placeholder="blur"
+                blurDataURL={image.base64}
                 className="!relative aspect-[2/3] !w-60 max-w-none object-cover opacity-20 lg:!w-80"
               />
             </MarqueeItem>

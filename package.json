@@ -7,8 +7,9 @@
   "scripts": {
     "dev": "next dev",
     "dev:https": "next dev --experimental-https",
-    "dev:turbo": "node scripts/generate-book-pages-images.js && next dev --turbopack",
-    "build": "node scripts/generate-book-pages-images.js && next build",
+    "dev:turbo": "next dev --turbopack",
+    "build": "next build",
+    "generate:book-pages-images": "node scripts/generate-book-pages-images.cjs",
     "start": "next start",
     "lint": "next lint",
     "payload:migrate": "payload migrate",
