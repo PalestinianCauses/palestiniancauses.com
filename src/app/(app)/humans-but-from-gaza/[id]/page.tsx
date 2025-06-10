@@ -1,12 +1,19 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
+import { MessageSquareTextIcon } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
 import { getDiaryEntry, getDiaryEntryAuthor } from "@/actions/diary-entry";
+import { CreateCommentForm } from "@/components/comments/forms/create";
 import { DiaryEntryBadges } from "@/components/diary-entry/diary-entry-badges";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
-import { Paragraph, SectionHeading } from "@/components/globals/typography";
+import {
+  Paragraph,
+  SectionHeading,
+  SubSectionHeading,
+} from "@/components/globals/typography";
+import { Separator } from "@/components/ui/separator";
 import { splitByFlexibleNewLines } from "@/lib/utils/strings";
 
 /* eslint-disable-next-line func-style  */
@@ -67,6 +74,23 @@ export default async function HumanButFromGazaPage(props: {
           )}
         </Container>
       </Container>
+      <Separator />
+      <Container className="my-12 max-w-6xl lg:my-24 xl:my-32">
+        <SubSectionHeading
+          small
+          className="mb-4 flex flex-row items-center gap-2.5">
+          <MessageSquareTextIcon className="size-7 stroke-[1.5]" />
+          Comments
+        </SubSectionHeading>
+        <Paragraph small className="mb-12">
+          Share your thoughts and show your support. Your words matter - they
+          can bring comfort, understanding, and solidarity to those sharing
+          their experiences. Let&apos;s build a community of empathy and support
+          together.
+        </Paragraph>
+        <CreateCommentForm />
+      </Container>
+      <Separator className="mb-12 lg:mb-24 xl:mb-32" />
       <Footer />
     </main>
   );
