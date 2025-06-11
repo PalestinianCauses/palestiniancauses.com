@@ -1,4 +1,4 @@
-# REVIEWED - 07
+# REVIEWED - 08
 
 name: CI and Deployment
 on:
@@ -37,6 +37,7 @@ jobs:
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
           NEXT_PUBLIC_DOMAIN: ${{ secrets.NEXT_PUBLIC_DOMAIN }}
           NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
           UPLOADTHING_DOMAIN: ${{ secrets.UPLOADTHING_DOMAIN }}
           VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
           NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${{ secrets.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
@@ -48,6 +49,7 @@ jobs:
           DATABASE_URI: ${{ secrets.DATABASE_URI }}
           NEXT_PUBLIC_DOMAIN: ${{ secrets.NEXT_PUBLIC_DOMAIN }}
           NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
           UPLOADTHING_DOMAIN: ${{ secrets.UPLOADTHING_DOMAIN }}
           PLAYWRIGHT_TESTING_USER_EMAIL: ${{ secrets.PLAYWRIGHT_TESTING_USER_EMAIL }}
           PLAYWRIGHT_TESTING_USER_PASSWORD: ${{ secrets.PLAYWRIGHT_TESTING_USER_PASSWORD }}
