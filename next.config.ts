@@ -1,4 +1,4 @@
-// REVIEWED - 14
+// REVIEWED - 15
 import { withPayload } from "@payloadcms/next/withPayload";
 import withSerwistInit from "@serwist/next";
 import { NextConfig } from "next";
@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
 
   images: {
     remotePatterns: [
+      {
+        protocol: "https",
+        hostname: process.env.VERCEL_BLOB_STORAGE_DOMAIN!,
+        pathname: "/**",
+      },
       {
         protocol: "https",
         hostname: process.env.UPLOADTHING_DOMAIN!,

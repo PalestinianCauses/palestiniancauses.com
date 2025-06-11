@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import Image from "next/image";
 import Link from "next/link";
@@ -69,7 +69,6 @@ export const Testimonials = function Testimonials() {
                   <Image
                     src={image}
                     alt={[name, "Profile Picture"].join(" ")}
-                    priority
                     fill
                     sizes="14rem"
                     className="!relative !h-56 !w-56 flex-none ring-1 ring-input grayscale"

@@ -1,4 +1,4 @@
-// REVIEWED - 20
+// REVIEWED - 21
 
 export const messages = {
   http: {
@@ -13,6 +13,9 @@ export const messages = {
       "An error occurred while processing response data. Please try again later.",
   },
   actions: {
+    blob: {
+      serverError: "Failed to retrieve blobs. Please try again later.",
+    },
     notificationSubscription: {
       success: "Successfully subscribed to notifications.",
       successDelete: "Successfully unsubscribed from notifications.",
