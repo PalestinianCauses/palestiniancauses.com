@@ -1,43 +1,123 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Paragraph } from "@/components/globals/typography";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import { useComment } from "@/hooks/use-comment";
+import { useUser } from "@/hooks/use-user";
+import { messages } from "@/lib/messages";
+import {
+  createCommentSchema,
+  CreateCommentSchema,
+} from "@/lib/schemas/comment";
 
-export const CreateCommentForm = function CreateCommentForm() {
-  const form = useForm();
+export const CreateCommentForm = function CreateCommentForm({
+  relationTo,
+  value,
+}: {
+  relationTo: "diary-entries" | "blogs";
+  value: number;
+}) {
+  const { isPending, data: user } = useUser();
+  const { createComment } = useComment();
+  const form = useForm<CreateCommentSchema>({
+    mode: "onBlur",
+    defaultValues: { content: "" },
+    resolver: zodResolver(createCommentSchema),
+  });
+
+  const handleSubmit = function handleSubmit(data: CreateCommentSchema) {
+    if (isPending || !user) return;
+
+    toast.loading(messages.actions.comment.pendingCreate, {
+      id: "create-comment",
+    });
+
+    createComment.mutate(
+      {
+        user,
+        on: { relationTo, value },
+        content: data.content,
+        status: "approved",
+      },
+      {
+        onSuccess: () => {
+          form.reset();
+        },
+      },
+    );
+  };
 
   return (
     <div>
       <Form {...form}>
-        <form className="relative flex flex-col gap-5">
-          <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/70 ring-1 ring-background/70">
-            <Paragraph small className="max-w-xl text-center text-foreground">
-              Join the conversation -{" "}
-              <Button
-                variant="link"
-                className="p-0 underline underline-offset-4"
-                style={{ fontSize: "inherit" }}
-                asChild>
-                <Link href="/signin">sign in</Link>
-              </Button>{" "}
-              to share your thoughts and show your support.
-            </Paragraph>
-          </div>
+        <form
+          {...(!isPending && user
+            ? { onSubmit: form.handleSubmit(handleSubmit) }
+            : {})}
+          className="relative flex flex-col gap-5">
+          {!user ? (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/70 ring-1 ring-background/70">
+              <Paragraph small className="max-w-xl text-center text-foreground">
+                Join the conversation -{" "}
+                <Button
+                  variant="link"
+                  className="p-0 underline decoration-1 underline-offset-4"
+                  style={{ fontSize: "inherit" }}
+                  asChild>
+                  <Link href="/signin">sign in</Link>
+                </Button>{" "}
+                to share your thoughts and show your support.
+              </Paragraph>
+            </div>
+          ) : null}
           <div className="flex items-start gap-5">
             <Avatar className="h-12 w-12 ring-1 ring-primary/20">
-              <AvatarFallback className="bg-muted/40">A</AvatarFallback>
+              <AvatarFallback className="bg-muted/40">
+                {user && user.firstName ? user.firstName.charAt(0) : "A"}
+              </AvatarFallback>
             </Avatar>
-            <Textarea rows={6} className="resize-none" />
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem className="flex-1 space-y-0">
+                  <FormLabel className="sr-only">Comment Content</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      rows={6}
+                      className="!mb-2 resize-none"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-          <Button className="justify-end self-end">Comment</Button>
+          <Button
+            className="justify-end self-end"
+            {...(!isPending && user
+              ? { type: "submit", disabled: createComment.isPending }
+              : { type: "button", disabled: true })}>
+            {createComment.isPending ? "Posting..." : "Comment"}
+          </Button>
         </form>
       </Form>
     </div>
