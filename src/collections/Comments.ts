@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { CollectionConfig } from "payload";
 
@@ -51,8 +51,8 @@ export const Comments: CollectionConfig = {
       label: "Content",
       name: "content",
       type: "textarea",
-      minLength: 2,
-      maxLength: 1000,
+      minLength: 12,
+      maxLength: 1200,
       required: true,
     },
     {

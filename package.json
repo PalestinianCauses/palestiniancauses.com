@@ -9,7 +9,6 @@
     "dev:https": "next dev --experimental-https",
     "dev:turbo": "next dev --turbopack",
     "build": "next build",
-    "generate:book-pages-images": "node scripts/generate-book-pages-images.cjs",
     "start": "next start",
     "lint": "next lint",
     "payload:migrate": "payload migrate",

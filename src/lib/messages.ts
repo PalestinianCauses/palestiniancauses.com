@@ -1,4 +1,4 @@
-// REVIEWED - 21
+// REVIEWED - 22
 
 export const messages = {
   http: {
@@ -105,6 +105,8 @@ export const messages = {
     comment: {
       pendingCreate: "Posting your comment...",
       successCreate: "Comment posted successfully.",
+      unAuthenticated:
+        "Authentication required to post a comment. Please sign in.",
       serverErrorCreate: "Failed to post comment. Please try again later.",
     },
     diaryEntry: {
@@ -129,6 +131,8 @@ export const messages = {
   forms: {
     required: (field: string) => `Please enter your ${field}.`,
     valid: (field: string) => `Please enter a valid ${field}.`,
+    minLength: (field: string, length: number) =>
+      `Please enter a ${field} with at least ${length} characters.`,
     maxLength: (field: string, length: number) =>
       `Please enter a ${field} with less than ${length} characters.`,
     date: (min: string, max: string) =>
