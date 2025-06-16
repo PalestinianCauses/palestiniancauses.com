@@ -1,8 +1,8 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
-import { GeneratedTypes } from "payload";
+import { GeneratedTypes, Where } from "payload";
 
-import { User } from "@/payload-types";
+import { Comment, User } from "@/payload-types";
 
 // PayLoad CMS
 export type CollectionTypes = keyof GeneratedTypes["collections"];
@@ -12,7 +12,7 @@ export type SelectOptions = {
   limit?: number;
   sort?: string;
   search?: string;
-  [key: string]: string | number | undefined;
+  fields?: Where[];
 };
 
 export type ErrorPayload = {
@@ -46,6 +46,9 @@ export type NotificationSubscriptionError = {
   body: string;
   endpoint: string;
 };
+
+// Comments
+export type CommentOn = Pick<Comment, "on">;
 
 // Actions/HTTPs
 export type ResponseSafeExecuteError<E = string> = { data: null; error: E };
