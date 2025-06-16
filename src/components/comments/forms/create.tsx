@@ -1,12 +1,13 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { Loading } from "@/components/globals/loading";
 import { Paragraph } from "@/components/globals/typography";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -26,15 +27,13 @@ import {
   createCommentSchema,
   CreateCommentSchema,
 } from "@/lib/schemas/comment";
+import { Comment } from "@/payload-types";
 
 export const CreateCommentForm = function CreateCommentForm({
-  relationTo,
-  value,
-}: {
-  relationTo: "diary-entries" | "blogs";
-  value: number;
-}) {
+  on,
+}: Pick<Comment, "on">) {
   const { isPending, data: user } = useUser();
+
   const { createComment } = useComment();
   const form = useForm<CreateCommentSchema>({
     mode: "onBlur",
@@ -52,7 +51,7 @@ export const CreateCommentForm = function CreateCommentForm({
     createComment.mutate(
       {
         user,
-        on: { relationTo, value },
+        on,
         content: data.content,
         status: "approved",
       },
@@ -64,17 +63,20 @@ export const CreateCommentForm = function CreateCommentForm({
     );
   };
 
+  if (isPending) return <Loading className="min-h-96" />;
+
   return (
     <div>
       <Form {...form}>
         <form
-          {...(!isPending && user
-            ? { onSubmit: form.handleSubmit(handleSubmit) }
-            : {})}
+          {...(user ? { onSubmit: form.handleSubmit(handleSubmit) } : {})}
           className="relative flex flex-col gap-5">
           {!user ? (
             <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/70 ring-1 ring-background/70">
-              <Paragraph small className="max-w-xl text-center text-foreground">
+              <Paragraph
+                isMotion={false}
+                small
+                className="max-w-xl text-center text-foreground">
                 Join the conversation -{" "}
                 <Button
                   variant="link"
@@ -89,8 +91,10 @@ export const CreateCommentForm = function CreateCommentForm({
           ) : null}
           <div className="flex items-start gap-5">
             <Avatar className="h-12 w-12 ring-1 ring-primary/20">
-              <AvatarFallback className="bg-muted/40">
-                {user && user.firstName ? user.firstName.charAt(0) : "A"}
+              <AvatarFallback className="bg-muted/40 text-xl">
+                {user && user.firstName
+                  ? user.firstName.charAt(0).toUpperCase()
+                  : "A"}
               </AvatarFallback>
             </Avatar>
             <FormField
@@ -113,7 +117,7 @@ export const CreateCommentForm = function CreateCommentForm({
           </div>
           <Button
             className="justify-end self-end"
-            {...(!isPending && user
+            {...(user
               ? { type: "submit", disabled: createComment.isPending }
               : { type: "button", disabled: true })}>
             {createComment.isPending ? "Posting..." : "Comment"}
