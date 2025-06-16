@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { useQuery } from "@tanstack/react-query";
 import { FileDiffIcon } from "lucide-react";
@@ -28,11 +28,11 @@ export const DiaryEntryListItem = function DiaryEntryListItem({
 }: {
   diaryEntry: DiaryEntry;
 }) {
-  const { data: authorData, isLoading } = useQuery({
-    queryKey: ["author", typeof author === "number" ? author : author.id],
+  const { data: authorData, isPending } = useQuery({
+    queryKey: ["author", typeof author === "object" ? author.id : author],
     queryFn: async () => {
       const response = await getDiaryEntryAuthor(
-        typeof author === "number" ? author : author.id,
+        typeof author === "object" ? author.id : author,
       );
 
       if (!response.data || response.error) return null;
@@ -49,7 +49,7 @@ export const DiaryEntryListItem = function DiaryEntryListItem({
       whileInView={motions.fadeIn.whileInView}
       transition={motions.transition({})}
       className="relative border-l border-input pl-5 ring-0">
-      {isLoading ? (
+      {isPending ? (
         <div className={cn("mb-4 flex items-center gap-2.5 md:gap-5")}>
           <Skeleton className="h-5 w-full max-w-24 md:max-w-32 xl:max-w-40" />
           <Skeleton className="h-5 w-full max-w-24 md:max-w-32 xl:max-w-40" />
@@ -80,7 +80,7 @@ export const DiaryEntryListItem = function DiaryEntryListItem({
               "?",
               "author",
               "=",
-              typeof author === "number" ? author : author.id,
+              typeof author === "object" ? author.id : author,
             ].join("")}>
             Read more
           </Link>
@@ -97,7 +97,7 @@ export const DiaryEntryList = function DiaryEntryList({
   selects: SelectOptions;
   fields: (keyof GeneratedTypes["collections"]["diary-entries"])[];
 }) {
-  const { data, isLoading } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["diary-entries", selects, fields],
     queryFn: async () => {
       const response = await getCollection<"diary-entries">({
@@ -112,7 +112,7 @@ export const DiaryEntryList = function DiaryEntryList({
     },
   });
 
-  if (isLoading)
+  if (isPending)
     return [1, 2, 3].map((id) => (
       <MotionDiv
         viewport={{ once: true }}
@@ -136,7 +136,7 @@ export const DiaryEntryList = function DiaryEntryList({
       </MotionDiv>
     ));
 
-  if (!data || !data.docs.length)
+  if (!data || data.docs.length === 0)
     return (
       <Container className="flex max-w-4xl flex-col px-0 py-12 lg:items-center lg:py-24 lg:text-center xl:py-32">
         <MotionDiv
