@@ -1,10 +1,11 @@
 "use client";
 
-// REVIEWED - 14
+// REVIEWED - 15
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { PaginatedDocs } from "payload";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -31,11 +32,13 @@ export const useUser = function useUser(enabled?: boolean) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const {
-    isLoading: isPending,
-    data,
-    refetch,
-  } = useQuery({
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const { isPending, data, refetch } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await getAuthentication();
@@ -44,7 +47,7 @@ export const useUser = function useUser(enabled?: boolean) {
 
       return response.user;
     },
-    enabled,
+    enabled: enabled ?? true,
   });
 
   const signIn = useMutation({
@@ -239,7 +242,7 @@ export const useUser = function useUser(enabled?: boolean) {
   });
 
   return {
-    isPending,
+    isPending: isMounted ? isPending : false,
     data,
     refetch,
     signIn,
