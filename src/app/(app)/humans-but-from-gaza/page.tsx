@@ -1,15 +1,13 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { getCollection } from "@/actions/collection";
 import { DiaryEntryList } from "@/components/diary-entry/list";
+import { DiaryEntryListLoading } from "@/components/diary-entry/loading";
 import { Container } from "@/components/globals/container";
 import {
   FilterConfig,
@@ -21,7 +19,9 @@ import { Paragraph, SectionHeading } from "@/components/globals/typography";
 import { VideoOutroScene } from "@/components/globals/video-outro-scene";
 import { Button } from "@/components/ui/button";
 import { motions } from "@/lib/motion";
+import { getQueryClient } from "@/lib/query";
 import { SelectOptions } from "@/lib/types";
+import { DiaryEntry } from "@/payload-types";
 
 import { QueryProvider } from "../providers";
 
@@ -46,6 +46,38 @@ export const metadata: Metadata = {
       "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXC1oaVJSjsK7EiPGHV1uLXdr0eRnvWfxmt5qM",
     ],
   },
+};
+
+const DiaryEntryPageList = async function DiaryEntryPageList({
+  selects,
+}: {
+  selects: SelectOptions;
+}) {
+  const queryClient = getQueryClient();
+  const fieldsSearch: (keyof DiaryEntry)[] = ["title"];
+
+  queryClient.prefetchQuery({
+    queryKey: ["diary-entries", selects],
+    queryFn: async () => {
+      const response = await getCollection<"diary-entries">({
+        collection: "diary-entries",
+        selects,
+        fieldsSearch,
+      });
+
+      if (!response.data || response.error) return null;
+
+      return response.data;
+    },
+  });
+
+  return (
+    <QueryProvider>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <DiaryEntryList selects={selects} fieldsSearch={fieldsSearch} />
+      </HydrationBoundary>
+    </QueryProvider>
+  );
 };
 
 export default async function HumansButFromGazaPage(props: {
@@ -90,22 +122,6 @@ export default async function HumansButFromGazaPage(props: {
       ],
     },
   ];
-
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: ["diary-entries", selects, ["title"]],
-    queryFn: async () => {
-      const response = await getCollection<"diary-entries">({
-        collection: "diary-entries",
-        selects,
-        fieldsSearch: ["title"],
-      });
-
-      if (!response.data || response.error) return null;
-
-      return response.data;
-    },
-  });
 
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">
@@ -154,11 +170,9 @@ export default async function HumansButFromGazaPage(props: {
         </MotionDiv>
       </Container>
       <Container className="mb-12 grid max-w-7xl grid-cols-1 gap-16 xl:mb-24">
-        <QueryProvider>
-          <HydrationBoundary state={dehydrate(queryClient)}>
-            <DiaryEntryList selects={selects} fieldsSearch={["title"]} />
-          </HydrationBoundary>
-        </QueryProvider>
+        <Suspense fallback={<DiaryEntryListLoading />}>
+          <DiaryEntryPageList selects={selects} />
+        </Suspense>
       </Container>
       <VideoOutroScene
         duration={800}
