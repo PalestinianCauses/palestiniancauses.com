@@ -1,4 +1,4 @@
-/* REVIEWED - 07 */
+/* REVIEWED - 08 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -57,17 +57,17 @@
   src: url("../../assets/fonts/gilroy-black.woff2") format("woff2");
 }
 
-@keyframes book {
+@keyframes highlight {
   0% {
-    transform: rotateX(50deg) rotateZ(45deg);
+    background-color: rgba(255, 255, 255, 0);
   }
 
   50% {
-    transform: rotateX(50deg) rotateZ(40deg) translateZ(2.5rem);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   100% {
-    transform: rotateX(50deg) rotateZ(45deg);
+    background-color: rgba(255, 255, 255, 0);
   }
 }
 
@@ -87,6 +87,14 @@
 
   body {
     @apply bg-background font-["Gilroy",_system-ui,_sans-serif] text-foreground;
+  }
+
+  .highlight {
+    animation-name: highlight;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
   }
 }
 

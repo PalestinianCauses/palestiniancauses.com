@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useQuery } from "@tanstack/react-query";
 import TimeAgo from "javascript-time-ago";
@@ -72,7 +72,7 @@ export const CommentItem = function CommentItem({
             },
           ],
         },
-        fields: ["user", "content", "createdAt"],
+        fieldsSearch: ["user", "content", "createdAt"],
         depth: 2,
       });
 
@@ -247,18 +247,18 @@ export const CommentItem = function CommentItem({
 
 export const CommentList = function CommentList({
   selects,
-  fields,
+  fieldsSearch,
 }: {
   selects: SelectOptions;
-  fields: (keyof GeneratedTypes["collections"]["comments"])[];
+  fieldsSearch: (keyof GeneratedTypes["collections"]["comments"])[];
 }) {
   const { isFetching, data: comments } = useQuery({
-    queryKey: ["comments", selects, fields],
+    queryKey: ["comments", selects, fieldsSearch],
     queryFn: async () => {
       const response = await getCollection({
         collection: "comments",
         selects,
-        fields,
+        fieldsSearch,
         depth: 1,
       });
 

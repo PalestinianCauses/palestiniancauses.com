@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import {
   dehydrate,
@@ -105,21 +105,17 @@ const DiaryEntryPageCommentsList = async function DiaryEntryPageCommentsList({
     ],
   };
 
-  const commentsFields: (keyof GeneratedTypes["collections"]["comments"])[] = [
-    "user",
-    "content",
-    "votes",
-    "createdAt",
-  ];
+  const commentsFieldsSearch: (keyof GeneratedTypes["collections"]["comments"])[] =
+    ["user", "content", "votes", "createdAt"];
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ["comments", commentsSelects, commentsFields],
+    queryKey: ["comments", commentsSelects, commentsFieldsSearch],
     queryFn: async () => {
       const response = await getCollection({
         collection: "comments",
         selects: commentsSelects,
-        fields: commentsFields,
+        fieldsSearch: commentsFieldsSearch,
         depth: 1,
       });
 
@@ -133,7 +129,10 @@ const DiaryEntryPageCommentsList = async function DiaryEntryPageCommentsList({
   return (
     <QueryProvider>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <CommentList selects={commentsSelects} fields={commentsFields} />
+        <CommentList
+          selects={commentsSelects}
+          fieldsSearch={commentsFieldsSearch}
+        />
       </HydrationBoundary>
     </QueryProvider>
   );

@@ -1,4 +1,4 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
 import {
   dehydrate,
@@ -71,7 +71,7 @@ export default async function HumansButFromGazaPage(props: {
       searchParams?.title && typeof searchParams.title === "string"
         ? searchParams?.title
         : "",
-    status: "approved",
+    fields: [{ status: { equals: "approved" } }],
   };
 
   const filterConfigs: FilterConfig[] = [
@@ -98,7 +98,7 @@ export default async function HumansButFromGazaPage(props: {
       const response = await getCollection<"diary-entries">({
         collection: "diary-entries",
         selects,
-        fields: ["title"],
+        fieldsSearch: ["title"],
       });
 
       if (!response.data || response.error) return null;
@@ -156,7 +156,7 @@ export default async function HumansButFromGazaPage(props: {
       <Container className="mb-12 grid max-w-7xl grid-cols-1 gap-16 xl:mb-24">
         <QueryProvider>
           <HydrationBoundary state={dehydrate(queryClient)}>
-            <DiaryEntryList selects={selects} fields={["title"]} />
+            <DiaryEntryList selects={selects} fieldsSearch={["title"]} />
           </HydrationBoundary>
         </QueryProvider>
       </Container>

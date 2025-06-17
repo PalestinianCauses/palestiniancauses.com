@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -63,7 +63,8 @@ export const CreateCommentForm = function CreateCommentForm({
     );
   };
 
-  if (isPending) return <Loading className="min-h-96" />;
+  if (isPending)
+    return <Loading className="-mb-12 min-h-80 lg:-mb-24 xl:-mb-32" />;
 
   return (
     <div>

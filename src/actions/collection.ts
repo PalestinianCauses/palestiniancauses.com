@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import {
   GeneratedTypes,
@@ -21,7 +21,7 @@ type CollectionOptions<TSlug extends CollectionTypes> = {
   user?: User | null;
   collection: TSlug;
   selects: SelectOptions;
-  fields?: (keyof GeneratedTypes["collections"][TSlug])[];
+  fieldsSearch?: (keyof GeneratedTypes["collections"][TSlug])[];
   depth?: number;
 };
 
@@ -44,25 +44,20 @@ export const getCollection = async function getCollection<
     limit = selectOptionsDefaults.limit,
     sort = selectOptionsDefaults.sort,
     search = selectOptionsDefaults.search,
-    ...otherSelects
+    fields: selectFields,
   },
-  fields,
+  fieldsSearch,
   depth = 0,
 }: CollectionOptions<TSlug>): Promise<ResponseCollection<TSlug>> {
   const where: Where = {};
 
-  if (search && fields && fields.length > 0) {
-    where.or = fields.map((field) => ({
+  if (search && fieldsSearch && fieldsSearch.length > 0) {
+    where.or = fieldsSearch.map((field) => ({
       [field]: { contains: search },
     }));
   }
 
-  /* eslint-disable no-restricted-syntax */
-  for (const key in otherSelects) {
-    if (otherSelects[key] !== undefined && otherSelects[key] !== "") {
-      where[key] = { equals: otherSelects[key] };
-    }
-  }
+  if (selectFields) where.and = selectFields;
 
   const response = await actionSafeExecute(
     payload.find({

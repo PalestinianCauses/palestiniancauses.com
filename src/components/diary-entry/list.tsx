@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { useQuery } from "@tanstack/react-query";
 import { FileDiffIcon } from "lucide-react";
@@ -92,18 +92,18 @@ export const DiaryEntryListItem = function DiaryEntryListItem({
 
 export const DiaryEntryList = function DiaryEntryList({
   selects,
-  fields,
+  fieldsSearch,
 }: {
   selects: SelectOptions;
-  fields: (keyof GeneratedTypes["collections"]["diary-entries"])[];
+  fieldsSearch: (keyof GeneratedTypes["collections"]["diary-entries"])[];
 }) {
   const { data, isPending } = useQuery({
-    queryKey: ["diary-entries", selects, fields],
+    queryKey: ["diary-entries", selects, fieldsSearch],
     queryFn: async () => {
       const response = await getCollection<"diary-entries">({
         collection: "diary-entries",
         selects,
-        fields,
+        fieldsSearch,
       });
 
       if (!response.data || response.error) return null;
