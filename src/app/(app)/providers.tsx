@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 08
+// REVIEWED - 09
 import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
@@ -16,11 +16,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useActivity } from "@/hooks/use-activity";
 import { useUser } from "@/hooks/use-user";
-import { queryClient } from "@/lib/query";
+import { getQueryClient } from "@/lib/query";
 
 export const QueryProvider = function QueryProvider({
   children,
 }: PropsWithChildren) {
+  const queryClient = getQueryClient();
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
