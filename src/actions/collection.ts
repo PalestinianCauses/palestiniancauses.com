@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 09
+// REVIEWED - 10
 
 import {
   GeneratedTypes,
@@ -57,7 +57,13 @@ export const getCollection = async function getCollection<
     }));
   }
 
-  if (selectFields) where.and = selectFields;
+  if (selectFields)
+    selectFields.forEach((field) => {
+      /* eslint-disable no-restricted-syntax */
+      for (const key in field) {
+        if (Object.hasOwn(field, key)) where[key] = field[key];
+      }
+    });
 
   const response = await actionSafeExecute(
     payload.find({

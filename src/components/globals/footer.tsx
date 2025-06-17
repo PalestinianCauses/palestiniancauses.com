@@ -1,9 +1,10 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import Image from "next/image";
 import Link from "next/link";
 
 import { motions } from "@/lib/motion";
+import { HumansButFromGazaPageLink } from "@/lib/utils/strings";
 
 import { Button } from "../ui/button";
 
@@ -19,7 +20,7 @@ const lists = [
       { href: "/about-us", label: "About us" },
       { href: "/support", label: "Support us" },
       { href: "/a-human-but-from-gaza", label: "A Human But From Gaza" },
-      { href: "/humans-but-from-gaza", label: "Humans But From Gaza" },
+      { href: HumansButFromGazaPageLink, label: "Humans But From Gaza" },
     ],
   },
   {

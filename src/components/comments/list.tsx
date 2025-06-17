@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useQuery } from "@tanstack/react-query";
 import TimeAgo from "javascript-time-ago";
@@ -132,7 +132,7 @@ export const CommentItem = function CommentItem({
               {typeof comment.user === "object" &&
               (comment.user.role === "admin" ||
                 comment.user.role === "system-user") ? (
-                <VerifiedIcon className="h-5 w-5" />
+                <VerifiedIcon className="h-4 w-4" />
               ) : null}
             </span>
           </h3>
@@ -171,7 +171,7 @@ export const CommentItem = function CommentItem({
               asChild>
               <Link href="/signin">
                 <MessageSquareReply className="mt-0.5 !h-5 !w-5 stroke-[1.5]" />
-                Join the conversation — sign in to reply!
+                Join this conversation — sign in to reply!
               </Link>
             </Button>
           ) : null}
@@ -268,7 +268,6 @@ export const CommentList = function CommentList({
       return response.data;
     },
     placeholderData: (previous) => previous,
-    refetchOnWindowFocus: false,
   });
 
   if (!comments || comments.docs.length === 0) return null;

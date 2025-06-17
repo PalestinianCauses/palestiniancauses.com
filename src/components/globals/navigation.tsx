@@ -1,6 +1,7 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { motions } from "@/lib/motion";
+import { HumansButFromGazaPageLink } from "@/lib/utils/strings";
 
 import { MotionSpan } from "./motion";
 import { NavigationLink } from "./navigation-link";
@@ -14,7 +15,7 @@ export const navigation = [
   },
   {
     label: "Humans But From Gaza",
-    href: "/humans-but-from-gaza",
+    href: HumansButFromGazaPageLink,
     recent: true,
     coming: false,
   },
