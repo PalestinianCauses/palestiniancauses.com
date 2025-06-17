@@ -1,10 +1,6 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { MessageSquareTextIcon } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import { GeneratedTypes } from "payload";
@@ -26,8 +22,12 @@ import {
 } from "@/components/globals/typography";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getQueryClient } from "@/lib/query";
 import { SelectOptions } from "@/lib/types";
-import { splitByFlexibleNewLines } from "@/lib/utils/strings";
+import {
+  HumansButFromGazaPageLink,
+  splitByFlexibleNewLines,
+} from "@/lib/utils/strings";
 import { User } from "@/payload-types";
 
 import { QueryProvider } from "../../providers";
@@ -61,7 +61,7 @@ const DiaryEntryPageBadges = async function DiaryEntryPageBadges({
 const DiaryEntryPageComments = async function DiaryEntryPageComments({
   children,
 }: PropsWithChildren) {
-  const queryClient = new QueryClient();
+  const queryClient = getQueryClient();
   queryClient.prefetchQuery({
     queryKey: ["user"],
     queryFn: async () => {
@@ -108,7 +108,7 @@ const DiaryEntryPageCommentsList = async function DiaryEntryPageCommentsList({
   const commentsFieldsSearch: (keyof GeneratedTypes["collections"]["comments"])[] =
     ["user", "content", "votes", "createdAt"];
 
-  const queryClient = new QueryClient();
+  const queryClient = getQueryClient();
   await queryClient.prefetchQuery({
     queryKey: ["comments", commentsSelects, commentsFieldsSearch],
     queryFn: async () => {
@@ -163,7 +163,7 @@ export default async function HumanButFromGazaPage(props: {
   const searchParams = await props.searchParams;
 
   const authorId = parseInt(searchParams.author, 10);
-  if (Number.isNaN(authorId)) redirect("/humans-but-from-gaza");
+  if (Number.isNaN(authorId)) redirect(HumansButFromGazaPageLink);
 
   const diaryEntry = await getDiaryEntry(parseInt(params.id, 10));
 
