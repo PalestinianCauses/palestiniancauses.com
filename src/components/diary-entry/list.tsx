@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { FileDiffIcon } from "lucide-react";
@@ -10,7 +10,7 @@ import { GeneratedTypes } from "payload";
 import { getCollection } from "@/actions/collection";
 import { getDiaryEntryAuthor } from "@/actions/diary-entry";
 import { motions } from "@/lib/motion";
-import { SelectOptions } from "@/lib/types";
+import { FiltersOptions } from "@/lib/types";
 import { splitByFlexibleNewLines } from "@/lib/utils/strings";
 import { cn } from "@/lib/utils/styles";
 import { DiaryEntry } from "@/payload-types";
@@ -92,30 +92,30 @@ export const DiaryEntryListItem = function DiaryEntryListItem({
 };
 
 export const DiaryEntryList = function DiaryEntryList({
-  selects,
+  filters,
   fieldsSearch,
 }: {
-  selects: SelectOptions;
+  filters: FiltersOptions;
   fieldsSearch: (keyof GeneratedTypes["collections"]["diary-entries"])[];
 }) {
   const { isPending, isFetching, data } = useSuspenseQuery({
-    queryKey: ["diary-entries", selects, fieldsSearch],
+    queryKey: ["diary-entries", filters, fieldsSearch],
     queryFn: async () => {
       const response = await getCollection<"diary-entries">({
         collection: "diary-entries",
-        selects,
+        filters,
         fieldsSearch,
       });
 
       if (!response.data || response.error) return null;
 
-      return response.data;
+      return response.data.docs;
     },
   });
 
   if (isPending || isFetching) return <DiaryEntryListLoading />;
 
-  if (!data || data.docs.length === 0)
+  if (!data || data.length === 0)
     return (
       <Container className="flex max-w-4xl flex-col px-0 py-12 lg:items-center lg:py-24 lg:text-center xl:py-32">
         <MotionDiv
@@ -139,7 +139,7 @@ export const DiaryEntryList = function DiaryEntryList({
       </Container>
     );
 
-  return data.docs.map((diaryEntry) => (
+  return data.map((diaryEntry) => (
     <DiaryEntryListItem key={diaryEntry.id} diaryEntry={diaryEntry} />
   ));
 };
