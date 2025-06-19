@@ -1,11 +1,11 @@
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Metadata } from "next";
 import Link from "next/link";
+import { GeneratedTypes } from "payload";
 import { Suspense } from "react";
 
-import { getCollection } from "@/actions/collection";
 import { DiaryEntryList } from "@/components/diary-entry/list";
 import { DiaryEntryListLoading } from "@/components/diary-entry/loading";
 import { Container } from "@/components/globals/container";
@@ -19,9 +19,9 @@ import { Paragraph, SectionHeading } from "@/components/globals/typography";
 import { VideoOutroScene } from "@/components/globals/video-outro-scene";
 import { Button } from "@/components/ui/button";
 import { motions } from "@/lib/motion";
+import { payload } from "@/lib/payload";
 import { getQueryClient } from "@/lib/query";
-import { SelectOptions } from "@/lib/types";
-import { DiaryEntry } from "@/payload-types";
+import { FiltersOptions } from "@/lib/types";
 
 import { QueryProvider } from "../providers";
 
@@ -48,35 +48,50 @@ export const metadata: Metadata = {
   },
 };
 
-const DiaryEntryPageList = async function DiaryEntryPageList({
-  selects,
+const DiaryEntryListSuspense = function DiaryEntryListSuspense({
+  filters,
+  fieldsSearch,
 }: {
-  selects: SelectOptions;
+  filters: FiltersOptions;
+  fieldsSearch: (keyof GeneratedTypes["collections"]["diary-entries"])[];
 }) {
   const queryClient = getQueryClient();
-  const fieldsSearch: (keyof DiaryEntry)[] = ["title"];
 
   queryClient.prefetchQuery({
-    queryKey: ["diary-entries", selects],
+    queryKey: ["diary-entries", filters, fieldsSearch],
     queryFn: async () => {
-      const response = await getCollection<"diary-entries">({
-        collection: "diary-entries",
-        selects,
-        fieldsSearch,
-      });
+      try {
+        const response = await payload.find({
+          collection: "diary-entries",
+          page: filters.page,
+          limit: filters.limit,
+          sort: filters.sort,
+          where: {
+            status: { equals: "approved" },
+            or: fieldsSearch.map((field) => ({
+              [field]: { contains: filters.search },
+            })),
+          },
+        });
 
-      if (!response.data || response.error) return null;
+        if (response.docs.length === 0) return null;
 
-      return response.data;
+        return response.docs;
+      } catch (error) {
+        console.log(error);
+        return null;
+      }
     },
   });
 
   return (
-    <QueryProvider>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <DiaryEntryList selects={selects} fieldsSearch={fieldsSearch} />
-      </HydrationBoundary>
-    </QueryProvider>
+    <Suspense fallback={<DiaryEntryListLoading />}>
+      <QueryProvider>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <DiaryEntryList filters={filters} fieldsSearch={fieldsSearch} />
+        </HydrationBoundary>
+      </QueryProvider>
+    </Suspense>
   );
 };
 
@@ -86,7 +101,7 @@ export default async function HumansButFromGazaPage(props: {
   /* eslint-disable react/destructuring-assignment */
   const searchParams = await props.searchParams;
 
-  const selects: SelectOptions = {
+  const filters: FiltersOptions = {
     page:
       searchParams?.page && typeof searchParams?.page === "string"
         ? parseInt(searchParams?.page, 10)
@@ -152,9 +167,9 @@ export default async function HumansButFromGazaPage(props: {
         <div className="flex max-w-3xl flex-1 flex-col justify-stretch gap-5 sm:flex-row [&_#filter-control-sort]:min-w-48 [&_#filter-control-title]:w-full">
           <FilterControls
             filterConfigs={filterConfigs}
-            pageDefault={selects.page}
-            limitDefault={selects.limit}
-            sortDefault={selects.sort}
+            pageDefault={filters.page}
+            limitDefault={filters.limit}
+            sortDefault={filters.sort}
             debounceTime={500}
           />
         </div>
@@ -170,9 +185,7 @@ export default async function HumansButFromGazaPage(props: {
         </MotionDiv>
       </Container>
       <Container className="mb-12 grid max-w-7xl grid-cols-1 gap-16 xl:mb-24">
-        <Suspense fallback={<DiaryEntryListLoading />}>
-          <DiaryEntryPageList selects={selects} />
-        </Suspense>
+        <DiaryEntryListSuspense filters={filters} fieldsSearch={["title"]} />
       </Container>
       <VideoOutroScene
         duration={800}
