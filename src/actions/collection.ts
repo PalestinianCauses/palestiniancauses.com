@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 10
+// REVIEWED - 11
 
 import {
   GeneratedTypes,
@@ -13,14 +13,14 @@ import {
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
-import { CollectionTypes, SelectOptions } from "@/lib/types";
-import { selectOptionsDefaults } from "@/lib/utils/filters";
+import { CollectionTypes, FiltersOptions } from "@/lib/types";
+import { filtersOptionsDefaults } from "@/lib/utils/filters";
 
 type CollectionOptions<TSlug extends CollectionTypes> = {
   req?: Partial<PayloadRequest>;
   user?: User | null;
   collection: TSlug;
-  selects: SelectOptions;
+  filters: FiltersOptions;
   fieldsSearch?: (keyof GeneratedTypes["collections"][TSlug])[];
   depth?: number;
 };
@@ -39,11 +39,11 @@ export const getCollection = async function getCollection<
   req,
   user,
   collection,
-  selects: {
-    page = selectOptionsDefaults.page,
-    limit = selectOptionsDefaults.limit,
-    sort = selectOptionsDefaults.sort,
-    search = selectOptionsDefaults.search,
+  filters: {
+    page = filtersOptionsDefaults.page,
+    limit = filtersOptionsDefaults.limit,
+    sort = filtersOptionsDefaults.sort,
+    search = filtersOptionsDefaults.search,
     fields: selectFields,
   },
   fieldsSearch,
