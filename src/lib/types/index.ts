@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { GeneratedTypes, Where } from "payload";
 
@@ -7,7 +7,7 @@ import { Comment, User } from "@/payload-types";
 // PayLoad CMS
 export type CollectionTypes = keyof GeneratedTypes["collections"];
 
-export type SelectOptions = {
+export type FiltersOptions = {
   page?: number;
   limit?: number;
   sort?: string;
