@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -13,8 +13,8 @@ import {
 
 import { useDebounce } from "@/hooks/use-debounce";
 import { motions } from "@/lib/motion";
-import { SelectOptions } from "@/lib/types";
-import { selectOptionsDefaults } from "@/lib/utils/filters";
+import { FiltersOptions } from "@/lib/types";
+import { filtersOptionsDefaults } from "@/lib/utils/filters";
 
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -40,9 +40,9 @@ export type FilterConfig =
 
 export const FilterControls = function FilterControls({
   filterConfigs,
-  pageDefault = selectOptionsDefaults.page,
-  limitDefault = selectOptionsDefaults.limit,
-  sortDefault = selectOptionsDefaults.sort,
+  pageDefault = filtersOptionsDefaults.page,
+  limitDefault = filtersOptionsDefaults.limit,
+  sortDefault = filtersOptionsDefaults.sort,
   debounceTime = 400,
 }: {
   filterConfigs: FilterConfig[];
@@ -58,7 +58,7 @@ export const FilterControls = function FilterControls({
 
   // State Management
   const [filterState, setFilterState] = useState(() => {
-    const state: SelectOptions & { [key: string]: string | number } = {};
+    const state: FiltersOptions & { [key: string]: string | number } = {};
 
     filterConfigs.forEach((filterConfig) => {
       state[filterConfig.param] = paramsSearch.get(filterConfig.param) || "";
