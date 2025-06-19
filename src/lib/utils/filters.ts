@@ -1,8 +1,8 @@
-// REVIEWED
+// REVIEWED - 01
 
-import { SelectOptions } from "../types";
+import { FiltersOptions } from "../types";
 
-export const selectOptionsDefaults: SelectOptions = {
+export const filtersOptionsDefaults: FiltersOptions = {
   page: 1,
   limit: 50,
   sort: ["-", "created", "At"].join(""),
