@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -23,7 +23,6 @@ export const useComment = function useComment() {
       }
 
       toast.success(response.data);
-      queryClient.invalidateQueries({ queryKey: ["comments"] });
     },
     onSettled: () => {
       toast.dismiss("create-comment");
