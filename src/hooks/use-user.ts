@@ -1,11 +1,14 @@
 "use client";
 
-// REVIEWED - 15
+// REVIEWED - 16
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { PaginatedDocs } from "payload";
-import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -28,17 +31,11 @@ import {
 } from "@/lib/types/guards";
 import { User } from "@/payload-types";
 
-export const useUser = function useUser(enabled?: boolean) {
+export const useUser = function useUser() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const { isPending, data, refetch } = useQuery({
+  const { isPending, isFetching, data, refetch } = useSuspenseQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await getAuthentication();
@@ -47,7 +44,6 @@ export const useUser = function useUser(enabled?: boolean) {
 
       return response.user;
     },
-    enabled: enabled ?? true,
   });
 
   const signIn = useMutation({
@@ -242,7 +238,7 @@ export const useUser = function useUser(enabled?: boolean) {
   });
 
   return {
-    isPending: isMounted ? isPending : false,
+    isPending: isPending || isFetching,
     data,
     refetch,
     signIn,
