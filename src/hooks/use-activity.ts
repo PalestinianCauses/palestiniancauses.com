@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -320,6 +320,8 @@ export const useActivity = function useActivity() {
   }, [doSignOut]);
 
   return {
+    isPending,
+    user,
     isInActivityWarning,
     isInActivityCountDown,
     staySignedIn,
