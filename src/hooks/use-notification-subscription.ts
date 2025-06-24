@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -26,31 +26,34 @@ export const useNotificationSubscription =
         setIsAvailable(true);
     }, []);
 
-    const { isPending, data: subscription } =
-      useQuery<NotificationSubscription | null>({
-        queryKey: ["notification-subscription"],
-        queryFn: async () => {
-          try {
-            const serviceWorker = await navigator.serviceWorker.ready;
-            const serviceWorkerSubscription =
-              await serviceWorker.pushManager.getSubscription();
+    const {
+      isPending,
+      isFetching,
+      data: subscription,
+    } = useQuery<NotificationSubscription | null>({
+      queryKey: ["notification-subscription"],
+      queryFn: async () => {
+        try {
+          const serviceWorker = await navigator.serviceWorker.ready;
+          const serviceWorkerSubscription =
+            await serviceWorker.pushManager.getSubscription();
 
-            if (!serviceWorkerSubscription) return null;
+          if (!serviceWorkerSubscription) return null;
 
-            const response = await getNotificationSubscription({
-              endpoint: serviceWorkerSubscription.endpoint,
-            });
+          const response = await getNotificationSubscription({
+            endpoint: serviceWorkerSubscription.endpoint,
+          });
 
-            if (!response.data || response.error) return null;
+          if (!response.data || response.error) return null;
 
-            return response.data;
-          } catch (error) {
-            console.error(error);
-            return null;
-          }
-        },
-        enabled: isAvailable,
-      });
+          return response.data;
+        } catch (error) {
+          console.error(error);
+          return null;
+        }
+      },
+      enabled: isAvailable,
+    });
 
     const subscribe = useMutation({
       mutationFn: async () => {
@@ -132,7 +135,7 @@ export const useNotificationSubscription =
     });
 
     return {
-      isPending,
+      isPending: isPending || isFetching,
       isAvailable,
       subscription,
       subscribe,
