@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 export const ensureStartsWith = function ensureStartsWith(
   stringToCheck: string,
@@ -7,16 +7,6 @@ export const ensureStartsWith = function ensureStartsWith(
   return stringToCheck.startsWith(startsWith)
     ? stringToCheck
     : [startsWith, stringToCheck].join("");
-};
-
-export const splitByFlexibleNewLines = function splitByFlexibleNewLines(
-  string: string,
-) {
-  if (!string.trim()) return [];
-
-  const separateRegex = /\s*\n+\s*/;
-  const stringFiltered = string.split(separateRegex).filter(Boolean);
-  return stringFiltered;
 };
 
 export const HumansButFromGazaPageLink = [
