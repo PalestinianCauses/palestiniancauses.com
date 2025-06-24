@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { GeneratedTypes, Where } from "payload";
 
@@ -12,7 +12,7 @@ export type FiltersOptions = {
   limit?: number;
   sort?: string;
   search?: string;
-  fields?: Where[];
+  fields?: Where;
 };
 
 export type ErrorPayload = {
