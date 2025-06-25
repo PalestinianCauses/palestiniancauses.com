@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
@@ -240,7 +240,7 @@ const Sidebar = React.forwardRef<
         {/* This is what handles the sidebar gap on desktop */}
         <div
           className={cn(
-            "relative h-svh w-[--sidebar-width] bg-transparent transition-[width] duration-100 ease-linear",
+            "relative h-svh w-[--sidebar-width] bg-transparent transition-[width] duration-100 ease-in-out",
             "group-data-[collapsible_=_off-canvas]:w-0",
             "group-data-[side_=_right]:rotate-180",
             variant === "floating" || variant === "inset"
@@ -250,7 +250,7 @@ const Sidebar = React.forwardRef<
         />
         <div
           className={cn(
-            "fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,_right,_width] duration-100 ease-linear md:flex",
+            "fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,_right,_width] duration-100 ease-in-out md:flex",
             side === "left"
               ? "left-0 group-data-[collapsible_=_off-canvas]:left-[calc(var(--sidebar-width)_*_-1)]"
               : "right-0 group-data-[collapsible_=_off-canvas]:right-[calc(var(--sidebar-width)_*_-1)]",
@@ -316,7 +316,7 @@ const SidebarRail = React.forwardRef<
       aria-label="Toggle Sidebar"
       onClick={toggleSidebar}
       className={cn(
-        "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[0.125rem] hover:after:bg-sidebar-border group-data-[side_=_left]:-right-4 group-data-[side_=_right]:left-0 sm:flex",
+        "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-in-out after:absolute after:inset-y-0 after:left-1/2 after:w-[0.125rem] hover:after:bg-sidebar-border group-data-[side_=_left]:-right-4 group-data-[side_=_right]:left-0 sm:flex",
         "[[data-side_=_left]_&]:cursor-w-resize [[data-side_=_right]_&]:cursor-e-resize",
         "[[data-side_=_left][data-state_=_collapsed]_&]:cursor-e-resize [[data-side_=_right][data-state_=_collapsed]_&]:cursor-w-resize",
         "group-data-[collapsible_=_off-canvas]:translate-x-0 group-data-[collapsible_=_off-canvas]:after:left-full group-data-[collapsible_=_off-canvas]:hover:bg-sidebar",
@@ -449,7 +449,7 @@ const SidebarGroupLabel = React.forwardRef<
       ref={ref}
       data-sidebar="group-label"
       className={cn(
-        "flex h-8 shrink-0 items-center px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,_opacity] duration-100 ease-linear focus-visible:ring-2 [&_>_svg]:size-4 [&_>_svg]:shrink-0",
+        "flex h-8 shrink-0 items-center px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,_opacity] duration-100 ease-in-out focus-visible:ring-2 [&_>_svg]:size-4 [&_>_svg]:shrink-0",
         "group-data-[collapsible_=_icon]:-mt-8 group-data-[collapsible_=_icon]:opacity-0",
         className,
       )}
