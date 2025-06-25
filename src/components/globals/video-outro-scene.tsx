@@ -1,8 +1,8 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, Variants } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 
 import { cn, toHEX } from "@/lib/utils/styles";
@@ -55,7 +55,7 @@ export const VideoOutroScene = function VideoOutroScene({
   bgClassName = "",
   textClassName = "",
 }) {
-  const variants = useMemo(
+  const variants: Variants = useMemo(
     () => ({
       initial: { scale: 0.96, y: 8 },
       animate: {
