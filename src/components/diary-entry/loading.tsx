@@ -1,19 +1,10 @@
-// REVIEWED
+// REVIEWED - 01
 
-import { motions } from "@/lib/motion";
-
-import { MotionDiv } from "../globals/motion";
 import { Skeleton } from "../ui/skeleton";
 
 export const DiaryEntryListLoading = function DiaryEntryListLoading() {
   return [1, 2, 3].map((id) => (
-    <MotionDiv
-      viewport={{ once: true }}
-      initial={motions.fadeIn.initial}
-      whileInView={motions.fadeIn.whileInView}
-      transition={motions.transition({})}
-      key={id}
-      className="flex flex-col">
+    <div key={id} className="flex flex-col">
       <div className="mb-4 flex items-center gap-2.5 md:gap-5">
         <Skeleton className="h-5 w-full max-w-24 md:max-w-32 xl:max-w-40" />
         <Skeleton className="h-5 w-full max-w-24 md:max-w-32 xl:max-w-40" />
@@ -26,6 +17,6 @@ export const DiaryEntryListLoading = function DiaryEntryListLoading() {
         <Skeleton className="h-3 w-full max-w-lg md:max-w-xl xl:max-w-2xl" />
       </div>
       <Skeleton className="h-8 w-28" />
-    </MotionDiv>
+    </div>
   ));
 };
