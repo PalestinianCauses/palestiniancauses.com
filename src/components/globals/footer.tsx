@@ -1,15 +1,13 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import Image from "next/image";
 import Link from "next/link";
 
-import { motions } from "@/lib/motion";
 import { HumansButFromGazaPageLink } from "@/lib/utils/strings";
 
 import { Button } from "../ui/button";
 
 import { Container } from "./container";
-import { MotionDiv } from "./motion";
 import { Paragraph, SubSectionHeading } from "./typography";
 
 const lists = [
@@ -50,12 +48,7 @@ export const Footer = function Footer() {
     <footer className="relative">
       <Container className="max-w-7xl pb-12 pt-0 sm:pt-12">
         <div className="mb-12 grid grid-cols-1 items-start gap-12 md:grid-cols-2 md:gap-8">
-          <MotionDiv
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="relative flex flex-col items-start justify-start">
+          <div className="relative flex flex-col items-start justify-start">
             <div className="relative mb-4 flex items-center gap-5">
               <Image
                 src="/logo-primary.png"
@@ -80,36 +73,25 @@ export const Footer = function Footer() {
               className="!text-sm !leading-normal text-foreground">
               &copy; 2025 PalestinianCauses LLC. All Rights Reserved.
             </Paragraph>
-          </MotionDiv>
+          </div>
           <div className="flex flex-wrap items-start justify-start gap-20">
             {lists.map((list) => (
-              <MotionDiv
+              <div
                 key={list.title}
-                viewport={{ once: true }}
-                initial={motions.fadeIn.initial}
-                whileInView={motions.fadeIn.whileInView}
-                transition={motions.transition({})}
                 className="flex flex-col items-start justify-start gap-6">
                 <Paragraph className="!text-sm font-medium uppercase tracking-[0.2em] text-foreground">
                   {list.title}
                 </Paragraph>
                 <ul className="flex flex-col items-start justify-start gap-4">
-                  {list.links.map(({ href, label }, index) => (
-                    <li key={href}>
-                      <MotionDiv
-                        viewport={{ once: true }}
-                        initial={motions.fadeIn.initial}
-                        whileInView={motions.fadeIn.whileInView}
-                        transition={motions.transition({ delay: index * 0.1 })}
-                        className="flex items-center justify-center">
-                        <Button variant="link" className="p-0" asChild>
-                          <Link href={href}>{label}</Link>
-                        </Button>
-                      </MotionDiv>
+                  {list.links.map(({ href, label }) => (
+                    <li key={href} className="flex items-center justify-center">
+                      <Button variant="link" className="p-0" asChild>
+                        <Link href={href}>{label}</Link>
+                      </Button>
                     </li>
                   ))}
                 </ul>
-              </MotionDiv>
+              </div>
             ))}
           </div>
         </div>
