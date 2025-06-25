@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -12,15 +12,12 @@ import {
 } from "react";
 
 import { useDebounce } from "@/hooks/use-debounce";
-import { motions } from "@/lib/motion";
 import { FiltersOptions } from "@/lib/types";
 import { filtersOptionsDefaults } from "@/lib/utils/filters";
 
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
-
-import { MotionDiv } from "./motion";
 
 // Defining a structure for configuring a single filter control
 export type FilterConfig =
@@ -153,13 +150,9 @@ export const FilterControls = function FilterControls({
   return (
     <Fragment>
       {filterConfigs.map((filter) => (
-        <MotionDiv
+        <div
           key={filter.param}
           id={`filter-control-${filter.param}`}
-          viewport={{ once: true }}
-          initial={motions.fadeIn.initial}
-          whileInView={motions.fadeIn.whileInView}
-          transition={motions.transition({})}
           className="flex flex-col items-start justify-start gap-3">
           <Label htmlFor={filter.param}>{filter.label}</Label>
           {filter.type === "search" ? (
@@ -193,7 +186,7 @@ export const FilterControls = function FilterControls({
               </SelectContent>
             </Select>
           ) : null}
-        </MotionDiv>
+        </div>
       ))}
     </Fragment>
   );
