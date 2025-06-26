@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { CollectionConfig } from "payload";
 
@@ -36,6 +36,14 @@ export const Comments: CollectionConfig = {
       relationTo: "comments",
       hasMany: false,
       required: false,
+    },
+    {
+      admin: { readOnly: true, position: "sidebar" },
+      label: "Replies Count",
+      name: "repliesCount",
+      type: "number",
+      defaultValue: 0,
+      min: 0,
     },
     {
       admin: { readOnly: true, position: "sidebar" },
@@ -95,11 +103,16 @@ export const Comments: CollectionConfig = {
     },
   ],
   hooks: {
-    beforeChange: [
-      ({ req, data }) => {
-        const dataUpdated = data;
-        if (req.user && !data.user) dataUpdated.user = req.user.id;
-        return dataUpdated;
+    beforeRead: [
+      async ({ req: { payload }, doc }) => {
+        const docUpdated = doc;
+        const response = await payload.count({
+          collection: "comments",
+          where: { parent: { equals: doc.id } },
+        });
+
+        docUpdated.repliesCount = response.totalDocs;
+        return docUpdated;
       },
     ],
   },
