@@ -1,13 +1,12 @@
 "use client";
 
-// REVIEWED - 12
+// REVIEWED - 13
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { MotionDiv } from "@/components/globals/motion";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,11 +20,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/use-user";
 import { messages } from "@/lib/messages";
-import { motions } from "@/lib/motion";
 import { signUpSchema, SignUpSchema } from "@/lib/schemas/auth";
 
 export const SignUpForm = function SignUpForm() {
-  const { signUp } = useUser(false);
+  const { signUp } = useUser();
 
   const form = useForm<SignUpSchema>({
     mode: "onBlur",
@@ -52,56 +50,42 @@ export const SignUpForm = function SignUpForm() {
         onSubmit={form.handleSubmit(handleSubmit)}
         className="flex flex-col items-stretch justify-center">
         <div className="mb-4 grid w-full grid-cols-2 items-start gap-4">
-          <MotionDiv
-            initial={motions.fadeIn.initial}
-            animate={motions.fadeIn.whileInView}
-            transition={motions.transition({ duration: "fast", delay: 0.3 })}>
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First name</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={signUp.isPending}
-                      data-testid="first-name-input"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </MotionDiv>
-          <MotionDiv
-            initial={motions.fadeIn.initial}
-            animate={motions.fadeIn.whileInView}
-            transition={motions.transition({ duration: "fast", delay: 0.4 })}>
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last name</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={signUp.isPending}
-                      data-testid="last-name-input"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </MotionDiv>
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First name</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={signUp.isPending}
+                    data-testid="first-name-input"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last name</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={signUp.isPending}
+                    data-testid="last-name-input"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
-        <MotionDiv
-          initial={motions.fadeIn.initial}
-          animate={motions.fadeIn.whileInView}
-          transition={motions.transition({ duration: "fast", delay: 0.5 })}
-          className="mb-4">
+        <div className="mb-4">
           <FormField
             control={form.control}
             name="email"
@@ -120,12 +104,8 @@ export const SignUpForm = function SignUpForm() {
               </FormItem>
             )}
           />
-        </MotionDiv>
-        <MotionDiv
-          initial={motions.fadeIn.initial}
-          animate={motions.fadeIn.whileInView}
-          transition={motions.transition({ duration: "fast", delay: 0.6 })}
-          className="mb-6">
+        </div>
+        <div className="mb-6">
           <FormField
             control={form.control}
             name="password"
@@ -145,12 +125,8 @@ export const SignUpForm = function SignUpForm() {
               </FormItem>
             )}
           />
-        </MotionDiv>
-        <MotionDiv
-          initial={motions.fadeIn.initial}
-          animate={motions.fadeIn.whileInView}
-          transition={motions.transition({ duration: "fast", delay: 0.7 })}
-          className="flex flex-col items-stretch justify-center">
+        </div>
+        <div className="flex flex-col items-stretch justify-center">
           <Button
             type="submit"
             disabled={signUp.isPending}
@@ -167,7 +143,7 @@ export const SignUpForm = function SignUpForm() {
             </Button>
             .
           </p>
-        </MotionDiv>
+        </div>
       </form>
     </Form>
   );
