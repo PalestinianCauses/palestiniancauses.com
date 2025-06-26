@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -86,7 +86,7 @@ export const CreateCommentForm = function CreateCommentForm({
           </div>
         ) : null}
         <div className="flex flex-col items-start gap-5 md:flex-row">
-          <Avatar className="h-12 w-12 ring-1 ring-primary/20">
+          <Avatar className="h-11 w-11 ring-1 ring-input md:h-12 md:w-12">
             <AvatarFallback className="bg-muted/50 text-xl">
               {user && user.firstName
                 ? user.firstName.charAt(0).toUpperCase()
