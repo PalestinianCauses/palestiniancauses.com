@@ -1,9 +1,9 @@
-// REVIEWED - 01
+// REVIEWED - 02
+
 import { Metadata } from "next";
 import Link from "next/link";
 
 import { Container } from "@/components/globals/container";
-import { MotionOl } from "@/components/globals/motion";
 import {
   Paragraph,
   SectionHeading,
@@ -11,7 +11,6 @@ import {
   SubSectionHeading,
 } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
-import { motions } from "@/lib/motion";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -105,16 +104,11 @@ export default function PrivacyPolicyPage() {
             When you visit our website or interact with our services, we may
             automatically collect data about your device, such as:
           </Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>Device type.</li>
             <li>Operating system.</li>
             <li>Unique device identifiers.</li>
-          </MotionOl>
+          </ol>
           <Paragraph>
             The data we collect can depend on the individual settings of your
             device and software. We recommend checking your device
@@ -127,18 +121,13 @@ export default function PrivacyPolicyPage() {
             content to us or when you contact us — which may include one or more
             of the following:
           </Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>Name.</li>
             <li>Email.</li>
             <li>Social media profiles.</li>
             <li>Phone/mobile number.</li>
             <li>Home/mailing address.</li>
-          </MotionOl>
+          </ol>
           <SubSectionHeading>User-Generated Content.</SubSectionHeading>
           <Paragraph>
             We consider &ldquo;user-generated content&ldquo; materials (text,
@@ -168,12 +157,7 @@ export default function PrivacyPolicyPage() {
             We may collect personal information from you when you do any of the
             following on our website:
           </Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>Register for an account.</li>
             <li>
               Sign up to receive updates from us via email or social media
@@ -188,18 +172,13 @@ export default function PrivacyPolicyPage() {
               Contact us via email, social media, or any similar technologies.
             </li>
             <li>When you mention us on social media.</li>
-          </MotionOl>
+          </ol>
           <Paragraph>
             We may collect, hold, use, and disclose information for the
             following purposes, and personal data will not be further processed
             in a manner that is incompatible with these purposes:
           </Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>
               To provide you with our platform&apos;s core features and
               services.
@@ -227,7 +206,7 @@ export default function PrivacyPolicyPage() {
               For technical assessment, including operating and improving our
               app, associated applications, and social media platforms.
             </li>
-          </MotionOl>
+          </ol>
           <Paragraph>
             We may combine voluntarily provided and automatically collected
             personal information with general information or research data we
@@ -287,12 +266,7 @@ export default function PrivacyPolicyPage() {
             Disclosure of Personal Information to Third Parties.
           </SubSectionHeading>
           <Paragraph>We may disclose personal information to:</Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>A parent, subsidiary, or affiliate of our company.</li>
             <li>
               Third-party service providers to enable them to provide their
@@ -325,19 +299,14 @@ export default function PrivacyPolicyPage() {
               An entity that buys or to which we transfer all or substantially
               all of our assets and business.
             </li>
-          </MotionOl>
+          </ol>
           <Paragraph>Third parties we currently use include:</Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>Google Analytics.</li>
             <li>Open Web Analytics.</li>
             <li>Meta Pixel.</li>
             <li>MailChimp.</li>
-          </MotionOl>
+          </ol>
           <SubSectionHeading>
             Your Rights and Controlling Your Personal Information.
           </SubSectionHeading>
@@ -662,12 +631,7 @@ export default function PrivacyPolicyPage() {
             In the past 12 months, we have collected the following categories of
             personal information enumerated in the CCPA:
           </Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>
               Identifiers include name, email address, phone number, account
               name, IP address, and an ID or number assigned to your account.
@@ -677,7 +641,7 @@ export default function PrivacyPolicyPage() {
               or post on the service.
             </li>
             <li>Geolocation data.</li>
-          </MotionOl>
+          </ol>
           <Paragraph>
             For more information on the information we collect, including the
             sources we receive information from, review the &ldquo;Information
@@ -693,12 +657,7 @@ export default function PrivacyPolicyPage() {
             12 months. In particular, you have the right to request the
             following from us:
           </Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>
               The categories of personal information we have collected about
               you.
@@ -723,7 +682,7 @@ export default function PrivacyPolicyPage() {
               The specific pieces of personal information we have collected
               about you.
             </li>
-          </MotionOl>
+          </ol>
           <Paragraph>
             To exercise any of these rights, don&apos;t hesitate to contact us
             using the details provided in this privacy policy.
@@ -889,12 +848,7 @@ export default function PrivacyPolicyPage() {
             If we transfer your personal information to third parties in other
             countries:
           </Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>
               We will perform those transfers according to the requirements of
               the UK GDPR (Article 45) and the Data Protection Act 2018.
@@ -905,7 +859,7 @@ export default function PrivacyPolicyPage() {
               contractual clauses (&ldquo;SCCs&ldquo;) or binding corporate
               rules.
             </li>
-          </MotionOl>
+          </ol>
           <SubSectionHeading>Your Data Subject Rights.</SubSectionHeading>
           <Paragraph>
             <strong>Right to Restrict Processing:</strong> You have the right to
@@ -977,12 +931,7 @@ export default function PrivacyPolicyPage() {
             organization.
           </Paragraph>
           <Paragraph>However, the right to portability:</Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>
               This only applies to personal data that a person has directly and
               electronically given to PalestinianCauses LLC.
@@ -991,7 +940,7 @@ export default function PrivacyPolicyPage() {
               Onward transfer will only be available where this is
               &ldquo;technically feasible&ldquo;.
             </li>
-          </MotionOl>
+          </ol>
           <Paragraph>
             <strong>Right to Rectification:</strong> If personal data is
             inaccurate, outdated, or incomplete, individuals have the right to
@@ -1141,12 +1090,7 @@ export default function PrivacyPolicyPage() {
             Although PIPEDA does not contain an extensive set of consumer
             rights, it does grant consumers the right to:
           </Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>
               Access the personal information organizations hold about them.
             </li>
@@ -1159,7 +1103,7 @@ export default function PrivacyPolicyPage() {
               Withdraw consent for any activities they have consented to (e.g.,
               direct marketing or cookies).
             </li>
-          </MotionOl>
+          </ol>
           <SubSectionHeading as="h3" small>
             Right to Withdraw Consent.
           </SubSectionHeading>
@@ -1176,19 +1120,14 @@ export default function PrivacyPolicyPage() {
             Customers can not refuse collection, use, and disclosure of their
             personal information if such information is required to:
           </Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>Be collected, used, or disclosed as required by any law.</li>
             <li>Fulfill the terms of any contractual agreement.</li>
             <li>
               Be collected, used, or disclosed as regulators require, including
               self-regulatory organizations.
             </li>
-          </MotionOl>
+          </ol>
           <Paragraph>
             While you may request that we delete your contact details anytime,
             we can not recall any email we have already sent. If you have any
@@ -1211,12 +1150,7 @@ export default function PrivacyPolicyPage() {
             request within 30 days of receipt. Otherwise, we must inform you of
             our inability to do so before the 30-day timeframe if:
           </Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>
               Meeting the time limit would unreasonably interfere with our
               business activities.
@@ -1225,7 +1159,7 @@ export default function PrivacyPolicyPage() {
               The time required to undertake consultations necessary to respond
               to the request would make it impractical to meet the time limit.
             </li>
-          </MotionOl>
+          </ol>
           <Paragraph>
             We can also extend the time limit for the length of time required to
             convert the personal information into an alternative format. In
