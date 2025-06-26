@@ -1,9 +1,6 @@
-// REVIEWED - 01
-
-import { motions } from "@/lib/motion";
+// REVIEWED - 02
 
 import { Container } from "../globals/container";
-import { MotionLi } from "../globals/motion";
 import {
   Paragraph,
   SectionHeading,
@@ -66,19 +63,15 @@ export const CoreValues = function CoreValues() {
         </SectionHeading>
         <ul className="grid w-full grid-cols-1 items-start gap-8 text-background md:grid-cols-2">
           {values.map(({ title, description }) => (
-            <MotionLi
+            <li
               key={title}
-              viewport={{ once: true }}
-              initial={motions.fadeIn.initial}
-              whileInView={motions.fadeIn.whileInView}
-              transition={motions.transition({})}
               className="relative flex items-baseline border-l border-background/10 pl-5">
               <div className="absolute -left-px top-0 h-8 w-px bg-background" />
               <Paragraph small className="text-muted/75">
                 <span className="font-medium text-background">{title}:</span>{" "}
                 {description}
               </Paragraph>
-            </MotionLi>
+            </li>
           ))}
         </ul>
       </Container>

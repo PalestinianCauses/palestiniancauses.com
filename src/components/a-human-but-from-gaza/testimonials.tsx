@@ -1,22 +1,16 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
-import Image from "next/image";
 import Link from "next/link";
 
-import { motions } from "@/lib/motion";
-
 import { Container } from "../globals/container";
-import {
-  MotionBlockquote,
-  MotionDiv,
-  MotionFigcaption,
-} from "../globals/motion";
+import { SuspenseImage } from "../globals/suspense-image";
 import {
   Paragraph,
   SectionHeading,
   SectionHeadingBadge,
 } from "../globals/typography";
 import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 
 const testimonials = [
   {
@@ -43,6 +37,8 @@ const testimonials = [
   },
 ];
 
+const isLoadingElement = <Skeleton className="h-full w-full bg-primary/5" />;
+
 export const Testimonials = function Testimonials() {
   return (
     <section className="relative my-24 xl:my-32">
@@ -60,43 +56,31 @@ export const Testimonials = function Testimonials() {
               key={name}
               className="relative flex flex-col gap-6 lg:flex-row lg:gap-10">
               <figcaption className="flex shrink-0 flex-col items-start gap-2.5">
-                <MotionDiv
-                  viewport={{ once: true }}
-                  initial={motions.fadeIn.initial}
-                  whileInView={motions.fadeIn.whileInView}
-                  transition={motions.transition({})}
-                  className="relative">
-                  <Image
+                <div className="relative h-56 w-56">
+                  <SuspenseImage
+                    loading="lazy"
+                    isLoadingElement={isLoadingElement}
                     src={image}
                     alt={[name, "Profile Picture"].join(" ")}
                     fill
-                    sizes="14rem"
-                    className="!relative !h-56 !w-56 flex-none ring-1 ring-input grayscale"
+                    sizes="7rem"
+                    className="!relative flex-none ring-1 ring-input grayscale"
                   />
-                </MotionDiv>
-                <MotionFigcaption
-                  viewport={{ once: true }}
-                  initial={motions.fadeIn.initial}
-                  whileInView={motions.fadeIn.whileInView}
-                  transition={motions.transition({ delay: 0.1 })}>
+                </div>
+                <figcaption>
                   <Button variant="default" asChild>
                     <Link href={link} target="_blank">
                       {name}
                     </Link>
                   </Button>
-                </MotionFigcaption>
+                </figcaption>
               </figcaption>
-              <MotionBlockquote
-                viewport={{ once: true }}
-                initial={motions.fadeIn.initial}
-                whileInView={motions.fadeIn.whileInView}
-                transition={motions.transition({})}
-                className="relative border-t border-input pt-5 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0 [&_>_p:not(:last-child)]:mb-6 xl:[&_>_p:not(:last-child)]:mb-8">
+              <blockquote className="relative border-t border-input pt-5 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0 [&_>_p:not(:last-child)]:mb-6 xl:[&_>_p:not(:last-child)]:mb-8">
                 <div className="absolute -top-px left-0 h-px w-10 bg-foreground lg:-left-px lg:top-0 lg:h-10 lg:w-px" />
                 {paragraphs.map((paragraph) => (
                   <Paragraph key={paragraph}>{paragraph}</Paragraph>
                 ))}
-              </MotionBlockquote>
+              </blockquote>
             </figure>
           ))}
         </div>

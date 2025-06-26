@@ -1,9 +1,6 @@
-// REVIEWED
-
-import { motions } from "@/lib/motion";
+// REVIEWED - 01
 
 import { Container } from "../globals/container";
-import { MotionDiv } from "../globals/motion";
 import {
   Paragraph,
   SectionHeading,
@@ -60,14 +57,9 @@ export const WhoAreWe = function WhoAreWe() {
           <li
             key={letter}
             className="flex flex-col items-start justify-start gap-8">
-            <MotionDiv
-              viewport={{ once: true }}
-              initial={motions.fadeIn.initial}
-              whileInView={motions.fadeIn.whileInView}
-              transition={motions.transition({})}
-              className="flex h-24 w-24 shrink-0 items-center justify-center bg-background ring-1 ring-input md:h-28 md:w-28 lg:h-32 lg:w-32">
+            <div className="flex h-24 w-24 shrink-0 items-center justify-center bg-background ring-1 ring-input md:h-28 md:w-28 lg:h-32 lg:w-32">
               <SectionHeading as="h4">{letter}</SectionHeading>
-            </MotionDiv>
+            </div>
             <div>
               <Paragraph small>{description}</Paragraph>
             </div>

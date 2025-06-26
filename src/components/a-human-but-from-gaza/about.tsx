@@ -1,10 +1,7 @@
-// REVIEWED - 02
-
-import { motions } from "@/lib/motion";
+// REVIEWED - 03
 
 import { Container } from "../globals/container";
 import { InfiniteMarquee, MarqueeItem } from "../globals/marquee";
-import { MotionDiv, MotionSpan } from "../globals/motion";
 import {
   Paragraph,
   SectionHeading,
@@ -60,12 +57,7 @@ export const About = function About() {
           global attention.
         </Paragraph>
       </Container>
-      <MotionDiv
-        viewport={{ once: true }}
-        initial={motions.fadeIn.initial}
-        whileInView={motions.fadeIn.whileInView}
-        transition={motions.transition({})}
-        className="w-full bg-foreground text-background">
+      <div className="w-full bg-foreground text-background">
         <InfiniteMarquee speed={80}>
           {[
             "Authentic",
@@ -99,17 +91,13 @@ export const About = function About() {
           ].map((word, index) => (
             /* eslint-disable-next-line react/no-array-index-key */
             <MarqueeItem key={word + index} delay={index * 0.1}>
-              <MotionSpan
-                initial={motions.fadeIn.initial}
-                animate={motions.fadeIn.whileInView}
-                transition={motions.transition({ delay: index * 0.1 })}
-                className="mr-2 text-4xl font-medium !leading-normal tracking-tight lg:mr-4 lg:text-5xl xl:text-6xl">
+              <span className="mr-2 whitespace-nowrap text-4xl font-medium !leading-normal tracking-tight lg:mr-4 lg:text-5xl xl:text-6xl">
                 {word}
-              </MotionSpan>
+              </span>
             </MarqueeItem>
           ))}
         </InfiniteMarquee>
-      </MotionDiv>
+      </div>
     </div>
   );
 };
