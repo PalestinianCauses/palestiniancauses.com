@@ -1,16 +1,14 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { Metadata } from "next";
 
 import { Container } from "@/components/globals/container";
-import { MotionOl } from "@/components/globals/motion";
 import {
   Paragraph,
   SectionHeading,
   SectionHeadingBadge,
   SubSectionHeading,
 } from "@/components/globals/typography";
-import { motions } from "@/lib/motion";
 
 export const metadata: Metadata = {
   title: "Acceptable Use Policy",
@@ -172,12 +170,7 @@ export default function AcceptableUsePolicyPage() {
             Other activities considered unethical, exploitative, and malicious
             include:
           </SubSectionHeading>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>
               Using our facilities to obtain (or attempt to obtain) services
               from another provider with the intent to avoid payment.
@@ -201,7 +194,7 @@ export default function AcceptableUsePolicyPage() {
               regulations.
             </li>
             <li>Any violation of a person&apos;s privacy.</li>
-          </MotionOl>
+          </ol>
           <Paragraph>
             Our Products may not be used by any person or entity that is
             involved with or suspected of involvement in activities or causes
