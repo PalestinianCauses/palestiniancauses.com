@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -31,12 +31,6 @@ export const createComment = async function createComment(
 
   if (response.data && !response.error)
     return { data: messages.actions.comment.successCreate, error: null };
-
-  //     revalidatePath(
-  //       data.on.relationTo === "diary-entries"
-  //         ? `/humans-but-from-gaza/${typeof data.on.value === "number" ? data.on.value : data.on.value.id}`
-  //         : `/blogs/${typeof data.on.value === "number" ? data.on.value : data.on.value.id}`,
-  //     );
 
   return response;
 };

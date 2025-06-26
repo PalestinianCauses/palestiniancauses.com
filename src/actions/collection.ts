@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 11
+// REVIEWED - 12
 
 import {
   GeneratedTypes,
@@ -25,9 +25,8 @@ type CollectionOptions<TSlug extends CollectionTypes> = {
   depth?: number;
 };
 
-type ResponseDataCollection<TSlug extends CollectionTypes> = PaginatedDocs<
-  GeneratedTypes["collections"][TSlug]
->;
+export type ResponseDataCollection<TSlug extends CollectionTypes> =
+  PaginatedDocs<GeneratedTypes["collections"][TSlug]>;
 
 type ResponseCollection<TSlug extends CollectionTypes> =
   | { data: ResponseDataCollection<TSlug>; error: null }
@@ -49,21 +48,13 @@ export const getCollection = async function getCollection<
   fieldsSearch,
   depth = 0,
 }: CollectionOptions<TSlug>): Promise<ResponseCollection<TSlug>> {
-  const where: Where = {};
+  const where: Where = { ...selectFields };
 
   if (search && fieldsSearch && fieldsSearch.length > 0) {
     where.or = fieldsSearch.map((field) => ({
       [field]: { contains: search },
     }));
   }
-
-  if (selectFields)
-    selectFields.forEach((field) => {
-      /* eslint-disable no-restricted-syntax */
-      for (const key in field) {
-        if (Object.hasOwn(field, key)) where[key] = field[key];
-      }
-    });
 
   const response = await actionSafeExecute(
     payload.find({

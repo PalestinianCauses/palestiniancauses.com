@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 09
+// REVIEWED - 10
 import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
@@ -15,7 +15,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useActivity } from "@/hooks/use-activity";
-import { useUser } from "@/hooks/use-user";
 import { getQueryClient } from "@/lib/query";
 
 export const QueryProvider = function QueryProvider({
@@ -28,8 +27,9 @@ export const QueryProvider = function QueryProvider({
 };
 
 export const ActivityProvider = function ActivityProvider() {
-  const { isPending, data: user } = useUser();
   const {
+    isPending,
+    user,
     isInActivityWarning,
     isInActivityCountDown,
     staySignedIn,

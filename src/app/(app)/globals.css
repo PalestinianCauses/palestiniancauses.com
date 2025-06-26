@@ -1,4 +1,4 @@
-/* REVIEWED - 08 */
+/* REVIEWED - 09 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -99,6 +99,14 @@
 }
 
 @layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   .font-stretch {
     font-family:
       "Gilroy",
@@ -107,13 +115,5 @@
       BlinkMacSystemFont,
       sans-serif;
     font-stretch: 150%;
-  }
-
-  .book-animation {
-    animation-name: book;
-    animation-duration: 5s;
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-    animation-iteration-count: infinite;
   }
 }
