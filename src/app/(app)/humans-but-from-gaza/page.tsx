@@ -1,9 +1,7 @@
-// REVIEWED - 12
+// REVIEWED - 13
 
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Metadata } from "next";
 import Link from "next/link";
-import { GeneratedTypes } from "payload";
 import { Suspense } from "react";
 
 import { DiaryEntryList } from "@/components/diary-entry/list";
@@ -14,16 +12,10 @@ import {
   FilterControls,
 } from "@/components/globals/filter-control";
 import { Footer } from "@/components/globals/footer";
-import { MotionDiv } from "@/components/globals/motion";
 import { Paragraph, SectionHeading } from "@/components/globals/typography";
 import { VideoOutroScene } from "@/components/globals/video-outro-scene";
 import { Button } from "@/components/ui/button";
-import { motions } from "@/lib/motion";
-import { payload } from "@/lib/payload";
-import { getQueryClient } from "@/lib/query";
 import { FiltersOptions } from "@/lib/types";
-
-import { QueryProvider } from "../providers";
 
 export const metadata: Metadata = {
   title: "The Truth Museum: Humans But From Gaza",
@@ -46,53 +38,6 @@ export const metadata: Metadata = {
       "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXC1oaVJSjsK7EiPGHV1uLXdr0eRnvWfxmt5qM",
     ],
   },
-};
-
-const DiaryEntryListSuspense = function DiaryEntryListSuspense({
-  filters,
-  fieldsSearch,
-}: {
-  filters: FiltersOptions;
-  fieldsSearch: (keyof GeneratedTypes["collections"]["diary-entries"])[];
-}) {
-  const queryClient = getQueryClient();
-
-  queryClient.prefetchQuery({
-    queryKey: ["diary-entries", filters, fieldsSearch],
-    queryFn: async () => {
-      try {
-        const response = await payload.find({
-          collection: "diary-entries",
-          page: filters.page,
-          limit: filters.limit,
-          sort: filters.sort,
-          where: {
-            status: { equals: "approved" },
-            or: fieldsSearch.map((field) => ({
-              [field]: { contains: filters.search },
-            })),
-          },
-        });
-
-        if (response.docs.length === 0) return null;
-
-        return response.docs;
-      } catch (error) {
-        console.log(error);
-        return null;
-      }
-    },
-  });
-
-  return (
-    <Suspense fallback={<DiaryEntryListLoading />}>
-      <QueryProvider>
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <DiaryEntryList filters={filters} fieldsSearch={fieldsSearch} />
-        </HydrationBoundary>
-      </QueryProvider>
-    </Suspense>
-  );
 };
 
 export default async function HumansButFromGazaPage(props: {
@@ -118,7 +63,7 @@ export default async function HumansButFromGazaPage(props: {
       searchParams?.title && typeof searchParams.title === "string"
         ? searchParams?.title
         : "",
-    fields: [{ status: { equals: "approved" } }],
+    fields: { status: { equals: "approved" } },
   };
 
   const filterConfigs: FilterConfig[] = [
@@ -152,16 +97,11 @@ export default async function HumansButFromGazaPage(props: {
           with these authentic testimonies to connect with the human experience
           often overlooked and deepen your understanding of Gaza.
         </Paragraph>
-        <MotionDiv
-          viewport={{ once: true }}
-          initial={motions.fadeIn.initial}
-          whileInView={motions.fadeIn.whileInView}
-          transition={motions.transition({})}
-          className="block w-full sm:hidden">
+        <div className="block w-full sm:hidden">
           <Button variant="default" className="w-full text-center" asChild>
             <Link href="/humans-but-from-gaza/share">Share your diary</Link>
           </Button>
-        </MotionDiv>
+        </div>
       </Container>
       <Container className="mb-12 flex max-w-7xl flex-col-reverse justify-between gap-5 sm:flex-row sm:items-end xl:mb-24">
         <div className="flex max-w-3xl flex-1 flex-col justify-stretch gap-5 sm:flex-row [&_#filter-control-sort]:min-w-48 [&_#filter-control-title]:w-full">
@@ -173,19 +113,16 @@ export default async function HumansButFromGazaPage(props: {
             debounceTime={500}
           />
         </div>
-        <MotionDiv
-          viewport={{ once: true }}
-          initial={motions.fadeIn.initial}
-          whileInView={motions.fadeIn.whileInView}
-          transition={motions.transition({})}
-          className="hidden sm:block">
+        <div className="hidden sm:block">
           <Button variant="default" asChild>
             <Link href="/humans-but-from-gaza/share">Share your diary</Link>
           </Button>
-        </MotionDiv>
+        </div>
       </Container>
       <Container className="mb-12 grid max-w-7xl grid-cols-1 gap-16 xl:mb-24">
-        <DiaryEntryListSuspense filters={filters} fieldsSearch={["title"]} />
+        <Suspense fallback={<DiaryEntryListLoading />}>
+          <DiaryEntryList filters={filters} fieldsSearch={["title"]} />
+        </Suspense>
       </Container>
       <VideoOutroScene
         duration={800}
