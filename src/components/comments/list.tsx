@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { ArrowDownIcon } from "lucide-react";
@@ -63,7 +63,7 @@ export const CommentList = function CommentList({
   return (
     <Fragment>
       <section
-        className={cn("flex w-full flex-col gap-10", {
+        className={cn("flex w-full flex-col gap-5 md:gap-10", {
           "opacity-50": isPending || isFetching,
         })}>
         {comments.map((comment) => (
