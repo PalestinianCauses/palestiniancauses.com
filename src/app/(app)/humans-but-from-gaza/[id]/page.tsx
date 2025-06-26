@@ -1,17 +1,17 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { MessageSquareTextIcon } from "lucide-react";
-import { notFound, redirect } from "next/navigation";
+import { MessageSquareTextIcon, MessagesSquareIcon } from "lucide-react";
+import { notFound } from "next/navigation";
 import { GeneratedTypes } from "payload";
-import { PropsWithChildren, Suspense } from "react";
+import { cache, Suspense } from "react";
+import linesSplit from "split-lines";
 
-import { getAuthentication } from "@/actions/auth";
 import { getCollection } from "@/actions/collection";
-import { getDiaryEntry, getDiaryEntryAuthor } from "@/actions/diary-entry";
+import { getDiaryEntry } from "@/actions/diary-entry";
 import { CreateCommentForm } from "@/components/comments/forms/create";
 import { CommentList } from "@/components/comments/list";
-import { DiaryEntryBadges } from "@/components/diary-entry/diary-entry-badges";
+import { DiaryEntryBadgesLoading } from "@/components/diary-entry/diary-entry-badges";
+import { DiaryEntryListItemBadges } from "@/components/diary-entry/list";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
 import { Loading } from "@/components/globals/loading";
@@ -21,120 +21,66 @@ import {
   SubSectionHeading,
 } from "@/components/globals/typography";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-import { getQueryClient } from "@/lib/query";
-import { SelectOptions } from "@/lib/types";
-import {
-  HumansButFromGazaPageLink,
-  splitByFlexibleNewLines,
-} from "@/lib/utils/strings";
-import { User } from "@/payload-types";
+import { FiltersOptions } from "@/lib/types";
 
-import { QueryProvider } from "../../providers";
+const getComments = cache(getCollection<"comments">);
 
-const DiaryEntryPageBadges = async function DiaryEntryPageBadges({
-  isAnonymous,
-  date,
-  authorId,
-}: {
-  isAnonymous: boolean;
-  date: string;
-  authorId: number;
-}) {
-  let author: Partial<User> | null = null;
-
-  if (!isAnonymous) {
-    const { data } = await getDiaryEntryAuthor(authorId);
-    if (data) author = data;
-  }
-
-  return (
-    <DiaryEntryBadges
-      isAnonymous={isAnonymous}
-      date={date}
-      author={author}
-      className="mb-6"
-    />
-  );
-};
-
-const DiaryEntryPageComments = async function DiaryEntryPageComments({
-  children,
-}: PropsWithChildren) {
-  const queryClient = getQueryClient();
-  queryClient.prefetchQuery({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const response = await getAuthentication();
-
-      if (!response || !response.user) return null;
-
-      return response.user;
-    },
-  });
-
-  return (
-    <QueryProvider>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        {children}
-      </HydrationBoundary>
-    </QueryProvider>
-  );
-};
-
-const DiaryEntryPageCommentsList = async function DiaryEntryPageCommentsList({
+const PageCommentsList = async function PageCommentsList({
   diaryEntryId,
 }: {
   diaryEntryId: number;
 }) {
-  const commentsSelects: SelectOptions = {
+  const commentsFilters: FiltersOptions = {
     page: 1,
-    limit: 50,
+    limit: 5,
     sort: "-createdAt",
-    fields: [
-      {
-        on: {
-          equals: {
-            relationTo: "diary-entries",
-            value: diaryEntryId,
-          },
+    fields: {
+      on: {
+        equals: {
+          relationTo: "diary-entries",
+          value: diaryEntryId,
         },
-        parent: { exists: false },
-        status: { equals: "approved" },
       },
-    ],
+      parent: { exists: false },
+      status: { equals: "approved" },
+    },
   };
 
   const commentsFieldsSearch: (keyof GeneratedTypes["collections"]["comments"])[] =
     ["user", "content", "votes", "createdAt"];
 
-  const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: ["comments", commentsSelects, commentsFieldsSearch],
-    queryFn: async () => {
-      const response = await getCollection({
-        collection: "comments",
-        selects: commentsSelects,
-        fieldsSearch: commentsFieldsSearch,
-        depth: 1,
-      });
-
-      if (!response.data || response.data.docs.length === 0 || response.error)
-        return null;
-
-      return response.data;
-    },
+  const comments = await getComments({
+    collection: "comments",
+    filters: commentsFilters,
+    fieldsSearch: commentsFieldsSearch,
+    depth: 1,
   });
 
+  if (!comments.data || comments.data.docs.length === 0 || comments.error)
+    return (
+      <Container
+        as="section"
+        className="flex max-w-4xl flex-col px-2.5 lg:items-center lg:text-center">
+        <div className="relative mb-6 flex w-max items-end lg:mb-8">
+          <MessagesSquareIcon className="relative h-12 w-12 stroke-[1] lg:h-20 lg:w-20" />
+        </div>
+        <SubSectionHeading small className="mb-4 lg:mb-6">
+          No comments yet
+        </SubSectionHeading>
+        <Paragraph small>
+          Be the first to contribute to this meaningful conversation. Your
+          thoughtful words can provide comfort and foster solidarity with those
+          sharing their experiences.
+        </Paragraph>
+      </Container>
+    );
+
   return (
-    <QueryProvider>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <CommentList
-          selects={commentsSelects}
-          fieldsSearch={commentsFieldsSearch}
-        />
-      </HydrationBoundary>
-    </QueryProvider>
+    <CommentList
+      commentsInitial={comments.data}
+      filters={commentsFilters}
+      fieldsSearch={commentsFieldsSearch}
+    />
   );
 };
 
@@ -154,16 +100,17 @@ export async function generateMetadata({
   };
 }
 
+const DiaryEntryListItemBadgesLoading = (
+  <div className="mb-4">
+    <DiaryEntryBadgesLoading />
+  </div>
+);
+
 export default async function HumanButFromGazaPage(props: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ author: string }>;
 }) {
   /* eslint-disable react/destructuring-assignment */
   const params = await props.params;
-  const searchParams = await props.searchParams;
-
-  const authorId = parseInt(searchParams.author, 10);
-  if (Number.isNaN(authorId)) redirect(HumansButFromGazaPageLink);
 
   const diaryEntry = await getDiaryEntry(parseInt(params.id, 10));
 
@@ -176,55 +123,47 @@ export default async function HumanButFromGazaPage(props: {
 
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">
-      <Container className="mb-24 max-w-6xl lg:mb-32 xl:mb-48">
+      <Container as="section" className="max-w-6xl">
         <Container className="mx-0 mb-12 max-w-5xl px-0 lg:px-0">
-          <Suspense
-            fallback={<Skeleton className="mb-6 h-5 w-full max-w-lg" />}>
-            <DiaryEntryPageBadges
-              isAnonymous={diaryEntry.data.isAnonymous}
-              date={diaryEntry.data.date}
-              authorId={authorId}
-            />
+          <Suspense fallback={DiaryEntryListItemBadgesLoading}>
+            <DiaryEntryListItemBadges diaryEntry={diaryEntry.data} />
           </Suspense>
           <SectionHeading>{diaryEntry.data.title}</SectionHeading>
         </Container>
         <Container className="flex flex-col gap-8 px-0 lg:px-0">
-          {splitByFlexibleNewLines(diaryEntry.data.content).map(
-            (text, index) => (
+          {linesSplit(diaryEntry.data.content)
+            .filter(Boolean)
+            .map((text, index) => (
               /* eslint-disable-next-line react/no-array-index-key */
               <Paragraph key={index}>{text}</Paragraph>
-            ),
-          )}
+            ))}
         </Container>
       </Container>
-      <Separator />
-      <Container className="my-12 max-w-6xl lg:my-24 xl:my-32">
+      <Separator className="my-12 lg:my-24 xl:my-32" />
+      <Container as="section" className="max-w-6xl">
         <SubSectionHeading
-          isMotion={false}
           small
           className="mb-4 flex flex-row items-center gap-2.5">
           <MessageSquareTextIcon className="size-7 stroke-[1.5]" />
           Comments
         </SubSectionHeading>
-        <Paragraph isMotion={false} small className="mb-12">
+        <Paragraph small className="mb-12">
           Share your thoughts and show your support. Your words matter - they
           can bring comfort, understanding, and solidarity to those sharing
           their experiences. Let&apos;s build a community of empathy and support
           together.
         </Paragraph>
-        <Suspense fallback={<Loading className="min-h-96" />}>
-          <DiaryEntryPageComments>
-            <CreateCommentForm
-              on={{ relationTo: "diary-entries", value: diaryEntry.data.id }}
-            />
-          </DiaryEntryPageComments>
-        </Suspense>
-        <Separator className="my-12 lg:my-24 xl:my-32" />
-        <Suspense fallback={<Loading className="min-h-96" />}>
-          <DiaryEntryPageCommentsList diaryEntryId={diaryEntry.data.id} />
+        <CreateCommentForm
+          on={{ relationTo: "diary-entries", value: diaryEntry.data.id }}
+        />
+      </Container>
+      <Separator className="my-12 lg:my-24 xl:my-32" />
+      <Container className="max-w-7xl px-2.5">
+        <Suspense fallback={<Loading className="min-h-80" />}>
+          <PageCommentsList diaryEntryId={diaryEntry.data.id} />
         </Suspense>
       </Container>
-      <Separator className="mb-12 lg:mb-24 xl:mb-32" />
+      <Separator className="my-12 lg:my-24 xl:my-32" />
       <Footer />
     </main>
   );
