@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 "use client";
 
@@ -7,11 +7,9 @@ import Link from "next/link";
 import { toast } from "sonner";
 
 import { messages } from "@/lib/messages";
-import { motions } from "@/lib/motion";
 import { SafeExecuteConfig } from "@/lib/types";
 import { User } from "@/payload-types";
 
-import { MotionDiv } from "../globals/motion";
 import { Button } from "../ui/button";
 
 export const AuthenticatedButtons = function AuthenticatedButtons({
@@ -36,34 +34,28 @@ export const AuthenticatedButtons = function AuthenticatedButtons({
   >;
 }) {
   return (
-    <MotionDiv
-      viewport={{ once: true }}
-      initial={motions.fadeIn.initial}
-      whileInView={motions.fadeIn.whileInView}
-      transition={motions.transition({ delay: 0.1 })}>
-      <ul className="flex flex-row items-center justify-center gap-2.5">
-        {user.role !== "website-user" ? (
-          <li>
-            <Button variant="ghost" asChild>
-              <Link href="/admin">Admin Dashboard</Link>
-            </Button>
-          </li>
-        ) : null}
+    <ul className="flex flex-row items-center justify-center gap-2.5">
+      {user.role !== "website-user" ? (
         <li>
-          <Button
-            variant="outline"
-            disabled={signOut.isPending}
-            onClick={() => {
-              toast.loading(messages.actions.auth.signOut.pending, {
-                id: "sign-out",
-              });
-
-              signOut.mutate({});
-            }}>
-            Sign out
+          <Button variant="ghost" asChild>
+            <Link href="/admin">Admin Dashboard</Link>
           </Button>
         </li>
-      </ul>
-    </MotionDiv>
+      ) : null}
+      <li>
+        <Button
+          variant="outline"
+          disabled={signOut.isPending}
+          onClick={() => {
+            toast.loading(messages.actions.auth.signOut.pending, {
+              id: "sign-out",
+            });
+
+            signOut.mutate({});
+          }}>
+          Sign out
+        </Button>
+      </li>
+    </ul>
   );
 };
