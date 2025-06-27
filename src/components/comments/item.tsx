@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import TimeAgo from "javascript-time-ago";
@@ -131,7 +131,7 @@ export const CommentItem = function CommentItem({
         id={`comment-${comment.id}`}
         style={{ scrollMarginTop: `${5}rem` }}
         className={cn(
-          "grid w-full grid-cols-[2rem_1fr] flex-col content-center items-start justify-start gap-x-2.5 gap-y-5 p-2.5 md:grid-cols-[2.25rem_1fr] md:grid-rows-[2.5rem_1fr_auto]",
+          "grid w-full grid-cols-[2rem_1fr] flex-col content-center items-start justify-start gap-x-2.5 gap-y-5 p-2.5 md:grid-cols-[2.25rem_1fr_auto] md:grid-rows-[2.25rem_1fr_auto]",
           { highlight: elementId.current === `comment-${comment.id}` },
           (user && "grid-rows-[repeat(4,auto)]") ||
             "grid-rows-[repeat(3,auto)]",
