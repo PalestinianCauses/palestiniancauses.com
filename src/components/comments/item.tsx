@@ -1,14 +1,12 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import {
   ArrowDownIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
   CornerDownRightIcon,
   DotIcon,
   MessageSquareTextIcon,
@@ -16,6 +14,7 @@ import {
   XIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Fragment, MutableRefObject, useMemo, useState } from "react";
 
 import { getCollection } from "@/actions/collection";
@@ -27,25 +26,42 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 
 import { ReplyCommentForm } from "./forms/reply";
+import { CommentVotes } from "./votes";
 
-export const CommentItem = function CommentItem({
-  depth,
-  comment,
-  elementId,
-  jumpToPlusHighlight,
-}: {
+export type CommentItemProps = {
+  isPageComment?: boolean;
   depth: number;
   comment: Comment;
   elementId: MutableRefObject<string | null>;
   // eslint-disable-next-line no-unused-vars
   jumpToPlusHighlight: (id: string) => void;
-}) {
+};
+
+export const CommentItem = function CommentItem({
+  isPageComment = false,
+  depth,
+  comment,
+  elementId,
+  jumpToPlusHighlight,
+}: CommentItemProps) {
   TimeAgo.addLocale(en);
+
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { data: user } = useUser();
 
-  const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
-  const [isRepliesOpen, setIsRepliesOpen] = useState(false);
+  const [isReplyFormOpen, setIsReplyFormOpen] = useState(
+    Number(comment.repliesCount) === 0 && isPageComment,
+  );
+
+  const [isRepliesOpen, setIsRepliesOpen] = useState(
+    Boolean(comment.repliesCount && isPageComment),
+  );
+
+  const [repliesCount, setRepliesCount] = useState(comment.repliesCount);
+
+  const isMaxDepth = depth >= 3;
 
   const {
     isPending,
@@ -88,7 +104,7 @@ export const CommentItem = function CommentItem({
 
       return response.data;
     },
-    enabled: comment.repliesCount !== 0 && isRepliesOpen,
+    enabled: isRepliesOpen,
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
@@ -105,33 +121,24 @@ export const CommentItem = function CommentItem({
     return comment.user.firstName;
   }, [comment.user]);
 
-  const votes = useMemo(() => {
-    if (!comment.votes) return { upVotes: [], downVotes: [], votesNumber: 0 };
-    const upVotes = comment.votes.filter((vote) => vote.vote === "up");
-    const downVotes = comment.votes.filter((vote) => vote.vote === "down");
-    return {
-      upVotes,
-      downVotes,
-      votesNumber: upVotes.length - downVotes.length,
-    };
-  }, [comment.votes]);
-
   const replies = useMemo(() => {
     if (!data) return [];
+
     const pages = data.pages.flatMap((page) => (page ? page.docs : []));
+
+    setRepliesCount(pages.length);
+
     return pages;
   }, [data]);
 
   return (
     <article
-      className={cn(
-        "relative flex flex-col items-start justify-start gap-2.5 md:gap-5",
-      )}>
+      className={cn("relative flex flex-col items-start justify-start gap-10")}>
       <div
         id={`comment-${comment.id}`}
         style={{ scrollMarginTop: `${5}rem` }}
         className={cn(
-          "grid w-full grid-cols-[2rem_1fr] flex-col content-center items-start justify-start gap-x-2.5 gap-y-5 p-2.5 md:grid-cols-[2.25rem_1fr_auto] md:grid-rows-[2.25rem_1fr_auto]",
+          "relative grid w-full grid-cols-[2rem_1fr] flex-col content-center items-start justify-start gap-x-2.5 gap-y-5 before:absolute before:-inset-2.5 before:-z-10 before:bg-transparent md:grid-cols-[2.25rem_1fr_auto] md:grid-rows-[2.25rem_1fr_auto]",
           { highlight: elementId.current === `comment-${comment.id}` },
           (user && "grid-rows-[repeat(4,auto)]") ||
             "grid-rows-[repeat(3,auto)]",
@@ -160,26 +167,19 @@ export const CommentItem = function CommentItem({
             ) : null}
           </h3>
           <DotIcon className="h-5 w-5 text-input" />
-          <time
-            dateTime={comment.createdAt}
-            className="text-sm font-normal leading-none text-muted-foreground">
-            {new TimeAgo("en-US").format(new Date(comment.createdAt))}
-          </time>
+          <Button
+            variant="ghost"
+            className="p-0 text-muted-foreground hover:bg-transparent"
+            asChild>
+            <Link href={`/comment/${comment.id}`}>
+              <time dateTime={comment.createdAt}>
+                {new TimeAgo("en-US").format(new Date(comment.createdAt))}
+              </time>
+            </Link>
+          </Button>
         </div>
 
-        {user ? (
-          <div className="col-start-1 row-start-4 row-end-4 flex h-full flex-row items-center justify-start gap-2.5 md:col-start-1 md:row-start-2 md:flex-col">
-            <Button variant="ghost" className="p-1">
-              <ChevronUpIcon className="text-muted-foreground" />
-            </Button>
-            <span className="font-mono text-sm leading-none">
-              {votes.votesNumber}
-            </span>
-            <Button variant="ghost" className="p-1">
-              <ChevronDownIcon className="text-muted-foreground" />
-            </Button>
-          </div>
-        ) : null}
+        <CommentVotes user={user} comment={comment} />
 
         <div className="col-start-1 col-end-3 row-start-2 h-full w-full md:col-start-2">
           <p className="text-base font-normal leading-relaxed text-foreground md:text-lg">
@@ -219,21 +219,36 @@ export const CommentItem = function CommentItem({
             </Button>
           ) : null}
 
-          {comment.repliesCount !== 0 ? (
-            <Button
-              variant="ghost"
-              className="p-0 text-muted-foreground hover:bg-transparent"
-              disabled={isFetching}
-              onClick={() => setIsRepliesOpen((previous) => !previous)}>
-              <MessageSquareTextIcon className="stroke-[1.5]" />
-              {(isFetching && "Loading replies...") ||
-                (isRepliesOpen && "Hide replies") ||
-                "Show replies"}
-              <span className="mt-0.5 font-mono">({comment.repliesCount})</span>
-            </Button>
+          {/* eslint-disable-next-line no-nested-ternary */}
+          {repliesCount !== 0 ? (
+            isMaxDepth ? (
+              <Button
+                variant="ghost"
+                className="p-0 text-muted-foreground hover:bg-transparent"
+                asChild>
+                <Link href={`/comment/${comment.id}`}>
+                  <MessageSquareTextIcon className="stroke-[1.5]" />
+                  Continue this thread
+                  <span className="mt-0.5 font-mono">({repliesCount})</span>
+                </Link>
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                className="p-0 text-muted-foreground hover:bg-transparent"
+                disabled={isFetching}
+                onClick={() => setIsRepliesOpen((previous) => !previous)}>
+                <MessageSquareTextIcon className="stroke-[1.5]" />
+                {(isFetching && "Loading replies...") ||
+                  (isRepliesOpen && "Hide replies") ||
+                  "Show replies"}
+                <span className="mt-0.5 font-mono">({repliesCount})</span>
+              </Button>
+            )
           ) : null}
 
-          {comment.parent &&
+          {!isPageComment &&
+          comment.parent &&
           typeof comment.parent === "object" &&
           typeof comment.parent.user === "object" ? (
             <Fragment>
@@ -259,18 +274,25 @@ export const CommentItem = function CommentItem({
 
       {isReplyFormOpen && (
         <ReplyCommentForm
-          depth={depth + 1}
           on={comment.on}
           parent={comment.id}
           onSuccess={() => {
-            refetch();
-            setIsReplyFormOpen(false);
-            setIsRepliesOpen(true);
+            if (isMaxDepth) {
+              queryClient.invalidateQueries({
+                queryKey: ["comment", comment.id],
+              });
+
+              router.push(`/comment/${comment.id}`);
+            } else {
+              refetch();
+              setIsReplyFormOpen(false);
+              setIsRepliesOpen(true);
+            }
           }}
         />
       )}
 
-      {isRepliesOpen && !isPending && replies && replies.length !== 0 ? (
+      {isRepliesOpen ? (
         <section
           className={cn(
             "relative flex w-full flex-col gap-5 pl-4 md:gap-10 md:pl-12",
@@ -278,7 +300,7 @@ export const CommentItem = function CommentItem({
               "opacity-50": isPending || isFetching,
             },
           )}>
-          <div className="absolute left-2.5 top-0 h-full w-px bg-input" />
+          <div className="absolute left-0 top-0 h-full w-px -translate-x-1/2 bg-input" />
 
           {replies.map((reply) => (
             <CommentItem
