@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -27,12 +27,10 @@ import {
 import { Comment } from "@/payload-types";
 
 export const ReplyCommentForm = function ReplyCommentForm({
-  depth,
   on,
   parent,
   onSuccess,
 }: {
-  depth: number;
   onSuccess: () => void;
 } & Pick<Comment, "on" | "parent">) {
   const { data: user } = useUser();
@@ -69,8 +67,8 @@ export const ReplyCommentForm = function ReplyCommentForm({
   };
 
   return (
-    <div className="flex w-full flex-col items-start gap-5 p-2.5 md:flex-row">
-      <Avatar className="ring-1 ring-primary/20">
+    <div className="flex w-full flex-col items-start gap-5 md:flex-row">
+      <Avatar className="h-8 w-8 ring-1 ring-input md:h-9 md:w-9">
         <AvatarFallback className="bg-muted/50">
           {user.firstName ? user.firstName.charAt(0).toUpperCase() : "A"}
         </AvatarFallback>
@@ -86,7 +84,12 @@ export const ReplyCommentForm = function ReplyCommentForm({
               <FormItem className="w-full flex-1 space-y-0">
                 <FormLabel className="sr-only">Reply Content</FormLabel>
                 <FormControl>
-                  <Textarea {...field} rows={4} className="!mb-2 resize-none" />
+                  <Textarea
+                    {...field}
+                    disabled={createComment.isPending}
+                    rows={4}
+                    className="!mb-2 resize-none"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
