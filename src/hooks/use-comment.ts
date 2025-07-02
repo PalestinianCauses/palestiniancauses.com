@@ -1,14 +1,12 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { createComment } from "@/actions/comments";
 import { Comment } from "@/payload-types";
 
 export const useComment = function useComment() {
-  const queryClient = useQueryClient();
-
   const createCommentMutation = useMutation({
     mutationFn: async (
       data: Omit<Comment, "id" | "createdAt" | "updatedAt">,
