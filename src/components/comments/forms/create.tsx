@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -100,7 +100,12 @@ export const CreateCommentForm = function CreateCommentForm({
               <FormItem className="w-full flex-1 space-y-0">
                 <FormLabel className="sr-only">Comment Content</FormLabel>
                 <FormControl>
-                  <Textarea {...field} rows={6} className="!mb-2 resize-none" />
+                  <Textarea
+                    {...field}
+                    rows={6}
+                    disabled={createComment.isPending}
+                    className="!mb-2 resize-none"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
