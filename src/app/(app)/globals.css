@@ -1,4 +1,4 @@
-/* REVIEWED - 09 */
+/* REVIEWED - 10 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -90,11 +90,13 @@
   }
 
   .highlight {
-    animation-name: highlight;
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-    animation-iteration-count: infinite;
-    animation-duration: 1s;
+    &::before {
+      animation-name: highlight;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-iteration-count: infinite;
+      animation-duration: 1s;
+    }
   }
 }
 

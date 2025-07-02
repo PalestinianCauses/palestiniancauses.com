@@ -1,6 +1,6 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
-import { MessageSquareTextIcon, MessagesSquareIcon } from "lucide-react";
+import { MessageSquareTextIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import { GeneratedTypes } from "payload";
 import { cache, Suspense } from "react";
@@ -55,25 +55,6 @@ const PageCommentsList = async function PageCommentsList({
     fieldsSearch: commentsFieldsSearch,
     depth: 1,
   });
-
-  if (!comments.data || comments.data.docs.length === 0 || comments.error)
-    return (
-      <Container
-        as="section"
-        className="flex max-w-4xl flex-col px-2.5 lg:items-center lg:text-center">
-        <div className="relative mb-6 flex w-max items-end lg:mb-8">
-          <MessagesSquareIcon className="relative h-12 w-12 stroke-[1] lg:h-20 lg:w-20" />
-        </div>
-        <SubSectionHeading small className="mb-4 lg:mb-6">
-          No comments yet
-        </SubSectionHeading>
-        <Paragraph small>
-          Be the first to contribute to this meaningful conversation. Your
-          thoughtful words can provide comfort and foster solidarity with those
-          sharing their experiences.
-        </Paragraph>
-      </Container>
-    );
 
   return (
     <CommentList
@@ -158,12 +139,11 @@ export default async function HumanButFromGazaPage(props: {
         />
       </Container>
       <Separator className="my-12 lg:my-24 xl:my-32" />
-      <Container className="max-w-7xl px-2.5">
+      <Container className="max-w-7xl">
         <Suspense fallback={<Loading className="min-h-80" />}>
           <PageCommentsList diaryEntryId={diaryEntry.data.id} />
         </Suspense>
       </Container>
-      <Separator className="my-12 lg:my-24 xl:my-32" />
       <Footer />
     </main>
   );

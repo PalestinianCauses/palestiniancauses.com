@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -29,8 +29,20 @@ export const createComment = async function createComment(
     messages.actions.comment.serverErrorCreate,
   );
 
-  if (response.data && !response.error)
-    return { data: messages.actions.comment.successCreate, error: null };
+  if (!response.data || response.error) return response;
+
+  return { data: messages.actions.comment.successCreate, error: null };
+};
+
+export const getComment = async function getComment(id: number) {
+  const response = await actionSafeExecute(
+    payload.findByID({
+      collection: "comments",
+      id,
+      depth: 2,
+    }),
+    messages.actions.comment.serverErrorGet,
+  );
 
   return response;
 };

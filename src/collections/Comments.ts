@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { CollectionConfig } from "payload";
 
@@ -106,12 +106,12 @@ export const Comments: CollectionConfig = {
     beforeRead: [
       async ({ req: { payload }, doc }) => {
         const docUpdated = doc;
-        const response = await payload.count({
+        const repliesCountResponse = await payload.count({
           collection: "comments",
           where: { parent: { equals: doc.id } },
         });
 
-        docUpdated.repliesCount = response.totalDocs;
+        docUpdated.repliesCount = repliesCountResponse.totalDocs;
         return docUpdated;
       },
     ],

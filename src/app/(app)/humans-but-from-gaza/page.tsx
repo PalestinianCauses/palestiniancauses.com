@@ -1,4 +1,4 @@
-// REVIEWED - 13
+// REVIEWED - 14
 
 import { Metadata } from "next";
 import Link from "next/link";
@@ -124,6 +124,11 @@ export default async function HumansButFromGazaPage(props: {
           <DiaryEntryList filters={filters} fieldsSearch={["title"]} />
         </Suspense>
       </Container>
+      <Container className="mb-24 flex items-center justify-center lg:mb-32">
+        <Button variant="default" size="lg" asChild>
+          <Link href="/humans-but-from-gaza/share">Share your diary</Link>
+        </Button>
+      </Container>
       <VideoOutroScene
         duration={800}
         sequence={[
@@ -153,14 +158,8 @@ export default async function HumansButFromGazaPage(props: {
             bgColor: "--primary",
           },
         ]}
+        containerClassName="-mb-12 lg:-mb-24"
       />
-      <Container>
-        <div className="relative z-50 flex w-full -translate-y-[3.25rem] items-center justify-center sm:-mt-[4.25rem] sm:translate-y-0 sm:pb-4 lg:-mt-[5.25rem] lg:pb-8">
-          <Button variant="default" size="lg" asChild>
-            <Link href="/humans-but-from-gaza/share">Share your diary</Link>
-          </Button>
-        </div>
-      </Container>
       <Footer />
     </main>
   );
