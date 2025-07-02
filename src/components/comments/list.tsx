@@ -1,9 +1,9 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 06
 
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
-import { ArrowDownIcon } from "lucide-react";
+import { ArrowDownIcon, MessagesSquareIcon } from "lucide-react";
 import { GeneratedTypes } from "payload";
 import { Fragment, useMemo } from "react";
 
@@ -12,6 +12,8 @@ import { useHashScroll } from "@/hooks/use-hash-scroll";
 import { FiltersOptions } from "@/lib/types";
 import { cn } from "@/lib/utils/styles";
 
+import { Container } from "../globals/container";
+import { Paragraph, SubSectionHeading } from "../globals/typography";
 import { Button } from "../ui/button";
 
 import { CommentItem } from "./item";
@@ -21,7 +23,7 @@ export const CommentList = function CommentList({
   filters,
   fieldsSearch,
 }: {
-  commentsInitial: ResponseDataCollection<"comments">;
+  commentsInitial: ResponseDataCollection<"comments"> | null;
   filters: FiltersOptions;
   fieldsSearch: (keyof GeneratedTypes["collections"]["comments"])[];
 }) {
@@ -60,10 +62,32 @@ export const CommentList = function CommentList({
     return pages;
   }, [data.pages]);
 
+  if (comments.length === 0)
+    return (
+      <Container
+        as="section"
+        className={cn(
+          "flex max-w-4xl flex-col px-2.5 lg:items-center lg:text-center",
+          { "opacity-50": isPending || isFetching },
+        )}>
+        <div className="relative mb-6 flex w-max items-end lg:mb-8">
+          <MessagesSquareIcon className="relative h-12 w-12 stroke-[1] lg:h-20 lg:w-20" />
+        </div>
+        <SubSectionHeading small className="mb-4 lg:mb-6">
+          No comments yet
+        </SubSectionHeading>
+        <Paragraph small>
+          Be the first to contribute to this meaningful conversation. Your
+          thoughtful words can provide comfort and foster solidarity with those
+          sharing their experiences.
+        </Paragraph>
+      </Container>
+    );
+
   return (
     <Fragment>
       <section
-        className={cn("flex w-full flex-col gap-5 md:gap-10", {
+        className={cn("flex w-full flex-col gap-10", {
           "opacity-50": isPending || isFetching,
         })}>
         {comments.map((comment) => (
