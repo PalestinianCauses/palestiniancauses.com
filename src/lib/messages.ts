@@ -1,4 +1,4 @@
-// REVIEWED - 23
+// REVIEWED - 24
 
 export const messages = {
   http: {
@@ -108,6 +108,7 @@ export const messages = {
       unAuthenticated:
         "Authentication required to post a comment. Please sign in.",
       serverErrorCreate: "Failed to post comment. Please try again later.",
+      serverErrorGet: "Failed to retrieve comment. Please try again later.",
       replies: {
         serverErrorCount:
           "Failed to retrieve replies count. Please try again later.",
