@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import Image from "next/image";
 import Link from "next/link";
@@ -6,6 +6,7 @@ import Link from "next/link";
 import { HumansButFromGazaPageLink } from "@/lib/utils/strings";
 
 import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
 
 import { Container } from "./container";
 import { Paragraph, SubSectionHeading } from "./typography";
@@ -45,9 +46,10 @@ const lists = [
 
 export const Footer = function Footer() {
   return (
-    <footer className="relative">
-      <Container className="max-w-7xl pb-12 pt-0 sm:pt-12">
-        <div className="mb-12 grid grid-cols-1 items-start gap-12 md:grid-cols-2 md:gap-8">
+    <footer className="relative pb-12 lg:pb-24">
+      <Separator className="my-12 lg:my-24" />
+      <Container className="max-w-7xl">
+        <div className="grid grid-cols-1 items-start gap-12 md:grid-cols-2 md:gap-8">
           <div className="relative flex flex-col items-start justify-start">
             <div className="relative mb-4 flex items-center gap-5">
               <Image
