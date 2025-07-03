@@ -1,8 +1,23 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { CollectionConfig } from "payload";
 
 import { isAdminOrSelf, isAuthenticated } from "@/access/global";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const populateVotesScore = (data: any) => {
+  const dataUpdated = data;
+
+  dataUpdated.votesScore = data.votes.reduce(
+    (accumulator: number, voteElement: { vote: "up" | "down" }) => {
+      if (voteElement.vote === "up") return accumulator + 1;
+      return accumulator - 1;
+    },
+    0,
+  );
+
+  return dataUpdated;
+};
 
 export const Comments: CollectionConfig = {
   slug: "comments",
@@ -101,9 +116,19 @@ export const Comments: CollectionConfig = {
         },
       ],
     },
+    {
+      admin: { readOnly: true },
+      label: "Votes Score",
+      name: "votesScore",
+      type: "number",
+      defaultValue: 0,
+      min: 0,
+    },
   ],
   hooks: {
+    beforeChange: [async ({ data }) => populateVotesScore(data)],
     beforeRead: [
+      ({ doc }) => populateVotesScore(doc),
       async ({ req: { payload }, doc }) => {
         const docUpdated = doc;
         const repliesCountResponse = await payload.count({
@@ -112,6 +137,7 @@ export const Comments: CollectionConfig = {
         });
 
         docUpdated.repliesCount = repliesCountResponse.totalDocs;
+
         return docUpdated;
       },
     ],
