@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, MessagesSquareIcon } from "lucide-react";
@@ -11,6 +11,7 @@ import { getCollection, ResponseDataCollection } from "@/actions/collection";
 import { useHashScroll } from "@/hooks/use-hash-scroll";
 import { FiltersOptions } from "@/lib/types";
 import { cn } from "@/lib/utils/styles";
+import { Comment } from "@/payload-types";
 
 import { Container } from "../globals/container";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
@@ -19,6 +20,7 @@ import { Button } from "../ui/button";
 import { CommentItem } from "./item";
 
 export const CommentList = function CommentList({
+  on,
   commentsInitial,
   filters,
   fieldsSearch,
@@ -26,7 +28,7 @@ export const CommentList = function CommentList({
   commentsInitial: ResponseDataCollection<"comments"> | null;
   filters: FiltersOptions;
   fieldsSearch: (keyof GeneratedTypes["collections"]["comments"])[];
-}) {
+} & Pick<Comment, "on">) {
   const { elementId, jumpToPlusHighlight } = useHashScroll();
 
   const {
@@ -37,7 +39,11 @@ export const CommentList = function CommentList({
     fetchNextPage,
     data,
   } = useSuspenseInfiniteQuery({
-    queryKey: ["comments", filters, fieldsSearch],
+    queryKey: [
+      `comments-${on.relationTo}-${typeof on.value === "object" ? on.value.id : on.value}`,
+      filters,
+      fieldsSearch,
+    ],
     queryFn: async ({ pageParam = filters.page }) => {
       const response = await getCollection({
         collection: "comments",
