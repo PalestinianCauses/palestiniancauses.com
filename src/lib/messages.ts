@@ -1,4 +1,4 @@
-// REVIEWED - 24
+// REVIEWED - 25
 
 export const messages = {
   http: {
@@ -105,13 +105,25 @@ export const messages = {
     comment: {
       pendingCreate: "Posting your comment...",
       successCreate: "Comment posted successfully.",
-      unAuthenticated:
+      successDelete: "Comment deleted successfully.",
+      createUnAuthenticated:
         "Authentication required to post a comment. Please sign in.",
+      deleteUnAuthorized: "You are not authorized to delete this comment.",
+      deleteUnAuthenticated:
+        "Authentication required to delete a comment. Please sign in.",
+      notFound: "Comment not found. Please try again later.",
       serverErrorCreate: "Failed to post comment. Please try again later.",
       serverErrorGet: "Failed to retrieve comment. Please try again later.",
+      serverErrorDelete: "Failed to delete comment. Please try again later.",
       replies: {
         serverErrorCount:
           "Failed to retrieve replies count. Please try again later.",
+      },
+      votes: {
+        success: "Successfully voted on comment.",
+        unAuthenticated:
+          "Authentication required to vote on a comment. Please sign in.",
+        serverError: "Failed to vote on comment. Please try again later.",
       },
     },
     diaryEntry: {
