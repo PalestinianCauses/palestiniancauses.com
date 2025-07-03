@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import TimeAgo from "javascript-time-ago";
@@ -10,6 +10,7 @@ import {
   CornerDownRightIcon,
   DotIcon,
   MessageSquareTextIcon,
+  Trash2Icon,
   VerifiedIcon,
   XIcon,
 } from "lucide-react";
@@ -18,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { Fragment, MutableRefObject, useMemo, useState } from "react";
 
 import { getCollection } from "@/actions/collection";
+import { useComment } from "@/hooks/use-comment";
 import { useUser } from "@/hooks/use-user";
 import { cn } from "@/lib/utils/styles";
 import { Comment } from "@/payload-types";
@@ -50,6 +52,7 @@ export const CommentItem = function CommentItem({
   const queryClient = useQueryClient();
 
   const { data: user } = useUser();
+  const { deleteComment } = useComment();
 
   const [isReplyFormOpen, setIsReplyFormOpen] = useState(
     Number(comment.repliesCount) === 0 && isPageComment,
@@ -72,7 +75,7 @@ export const CommentItem = function CommentItem({
     data,
     refetch,
   } = useInfiniteQuery({
-    queryKey: ["comment", comment.id],
+    queryKey: ["comment-replies", comment.id],
     queryFn: async ({ pageParam = 1 }) => {
       const response = await getCollection({
         collection: "comments",
@@ -247,6 +250,46 @@ export const CommentItem = function CommentItem({
             )
           ) : null}
 
+          {user &&
+          user.id ===
+            (typeof comment.user === "object"
+              ? comment.user.id
+              : comment.user) ? (
+            <Button
+              variant="ghost"
+              className="p-0 text-muted-foreground hover:bg-transparent"
+              disabled={deleteComment.isPending}
+              onClick={() =>
+                deleteComment.mutate(comment.id, {
+                  onSuccess: () => {
+                    if (comment.parent)
+                      queryClient.invalidateQueries({
+                        queryKey: [
+                          "comment-replies",
+                          typeof comment.parent === "object"
+                            ? comment.parent.id
+                            : comment.parent,
+                        ],
+                      });
+                    else
+                      queryClient.invalidateQueries({
+                        queryKey: [
+                          `comments-${comment.on.relationTo}-${typeof comment.on.value === "object" ? comment.on.value.id : comment.on.value}`,
+                        ],
+                      });
+
+                    if (isPageComment)
+                      router.push(
+                        `/${comment.on.relationTo === "diary-entries" ? "humans-but-from-gaza" : "blog"}/${typeof comment.on.value === "object" ? comment.on.value.id : comment.on.value}`,
+                      );
+                  },
+                })
+              }>
+              <Trash2Icon className="stroke-[1.5]" />
+              {deleteComment.isPending ? "Deleting..." : "Delete"}
+            </Button>
+          ) : null}
+
           {!isPageComment &&
           comment.parent &&
           typeof comment.parent === "object" &&
@@ -279,7 +322,7 @@ export const CommentItem = function CommentItem({
           onSuccess={() => {
             if (isMaxDepth) {
               queryClient.invalidateQueries({
-                queryKey: ["comment", comment.id],
+                queryKey: ["comment-replies", comment.id],
               });
 
               router.push(`/comment/${comment.id}`);
