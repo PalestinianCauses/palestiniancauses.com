@@ -1,4 +1,4 @@
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { MessageSquareTextIcon } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -33,7 +33,7 @@ const PageCommentsList = async function PageCommentsList({
   const commentsFilters: FiltersOptions = {
     page: 1,
     limit: 5,
-    sort: "-createdAt",
+    sort: ["-votesScore", "-createdAt"],
     fields: {
       on: {
         equals: {
@@ -58,6 +58,7 @@ const PageCommentsList = async function PageCommentsList({
 
   return (
     <CommentList
+      on={{ relationTo: "diary-entries", value: diaryEntryId }}
       commentsInitial={comments.data}
       filters={commentsFilters}
       fieldsSearch={commentsFieldsSearch}
