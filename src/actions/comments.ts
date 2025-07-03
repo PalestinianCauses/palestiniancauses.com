@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -16,7 +16,10 @@ export const createComment = async function createComment(
   const auth = await getAuthentication();
 
   if (!auth || !auth.user)
-    return { data: null, error: messages.actions.comment.unAuthenticated };
+    return {
+      data: null,
+      error: messages.actions.comment.createUnAuthenticated,
+    };
 
   const response = await actionSafeExecute(
     payload.create({
@@ -45,4 +48,125 @@ export const getComment = async function getComment(id: number) {
   );
 
   return response;
+};
+
+export const deleteComment = async function deleteComment(
+  id: number,
+): Promise<ResponseSafeExecute<string, string>> {
+  const auth = await getAuthentication();
+
+  if (!auth || !auth.user)
+    return {
+      data: null,
+      error: messages.actions.comment.deleteUnAuthenticated,
+    };
+
+  const comment = await getComment(id);
+
+  if (!comment.data || comment.error)
+    return {
+      data: null,
+      error: messages.actions.comment.notFound,
+    };
+
+  if (
+    (typeof comment.data.user === "object"
+      ? comment.data.user.id
+      : comment.data.user) !== auth.user.id
+  )
+    return {
+      data: null,
+      error: messages.actions.comment.deleteUnAuthorized,
+    };
+
+  const response = await actionSafeExecute(
+    payload.delete({ collection: "comments", id }),
+    messages.actions.comment.serverErrorDelete,
+  );
+
+  if (!response.data || response.error) return response;
+
+  return { data: messages.actions.comment.successDelete, error: null };
+};
+
+// There is security issues here, but it is not a big deal for now
+export const deleteCommentReplies = async function deleteCommentReplies(
+  id: number,
+) {
+  const response = await actionSafeExecute(
+    payload.delete({
+      collection: "comments",
+      where: { parent: { equals: id } },
+    }),
+    messages.actions.comment.serverErrorDelete,
+  );
+
+  if (!response.data || response.error) return response;
+
+  return { data: messages.actions.comment.replies.successDelete, error: null };
+};
+
+export const voteOnComment = async function voteOnComment({
+  id,
+  vote,
+}: {
+  id: number;
+  vote: "up" | "down";
+}): Promise<
+  ResponseSafeExecute<Pick<Comment, "votes" | "votesScore">, string>
+> {
+  const auth = await getAuthentication();
+
+  if (!auth || !auth.user)
+    return {
+      data: null,
+      error: messages.actions.comment.votes.unAuthenticated,
+    };
+
+  const { user } = auth;
+
+  const comment = await getComment(id);
+
+  if (!comment.data || comment.error)
+    return { data: null, error: messages.actions.comment.notFound };
+
+  const votes = comment.data.votes || [];
+  let votesUpdated = [];
+
+  const voteExisting = votes.find(
+    (voteElement) =>
+      (typeof voteElement.user === "object"
+        ? voteElement.user.id
+        : voteElement.user) === user.id,
+  );
+
+  if (voteExisting) {
+    votesUpdated = votes.filter(
+      (voteElement) => voteElement.id !== voteExisting.id,
+    );
+
+    if (voteExisting.vote !== vote)
+      votesUpdated.push({
+        user,
+        vote,
+      });
+  } else {
+    votesUpdated = [...votes, { user, vote }];
+  }
+
+  const response = await actionSafeExecute(
+    payload.update({
+      collection: "comments",
+      id,
+      data: { votes: votesUpdated },
+    }),
+    messages.actions.comment.votes.serverError,
+  );
+
+  if (!response.data || response.error) return response;
+
+  return {
+    data: { votes: response.data.votes, votesScore: response.data.votesScore },
+    error: null,
+  };
 };
