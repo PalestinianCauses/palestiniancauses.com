@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { GeneratedTypes, Where } from "payload";
 
@@ -10,7 +10,7 @@ export type CollectionTypes = keyof GeneratedTypes["collections"];
 export type FiltersOptions = {
   page?: number;
   limit?: number;
-  sort?: string;
+  sort?: string | string[];
   search?: string;
   fields?: Where;
 };
