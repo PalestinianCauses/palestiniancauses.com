@@ -1,4 +1,4 @@
-// REVIEWED - 25
+// REVIEWED - 24
 
 export const messages = {
   http: {
@@ -116,6 +116,7 @@ export const messages = {
       serverErrorGet: "Failed to retrieve comment. Please try again later.",
       serverErrorDelete: "Failed to delete comment. Please try again later.",
       replies: {
+        successDelete: "Replies deleted successfully.",
         serverErrorCount:
           "Failed to retrieve replies count. Please try again later.",
       },

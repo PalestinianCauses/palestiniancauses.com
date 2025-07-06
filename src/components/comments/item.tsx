@@ -82,20 +82,10 @@ export const CommentItem = function CommentItem({
         filters: {
           page: pageParam,
           limit: 5,
-          sort: "createdAt",
+          sort: ["createdAt"],
           fields: {
-            on: {
-              equals: {
-                relationTo: comment.on.relationTo,
-                value:
-                  typeof comment.on.value === "object"
-                    ? comment.on.value.id
-                    : comment.on.value,
-              },
-            },
-            parent: {
-              equals: comment.id,
-            },
+            on: { equals: comment.on },
+            parent: { equals: comment.id },
           },
         },
         fieldsSearch: ["user", "content", "createdAt"],
@@ -141,10 +131,8 @@ export const CommentItem = function CommentItem({
         id={`comment-${comment.id}`}
         style={{ scrollMarginTop: `${5}rem` }}
         className={cn(
-          "relative grid w-full grid-cols-[2rem_1fr] flex-col content-center items-start justify-start gap-x-2.5 gap-y-5 before:absolute before:-inset-2.5 before:-z-10 before:bg-transparent md:grid-cols-[2.25rem_1fr_auto] md:grid-rows-[2.25rem_1fr_auto]",
+          "relative grid w-full grid-cols-[2rem_1fr] grid-rows-[repeat(4,auto)] flex-col content-center items-start justify-start gap-x-2.5 gap-y-5 before:absolute before:-inset-2.5 before:-z-10 before:bg-transparent md:grid-cols-[2.25rem_1fr_auto] md:grid-rows-[2.25rem_1fr_auto]",
           { highlight: elementId.current === `comment-${comment.id}` },
-          (user && "grid-rows-[repeat(4,auto)]") ||
-            "grid-rows-[repeat(3,auto)]",
         )}>
         <div className="relative col-start-1 row-start-1 h-full w-full">
           {depth > 0 ? (
@@ -339,9 +327,7 @@ export const CommentItem = function CommentItem({
         <section
           className={cn(
             "relative flex w-full flex-col gap-5 pl-4 md:gap-10 md:pl-12",
-            {
-              "opacity-50": isPending || isFetching,
-            },
+            { "pointer-events-none opacity-50": isPending || isFetching },
           )}>
           <div className="absolute left-0 top-0 h-full w-px -translate-x-1/2 bg-input" />
 

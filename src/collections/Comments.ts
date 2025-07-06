@@ -30,7 +30,14 @@ export const Comments: CollectionConfig = {
   admin: {
     group: "Content",
     useAsTitle: "id",
-    defaultColumns: ["id", "user", "content", "status", "createdAt"],
+    defaultColumns: [
+      "id",
+      "user",
+      "content",
+      "status",
+      "votesScore",
+      "createdAt",
+    ],
     enableRichTextRelationship: false,
   },
   fields: [
@@ -42,6 +49,7 @@ export const Comments: CollectionConfig = {
       relationTo: ["diary-entries", "blogs"],
       hasMany: false,
       required: true,
+      index: true,
     },
     {
       admin: { readOnly: true, position: "sidebar" },
@@ -51,6 +59,7 @@ export const Comments: CollectionConfig = {
       relationTo: "comments",
       hasMany: false,
       required: false,
+      index: true,
     },
     {
       admin: { readOnly: true, position: "sidebar" },
@@ -59,6 +68,7 @@ export const Comments: CollectionConfig = {
       type: "number",
       defaultValue: 0,
       min: 0,
+      index: true,
     },
     {
       admin: { readOnly: true, position: "sidebar" },
@@ -68,6 +78,7 @@ export const Comments: CollectionConfig = {
       relationTo: "users",
       hasMany: false,
       required: true,
+      index: true,
     },
     {
       admin: { readOnly: true },
@@ -90,6 +101,7 @@ export const Comments: CollectionConfig = {
       ],
       defaultValue: "approved",
       required: true,
+      index: true,
     },
     {
       label: "Votes",
@@ -122,7 +134,7 @@ export const Comments: CollectionConfig = {
       name: "votesScore",
       type: "number",
       defaultValue: 0,
-      min: 0,
+      index: true,
     },
   ],
   hooks: {

@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -101,7 +101,10 @@ export const deleteCommentReplies = async function deleteCommentReplies(
     messages.actions.comment.serverErrorDelete,
   );
 
-  if (!response.data || response.error) return response;
+  if (!response.data || response.error) {
+    console.error("Error deleting comment replies", id, response);
+    return response;
+  }
 
   return { data: messages.actions.comment.replies.successDelete, error: null };
 };
@@ -154,11 +157,20 @@ export const voteOnComment = async function voteOnComment({
     votesUpdated = [...votes, { user, vote }];
   }
 
+  const upVotes = votesUpdated.filter((v) => v.vote === "up").length;
+  const downVotes = votesUpdated.filter((v) => v.vote === "down").length;
+  const votesScore = upVotes - downVotes;
+
   const response = await actionSafeExecute(
     payload.update({
       collection: "comments",
       id,
-      data: { votes: votesUpdated },
+      data: {
+        votes: votesUpdated,
+        upVotesCount: upVotes,
+        downVotesCount: downVotes,
+        votesScore,
+      },
     }),
     messages.actions.comment.votes.serverError,
   );
@@ -166,7 +178,7 @@ export const voteOnComment = async function voteOnComment({
   if (!response.data || response.error) return response;
 
   return {
-    data: { votes: response.data.votes, votesScore: response.data.votesScore },
+    data: { votes: votesUpdated, votesScore },
     error: null,
   };
 };

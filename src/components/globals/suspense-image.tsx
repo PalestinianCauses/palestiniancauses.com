@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import Image, { ImageProps } from "next/image";
 import { ReactNode, useState } from "react";
@@ -30,7 +30,7 @@ export const SuspenseImage = function SuspenseImage({
         {...props}
         className={cn(
           "transition-opacity duration-300 ease-in-out",
-          { "opacity-0": isLoading },
+          { "pointer-events-none opacity-0": isLoading },
           className,
         )}
         onLoad={(e) => {

@@ -1,8 +1,8 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { ArrowLeftIcon, CornerDownRightIcon } from "lucide-react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import { getComment } from "@/actions/comments";
 import { Container } from "@/components/globals/container";
@@ -66,7 +66,7 @@ export default async function CommentPage(props: {
     comment.data.status !== "approved" ||
     comment.error
   )
-    return notFound();
+    return redirect("/");
 
   return (
     <main className="relative">

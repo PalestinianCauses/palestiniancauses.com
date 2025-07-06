@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, MessagesSquareIcon } from "lucide-react";
@@ -74,7 +74,7 @@ export const CommentList = function CommentList({
         as="section"
         className={cn(
           "flex max-w-4xl flex-col px-2.5 lg:items-center lg:text-center",
-          { "opacity-50": isPending || isFetching },
+          { "pointer-events-none opacity-50": isPending || isFetching },
         )}>
         <div className="relative mb-6 flex w-max items-end lg:mb-8">
           <MessagesSquareIcon className="relative h-12 w-12 stroke-[1] lg:h-20 lg:w-20" />
@@ -94,7 +94,7 @@ export const CommentList = function CommentList({
     <Fragment>
       <section
         className={cn("flex w-full flex-col gap-10", {
-          "opacity-50": isPending || isFetching,
+          "pointer-events-none opacity-50": isPending || isFetching,
         })}>
         {comments.map((comment) => (
           <CommentItem
