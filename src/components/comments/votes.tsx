@@ -1,9 +1,8 @@
 "use client";
 
-// REVIEWED - 01
-
+// REVIEWED - 02
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-import { HTMLAttributes, useMemo, useState } from "react";
+import { HTMLAttributes, useMemo } from "react";
 
 import { useComment } from "@/hooks/use-comment";
 import { cn } from "@/lib/utils/styles";
@@ -21,8 +20,6 @@ export const CommentVotes = function CommentVotes({
 } & HTMLAttributes<HTMLDivElement>) {
   const { voteOnComment } = useComment();
 
-  const [votesScore, setVotesScore] = useState(comment.votesScore || 0);
-
   const userVote: false | "up" | "down" = useMemo(() => {
     if (!user || !comment.votes) return false;
     const vote = comment.votes.find(
@@ -37,19 +34,7 @@ export const CommentVotes = function CommentVotes({
   }, [user, comment.votes]);
 
   const handleVote = (vote: "up" | "down") => {
-    voteOnComment.mutate(
-      { id: comment.id, vote },
-      {
-        onSuccess: (response) => {
-          if (!response.data || response.error) {
-            setVotesScore(comment.votesScore || 0);
-            return;
-          }
-
-          setVotesScore(response.data.votesScore || 0);
-        },
-      },
-    );
+    voteOnComment.mutate({ id: comment.id, vote });
   };
 
   return (
@@ -66,7 +51,9 @@ export const CommentVotes = function CommentVotes({
         {...(user ? { onClick: () => handleVote("up") } : {})}>
         <ChevronUpIcon className="text-muted-foreground" />
       </Button>
-      <span className="font-mono text-sm leading-none">{votesScore}</span>
+      <span className="font-mono text-sm leading-none">
+        {comment.votesScore || 0}
+      </span>
       <Button
         variant="ghost"
         className={cn("p-1", { "ring-1 ring-input": userVote === "down" })}

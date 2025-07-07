@@ -1,18 +1,26 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
-import { useMutation } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "sonner";
 
+import { ResponseDataCollection } from "@/actions/collection";
 import {
   createComment,
   deleteComment,
   deleteCommentReplies,
   voteOnComment,
 } from "@/actions/comments";
-import { messages } from "@/lib/messages";
 import { Comment } from "@/payload-types";
 
+type InfiniteDataComments = InfiniteData<ResponseDataCollection<"comments">>;
+
 export const useComment = function useComment() {
+  const queryClient = useQueryClient();
+
   const createCommentMutation = useMutation({
     mutationFn: async (
       data: Omit<Comment, "id" | "createdAt" | "updatedAt">,
@@ -54,17 +62,51 @@ export const useComment = function useComment() {
   });
 
   const voteOnCommentMutation = useMutation({
-    mutationFn: async ({ id, vote }: { id: number; vote: "up" | "down" }) => {
-      const response = await voteOnComment({ id, vote });
-      return response;
-    },
-    onSuccess: (response) => {
-      if (!response.data || response.error) {
-        toast.error(response.error);
-        return;
-      }
+    mutationFn: async ({ id, vote }: { id: number; vote: "up" | "down" }) =>
+      voteOnComment({ id, vote }),
+    onMutate: async ({ id, vote }) => {
+      await queryClient.cancelQueries({ queryKey: ["comment-replies", id] });
 
-      toast.success(messages.actions.comment.votes.success);
+      const previousComment = queryClient.getQueryData<InfiniteDataComments>([
+        "comment-replies",
+        id,
+      ]);
+
+      queryClient.setQueryData<InfiniteDataComments>(
+        ["comment-replies", id],
+        (previous) =>
+          previous && {
+            ...previous,
+            pages: previous.pages.map((page) => ({
+              ...page,
+              docs: page.docs.map((doc) =>
+                doc.id === id
+                  ? {
+                      ...doc,
+                      votesScore:
+                        (doc.votesScore || 0) + (vote === "up" ? 1 : -1),
+                    }
+                  : doc,
+              ),
+            })),
+          },
+      );
+
+      return { previousComment };
+    },
+    onSettled: (response, _, { id }, context) => {
+      if (response)
+        if (!response.data || response.error) {
+          toast.error(response.error);
+
+          if (context)
+            queryClient.setQueryData<InfiniteDataComments>(
+              ["comment-replies", id],
+              context.previousComment,
+            );
+        }
+
+      queryClient.invalidateQueries({ queryKey: ["comment-replies", id] });
     },
   });
 

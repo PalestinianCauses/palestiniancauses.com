@@ -1,23 +1,10 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { CollectionConfig } from "payload";
 
 import { isAdminOrSelf, isAuthenticated } from "@/access/global";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const populateVotesScore = (data: any) => {
-  const dataUpdated = data;
-
-  dataUpdated.votesScore = data.votes.reduce(
-    (accumulator: number, voteElement: { vote: "up" | "down" }) => {
-      if (voteElement.vote === "up") return accumulator + 1;
-      return accumulator - 1;
-    },
-    0,
-  );
-
-  return dataUpdated;
-};
 
 export const Comments: CollectionConfig = {
   slug: "comments",
@@ -138,19 +125,50 @@ export const Comments: CollectionConfig = {
     },
   ],
   hooks: {
-    beforeChange: [async ({ data }) => populateVotesScore(data)],
-    beforeRead: [
-      ({ doc }) => populateVotesScore(doc),
-      async ({ req: { payload }, doc }) => {
-        const docUpdated = doc;
-        const repliesCountResponse = await payload.count({
-          collection: "comments",
-          where: { parent: { equals: doc.id } },
-        });
+    beforeChange: [
+      async ({ data }) => {
+        // eslint-disable-next-line no-param-reassign
+        data.votesScore = (data.votes || []).reduce(
+          (accumulator: number, vote: { vote: "up" | "down" }) =>
+            accumulator + (vote.vote === "up" ? 1 : -1),
+          0,
+        );
 
-        docUpdated.repliesCount = repliesCountResponse.totalDocs;
+        return data;
+      },
+    ],
+    afterChange: [
+      async ({ operation, doc, req }) => {
+        if (operation === "create" && doc.parent) {
+          const parent = await req.payload.findByID({
+            collection: "comments",
+            id: typeof doc.parent === "object" ? doc.parent.id : doc.parent,
+            depth: 0,
+          });
 
-        return docUpdated;
+          await req.payload.update({
+            collection: "comments",
+            id: parent.id,
+            data: { repliesCount: (parent.repliesCount || 0) + 1 },
+          });
+        }
+      },
+    ],
+    afterDelete: [
+      async ({ doc, req }) => {
+        if (doc.parent) {
+          const parent = await req.payload.findByID({
+            collection: "comments",
+            id: typeof doc.parent === "object" ? doc.parent.id : doc.parent,
+            depth: 0,
+          });
+
+          await req.payload.update({
+            collection: "comments",
+            id: parent.id,
+            data: { repliesCount: Math.max((parent.repliesCount || 1) - 1, 0) },
+          });
+        }
       },
     ],
   },

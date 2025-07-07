@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, MessagesSquareIcon } from "lucide-react";
@@ -31,6 +31,33 @@ export const CommentList = function CommentList({
 } & Pick<Comment, "on">) {
   const { elementId, jumpToPlusHighlight } = useHashScroll();
 
+  const onValue = typeof on.value === "object" ? on.value.id : on.value;
+
+  const queryKey = useMemo(
+    () =>
+      [
+        "comments",
+        onValue,
+        on.relationTo,
+        filters.page,
+        filters.limit,
+        (filters.sort &&
+          (typeof filters.sort === "string"
+            ? filters.sort
+            : filters.sort.join(","))) ||
+          undefined,
+        fieldsSearch.join(","),
+      ].filter(Boolean),
+    [
+      onValue,
+      on.relationTo,
+      filters.page,
+      filters.limit,
+      filters.sort,
+      fieldsSearch,
+    ],
+  );
+
   const {
     isPending,
     isFetching,
@@ -39,11 +66,7 @@ export const CommentList = function CommentList({
     fetchNextPage,
     data,
   } = useSuspenseInfiniteQuery({
-    queryKey: [
-      `comments-${on.relationTo}-${typeof on.value === "object" ? on.value.id : on.value}`,
-      filters,
-      fieldsSearch,
-    ],
+    queryKey,
     queryFn: async ({ pageParam = filters.page }) => {
       const response = await getCollection({
         collection: "comments",

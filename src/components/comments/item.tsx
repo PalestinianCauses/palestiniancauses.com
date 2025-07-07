@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import TimeAgo from "javascript-time-ago";
@@ -64,7 +64,7 @@ export const CommentItem = function CommentItem({
 
   const [repliesCount, setRepliesCount] = useState(comment.repliesCount);
 
-  const isMaxDepth = depth >= 3;
+  const isMaximumDepth = depth >= 3;
 
   const {
     isPending,
@@ -73,7 +73,6 @@ export const CommentItem = function CommentItem({
     hasNextPage,
     fetchNextPage,
     data,
-    refetch,
   } = useInfiniteQuery({
     queryKey: ["comment-replies", comment.id],
     queryFn: async ({ pageParam = 1 }) => {
@@ -92,9 +91,12 @@ export const CommentItem = function CommentItem({
         depth: 2,
       });
 
-      if (!response.data || response.data.docs.length === 0 || response.error)
+      if (!response.data || response.data.docs.length === 0 || response.error) {
+        setRepliesCount(0);
         return null;
+      }
 
+      setRepliesCount(response.data.totalDocs);
       return response.data;
     },
     enabled: isRepliesOpen,
@@ -119,13 +121,12 @@ export const CommentItem = function CommentItem({
 
     const pages = data.pages.flatMap((page) => (page ? page.docs : []));
 
-    setRepliesCount(pages.length);
-
     return pages;
   }, [data]);
 
   return (
     <article
+      aria-labelledby={`comment-${comment.id}-author`}
       className={cn("relative flex flex-col items-start justify-start gap-10")}>
       <div
         id={`comment-${comment.id}`}
@@ -147,7 +148,9 @@ export const CommentItem = function CommentItem({
         </div>
 
         <div className="col-start-2 row-start-1 flex h-full w-full items-center justify-start">
-          <h3 className="flex items-center justify-start gap-1.5 text-base font-medium leading-none">
+          <h3
+            id={`comment-${comment.id}-author`}
+            className="flex items-center justify-start gap-1.5 text-base font-medium leading-none">
             {author}
             {typeof comment.user === "object" &&
             (comment.user.role === "admin" ||
@@ -212,7 +215,7 @@ export const CommentItem = function CommentItem({
 
           {/* eslint-disable-next-line no-nested-ternary */}
           {repliesCount !== 0 ? (
-            isMaxDepth ? (
+            isMaximumDepth ? (
               <Button
                 variant="ghost"
                 className="p-0 text-muted-foreground hover:bg-transparent"
@@ -228,6 +231,8 @@ export const CommentItem = function CommentItem({
                 variant="ghost"
                 className="p-0 text-muted-foreground hover:bg-transparent"
                 disabled={isFetching}
+                aria-expanded={isRepliesOpen}
+                aria-controls={`comment-${comment.id}-replies`}
                 onClick={() => setIsRepliesOpen((previous) => !previous)}>
                 <MessageSquareTextIcon className="stroke-[1.5]" />
                 {(isFetching && "Loading replies...") ||
@@ -308,14 +313,8 @@ export const CommentItem = function CommentItem({
           on={comment.on}
           parent={comment.id}
           onSuccess={() => {
-            if (isMaxDepth) {
-              queryClient.invalidateQueries({
-                queryKey: ["comment-replies", comment.id],
-              });
-
-              router.push(`/comment/${comment.id}`);
-            } else {
-              refetch();
+            if (isMaximumDepth) router.push(`/comment/${comment.id}`);
+            else {
               setIsReplyFormOpen(false);
               setIsRepliesOpen(true);
             }
@@ -323,8 +322,9 @@ export const CommentItem = function CommentItem({
         />
       )}
 
-      {isRepliesOpen ? (
+      {!isMaximumDepth && isRepliesOpen ? (
         <section
+          id={`comment-${comment.id}-replies`}
           className={cn(
             "relative flex w-full flex-col gap-5 pl-4 md:gap-10 md:pl-12",
             { "pointer-events-none opacity-50": isPending || isFetching },
