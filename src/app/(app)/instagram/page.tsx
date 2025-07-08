@@ -1,10 +1,11 @@
 "use client";
 
-// REVIEWED - 11
+// REVIEWED - 12
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
 import DomToImage from "dom-to-image";
+import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import {
   forwardRef,
@@ -15,6 +16,7 @@ import {
 } from "react";
 
 import {
+  Paragraph,
   SectionHeading,
   SectionHeadingBadge,
 } from "@/components/globals/typography";
@@ -307,92 +309,99 @@ const InstagramStudioPage = function InstagramStudioPage() {
     },
   ];
 
+  const instagramFrames: ImageFrame[] = [
+    {
+      id: "ig-01",
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+    {
+      id: "ig-02",
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+    {
+      id: "ig-03",
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+  ];
+
   return (
     <main>
       {/* Open Graph */}
       <ImageFrameRender frames={profileImagesFrames} />
       <ImageFrameRender frames={hoodiesFrames} />
+      <ImageFrameRender frames={instagramFrames} />
       <Frame
-        ref={frames[0].ref}
-        dimensions="open-graph"
+        ref={instagramFrames[0].ref}
+        dimensions="4:5"
         color="primary-foreground">
-        <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
-          <div className="mx-auto flex h-full w-60 items-center justify-center">
-            <PCLogo />
-          </div>
-          <div className="col-span-2">
-            <SectionHeading className="!text-7xl font-semibold text-primary lg:!leading-none xl:!leading-none">
-              Passionate and Creative{" "}
-              <span className="relative z-10 inline-block font-bold text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary">
-                Individuals
-              </span>{" "}
-              United By One{" "}
-              <span className="relative z-10 inline-block font-bold text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary">
-                Mission.
-              </span>
-            </SectionHeading>
+        <FrameContent className="gap-8">
+          <SectionHeadingBadge className="text-lg ring-primary/20">
+            Dear PalestinianCauses&apos; Family{" "}
+          </SectionHeadingBadge>
+          <SectionHeading className="!text-9xl font-bold text-primary lg:!leading-[0.9] xl:!leading-[0.9]">
+            Your voice has a new{" "}
+            <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
+              home
+            </span>{" "}
+            with us🕊️.
+          </SectionHeading>
+          <div className="mt-auto flex h-28 w-28 items-center justify-center bg-primary">
+            <ArrowRightIcon className="h-16 w-16 stroke-1 text-primary-foreground" />
           </div>
         </FrameContent>
+        <FrameImagesGrid>
+          <div className="relative col-start-3 col-end-13 row-start-8 row-end-13 ring-2 ring-primary">
+            <Image
+              src="/ig-01.png"
+              alt="Screen Shot 01"
+              fill
+              sizes="42rem"
+              className="!relative bg-primary-foreground object-cover object-[top_left]"
+            />
+          </div>
+        </FrameImagesGrid>
       </Frame>
-      <Frame ref={frames[1].ref} dimensions="open-graph" color="primary">
-        <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
-          <div className="mx-auto flex h-full w-60 items-center justify-center">
-            <PCLogo color="primary-foreground" />
-          </div>
-          <div className="col-span-2">
-            <SectionHeading className="!text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
-              Discover Our{" "}
-              <span className="relative z-10 inline-block pl-1 font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
-                Core
-              </span>{" "}
-              Project: A Human But From{" "}
-              <span className="relative z-10 inline-block pl-1 font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
-                Gaza.
-              </span>
-            </SectionHeading>
-          </div>
+      <Frame ref={instagramFrames[1].ref} dimensions="4:5" color="primary">
+        <FrameContent className="gap-8">
+          <SectionHeadingBadge className="text-lg text-primary-foreground">
+            The conversation is open
+          </SectionHeadingBadge>
+          <SectionHeading className="!text-9xl font-bold text-primary-foreground lg:!leading-[0.9] xl:!leading-[0.9]">
+            <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary-foreground">
+              Comments
+            </span>{" "}
+            are now live on The Truth Museum.
+          </SectionHeading>
+          <Paragraph className="!text-4xl !leading-relaxed text-primary-foreground">
+            Dive your-self in our comprehensive diaries, express your
+            un-wavering support through meaningful engagement, and forge
+            connections with an international community united in solidarity and
+            shared purpose.
+          </Paragraph>
         </FrameContent>
       </Frame>
       <Frame
-        ref={frames[2].ref}
-        dimensions="open-graph"
+        ref={instagramFrames[2].ref}
+        dimensions="4:5"
         color="primary-foreground">
-        <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
-          <div className="mx-auto flex h-full w-60 items-center justify-center">
-            <PCLogo />
-          </div>
-          <div className="col-span-2">
-            <SectionHeading className="!text-7xl font-semibold text-primary lg:!leading-none xl:!leading-none">
-              The Truth <br />
-              <span className="relative z-10 inline-block font-bold text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary">
-                Museum:
-              </span>{" "}
-              Humans <br />
-              But From{" "}
-              <span className="relative z-10 inline-block pl-1 font-bold text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary">
-                Gaza.
-              </span>
-            </SectionHeading>
-          </div>
-        </FrameContent>
-      </Frame>
-      <Frame ref={frames[3].ref} dimensions="open-graph" color="primary">
-        <FrameContent className="grid h-[30rem] w-[67.5rem] grid-cols-3 items-center">
-          <div className="mx-auto flex h-full w-60 items-center justify-center">
-            <PCLogo color="primary-foreground" />
-          </div>
-          <div className="col-span-2">
-            <SectionHeading className="!text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
-              Identity, Mission, Vision, and{" "}
-              <span className="relative z-10 inline-block pl-1 font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
-                Values:
-              </span>{" "}
-              <span className="relative z-10 inline-block pl-1 font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
-                About
-              </span>{" "}
-              Palestinian-Causes.
-            </SectionHeading>
-          </div>
+        <FrameContent className="gap-8">
+          <SectionHeadingBadge className="text-lg ring-primary/20">
+            Get ready for more
+          </SectionHeadingBadge>
+          <Paragraph className="!text-4xl italic !leading-relaxed text-primary">
+            Reply notifications are on their way to help keep these important
+            conversations alive.
+          </Paragraph>
+          <SectionHeading className="!text-9xl font-bold text-primary lg:!leading-[0.9] xl:!leading-[0.9]">
+            Visit our home in our bio to read and{" "}
+            <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
+              reflect
+            </span>{" "}
+            with us.
+          </SectionHeading>
         </FrameContent>
       </Frame>
       {/* Logo */}
