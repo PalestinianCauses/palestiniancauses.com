@@ -1,26 +1,26 @@
 {
-  "reviewed": "true - 03",
+  "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["public/sw.js"],
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2022",
     "types": ["@serwist/next/typings"],
-    "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
+    "lib": ["DOM", "DOM.Iterable", "ES2022", "WebWorker"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "forceConsistentCasingInFileNames": true,
     "plugins": [{ "name": "next" }],
     "paths": {
       "@/*": ["./src/*"],
       "@payload-config": ["./src/payload.config.ts"]
     }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "public/sw.js"]
+  }
 }

@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 09
 
 import { CollectionConfig } from "payload";
 
@@ -15,7 +15,14 @@ export const Comments: CollectionConfig = {
   admin: {
     group: "Content",
     useAsTitle: "id",
-    defaultColumns: ["id", "user", "content", "status", "createdAt"],
+    defaultColumns: [
+      "id",
+      "user",
+      "content",
+      "status",
+      "votesScore",
+      "createdAt",
+    ],
     enableRichTextRelationship: false,
   },
   fields: [
@@ -27,6 +34,7 @@ export const Comments: CollectionConfig = {
       relationTo: ["diary-entries", "blogs"],
       hasMany: false,
       required: true,
+      index: true,
     },
     {
       admin: { readOnly: true, position: "sidebar" },
@@ -36,6 +44,7 @@ export const Comments: CollectionConfig = {
       relationTo: "comments",
       hasMany: false,
       required: false,
+      index: true,
     },
     {
       admin: { readOnly: true, position: "sidebar" },
@@ -45,14 +54,15 @@ export const Comments: CollectionConfig = {
       relationTo: "users",
       hasMany: false,
       required: true,
+      index: true,
     },
     {
       admin: { readOnly: true },
       label: "Content",
       name: "content",
       type: "textarea",
-      minLength: 2,
-      maxLength: 1000,
+      minLength: 12,
+      maxLength: 1200,
       required: true,
     },
     {
@@ -67,6 +77,7 @@ export const Comments: CollectionConfig = {
       ],
       defaultValue: "approved",
       required: true,
+      index: true,
     },
     {
       label: "Votes",
@@ -93,14 +104,13 @@ export const Comments: CollectionConfig = {
         },
       ],
     },
+    {
+      admin: { readOnly: true },
+      label: "Votes Score",
+      name: "votesScore",
+      type: "number",
+      defaultValue: 0,
+      index: true,
+    },
   ],
-  hooks: {
-    beforeChange: [
-      ({ req, data }) => {
-        const dataUpdated = data;
-        if (req.user && !data.user) dataUpdated.user = req.user.id;
-        return dataUpdated;
-      },
-    ],
-  },
 };

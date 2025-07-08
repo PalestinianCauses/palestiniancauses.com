@@ -1,12 +1,10 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useNotificationSubscription } from "@/hooks/use-notification-subscription";
 import { useUserAgentInfo } from "@/hooks/use-user-agent-info";
-import { motions } from "@/lib/motion";
 
-import { MotionDiv, MotionP } from "../globals/motion";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 
@@ -17,24 +15,10 @@ export const NotificationButton = function NotificationButton() {
 
   if (!isRunningOnPWA || !isAvailable) return null;
 
-  if (isPending)
-    return (
-      <MotionDiv
-        viewport={{ once: true }}
-        initial={motions.fadeIn.initial}
-        whileInView={motions.fadeIn.whileInView}
-        transition={motions.transition({})}>
-        <Skeleton className="h-5 w-full" />
-      </MotionDiv>
-    );
+  if (isPending) return <Skeleton className="h-5 w-full" />;
 
   return !subscription ? (
-    <MotionP
-      viewport={{ once: true }}
-      initial={motions.fadeIn.initial}
-      whileInView={motions.fadeIn.whileInView}
-      transition={motions.transition({})}
-      className="mr-auto text-sm leading-normal tracking-wide text-muted-foreground">
+    <p className="mr-auto text-sm leading-normal tracking-wide text-muted-foreground">
       <Button
         variant="link"
         className="mr-1.5 p-0"
@@ -42,14 +26,9 @@ export const NotificationButton = function NotificationButton() {
         onClick={() => subscribe.mutate()}>
         Subscribe to receive important updates.
       </Button>
-    </MotionP>
+    </p>
   ) : (
-    <MotionP
-      viewport={{ once: true }}
-      initial={motions.fadeIn.initial}
-      whileInView={motions.fadeIn.whileInView}
-      transition={motions.transition({})}
-      className="mr-auto text-sm leading-normal tracking-wide text-muted-foreground">
+    <p className="mr-auto text-sm leading-normal tracking-wide text-muted-foreground">
       <Button
         variant="link"
         className="mr-1.5 p-0"
@@ -57,6 +36,6 @@ export const NotificationButton = function NotificationButton() {
         onClick={() => unsubscribe.mutate()}>
         Unsubscribe from updates.
       </Button>
-    </MotionP>
+    </p>
   );
 };

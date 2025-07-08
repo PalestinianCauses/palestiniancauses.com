@@ -1,16 +1,19 @@
-// REVIEWED - 24
+// REVIEWED - 25
+
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, Suspense } from "react";
 import colors from "tailwindcss/colors";
 
+import { AuthenticationUserPreFetch } from "@/components/auth/providers";
 import { BackButton } from "@/components/globals/back-button";
+import { Loading } from "@/components/globals/loading";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
-import { ActivityProvider, QueryProvider } from "./providers";
+import { ActivityProvider } from "./providers";
 
 export const metadata: Metadata = {
   applicationName: "PalestinianCauses",
@@ -130,11 +133,13 @@ const RootLayout = async function RootLayout({ children }: PropsWithChildren) {
       </head>
       <body>
         <BackButton />
-        <QueryProvider>
-          <ReactQueryDevtools />
-          <ActivityProvider />
-        </QueryProvider>
-        {children}
+        <Suspense fallback={<Loading />}>
+          <AuthenticationUserPreFetch>
+            {children}
+            <ActivityProvider />
+            <ReactQueryDevtools />
+          </AuthenticationUserPreFetch>
+        </Suspense>
         <Toaster theme="dark" richColors />
         <Analytics />
         <SpeedInsights />

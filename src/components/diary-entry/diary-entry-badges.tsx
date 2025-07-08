@@ -1,6 +1,4 @@
-"use client";
-
-// REVIEWED - 01
+// REVIEWED - 02
 
 import {
   CalendarFoldIcon,
@@ -12,58 +10,59 @@ import {
   ForwardRefExoticComponent,
   HTMLAttributes,
   RefAttributes,
-  useState,
 } from "react";
 
-import { motions } from "@/lib/motion";
 import { cn } from "@/lib/utils/styles";
 import { User } from "@/payload-types";
 
-import { MotionDiv } from "../globals/motion";
 import { Paragraph } from "../globals/typography";
+import { Skeleton } from "../ui/skeleton";
+
+export const DiaryEntryBadgesLoading = function DiaryEntryBadgesLoading() {
+  return (
+    <div className="relative flex flex-wrap items-center gap-3 before:absolute before:-left-5 before:top-0 before:h-full before:w-px before:bg-foreground lg:gap-5">
+      <Skeleton className="h-5 w-full max-w-24 md:max-w-32 xl:max-w-40" />
+      <Skeleton className="h-5 w-full max-w-24 md:max-w-32 xl:max-w-40" />
+    </div>
+  );
+};
 
 export const DiaryEntryBadges = function DiaryEntryBadges({
   isAnonymous,
-  date,
   author,
+  date,
   className,
 }: {
   isAnonymous: boolean;
-  date: string;
   author: Partial<User> | null | undefined;
+  date: string;
 } & HTMLAttributes<HTMLDivElement>) {
-  const [badges] = useState<
-    [
-      {
-        type: "date";
-        label: string;
-        icon: ForwardRefExoticComponent<
-          Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-        >;
-      },
-      {
-        type: "name";
-        label: string;
-        icon: ForwardRefExoticComponent<
-          Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-        >;
-      },
-      {
-        type: "pc-author";
-        label: string | null;
-        icon: ForwardRefExoticComponent<
-          Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-        > | null;
-      },
-    ]
-  >(() => [
+  const badges: [
+    {
+      type: "date";
+      label: string;
+      icon: ForwardRefExoticComponent<
+        Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+      >;
+    },
+    {
+      type: "name";
+      label: string;
+      icon: ForwardRefExoticComponent<
+        Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+      >;
+    },
+    {
+      type: "pc-author";
+      label: string | null;
+      icon: ForwardRefExoticComponent<
+        Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+      > | null;
+    },
+  ] = [
     {
       type: "date",
-      label: new Date(date).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
+      label: date,
       icon: CalendarFoldIcon,
     },
     (!isAnonymous &&
@@ -83,14 +82,10 @@ export const DiaryEntryBadges = function DiaryEntryBadges({
       label: null,
       icon: null,
     },
-  ]);
+  ];
 
   return (
-    <MotionDiv
-      viewport={{ once: true }}
-      initial={motions.fadeIn.initial}
-      whileInView={motions.fadeIn.whileInView}
-      transition={motions.transition({})}
+    <div
       className={cn(
         "relative flex flex-wrap items-center gap-3 before:absolute before:-left-5 before:top-0 before:h-full before:w-px before:bg-foreground lg:gap-5",
         className,
@@ -107,6 +102,6 @@ export const DiaryEntryBadges = function DiaryEntryBadges({
           )) ||
           null,
       )}
-    </MotionDiv>
+    </div>
   );
 };

@@ -1,36 +1,42 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
-import { PropsWithChildren, useEffect, useRef, useState } from "react";
+import { Variants } from "motion/react";
+import {
+  HTMLAttributes,
+  PropsWithChildren,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
-import { motions } from "@/lib/motion";
+import { cn } from "@/lib/utils/styles";
 
 import { MotionDiv } from "./motion";
 
 export const MarqueeItem = function MarqueeItem({
   delay = 0,
+  className,
   children,
-}: PropsWithChildren<{ delay?: number }>) {
+}: HTMLAttributes<HTMLDivElement> & PropsWithChildren<{ delay?: number }>) {
   return (
-    <MotionDiv
-      initial={motions.fadeInLeft.initial}
-      animate={motions.fadeInLeft.whileInView}
-      transition={motions.transition({ delay })}
-      className="relative inline-block">
+    <div className={cn("relative inline-block h-full w-full", className)}>
       {children}
-    </MotionDiv>
+    </div>
   );
 };
 
 export const InfiniteMarquee = function InfiniteMarquee({
   direction = "left",
   speed = 50,
+  className,
   children,
-}: PropsWithChildren<{
-  direction?: "left" | "right";
-  speed?: number;
-}>) {
+}: HTMLAttributes<HTMLDivElement> &
+  PropsWithChildren<{
+    direction?: "left" | "right";
+    speed?: number;
+  }>) {
   const marqueeRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState(0);
 
@@ -40,7 +46,7 @@ export const InfiniteMarquee = function InfiniteMarquee({
   }, [children]);
 
   const duration = contentWidth / speed;
-  const marqueeVariants = {
+  const marqueeVariants: Variants = {
     animate: {
       x: direction === "left" ? -contentWidth : 0,
       transition: {
@@ -55,21 +61,21 @@ export const InfiniteMarquee = function InfiniteMarquee({
   };
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className={cn("relative h-full w-full overflow-hidden", className)}>
       {contentWidth > 0 && (
         <MotionDiv
           ref={marqueeRef}
           variants={marqueeVariants}
           initial={{ x: direction === "left" ? 0 : -contentWidth }}
           animate="animate"
-          className="flex w-max">
+          className="flex h-full w-full">
           {children}
           {children}
         </MotionDiv>
       )}
 
       {contentWidth === 0 && (
-        <div ref={marqueeRef} className="invisible flex w-max">
+        <div ref={marqueeRef} className="invisible flex h-full w-full">
           {children}
           {children}
         </div>

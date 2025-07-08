@@ -1,9 +1,9 @@
-// REVIEWED - 02
+// REVIEWED - 03
+
 import { Metadata } from "next";
 import Link from "next/link";
 
 import { Container } from "@/components/globals/container";
-import { MotionOl } from "@/components/globals/motion";
 import {
   Paragraph,
   SectionHeading,
@@ -11,7 +11,6 @@ import {
   SubSectionHeading,
 } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
-import { motions } from "@/lib/motion";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -78,12 +77,7 @@ export default function TermsOfServicePage() {
             By using this website, you warrant on behalf of yourself, your
             users, and other parties you represent that you will not:
           </Paragraph>
-          <MotionOl
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}
-            className="flex list-decimal flex-col items-start justify-start gap-3">
+          <ol className="flex list-decimal flex-col items-start justify-start gap-3">
             <li>
               Modify, copy, prepare derivative works of, decompile, or reverse
               engineer any materials and software on this website.
@@ -122,7 +116,7 @@ export default function TermsOfServicePage() {
               infringe the privacy, intellectual property rights, or other
               rights of third parties.
             </li>
-          </MotionOl>
+          </ol>
           <SubSectionHeading>Intellectual Property.</SubSectionHeading>
           <Paragraph>
             The intellectual property in the materials contained in this website

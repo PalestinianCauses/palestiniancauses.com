@@ -1,8 +1,7 @@
-// REVIEWED - 07
+// REVIEWED - 10
 
-import { motions } from "@/lib/motion";
+import { HumansButFromGazaPageLink } from "@/lib/utils/strings";
 
-import { MotionSpan } from "./motion";
 import { NavigationLink } from "./navigation-link";
 
 export const navigation = [
@@ -14,7 +13,7 @@ export const navigation = [
   },
   {
     label: "Humans But From Gaza",
-    href: "/humans-but-from-gaza",
+    href: HumansButFromGazaPageLink,
     recent: true,
     coming: false,
   },
@@ -46,22 +45,14 @@ export const navigation = [
 
 export const Navigation = function Navigation() {
   return (
-    <ul className="grid snap-y snap-mandatory snap-start auto-rows-[calc(100vh/5)] grid-rows-[repeat(5,_calc(100vh/5))] divide-y divide-muted overflow-y-scroll lg:auto-rows-[calc(100vh/4)] lg:grid-rows-[repeat(4,_calc(100vh/4))] [@media_(max-height:48rem)]:snap-none [@media_(max-height:48rem)]:auto-rows-[calc(48rem/4)] [@media_(max-height:48rem)]:grid-rows-[repeat(4,_calc(48rem/4))]">
-      {navigation.map(({ label, href, recent, coming }, index) => (
+    <ul className="no-scrollbar grid auto-rows-[calc(100vh/5)] grid-rows-[repeat(5,_calc(100vh/5))] divide-y divide-muted overflow-y-scroll lg:auto-rows-[calc(100vh/4)] lg:grid-rows-[repeat(4,_calc(100vh/4))] [@media_(max-height:48rem)]:auto-rows-[calc(48rem/4)] [@media_(max-height:48rem)]:grid-rows-[repeat(4,_calc(48rem/4))] [@media_(max-width:64rem)]:h-auto [@media_(max-width:64rem)]:max-h-none">
+      {navigation.map(({ label, href, recent, coming }) => (
         <li
           key={href}
-          className="flex w-full snap-start items-center justify-start overflow-hidden">
-          <MotionSpan
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            whileHover="hover"
-            transition={motions.transition({ delay: index * 0.1 })}
-            className="h-full w-full">
-            <NavigationLink href={href} recent={recent} coming={coming}>
-              {label}
-            </NavigationLink>
-          </MotionSpan>
+          className="flex w-full items-center justify-start overflow-hidden">
+          <NavigationLink href={href} recent={recent} coming={coming}>
+            {label}
+          </NavigationLink>
         </li>
       ))}
     </ul>

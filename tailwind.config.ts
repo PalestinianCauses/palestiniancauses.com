@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 import colors from "tailwindcss/colors";
@@ -11,10 +11,7 @@ export const toRGB = function toRGB(value: string) {
 
 export default {
   darkMode: ["class"],
-  content: [
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       screens: {
@@ -89,8 +86,8 @@ export default {
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        "accordion-down": "accordion-down 0.2s ease-in-out",
+        "accordion-up": "accordion-up 0.2s ease-in-out",
       },
     },
   },

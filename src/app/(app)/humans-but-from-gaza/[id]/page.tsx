@@ -1,14 +1,70 @@
-// REVIEWED - 05
+// REVIEWED - 12
 
-import { notFound, redirect } from "next/navigation";
+import { MessageSquareTextIcon } from "lucide-react";
+import { notFound } from "next/navigation";
+import { GeneratedTypes } from "payload";
+import { cache, Suspense } from "react";
+import linesSplit from "split-lines";
 
-import { getDiaryEntry, getDiaryEntryAuthor } from "@/actions/diary-entry";
-import { DiaryEntryBadges } from "@/components/diary-entry/diary-entry-badges";
+import { getCollection } from "@/actions/collection";
+import { getDiaryEntry } from "@/actions/diary-entry";
+import { CreateCommentForm } from "@/components/comments/forms/create";
+import { CommentList } from "@/components/comments/list";
+import { DiaryEntryBadgesLoading } from "@/components/diary-entry/diary-entry-badges";
+import { DiaryEntryListItemBadges } from "@/components/diary-entry/list";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
-import { Paragraph, SectionHeading } from "@/components/globals/typography";
+import { Loading } from "@/components/globals/loading";
+import {
+  Paragraph,
+  SectionHeading,
+  SubSectionHeading,
+} from "@/components/globals/typography";
 import { Separator } from "@/components/ui/separator";
-import { splitByFlexibleNewLines } from "@/lib/utils/strings";
+import { FiltersOptions } from "@/lib/types";
+
+const getComments = cache(getCollection<"comments">);
+
+const PageCommentsList = async function PageCommentsList({
+  diaryEntryId,
+}: {
+  diaryEntryId: number;
+}) {
+  const commentsFilters: FiltersOptions = {
+    page: 1,
+    limit: 5,
+    sort: ["-votesScore", "-createdAt"],
+    fields: {
+      on: {
+        equals: {
+          relationTo: "diary-entries",
+          value: diaryEntryId,
+        },
+      },
+      parent: { exists: false },
+      status: { equals: "approved" },
+    },
+  };
+
+  const commentsFieldsSearch: (keyof GeneratedTypes["collections"]["comments"])[] =
+    ["user", "content", "votes", "createdAt"];
+
+  const comments = await getComments({
+    collection: "comments",
+    filters: commentsFilters,
+    fieldsSearch: commentsFieldsSearch,
+    depth: 1,
+  });
+
+  return (
+    <CommentList
+      on={{ relationTo: "diary-entries", value: diaryEntryId }}
+      commentsInitial={comments.data}
+      filters={commentsFilters}
+      fieldsSearch={commentsFieldsSearch}
+    />
+  );
+};
 
 /* eslint-disable-next-line func-style  */
 export async function generateMetadata({
@@ -26,19 +82,19 @@ export async function generateMetadata({
   };
 }
 
+const DiaryEntryListItemBadgesLoading = (
+  <div className="mb-4">
+    <DiaryEntryBadgesLoading />
+  </div>
+);
+
 export default async function HumanButFromGazaPage(props: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ author: string }>;
 }) {
   /* eslint-disable react/destructuring-assignment */
   const params = await props.params;
-  const searchParams = await props.searchParams;
-
-  const authorId = parseInt(searchParams.author, 10);
-  if (Number.isNaN(authorId)) redirect("/humans-but-from-gaza");
 
   const diaryEntry = await getDiaryEntry(parseInt(params.id, 10));
-  const author = await getDiaryEntryAuthor(authorId);
 
   if (
     !diaryEntry.data ||
@@ -49,27 +105,24 @@ export default async function HumanButFromGazaPage(props: {
 
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">
-      <Container className="mb-24 max-w-6xl lg:mb-32 xl:mb-48">
+      <Container as="section" className="max-w-6xl">
         <Container className="mx-0 mb-12 max-w-5xl px-0 lg:px-0">
-          <DiaryEntryBadges
-            isAnonymous={diaryEntry.data.isAnonymous}
-            date={diaryEntry.data.date}
-            author={author.data}
-            className="mb-6"
-          />
+          <Suspense fallback={DiaryEntryListItemBadgesLoading}>
+            <DiaryEntryListItemBadges diaryEntry={diaryEntry.data} />
+          </Suspense>
           <SectionHeading>{diaryEntry.data.title}</SectionHeading>
         </Container>
         <Container className="flex flex-col gap-8 px-0 lg:px-0">
-          {splitByFlexibleNewLines(diaryEntry.data.content).map(
-            (text, index) => (
+          {linesSplit(diaryEntry.data.content)
+            .filter(Boolean)
+            .map((text, index) => (
               /* eslint-disable-next-line react/no-array-index-key */
               <Paragraph key={index}>{text}</Paragraph>
-            ),
-          )}
+            ))}
         </Container>
       </Container>
-      <Separator />
-      {/* <Container className="my-12 max-w-6xl lg:my-24 xl:my-32">
+      <Separator className="my-12 lg:my-24 xl:my-32" />
+      <Container as="section" className="max-w-6xl">
         <SubSectionHeading
           small
           className="mb-4 flex flex-row items-center gap-2.5">
@@ -82,9 +135,16 @@ export default async function HumanButFromGazaPage(props: {
           their experiences. Let&apos;s build a community of empathy and support
           together.
         </Paragraph>
-        <CreateCommentForm />
-      </Container> */}
-      <Separator className="mb-12 lg:mb-24 xl:mb-32" />
+        <CreateCommentForm
+          on={{ relationTo: "diary-entries", value: diaryEntry.data.id }}
+        />
+      </Container>
+      <Separator className="my-12 lg:my-24 xl:my-32" />
+      <Container className="max-w-7xl">
+        <Suspense fallback={<Loading className="min-h-80" />}>
+          <PageCommentsList diaryEntryId={diaryEntry.data.id} />
+        </Suspense>
+      </Container>
       <Footer />
     </main>
   );

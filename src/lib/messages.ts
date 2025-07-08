@@ -1,4 +1,4 @@
-// REVIEWED - 21
+// REVIEWED - 24
 
 export const messages = {
   http: {
@@ -105,7 +105,27 @@ export const messages = {
     comment: {
       pendingCreate: "Posting your comment...",
       successCreate: "Comment posted successfully.",
+      successDelete: "Comment deleted successfully.",
+      createUnAuthenticated:
+        "Authentication required to post a comment. Please sign in.",
+      deleteUnAuthorized: "You are not authorized to delete this comment.",
+      deleteUnAuthenticated:
+        "Authentication required to delete a comment. Please sign in.",
+      notFound: "Comment not found. Please try again later.",
       serverErrorCreate: "Failed to post comment. Please try again later.",
+      serverErrorGet: "Failed to retrieve comment. Please try again later.",
+      serverErrorDelete: "Failed to delete comment. Please try again later.",
+      replies: {
+        successDelete: "Replies deleted successfully.",
+        serverErrorCount:
+          "Failed to retrieve replies count. Please try again later.",
+      },
+      votes: {
+        success: "Successfully voted on comment.",
+        unAuthenticated:
+          "Authentication required to vote on a comment. Please sign in.",
+        serverError: "Failed to vote on comment. Please try again later.",
+      },
     },
     diaryEntry: {
       pending: "Sharing your diary...",
@@ -129,6 +149,8 @@ export const messages = {
   forms: {
     required: (field: string) => `Please enter your ${field}.`,
     valid: (field: string) => `Please enter a valid ${field}.`,
+    minLength: (field: string, length: number) =>
+      `Please enter a ${field} with at least ${length} characters.`,
     maxLength: (field: string, length: number) =>
       `Please enter a ${field} with less than ${length} characters.`,
     date: (min: string, max: string) =>

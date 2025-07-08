@@ -1,10 +1,11 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { createDiaryEntry } from "@/actions/diary-entry";
+import { HumansButFromGazaPageLink } from "@/lib/utils/strings";
 import { DiaryEntry } from "@/payload-types";
 
 export const useDiaryEntry = function useDiaryEntry() {
@@ -29,7 +30,7 @@ export const useDiaryEntry = function useDiaryEntry() {
 
       toast.success(response.data);
       queryClient.invalidateQueries({ queryKey: ["diary-entry"] });
-      router.push("/humans-but-from-gaza");
+      router.push(HumansButFromGazaPageLink);
     },
     onSettled: () => {
       toast.dismiss("create-diary-entry");

@@ -1,14 +1,11 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-import { motions } from "@/lib/motion";
-
 import { Container } from "../globals/container";
-import { MotionLi } from "../globals/motion";
 import {
   Paragraph,
   SectionHeading,
@@ -58,12 +55,7 @@ export const CTA = function CTA() {
       </Paragraph>
       <ul className="grid h-full grid-rows-4">
         {ctas.map(({ title, href }) => (
-          <MotionLi
-            key={title}
-            viewport={{ once: true }}
-            initial={motions.fadeIn.initial}
-            whileInView={motions.fadeIn.whileInView}
-            transition={motions.transition({})}>
+          <li key={title}>
             <Button
               variant="outline"
               className="h-full w-full justify-start gap-5 whitespace-break-spaces p-5 text-left font-normal md:p-10"
@@ -77,7 +69,7 @@ export const CTA = function CTA() {
                 </SubSectionHeading>
               </Link>
             </Button>
-          </MotionLi>
+          </li>
         ))}
       </ul>
     </Container>

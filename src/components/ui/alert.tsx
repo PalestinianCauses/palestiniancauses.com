@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
@@ -6,7 +6,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils/styles";
 
 const alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm [&_>_svg_+_div]:translate-y-[-3px] [&_>_svg]:absolute [&_>_svg]:left-4 [&_>_svg]:top-4 [&_>_svg]:text-foreground [&_>_svg_~_*]:pl-7",
+  "relative w-full border px-4 py-3 text-sm [&_>_svg_+_div]:translate-y-[-3px] [&_>_svg]:absolute [&_>_svg]:left-4 [&_>_svg]:top-4 [&_>_svg]:text-foreground [&_>_svg_~_*]:pl-7",
   {
     variants: {
       variant: {

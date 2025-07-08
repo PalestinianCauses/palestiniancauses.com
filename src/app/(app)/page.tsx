@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 import { Metadata } from "next";
 
 import { Intro } from "@/components/globals/intro";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 const HomePage = async function HomePage() {
   return (
-    <main className="grid h-screen max-h-screen min-h-[48rem] snap-y snap-mandatory grid-cols-1 divide-y divide-muted overflow-y-scroll lg:snap-none lg:grid-cols-2 lg:divide-x lg:divide-y-0 [&_>_*]:h-screen [&_>_*]:max-h-screen [&_>_*]:min-h-[48rem] [@media_(max-height:48rem)]:snap-none">
+    <main className="grid grid-cols-1 divide-y divide-muted overflow-y-scroll lg:grid-cols-2 lg:divide-x lg:divide-y-0 [&_>_*]:h-screen [&_>_*]:max-h-screen [&_>_*]:min-h-[48rem]">
       <Intro />
       <Navigation />
       <PWAPromptInstall />

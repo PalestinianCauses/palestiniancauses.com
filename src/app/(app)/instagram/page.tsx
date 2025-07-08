@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 09
+// REVIEWED - 11
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -19,7 +19,6 @@ import {
   SectionHeadingBadge,
 } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/hooks/use-user";
 import { cn } from "@/lib/utils/styles";
 
 type Properties = "bg" | "text" | "fill" | "stroke";
@@ -228,7 +227,6 @@ const FrameImagesGrid = function FrameImagesGrid({
 
 const InstagramStudioPage = function InstagramStudioPage() {
   // Followers from my GitHub profile, please ignore this :)
-  const { data: user } = useUser();
 
   const frames: ImageFrame[] = [
     {
@@ -309,8 +307,6 @@ const InstagramStudioPage = function InstagramStudioPage() {
     },
   ];
 
-  if (!user || user.role !== "admin") return null;
-
   return (
     <main>
       {/* Open Graph */}
@@ -325,9 +321,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
             <PCLogo />
           </div>
           <div className="col-span-2">
-            <SectionHeading
-              isMotion={false}
-              className="!text-7xl font-semibold text-primary lg:!leading-none xl:!leading-none">
+            <SectionHeading className="!text-7xl font-semibold text-primary lg:!leading-none xl:!leading-none">
               Passionate and Creative{" "}
               <span className="relative z-10 inline-block font-bold text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary">
                 Individuals
@@ -346,9 +340,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
             <PCLogo color="primary-foreground" />
           </div>
           <div className="col-span-2">
-            <SectionHeading
-              isMotion={false}
-              className="!text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
+            <SectionHeading className="!text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
               Discover Our{" "}
               <span className="relative z-10 inline-block pl-1 font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
                 Core
@@ -370,9 +362,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
             <PCLogo />
           </div>
           <div className="col-span-2">
-            <SectionHeading
-              isMotion={false}
-              className="!text-7xl font-semibold text-primary lg:!leading-none xl:!leading-none">
+            <SectionHeading className="!text-7xl font-semibold text-primary lg:!leading-none xl:!leading-none">
               The Truth <br />
               <span className="relative z-10 inline-block font-bold text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary">
                 Museum:
@@ -392,9 +382,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
             <PCLogo color="primary-foreground" />
           </div>
           <div className="col-span-2">
-            <SectionHeading
-              isMotion={false}
-              className="!text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
+            <SectionHeading className="!text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
               Identity, Mission, Vision, and{" "}
               <span className="relative z-10 inline-block pl-1 font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
                 Values:
@@ -454,9 +442,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
       {/* GitHub */}
       <Frame ref={frames[6].ref} dimensions="github" color="primary">
         <FrameContent className="h-[32rem] w-[70rem]">
-          <SectionHeading
-            isMotion={false}
-            className="!max-w-none !text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
+          <SectionHeading className="!max-w-none !text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
             Join our open-source <br />
             <span className="relative z-10 mr-2 inline-block font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
               mission.
@@ -466,9 +452,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
               identity.
             </span>{" "}
           </SectionHeading>
-          <SectionHeadingBadge
-            isMotion={false}
-            className="text-lg text-primary-foreground">
+          <SectionHeadingBadge className="text-lg text-primary-foreground">
             Maintained By Shawqi Hatem (@shawqicauses)
           </SectionHeadingBadge>
         </FrameContent>
@@ -490,7 +474,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
         dimensions="4:5"
         color="primary-foreground"
         className="bg-transparent">
-        <SectionHeading isMotion={false} className="!text-9xl">
+        <SectionHeading className="!text-9xl">
           CODE <br />
           <span className="relative z-10 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
             WRITTEN
@@ -517,9 +501,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
         dimensions="4:5"
         color="primary"
         className="bg-transparent">
-        <SectionHeading
-          isMotion={false}
-          className="!text-9xl text-primary-foreground">
+        <SectionHeading className="!text-9xl text-primary-foreground">
           <span className="relative z-10 inline-block pl-2 font-extrabold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary-foreground">
             RUINS
           </span>{" "}
@@ -547,7 +529,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
         dimensions="4:5"
         color="primary-foreground"
         className="bg-transparent">
-        <SectionHeading isMotion={false} className="!text-9xl">
+        <SectionHeading className="!text-9xl">
           UNDER <br />
           <span className="relative z-10 ml-40 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
             ASHES.

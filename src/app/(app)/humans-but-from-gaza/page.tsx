@@ -1,29 +1,21 @@
-// REVIEWED - 09
+// REVIEWED - 14
 
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
 import { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 
-import { getCollection } from "@/actions/collection";
 import { DiaryEntryList } from "@/components/diary-entry/list";
+import { DiaryEntryListLoading } from "@/components/diary-entry/loading";
 import { Container } from "@/components/globals/container";
 import {
   FilterConfig,
   FilterControls,
 } from "@/components/globals/filter-control";
 import { Footer } from "@/components/globals/footer";
-import { MotionDiv } from "@/components/globals/motion";
 import { Paragraph, SectionHeading } from "@/components/globals/typography";
 import { VideoOutroScene } from "@/components/globals/video-outro-scene";
 import { Button } from "@/components/ui/button";
-import { motions } from "@/lib/motion";
-import { SelectOptions } from "@/lib/types";
-
-import { QueryProvider } from "../providers";
+import { FiltersOptions } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "The Truth Museum: Humans But From Gaza",
@@ -54,7 +46,7 @@ export default async function HumansButFromGazaPage(props: {
   /* eslint-disable react/destructuring-assignment */
   const searchParams = await props.searchParams;
 
-  const selects: SelectOptions = {
+  const filters: FiltersOptions = {
     page:
       searchParams?.page && typeof searchParams?.page === "string"
         ? parseInt(searchParams?.page, 10)
@@ -71,7 +63,7 @@ export default async function HumansButFromGazaPage(props: {
       searchParams?.title && typeof searchParams.title === "string"
         ? searchParams?.title
         : "",
-    status: "approved",
+    fields: { status: { equals: "approved" } },
   };
 
   const filterConfigs: FilterConfig[] = [
@@ -91,22 +83,6 @@ export default async function HumansButFromGazaPage(props: {
     },
   ];
 
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: ["diary-entries", selects, ["title"]],
-    queryFn: async () => {
-      const response = await getCollection<"diary-entries">({
-        collection: "diary-entries",
-        selects,
-        fields: ["title"],
-      });
-
-      if (!response.data || response.error) return null;
-
-      return response.data;
-    },
-  });
-
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">
       <Container className="mb-12 max-w-7xl xl:mb-24">
@@ -121,44 +97,37 @@ export default async function HumansButFromGazaPage(props: {
           with these authentic testimonies to connect with the human experience
           often overlooked and deepen your understanding of Gaza.
         </Paragraph>
-        <MotionDiv
-          viewport={{ once: true }}
-          initial={motions.fadeIn.initial}
-          whileInView={motions.fadeIn.whileInView}
-          transition={motions.transition({})}
-          className="block w-full sm:hidden">
+        <div className="block w-full sm:hidden">
           <Button variant="default" className="w-full text-center" asChild>
             <Link href="/humans-but-from-gaza/share">Share your diary</Link>
           </Button>
-        </MotionDiv>
+        </div>
       </Container>
       <Container className="mb-12 flex max-w-7xl flex-col-reverse justify-between gap-5 sm:flex-row sm:items-end xl:mb-24">
         <div className="flex max-w-3xl flex-1 flex-col justify-stretch gap-5 sm:flex-row [&_#filter-control-sort]:min-w-48 [&_#filter-control-title]:w-full">
           <FilterControls
             filterConfigs={filterConfigs}
-            pageDefault={selects.page}
-            limitDefault={selects.limit}
-            sortDefault={selects.sort}
+            pageDefault={filters.page}
+            limitDefault={filters.limit}
+            sortDefault={filters.sort}
             debounceTime={500}
           />
         </div>
-        <MotionDiv
-          viewport={{ once: true }}
-          initial={motions.fadeIn.initial}
-          whileInView={motions.fadeIn.whileInView}
-          transition={motions.transition({})}
-          className="hidden sm:block">
+        <div className="hidden sm:block">
           <Button variant="default" asChild>
             <Link href="/humans-but-from-gaza/share">Share your diary</Link>
           </Button>
-        </MotionDiv>
+        </div>
       </Container>
       <Container className="mb-12 grid max-w-7xl grid-cols-1 gap-16 xl:mb-24">
-        <QueryProvider>
-          <HydrationBoundary state={dehydrate(queryClient)}>
-            <DiaryEntryList selects={selects} fields={["title"]} />
-          </HydrationBoundary>
-        </QueryProvider>
+        <Suspense fallback={<DiaryEntryListLoading />}>
+          <DiaryEntryList filters={filters} fieldsSearch={["title"]} />
+        </Suspense>
+      </Container>
+      <Container className="mb-24 flex items-center justify-center lg:mb-32">
+        <Button variant="default" size="lg" asChild>
+          <Link href="/humans-but-from-gaza/share">Share your diary</Link>
+        </Button>
       </Container>
       <VideoOutroScene
         duration={800}
@@ -189,14 +158,8 @@ export default async function HumansButFromGazaPage(props: {
             bgColor: "--primary",
           },
         ]}
+        containerClassName="-mb-12 lg:-mb-24"
       />
-      <Container>
-        <div className="relative z-50 flex w-full -translate-y-[3.25rem] items-center justify-center sm:-mt-[4.25rem] sm:translate-y-0 sm:pb-4 lg:-mt-[5.25rem] lg:pb-8">
-          <Button variant="default" size="lg" asChild>
-            <Link href="/humans-but-from-gaza/share">Share your diary</Link>
-          </Button>
-        </div>
-      </Container>
       <Footer />
     </main>
   );

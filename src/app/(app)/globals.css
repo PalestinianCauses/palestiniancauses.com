@@ -1,4 +1,4 @@
-/* REVIEWED - 07 */
+/* REVIEWED - 10 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -57,17 +57,17 @@
   src: url("../../assets/fonts/gilroy-black.woff2") format("woff2");
 }
 
-@keyframes book {
+@keyframes highlight {
   0% {
-    transform: rotateX(50deg) rotateZ(45deg);
+    background-color: rgba(255, 255, 255, 0);
   }
 
   50% {
-    transform: rotateX(50deg) rotateZ(40deg) translateZ(2.5rem);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   100% {
-    transform: rotateX(50deg) rotateZ(45deg);
+    background-color: rgba(255, 255, 255, 0);
   }
 }
 
@@ -88,9 +88,27 @@
   body {
     @apply bg-background font-["Gilroy",_system-ui,_sans-serif] text-foreground;
   }
+
+  .highlight {
+    &::before {
+      animation-name: highlight;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-iteration-count: infinite;
+      animation-duration: 1s;
+    }
+  }
 }
 
 @layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   .font-stretch {
     font-family:
       "Gilroy",
@@ -99,13 +117,5 @@
       BlinkMacSystemFont,
       sans-serif;
     font-stretch: 150%;
-  }
-
-  .book-animation {
-    animation-name: book;
-    animation-duration: 5s;
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-    animation-iteration-count: infinite;
   }
 }

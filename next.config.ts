@@ -1,10 +1,9 @@
-// REVIEWED - 15
+// REVIEWED - 16
 import { withPayload } from "@payloadcms/next/withPayload";
 import withSerwistInit from "@serwist/next";
 import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // server
   experimental: {
     serverActions: {
       allowedOrigins: [process.env.NEXT_PUBLIC_DOMAIN!],

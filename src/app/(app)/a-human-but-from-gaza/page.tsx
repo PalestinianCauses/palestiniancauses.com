@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { Metadata } from "next";
 import { Fragment } from "react";
@@ -40,12 +40,10 @@ export default async function AHumanButFromGazaPage() {
       <Header />
       <About />
       <Testimonials />
-      <VideoOutroScene duration={600} />
-      <Container>
-        <div className="relative z-50 flex w-full -translate-y-[3.25rem] items-center justify-center sm:-mt-[4.25rem] sm:translate-y-0 sm:pb-4 lg:-mt-[5.25rem] lg:pb-8">
-          <HeaderButtons />
-        </div>
+      <Container className="mb-24 flex items-center justify-center lg:mb-32">
+        <HeaderButtons />
       </Container>
+      <VideoOutroScene duration={600} containerClassName="-mb-12 lg:-mb-24" />
       <Footer />
     </Fragment>
   );

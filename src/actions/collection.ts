@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 08
+// REVIEWED - 12
 
 import {
   GeneratedTypes,
@@ -13,21 +13,20 @@ import {
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
-import { CollectionTypes, SelectOptions } from "@/lib/types";
-import { selectOptionsDefaults } from "@/lib/utils/filters";
+import { CollectionTypes, FiltersOptions } from "@/lib/types";
+import { filtersOptionsDefaults } from "@/lib/utils/filters";
 
 type CollectionOptions<TSlug extends CollectionTypes> = {
   req?: Partial<PayloadRequest>;
   user?: User | null;
   collection: TSlug;
-  selects: SelectOptions;
-  fields?: (keyof GeneratedTypes["collections"][TSlug])[];
+  filters: FiltersOptions;
+  fieldsSearch?: (keyof GeneratedTypes["collections"][TSlug])[];
   depth?: number;
 };
 
-type ResponseDataCollection<TSlug extends CollectionTypes> = PaginatedDocs<
-  GeneratedTypes["collections"][TSlug]
->;
+export type ResponseDataCollection<TSlug extends CollectionTypes> =
+  PaginatedDocs<GeneratedTypes["collections"][TSlug]>;
 
 type ResponseCollection<TSlug extends CollectionTypes> =
   | { data: ResponseDataCollection<TSlug>; error: null }
@@ -39,29 +38,22 @@ export const getCollection = async function getCollection<
   req,
   user,
   collection,
-  selects: {
-    page = selectOptionsDefaults.page,
-    limit = selectOptionsDefaults.limit,
-    sort = selectOptionsDefaults.sort,
-    search = selectOptionsDefaults.search,
-    ...otherSelects
+  filters: {
+    page = filtersOptionsDefaults.page,
+    limit = filtersOptionsDefaults.limit,
+    sort = filtersOptionsDefaults.sort,
+    search = filtersOptionsDefaults.search,
+    fields: selectFields,
   },
-  fields,
+  fieldsSearch,
   depth = 0,
 }: CollectionOptions<TSlug>): Promise<ResponseCollection<TSlug>> {
-  const where: Where = {};
+  const where: Where = { ...selectFields };
 
-  if (search && fields && fields.length > 0) {
-    where.or = fields.map((field) => ({
+  if (search && fieldsSearch && fieldsSearch.length > 0) {
+    where.or = fieldsSearch.map((field) => ({
       [field]: { contains: search },
     }));
-  }
-
-  /* eslint-disable no-restricted-syntax */
-  for (const key in otherSelects) {
-    if (otherSelects[key] !== undefined && otherSelects[key] !== "") {
-      where[key] = { equals: otherSelects[key] };
-    }
   }
 
   const response = await actionSafeExecute(
