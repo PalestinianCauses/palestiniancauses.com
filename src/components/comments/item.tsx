@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import {
   QueryKey,
@@ -44,6 +44,8 @@ export type CommentItemProps = {
   jumpToPlusHighlight: (id: string) => void;
 };
 
+TimeAgo.addLocale(en);
+
 export const CommentItem = function CommentItem({
   queryKey,
   isPageComment = false,
@@ -52,8 +54,6 @@ export const CommentItem = function CommentItem({
   elementId,
   jumpToPlusHighlight,
 }: CommentItemProps) {
-  TimeAgo.addLocale(en);
-
   const router = useRouter();
   const queryClient = useQueryClient();
 

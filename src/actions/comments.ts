@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -114,7 +114,7 @@ export const deleteCommentReplies = async function deleteCommentReplies(
 
   if (!auth || !auth.user) return;
 
-  ids.forEach(async (id) => {
+  const deletePromises = ids.map(async (id) => {
     const response = await actionSafeExecute(
       payload.delete({
         collection: "comments",
@@ -130,6 +130,8 @@ export const deleteCommentReplies = async function deleteCommentReplies(
         response,
       );
   });
+
+  await Promise.all(deletePromises);
 };
 
 export const voteOnComment = async function voteOnComment({
