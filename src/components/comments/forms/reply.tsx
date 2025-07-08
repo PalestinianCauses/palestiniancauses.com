@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -62,15 +62,26 @@ export const ReplyCommentForm = function ReplyCommentForm({
         status: "approved",
       },
       {
-        onSuccess: () => {
+        onSettled: (response) => {
+          if (!response || !response.data || response.error) return;
+
           form.reset();
 
-          queryClient.invalidateQueries({
-            queryKey: [
-              "comment-replies",
-              typeof parent === "object" ? parent.id : parent,
-            ],
-          });
+          try {
+            const parentId = typeof parent === "object" ? parent.id : parent;
+            queryClient.invalidateQueries({
+              queryKey: ["comment-replies", parentId],
+            });
+
+            queryClient.invalidateQueries({
+              queryKey: ["comment-replies-count", parentId],
+            });
+          } catch (error) {
+            console.error(
+              "Error in `createComment.mutate.onSettled` in `ReplyCommentForm` while trying to in-validate queries after reply:",
+              error,
+            );
+          }
 
           onSuccess();
         },

@@ -1,8 +1,12 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  QueryKey,
+  useInfiniteQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import {
@@ -19,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { Fragment, MutableRefObject, useMemo, useState } from "react";
 
 import { getCollection } from "@/actions/collection";
-import { useComment } from "@/hooks/use-comment";
+import { useComment, useCommentRepliesCount } from "@/hooks/use-comment";
 import { useUser } from "@/hooks/use-user";
 import { cn } from "@/lib/utils/styles";
 import { Comment } from "@/payload-types";
@@ -31,6 +35,7 @@ import { ReplyCommentForm } from "./forms/reply";
 import { CommentVotes } from "./votes";
 
 export type CommentItemProps = {
+  queryKey?: QueryKey;
   isPageComment?: boolean;
   depth: number;
   comment: Comment;
@@ -40,6 +45,7 @@ export type CommentItemProps = {
 };
 
 export const CommentItem = function CommentItem({
+  queryKey,
   isPageComment = false,
   depth,
   comment,
@@ -52,17 +58,16 @@ export const CommentItem = function CommentItem({
   const queryClient = useQueryClient();
 
   const { data: user } = useUser();
-  const { deleteComment } = useComment();
+  const { deleteComment, deleteCommentReplies } = useComment();
+  const { data: repliesCount = 0 } = useCommentRepliesCount(comment.id);
 
   const [isReplyFormOpen, setIsReplyFormOpen] = useState(
-    Number(comment.repliesCount) === 0 && isPageComment,
+    repliesCount === 0 && isPageComment,
   );
 
   const [isRepliesOpen, setIsRepliesOpen] = useState(
-    Boolean(comment.repliesCount && isPageComment),
+    Boolean(repliesCount && isPageComment),
   );
-
-  const [repliesCount, setRepliesCount] = useState(comment.repliesCount);
 
   const isMaximumDepth = depth >= 3;
 
@@ -83,20 +88,25 @@ export const CommentItem = function CommentItem({
           limit: 5,
           sort: ["createdAt"],
           fields: {
-            on: { equals: comment.on },
+            on: {
+              equals: {
+                relationTo: comment.on.relationTo,
+                value:
+                  typeof comment.on.value === "object"
+                    ? comment.on.value.id
+                    : comment.on.value,
+              },
+            },
             parent: { equals: comment.id },
           },
         },
         fieldsSearch: ["user", "content", "createdAt"],
-        depth: 2,
+        depth: 1,
       });
 
-      if (!response.data || response.data.docs.length === 0 || response.error) {
-        setRepliesCount(0);
+      if (!response.data || response.data.docs.length === 0 || response.error)
         return null;
-      }
 
-      setRepliesCount(response.data.totalDocs);
       return response.data;
     },
     enabled: isRepliesOpen,
@@ -255,7 +265,7 @@ export const CommentItem = function CommentItem({
               onClick={() =>
                 deleteComment.mutate(comment.id, {
                   onSuccess: () => {
-                    if (comment.parent)
+                    if (comment.parent) {
                       queryClient.invalidateQueries({
                         queryKey: [
                           "comment-replies",
@@ -264,17 +274,32 @@ export const CommentItem = function CommentItem({
                             : comment.parent,
                         ],
                       });
-                    else
+
                       queryClient.invalidateQueries({
                         queryKey: [
-                          `comments-${comment.on.relationTo}-${typeof comment.on.value === "object" ? comment.on.value.id : comment.on.value}`,
+                          "comment-replies-count",
+                          typeof comment.parent === "object"
+                            ? comment.parent.id
+                            : comment.parent,
                         ],
+                      });
+                    } else if (queryKey)
+                      queryClient.invalidateQueries({ queryKey, exact: true });
+                    else
+                      queryClient.invalidateQueries({
+                        queryKey: ["comments"],
+                        exact: false,
                       });
 
                     if (isPageComment)
                       router.push(
                         `/${comment.on.relationTo === "diary-entries" ? "humans-but-from-gaza" : "blog"}/${typeof comment.on.value === "object" ? comment.on.value.id : comment.on.value}`,
                       );
+
+                    if (replies.length !== 0) {
+                      const repliesIds = replies.map((reply) => reply.id);
+                      deleteCommentReplies.mutate(repliesIds);
+                    }
                   },
                 })
               }>

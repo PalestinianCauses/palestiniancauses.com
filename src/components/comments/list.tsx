@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, MessagesSquareIcon } from "lucide-react";
@@ -122,6 +122,7 @@ export const CommentList = function CommentList({
         {comments.map((comment) => (
           <CommentItem
             key={comment.id}
+            queryKey={queryKey}
             depth={0}
             comment={comment}
             elementId={elementId}
