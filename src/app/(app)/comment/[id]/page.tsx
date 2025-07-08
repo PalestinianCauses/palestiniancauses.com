@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { ArrowLeftIcon, CornerDownRightIcon } from "lucide-react";
 import Link from "next/link";
@@ -38,12 +38,15 @@ const Navigation = function Navigation({
         <li className="flex items-center justify-start">
           <Button
             variant="ghost"
-            className="max-w-full p-0 text-muted-foreground hover:bg-transparent">
-            <CornerDownRightIcon />
-            <p className="truncate">
-              Replying to{" "}
-              <span className="text-foreground">{parent.title}</span>
-            </p>
+            className="max-w-full p-0 text-muted-foreground hover:bg-transparent"
+            asChild>
+            <Link href={parent.link}>
+              <CornerDownRightIcon />
+              <p className="truncate">
+                Replying to{" "}
+                <span className="text-foreground">{parent.title}</span>
+              </p>
+            </Link>
           </Button>
         </li>
       ) : null}
