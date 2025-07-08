@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 10
+// REVIEWED - 11
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -19,7 +19,6 @@ import {
   SectionHeadingBadge,
 } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/hooks/use-user";
 import { cn } from "@/lib/utils/styles";
 
 type Properties = "bg" | "text" | "fill" | "stroke";
@@ -228,7 +227,6 @@ const FrameImagesGrid = function FrameImagesGrid({
 
 const InstagramStudioPage = function InstagramStudioPage() {
   // Followers from my GitHub profile, please ignore this :)
-  const { data: user } = useUser();
 
   const frames: ImageFrame[] = [
     {
@@ -308,8 +306,6 @@ const InstagramStudioPage = function InstagramStudioPage() {
       as: "png",
     },
   ];
-
-  if (!user || user.role !== "admin") return null;
 
   return (
     <main>

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import {
   QueryKey,
@@ -101,7 +101,7 @@ export const CommentItem = function CommentItem({
           },
         },
         fieldsSearch: ["user", "content", "createdAt"],
-        depth: 1,
+        depth: 2,
       });
 
       if (!response.data || response.data.docs.length === 0 || response.error)

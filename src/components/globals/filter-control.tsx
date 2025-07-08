@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -45,7 +45,7 @@ export const FilterControls = function FilterControls({
   filterConfigs: FilterConfig[];
   pageDefault?: number;
   limitDefault?: number;
-  sortDefault?: string;
+  sortDefault?: string | string[];
   debounceTime?: number;
 }) {
   const router = useRouter();
@@ -107,7 +107,7 @@ export const FilterControls = function FilterControls({
       newParams.set("limit", limit.toString());
 
     const sort = filterState.sort || sortDefault;
-    if (sort) newParams.set("sort", sort);
+    if (sort) newParams.set("sort", sort.toString());
 
     newParams.sort(); // Sorting parameters for consistent URL and string comparison
 
