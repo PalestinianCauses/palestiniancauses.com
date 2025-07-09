@@ -1,11 +1,10 @@
 "use client";
 
-// REVIEWED - 12
+// REVIEWED - 14
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
-import DomToImage from "dom-to-image";
-import { ArrowRightIcon } from "lucide-react";
+import { toJpeg, toPng } from "html-to-image";
 import Image from "next/image";
 import {
   forwardRef,
@@ -16,7 +15,6 @@ import {
 } from "react";
 
 import {
-  Paragraph,
   SectionHeading,
   SectionHeadingBadge,
 } from "@/components/globals/typography";
@@ -160,7 +158,7 @@ const ImageFrameRender = function ImageFrameRender({
     imageFrames.forEach((imageFrame) => {
       if (!imageFrame.ref.current) return;
 
-      const functions = { jpeg: DomToImage.toJpeg, png: DomToImage.toPng };
+      const functions = { jpeg: toJpeg, png: toPng };
 
       functions[imageFrame.as || "jpeg"](imageFrame.ref.current, {
         cacheBust: true,
@@ -311,19 +309,9 @@ const InstagramStudioPage = function InstagramStudioPage() {
 
   const instagramFrames: ImageFrame[] = [
     {
-      id: "ig-01",
+      id: "ig-04",
       ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
-    },
-    {
-      id: "ig-02",
-      ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
-    },
-    {
-      id: "ig-03",
-      ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
+      as: "png",
     },
   ];
 
@@ -333,76 +321,30 @@ const InstagramStudioPage = function InstagramStudioPage() {
       <ImageFrameRender frames={profileImagesFrames} />
       <ImageFrameRender frames={hoodiesFrames} />
       <ImageFrameRender frames={instagramFrames} />
-      <Frame
-        ref={instagramFrames[0].ref}
-        dimensions="4:5"
-        color="primary-foreground">
+      <Frame ref={instagramFrames[0].ref} dimensions="4:5" color="primary">
         <FrameContent className="gap-8">
-          <SectionHeadingBadge className="text-lg ring-primary/20">
-            Dear PalestinianCauses&apos; Family{" "}
+          <SectionHeadingBadge className="text-lg text-primary-foreground">
+            Dear PalestinianCauses&apos; Family
           </SectionHeadingBadge>
-          <SectionHeading className="!text-9xl font-bold text-primary lg:!leading-[0.9] xl:!leading-[0.9]">
-            Your voice has a new{" "}
-            <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
-              home
+          <SectionHeading className="!text-9xl font-bold text-primary-foreground lg:!leading-[0.9] xl:!leading-[0.9]">
+            We are proud to{" "}
+            <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary-foreground">
+              un-veil
             </span>{" "}
-            with us🕊️.
+            a crypto hub for our Gym Rat.
           </SectionHeading>
-          <div className="mt-auto flex h-28 w-28 items-center justify-center bg-primary">
-            <ArrowRightIcon className="h-16 w-16 stroke-1 text-primary-foreground" />
-          </div>
         </FrameContent>
         <FrameImagesGrid>
-          <div className="relative col-start-3 col-end-13 row-start-8 row-end-13 ring-2 ring-primary">
+          <div className="relative col-start-3 col-end-13 row-start-8 row-end-13">
             <Image
-              src="/ig-01.png"
+              src="/ig-02.png"
               alt="Screen Shot 01"
               fill
               sizes="42rem"
-              className="!relative bg-primary-foreground object-cover object-[top_left]"
+              className="!relative bg-primary-foreground object-cover object-[top_left] grayscale"
             />
           </div>
         </FrameImagesGrid>
-      </Frame>
-      <Frame ref={instagramFrames[1].ref} dimensions="4:5" color="primary">
-        <FrameContent className="gap-8">
-          <SectionHeadingBadge className="text-lg text-primary-foreground">
-            The conversation is open
-          </SectionHeadingBadge>
-          <SectionHeading className="!text-9xl font-bold text-primary-foreground lg:!leading-[0.9] xl:!leading-[0.9]">
-            <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary-foreground">
-              Comments
-            </span>{" "}
-            are now live on The Truth Museum.
-          </SectionHeading>
-          <Paragraph className="!text-4xl !leading-relaxed text-primary-foreground">
-            Dive your-self in our comprehensive diaries, express your
-            un-wavering support through meaningful engagement, and forge
-            connections with an international community united in solidarity and
-            shared purpose.
-          </Paragraph>
-        </FrameContent>
-      </Frame>
-      <Frame
-        ref={instagramFrames[2].ref}
-        dimensions="4:5"
-        color="primary-foreground">
-        <FrameContent className="gap-8">
-          <SectionHeadingBadge className="text-lg ring-primary/20">
-            Get ready for more
-          </SectionHeadingBadge>
-          <Paragraph className="!text-4xl italic !leading-relaxed text-primary">
-            Reply notifications are on their way to help keep these important
-            conversations alive.
-          </Paragraph>
-          <SectionHeading className="!text-9xl font-bold text-primary lg:!leading-[0.9] xl:!leading-[0.9]">
-            Visit our home in our bio to read and{" "}
-            <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
-              reflect
-            </span>{" "}
-            with us.
-          </SectionHeading>
-        </FrameContent>
       </Frame>
       {/* Logo */}
       <Frame

@@ -1,4 +1,4 @@
-// REVIEWED - 24
+// REVIEWED - 25
 
 export const messages = {
   http: {
@@ -164,6 +164,13 @@ export const messages = {
         year: (when: "before" | "after", year: number) =>
           `Please enter a valid year ${when} ${year}.`,
       },
+    },
+  },
+  crypto: {
+    copy: {
+      pending: "Copying address to clipboard...",
+      success: "Address copied to clipboard.",
+      error: "Failed to copy address to clipboard.",
     },
   },
 };
