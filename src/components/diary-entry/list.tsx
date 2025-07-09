@@ -1,4 +1,4 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
 import Link from "next/link";
 import { GeneratedTypes } from "payload";
@@ -73,7 +73,7 @@ export const DiaryEntryListItem = async function DiaryEntryListItem({
         {diaryEntry.title}
       </SubSectionHeading>
       <Paragraph small className="mb-8 line-clamp-[8] sm:line-clamp-4">
-        {linesSplit(diaryEntry.content).filter(Boolean).slice(0, 2).join(" ")}
+        {linesSplit(diaryEntry.content).filter(Boolean).slice(0, 3).join(" ")}
       </Paragraph>
       <div>
         <Button variant="default" asChild>
