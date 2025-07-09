@@ -1,37 +1,40 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { CollectionConfig } from "payload";
 import slugify from "slugify";
 
-import { isAdminOrSelf } from "@/access/global";
 import { messages } from "@/lib/messages";
 import { validateDateInRange } from "@/lib/utils/dates";
 
 export const Rooms: CollectionConfig = {
   slug: "rooms",
   access: {
-    create: async ({ req }) => {
-      const { user } = req;
-      if (!user) return false;
+    // create: async ({ req }) => {
+    //   const { user } = req;
+    //   if (!user) return false;
 
-      if (user.role === "admin") return true;
+    //   if (user.role === "admin") return true;
 
-      if (user.role === "system-user") {
-        const room = await req.payload.find({
-          collection: "rooms",
-          where: { user: { equals: user.id } },
-        });
+    //   if (user.role === "system-user") {
+    //     const room = await req.payload.find({
+    //       collection: "rooms",
+    //       where: { user: { equals: user.id } },
+    //     });
 
-        if (room.docs.length === 0) return true;
+    //     if (room.docs.length === 0) return true;
 
-        return false;
-      }
+    //     return false;
+    //   }
 
-      return false;
-    },
-    read: isAdminOrSelf,
-    update: isAdminOrSelf,
-    delete: isAdminOrSelf,
+    //   return false;
+    // },
+    // read: isAdminOrSelf,
+    // update: isAdminOrSelf,
+    // delete: isAdminOrSelf,
+    create: () => false,
+    read: () => false,
+    update: () => false,
+    delete: () => false,
   },
   admin: {
     group: "Content",
