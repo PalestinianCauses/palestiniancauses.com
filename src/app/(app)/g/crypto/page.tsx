@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Metadata } from "next";
 import Link from "next/link";
@@ -35,6 +35,24 @@ const addresses = [
     qrCode: "/g-crypto-solana.jpg",
     icon: "/solana-3D.png",
   },
+  {
+    name: "Tron (TRC20)",
+    address: "THAJXzrwyffitd3x1DHnxVphv8RWPsB6Qg",
+    qrCode: "/g-crypto-tron.jpg",
+    icon: "/tron-3D.png",
+  },
+  {
+    name: "Litecoin",
+    address: "LYcqD4zyxr5PfTh92Lyf3rpXCkp2L7pTBN",
+    qrCode: "/g-crypto-litecoin.jpg",
+    icon: "/litecoin-3D.png",
+  },
+  {
+    name: "BNB",
+    address: "0x27ebfF8dC2Dc726560f331227E7b20585BcEf6C0",
+    qrCode: "/g-crypto-bnb.jpg",
+    icon: "/bnb-3D.png",
+  },
 ];
 
 export default function GCryptoPage() {
@@ -63,9 +81,9 @@ export default function GCryptoPage() {
         </div>
       </Container>
       <Separator className="mt-12 lg:mt-24 xl:mt-32" />
-      <ul className="grid grid-cols-1 grid-rows-3 lg:grid-cols-3 lg:grid-rows-1">
-        {addresses.map((address) => (
-          <CryptoItem key={address.name} {...address} />
+      <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+        {addresses.map((address, index) => (
+          <CryptoItem key={address.name} {...address} index={index} />
         ))}
       </ul>
       <Container className="mt-12 max-w-md lg:mt-24 xl:mt-32">

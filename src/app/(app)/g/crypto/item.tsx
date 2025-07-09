@@ -1,5 +1,7 @@
 "use client";
 
+// REVIEWED
+
 import { ClipboardIcon, QrCodeIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -9,13 +11,16 @@ import { SubSectionHeading } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { messages } from "@/lib/messages";
+import { cn } from "@/lib/utils/styles";
 
 export default function CryptoItem({
+  index,
   name,
   address,
   qrCode,
   icon,
 }: {
+  index: number;
   name: string;
   address: string;
   qrCode: string;
@@ -36,7 +41,12 @@ export default function CryptoItem({
   };
 
   return (
-    <li className="flex flex-col items-center border-r border-input last:border-r-transparent">
+    <li
+      className={cn("flex flex-col items-center border-r border-input", {
+        "xl:border-r-transparent": index === 2 || index === 5,
+        "md:border-r-transparent xl:border-input":
+          index === 1 || index === 3 || index === 5,
+      })}>
       <div className="relative m-6 flex h-[16rem] items-center justify-center overflow-hidden lg:h-[20rem]">
         {isQrCodeOpen ? (
           <SuspenseImage
@@ -44,9 +54,9 @@ export default function CryptoItem({
             src={qrCode}
             alt={name}
             fill
-            sizes="10rem"
+            sizes="16rem"
             containerClassName="flex items-center justify-center"
-            className="!static max-h-[12rem] object-contain mix-blend-hard-light lg:max-h-[16rem]"
+            className="!static object-contain mix-blend-hard-light"
           />
         ) : (
           <SuspenseImage
@@ -54,7 +64,7 @@ export default function CryptoItem({
             src={icon}
             alt={name}
             fill
-            sizes="10rem"
+            sizes="16rem"
             className="!static object-contain"
           />
         )}
@@ -66,7 +76,7 @@ export default function CryptoItem({
         <Button
           variant="default"
           size="lg"
-          className="w-full"
+          className="w-full bg-muted text-muted-foreground"
           onClick={() => handleCopyAddress()}>
           <ClipboardIcon className="!h-5 !w-5" /> Copy wallet address
         </Button>
