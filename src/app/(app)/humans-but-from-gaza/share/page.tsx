@@ -2,6 +2,7 @@
 
 import { Metadata } from "next";
 
+import { withAuthenticationPreFetch } from "@/components/auth/providers";
 import { CreateDiaryEntryForm } from "@/components/diary-entry/forms/create-diary-entry";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
     'Sharing your Gaza war experiences is profound. We stand in solidarity. Contribute your diary to "The Truth Museum" to amplify authentic voices and build our collective testimony. Together, we illuminate truth.',
 };
 
-export default async function SharePage() {
+const SharePageContent = function SharePageContent() {
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">
       <Container className="mb-8 max-w-7xl xl:mb-12">
@@ -37,4 +38,8 @@ export default async function SharePage() {
       <Footer />
     </main>
   );
-}
+};
+
+const SharePage = withAuthenticationPreFetch(SharePageContent);
+
+export default SharePage;

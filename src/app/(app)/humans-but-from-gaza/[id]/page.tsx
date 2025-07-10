@@ -1,4 +1,4 @@
-// REVIEWED - 12
+// REVIEWED - 13
 
 import { MessageSquareTextIcon } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -8,6 +8,7 @@ import linesSplit from "split-lines";
 
 import { getCollection } from "@/actions/collection";
 import { getDiaryEntry } from "@/actions/diary-entry";
+import { withAuthenticationPreFetch } from "@/components/auth/providers";
 import { CreateCommentForm } from "@/components/comments/forms/create";
 import { CommentList } from "@/components/comments/list";
 import { DiaryEntryBadgesLoading } from "@/components/diary-entry/diary-entry-badges";
@@ -25,46 +26,46 @@ import { FiltersOptions } from "@/lib/types";
 
 const getComments = cache(getCollection<"comments">);
 
-const PageCommentsList = async function PageCommentsList({
-  diaryEntryId,
-}: {
-  diaryEntryId: number;
-}) {
-  const commentsFilters: FiltersOptions = {
-    page: 1,
-    limit: 5,
-    sort: ["-votesScore", "-createdAt"],
-    fields: {
-      on: {
-        equals: {
-          relationTo: "diary-entries",
-          value: diaryEntryId,
+const PageCommentsList = withAuthenticationPreFetch(
+  async ({ diaryEntryId }: { diaryEntryId: number }) => {
+    const commentsFilters: FiltersOptions = {
+      page: 1,
+      limit: 5,
+      sort: ["-votesScore", "-createdAt"],
+      fields: {
+        on: {
+          equals: {
+            relationTo: "diary-entries",
+            value: diaryEntryId,
+          },
         },
+        parent: { exists: false },
+        status: { equals: "approved" },
       },
-      parent: { exists: false },
-      status: { equals: "approved" },
-    },
-  };
+    };
 
-  const commentsFieldsSearch: (keyof GeneratedTypes["collections"]["comments"])[] =
-    ["user", "content", "votes", "createdAt"];
+    const commentsFieldsSearch: (keyof GeneratedTypes["collections"]["comments"])[] =
+      ["user", "content", "votes", "createdAt"];
 
-  const comments = await getComments({
-    collection: "comments",
-    filters: commentsFilters,
-    fieldsSearch: commentsFieldsSearch,
-    depth: 1,
-  });
+    const comments = await getComments({
+      collection: "comments",
+      filters: commentsFilters,
+      fieldsSearch: commentsFieldsSearch,
+      depth: 1,
+    });
 
-  return (
-    <CommentList
-      on={{ relationTo: "diary-entries", value: diaryEntryId }}
-      commentsInitial={comments.data}
-      filters={commentsFilters}
-      fieldsSearch={commentsFieldsSearch}
-    />
-  );
-};
+    return (
+      <CommentList
+        on={{ relationTo: "diary-entries", value: diaryEntryId }}
+        commentsInitial={comments.data}
+        filters={commentsFilters}
+        fieldsSearch={commentsFieldsSearch}
+      />
+    );
+  },
+);
+
+const PageCreateCommentForm = withAuthenticationPreFetch(CreateCommentForm);
 
 /* eslint-disable-next-line func-style  */
 export async function generateMetadata({
@@ -135,7 +136,7 @@ export default async function HumanButFromGazaPage(props: {
           their experiences. Let&apos;s build a community of empathy and support
           together.
         </Paragraph>
-        <CreateCommentForm
+        <PageCreateCommentForm
           on={{ relationTo: "diary-entries", value: diaryEntry.data.id }}
         />
       </Container>

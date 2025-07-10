@@ -1,19 +1,18 @@
-// REVIEWED - 25
+// REVIEWED - 26
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
-import { PropsWithChildren, Suspense } from "react";
+import { PropsWithChildren } from "react";
 import colors from "tailwindcss/colors";
 
-import { AuthenticationUserPreFetch } from "@/components/auth/providers";
+import { withAuthenticationPreFetch } from "@/components/auth/providers";
 import { BackButton } from "@/components/globals/back-button";
-import { Loading } from "@/components/globals/loading";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
-import { ActivityProvider } from "./providers";
+import { ActivityProvider, QueryProvider } from "./providers";
 
 export const metadata: Metadata = {
   applicationName: "PalestinianCauses",
@@ -114,7 +113,10 @@ export const viewport: Viewport = {
   themeColor: colors.zinc["900"],
 };
 
-const RootLayout = async function RootLayout({ children }: PropsWithChildren) {
+const ActivityProviderWithAuthenticationPrefetch =
+  withAuthenticationPreFetch(ActivityProvider);
+
+const RootLayout = function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className="dark">
       <head>
@@ -133,16 +135,14 @@ const RootLayout = async function RootLayout({ children }: PropsWithChildren) {
       </head>
       <body>
         <BackButton />
-        <Suspense fallback={<Loading />}>
-          <AuthenticationUserPreFetch>
-            {children}
-            <ActivityProvider />
-            <ReactQueryDevtools />
-          </AuthenticationUserPreFetch>
-        </Suspense>
+        {children}
+        <ActivityProviderWithAuthenticationPrefetch />
         <Toaster theme="dark" richColors />
         <Analytics />
         <SpeedInsights />
+        <QueryProvider>
+          <ReactQueryDevtools />
+        </QueryProvider>
       </body>
     </html>
   );

@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import {
   defaultShouldDehydrateQuery,
@@ -11,6 +11,7 @@ const createQueryClient = function createQueryClient() {
     defaultOptions: {
       queries: {
         staleTime: 60 * 60 * 1000,
+        gcTime: 60 * 60 * 1000,
         refetchOnWindowFocus: true,
       },
       dehydrate: {

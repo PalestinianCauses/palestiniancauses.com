@@ -3,9 +3,10 @@
 import Image from "next/image";
 import { PropsWithChildren } from "react";
 
+import { withAuthenticationPreFetch } from "@/components/auth/providers";
 import { Container } from "@/components/globals/container";
 
-export default async function AuthLayout({ children }: PropsWithChildren) {
+const AuthLayout = async function AuthLayout({ children }: PropsWithChildren) {
   return (
     <div className="flex h-full max-h-screen min-h-[48rem] items-center justify-center">
       <Container className="relative">
@@ -23,4 +24,6 @@ export default async function AuthLayout({ children }: PropsWithChildren) {
       </Container>
     </div>
   );
-}
+};
+
+export default withAuthenticationPreFetch(AuthLayout);

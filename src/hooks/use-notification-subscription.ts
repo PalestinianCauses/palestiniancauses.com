@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -16,9 +16,12 @@ import { messages } from "@/lib/messages";
 import { base64ToUint8Array } from "@/lib/utils/pwa";
 import { NotificationSubscription } from "@/payload-types";
 
+import { useUserAgentInfo } from "./use-user-agent-info";
+
 export const useNotificationSubscription =
   function useNotificationSubscription() {
     const queryClient = useQueryClient();
+    const { isRunningOnPWA } = useUserAgentInfo();
     const [isAvailable, setIsAvailable] = useState(false);
 
     useEffect(() => {
@@ -52,7 +55,7 @@ export const useNotificationSubscription =
           return null;
         }
       },
-      enabled: isAvailable,
+      enabled: isRunningOnPWA && isAvailable,
     });
 
     const subscribe = useMutation({

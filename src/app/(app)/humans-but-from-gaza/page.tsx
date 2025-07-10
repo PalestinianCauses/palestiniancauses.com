@@ -1,4 +1,4 @@
-// REVIEWED - 14
+// REVIEWED - 15
 
 import { Metadata } from "next";
 import Link from "next/link";
@@ -120,7 +120,9 @@ export default async function HumansButFromGazaPage(props: {
         </div>
       </Container>
       <Container className="mb-12 grid max-w-7xl grid-cols-1 gap-16 xl:mb-24">
-        <Suspense fallback={<DiaryEntryListLoading />}>
+        <Suspense
+          key={JSON.stringify(filters)}
+          fallback={<DiaryEntryListLoading />}>
           <DiaryEntryList filters={filters} fieldsSearch={["title"]} />
         </Suspense>
       </Container>
