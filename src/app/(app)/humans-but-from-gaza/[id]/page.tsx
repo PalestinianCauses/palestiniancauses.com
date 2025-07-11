@@ -1,4 +1,4 @@
-// REVIEWED - 13
+// REVIEWED - 14
 
 import { MessageSquareTextIcon } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -8,10 +8,8 @@ import linesSplit from "split-lines";
 
 import { getCollection } from "@/actions/collection";
 import { getDiaryEntry } from "@/actions/diary-entry";
-import { withAuthenticationPreFetch } from "@/components/auth/providers";
 import { CreateCommentForm } from "@/components/comments/forms/create";
 import { CommentList } from "@/components/comments/list";
-import { DiaryEntryBadgesLoading } from "@/components/diary-entry/diary-entry-badges";
 import { DiaryEntryListItemBadges } from "@/components/diary-entry/list";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
@@ -26,46 +24,46 @@ import { FiltersOptions } from "@/lib/types";
 
 const getComments = cache(getCollection<"comments">);
 
-const PageCommentsList = withAuthenticationPreFetch(
-  async ({ diaryEntryId }: { diaryEntryId: number }) => {
-    const commentsFilters: FiltersOptions = {
-      page: 1,
-      limit: 5,
-      sort: ["-votesScore", "-createdAt"],
-      fields: {
-        on: {
-          equals: {
-            relationTo: "diary-entries",
-            value: diaryEntryId,
-          },
+const PageCommentList = async function PageCommentList({
+  diaryEntryId,
+}: {
+  diaryEntryId: number;
+}) {
+  const commentsFilters: FiltersOptions = {
+    page: 1,
+    limit: 5,
+    sort: ["-votesScore", "-createdAt"],
+    fields: {
+      on: {
+        equals: {
+          relationTo: "diary-entries",
+          value: diaryEntryId,
         },
-        parent: { exists: false },
-        status: { equals: "approved" },
       },
-    };
+      parent: { exists: false },
+      status: { equals: "approved" },
+    },
+  };
 
-    const commentsFieldsSearch: (keyof GeneratedTypes["collections"]["comments"])[] =
-      ["user", "content", "votes", "createdAt"];
+  const commentsFieldsSearch: (keyof GeneratedTypes["collections"]["comments"])[] =
+    ["user", "content", "votes", "createdAt"];
 
-    const comments = await getComments({
-      collection: "comments",
-      filters: commentsFilters,
-      fieldsSearch: commentsFieldsSearch,
-      depth: 1,
-    });
+  const comments = await getComments({
+    collection: "comments",
+    filters: commentsFilters,
+    fieldsSearch: commentsFieldsSearch,
+    depth: 1,
+  });
 
-    return (
-      <CommentList
-        on={{ relationTo: "diary-entries", value: diaryEntryId }}
-        commentsInitial={comments.data}
-        filters={commentsFilters}
-        fieldsSearch={commentsFieldsSearch}
-      />
-    );
-  },
-);
-
-const PageCreateCommentForm = withAuthenticationPreFetch(CreateCommentForm);
+  return (
+    <CommentList
+      on={{ relationTo: "diary-entries", value: diaryEntryId }}
+      commentsInitial={comments.data}
+      filters={commentsFilters}
+      fieldsSearch={commentsFieldsSearch}
+    />
+  );
+};
 
 /* eslint-disable-next-line func-style  */
 export async function generateMetadata({
@@ -82,12 +80,6 @@ export async function generateMetadata({
     title: diaryEntry.data.title,
   };
 }
-
-const DiaryEntryListItemBadgesLoading = (
-  <div className="mb-4">
-    <DiaryEntryBadgesLoading />
-  </div>
-);
 
 export default async function HumanButFromGazaPage(props: {
   params: Promise<{ id: string }>;
@@ -108,9 +100,7 @@ export default async function HumanButFromGazaPage(props: {
     <main className="relative pt-24 lg:pt-32 xl:pt-48">
       <Container as="section" className="max-w-6xl">
         <Container className="mx-0 mb-12 max-w-5xl px-0 lg:px-0">
-          <Suspense fallback={DiaryEntryListItemBadgesLoading}>
-            <DiaryEntryListItemBadges diaryEntry={diaryEntry.data} />
-          </Suspense>
+          <DiaryEntryListItemBadges diaryEntry={diaryEntry.data} />
           <SectionHeading>{diaryEntry.data.title}</SectionHeading>
         </Container>
         <Container className="flex flex-col gap-8 px-0 lg:px-0">
@@ -136,14 +126,14 @@ export default async function HumanButFromGazaPage(props: {
           their experiences. Let&apos;s build a community of empathy and support
           together.
         </Paragraph>
-        <PageCreateCommentForm
+        <CreateCommentForm
           on={{ relationTo: "diary-entries", value: diaryEntry.data.id }}
         />
       </Container>
       <Separator className="my-12 lg:my-24 xl:my-32" />
       <Container className="max-w-7xl">
         <Suspense fallback={<Loading className="min-h-80" />}>
-          <PageCommentsList diaryEntryId={diaryEntry.data.id} />
+          <PageCommentList diaryEntryId={diaryEntry.data.id} />
         </Suspense>
       </Container>
       <Footer />

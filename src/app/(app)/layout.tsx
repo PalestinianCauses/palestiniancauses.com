@@ -1,4 +1,4 @@
-// REVIEWED - 26
+// REVIEWED - 27
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Analytics } from "@vercel/analytics/next";
@@ -7,7 +7,7 @@ import type { Metadata, Viewport } from "next";
 import { PropsWithChildren } from "react";
 import colors from "tailwindcss/colors";
 
-import { withAuthenticationPreFetch } from "@/components/auth/providers";
+import { AuthenticationPreFetch } from "@/components/auth/providers";
 import { BackButton } from "@/components/globals/back-button";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -113,9 +113,6 @@ export const viewport: Viewport = {
   themeColor: colors.zinc["900"],
 };
 
-const ActivityProviderWithAuthenticationPrefetch =
-  withAuthenticationPreFetch(ActivityProvider);
-
 const RootLayout = function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className="dark">
@@ -135,14 +132,16 @@ const RootLayout = function RootLayout({ children }: PropsWithChildren) {
       </head>
       <body>
         <BackButton />
-        {children}
-        <ActivityProviderWithAuthenticationPrefetch />
+        <QueryProvider>
+          <AuthenticationPreFetch>
+            {children}
+            <ActivityProvider />
+          </AuthenticationPreFetch>
+          <ReactQueryDevtools />
+        </QueryProvider>
         <Toaster theme="dark" richColors />
         <Analytics />
         <SpeedInsights />
-        <QueryProvider>
-          <ReactQueryDevtools />
-        </QueryProvider>
       </body>
     </html>
   );

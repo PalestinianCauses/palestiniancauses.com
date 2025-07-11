@@ -1,14 +1,11 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { Metadata } from "next";
 
-import { withAuthenticationPreFetch } from "@/components/auth/providers";
 import { CreateDiaryEntryForm } from "@/components/diary-entry/forms/create-diary-entry";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
 import { Paragraph, SectionHeading } from "@/components/globals/typography";
-
-import { QueryProvider } from "../../providers";
 
 export const metadata: Metadata = {
   title: "Share Your Diary With The Truth Museum",
@@ -16,7 +13,7 @@ export const metadata: Metadata = {
     'Sharing your Gaza war experiences is profound. We stand in solidarity. Contribute your diary to "The Truth Museum" to amplify authentic voices and build our collective testimony. Together, we illuminate truth.',
 };
 
-const SharePageContent = function SharePageContent() {
+const SharePage = function SharePage() {
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">
       <Container className="mb-8 max-w-7xl xl:mb-12">
@@ -31,15 +28,11 @@ const SharePageContent = function SharePageContent() {
         </Paragraph>
       </Container>
       <Container className="mb-12 max-w-7xl xl:mb-24">
-        <QueryProvider>
-          <CreateDiaryEntryForm />
-        </QueryProvider>
+        <CreateDiaryEntryForm />
       </Container>
       <Footer />
     </main>
   );
 };
-
-const SharePage = withAuthenticationPreFetch(SharePageContent);
 
 export default SharePage;

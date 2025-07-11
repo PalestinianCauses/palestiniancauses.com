@@ -1,9 +1,8 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
 import Image from "next/image";
 import { PropsWithChildren } from "react";
 
-import { withAuthenticationPreFetch } from "@/components/auth/providers";
 import { Container } from "@/components/globals/container";
 
 const AuthLayout = async function AuthLayout({ children }: PropsWithChildren) {
@@ -26,4 +25,4 @@ const AuthLayout = async function AuthLayout({ children }: PropsWithChildren) {
   );
 };
 
-export default withAuthenticationPreFetch(AuthLayout);
+export default AuthLayout;

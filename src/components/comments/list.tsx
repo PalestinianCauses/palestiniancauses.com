@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, MessagesSquareIcon } from "lucide-react";
@@ -96,7 +96,7 @@ export const CommentList = function CommentList({
       <Container
         as="section"
         className={cn(
-          "flex max-w-4xl flex-col px-2.5 lg:items-center lg:text-center",
+          "flex max-w-4xl flex-col px-0 lg:items-center lg:px-0 lg:text-center",
           { "pointer-events-none opacity-50": isPending || isFetching },
         )}>
         <div className="relative mb-6 flex w-max items-end lg:mb-8">

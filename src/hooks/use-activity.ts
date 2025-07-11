@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -12,6 +12,7 @@ import { messages } from "@/lib/messages";
 import { httpSafeExecute } from "@/lib/network";
 import { SafeExecuteConfig } from "@/lib/types";
 
+import { useAuth } from "./use-auth";
 import { useUser } from "./use-user";
 
 const IN_ACTIVITY_TIME_OUT_MS = 15 * 60 * 1000; // 15 minutes for user's in-activity time out
@@ -21,7 +22,8 @@ const HEART_BEAT_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes for /heart-beat's r
 
 export const useActivity = function useActivity() {
   // 1. user's hook data and functions
-  const { isPending, data: user, tokenRefresh, signOut } = useUser();
+  const { isPending, user } = useUser();
+  const { tokenRefresh, signOut } = useAuth();
 
   // 2. hook's state management
   const [isInActivityWarning, setIsInActivityWarning] = useState(false);

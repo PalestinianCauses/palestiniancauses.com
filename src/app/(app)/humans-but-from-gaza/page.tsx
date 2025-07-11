@@ -1,11 +1,9 @@
-// REVIEWED - 15
+// REVIEWED - 16
 
 import { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
 
 import { DiaryEntryList } from "@/components/diary-entry/list";
-import { DiaryEntryListLoading } from "@/components/diary-entry/loading";
 import { Container } from "@/components/globals/container";
 import {
   FilterConfig,
@@ -120,14 +118,10 @@ export default async function HumansButFromGazaPage(props: {
         </div>
       </Container>
       <Container className="mb-12 grid max-w-7xl grid-cols-1 gap-16 xl:mb-24">
-        <Suspense
-          key={JSON.stringify(filters)}
-          fallback={<DiaryEntryListLoading />}>
-          <DiaryEntryList filters={filters} fieldsSearch={["title"]} />
-        </Suspense>
+        <DiaryEntryList filters={filters} fieldsSearch={["title"]} />
       </Container>
-      <Container className="mb-24 flex items-center justify-center lg:mb-32">
-        <Button variant="default" size="lg" asChild>
+      <Container className="mb-24 flex items-center lg:mb-32 lg:justify-center">
+        <Button variant="default" className="w-full md:w-max" asChild>
           <Link href="/humans-but-from-gaza/share">Share your diary</Link>
         </Button>
       </Container>

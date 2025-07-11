@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { HTMLAttributes, useMemo } from "react";
 
@@ -15,7 +15,7 @@ export const CommentVotes = function CommentVotes({
   comment,
   className,
 }: {
-  user: User | null;
+  user: User | null | undefined;
   comment: Comment;
 } & HTMLAttributes<HTMLDivElement>) {
   const { voteOnComment } = useComment();

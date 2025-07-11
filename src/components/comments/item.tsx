@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import {
   QueryKey,
@@ -57,7 +57,7 @@ export const CommentItem = function CommentItem({
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { data: user } = useUser();
+  const { user } = useUser();
   const { deleteComment, deleteCommentReplies } = useComment();
   const { data: repliesCount = 0 } = useCommentRepliesCount(comment.id);
 

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -33,7 +33,7 @@ export const CreateCommentForm = function CreateCommentForm({
   on,
 }: Pick<Comment, "on">) {
   const queryClient = useQueryClient();
-  const { data: user } = useUser();
+  const { user } = useUser();
 
   const { createComment } = useComment();
   const form = useForm<CreateCommentSchema>({

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -36,7 +36,7 @@ export const ReplyCommentForm = function ReplyCommentForm({
 } & Pick<Comment, "on" | "parent">) {
   const queryClient = useQueryClient();
 
-  const { data: user } = useUser();
+  const { user } = useUser();
 
   const { createComment } = useComment();
 

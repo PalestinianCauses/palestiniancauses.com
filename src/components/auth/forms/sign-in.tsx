@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 16
+// REVIEWED - 17
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -18,12 +18,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useUser } from "@/hooks/use-user";
+import { useAuth } from "@/hooks/use-auth";
 import { messages } from "@/lib/messages";
 import { signInSchema, SignInSchema } from "@/lib/schemas/auth";
 
 export const SignInForm = function SignInForm() {
-  const { signIn } = useUser();
+  const { signIn } = useAuth();
 
   const form = useForm<SignInSchema>({
     mode: "onBlur",
