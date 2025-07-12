@@ -1,10 +1,11 @@
 "use client";
 
-// REVIEWED - 14
+// REVIEWED - 15
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
 import { toJpeg, toPng } from "html-to-image";
+import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import {
   forwardRef,
@@ -15,6 +16,7 @@ import {
 } from "react";
 
 import {
+  Paragraph,
   SectionHeading,
   SectionHeadingBadge,
 } from "@/components/globals/typography";
@@ -309,7 +311,17 @@ const InstagramStudioPage = function InstagramStudioPage() {
 
   const instagramFrames: ImageFrame[] = [
     {
-      id: "ig-04",
+      id: "ig-01",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "ig-02",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "ig-03",
       ref: useRef<HTMLDivElement>(null),
       as: "png",
     },
@@ -321,30 +333,90 @@ const InstagramStudioPage = function InstagramStudioPage() {
       <ImageFrameRender frames={profileImagesFrames} />
       <ImageFrameRender frames={hoodiesFrames} />
       <ImageFrameRender frames={instagramFrames} />
-      <Frame ref={instagramFrames[0].ref} dimensions="4:5" color="primary">
-        <FrameContent className="gap-8">
-          <SectionHeadingBadge className="text-lg text-primary-foreground">
-            Dear PalestinianCauses&apos; Family
+      <Frame
+        ref={instagramFrames[0].ref}
+        dimensions="4:5"
+        color="primary-foreground">
+        <FrameContent>
+          <SectionHeadingBadge className="text-lg ring-primary/20">
+            The Truth Museum: Humans But From Gaza
           </SectionHeadingBadge>
-          <SectionHeading className="!text-9xl font-bold text-primary-foreground lg:!leading-[0.9] xl:!leading-[0.9]">
-            We are proud to{" "}
-            <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary-foreground">
-              un-veil
-            </span>{" "}
-            a crypto hub for our Gym Rat.
+          <SectionHeading className="!text-9xl font-bold text-primary lg:!leading-[0.9] xl:!leading-[0.9]">
+            What can we possibly say when mourning a{" "}
+            <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
+              {" "}
+              home-land?
+            </span>
           </SectionHeading>
+          <div className="mt-auto flex h-28 w-28 items-center justify-center bg-primary text-primary-foreground">
+            <ArrowRightIcon className="h-16 w-16 stroke-1" />
+          </div>
         </FrameContent>
         <FrameImagesGrid>
-          <div className="relative col-start-3 col-end-13 row-start-8 row-end-13">
+          <div className="relative col-start-3 col-end-13 row-start-8 row-end-13 ring-2 ring-primary">
+            <div className="absolute bottom-0 left-2.5 right-2.5 z-10 h-20 bg-gradient-to-t from-background to-background" />
             <Image
-              src="/ig-02.png"
+              src="/i-g-01.png"
               alt="Screen Shot 01"
               fill
               sizes="42rem"
-              className="!relative bg-primary-foreground object-cover object-[top_left] grayscale"
+              className="!relative bg-primary-foreground object-cover object-[top_left]"
             />
           </div>
         </FrameImagesGrid>
+      </Frame>
+      <Frame ref={instagramFrames[1].ref} dimensions="4:5" color="primary">
+        <FrameContent>
+          <SectionHeadingBadge className="text-lg text-primary-foreground">
+            Authored with dedication by M.
+          </SectionHeadingBadge>
+          <SectionHeading className="!text-8xl font-bold text-primary-foreground lg:!leading-[0.9] xl:!leading-[0.9]">
+            From the heart of{" "}
+            <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-primary-foreground">
+              Gaza.
+            </span>{" "}
+            &quot;M.&quot; shares a powerful reflection.
+          </SectionHeading>
+          <Paragraph className="!text-4xl font-medium !leading-relaxed text-primary-foreground">
+            At the end of it all, I lifted my eyes to the vastness of the sky,
+            and I was sure that if they could have deprived us of it, they would
+            have. There, in the sky, I saw a large kite soaring above the
+            rubble, decorating the colors of our Palestinian flag. At that
+            moment, I muttered:{" "}
+            <span className="bg-primary-foreground px-2.5 font-medium text-primary">
+              Gaza might be destroyed, but
+            </span>{" "}
+            <span className="bg-primary-foreground px-2.5 font-medium text-primary">
+              not defeated.
+            </span>
+          </Paragraph>
+        </FrameContent>
+      </Frame>
+      <Frame
+        ref={instagramFrames[2].ref}
+        dimensions="4:5"
+        color="primary-foreground">
+        <FrameContent>
+          <SectionHeading className="!text-8xl font-bold text-primary lg:!leading-[0.9] xl:!leading-[0.9]">
+            A{" "}
+            <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-primary">
+              reflection
+            </span>{" "}
+            on home-land, memory, and the stories that live on even after
+            everything has{" "}
+            <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-primary">
+              changed.
+            </span>
+          </SectionHeading>
+          <Paragraph className="!text-4xl font-medium !leading-relaxed text-primary">
+            This is a voice that needs to be heard. Tap the link in our bio to
+            read the full entry in{" "}
+            <span className="bg-primary px-2.5 font-medium text-primary-foreground">
+              The Truth Museum
+            </span>{" "}
+            and bear witness. 🔗
+          </Paragraph>
+        </FrameContent>
       </Frame>
       {/* Logo */}
       <Frame
