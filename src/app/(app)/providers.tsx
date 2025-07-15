@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 10
+// REVIEWED - 11
 import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
@@ -28,7 +28,7 @@ export const QueryProvider = function QueryProvider({
 
 export const ActivityProvider = function ActivityProvider() {
   const {
-    isPending,
+    isFetching,
     user,
     isInActivityWarning,
     isInActivityCountDown,
@@ -36,7 +36,7 @@ export const ActivityProvider = function ActivityProvider() {
     signOutDueToInActivity,
   } = useActivity();
 
-  if (isPending || !user) return null;
+  if (isFetching || !user) return null;
 
   return (
     <AlertDialog open={isInActivityWarning}>

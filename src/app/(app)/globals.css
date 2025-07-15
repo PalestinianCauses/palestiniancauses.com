@@ -1,4 +1,4 @@
-/* REVIEWED - 10 */
+/* REVIEWED - 11 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -73,7 +73,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border font-["Gilroy",_system-ui,_sans-serif];
   }
 
   ::selection {
@@ -86,7 +86,7 @@
   }
 
   body {
-    @apply bg-background font-["Gilroy",_system-ui,_sans-serif] text-foreground;
+    @apply bg-background text-foreground;
   }
 
   .highlight {

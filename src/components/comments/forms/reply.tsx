@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -19,24 +19,23 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useComment } from "@/hooks/use-comment";
-import { useUser } from "@/hooks/use-user";
 import { messages } from "@/lib/messages";
 import {
   createCommentSchema,
   CreateCommentSchema,
 } from "@/lib/schemas/comment";
-import { Comment } from "@/payload-types";
+import { Comment, User } from "@/payload-types";
 
 export const ReplyCommentForm = function ReplyCommentForm({
+  user,
   on,
   parent,
   onSuccess,
 }: {
+  user: User;
   onSuccess: () => void;
 } & Pick<Comment, "on" | "parent">) {
   const queryClient = useQueryClient();
-
-  const { user } = useUser();
 
   const { createComment } = useComment();
 
@@ -46,7 +45,7 @@ export const ReplyCommentForm = function ReplyCommentForm({
     resolver: zodResolver(createCommentSchema),
   });
 
-  if (!user || !parent) return null;
+  if (!parent) return null;
 
   const handleSubmit = function handleSubmit(data: CreateCommentSchema) {
     toast.loading(messages.actions.comment.pendingCreate, {

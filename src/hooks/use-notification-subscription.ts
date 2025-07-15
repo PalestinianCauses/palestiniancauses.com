@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -30,7 +30,7 @@ export const useNotificationSubscription =
     }, []);
 
     const {
-      isPending,
+      isLoading,
       isFetching,
       data: subscription,
     } = useQuery<NotificationSubscription | null>({
@@ -138,7 +138,8 @@ export const useNotificationSubscription =
     });
 
     return {
-      isPending: isPending || isFetching,
+      isLoading,
+      isFetching,
       isAvailable,
       subscription,
       subscribe,

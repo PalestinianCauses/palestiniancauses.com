@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 12
+// REVIEWED - 13
 
 import {
   GeneratedTypes,
@@ -43,12 +43,12 @@ export const getCollection = async function getCollection<
     limit = filtersOptionsDefaults.limit,
     sort = filtersOptionsDefaults.sort,
     search = filtersOptionsDefaults.search,
-    fields: selectFields,
+    fields: fieldsFilter,
   },
   fieldsSearch,
   depth = 0,
 }: CollectionOptions<TSlug>): Promise<ResponseCollection<TSlug>> {
-  const where: Where = { ...selectFields };
+  const where: Where = { ...fieldsFilter };
 
   if (search && fieldsSearch && fieldsSearch.length > 0) {
     where.or = fieldsSearch.map((field) => ({

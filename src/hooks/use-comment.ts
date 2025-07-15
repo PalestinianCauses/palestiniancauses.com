@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import {
   InfiniteData,
@@ -37,7 +37,7 @@ export const useCommentRepliesCount = function useCommentRepliesCount(
 
 export const useComment = function useComment() {
   const queryClient = useQueryClient();
-  const { user } = useUser();
+  const { data: user } = useUser();
 
   const createCommentMutation = useMutation({
     mutationFn: async (

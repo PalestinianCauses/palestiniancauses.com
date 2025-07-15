@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -22,7 +22,7 @@ const HEART_BEAT_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes for /heart-beat's r
 
 export const useActivity = function useActivity() {
   // 1. user's hook data and functions
-  const { isPending, user } = useUser();
+  const { isFetching, data: user } = useUser();
   const { tokenRefresh, signOut } = useAuth();
 
   // 2. hook's state management
@@ -46,7 +46,7 @@ export const useActivity = function useActivity() {
   // 4. sign out logic
   const doSignOut = useCallback(
     async ({ skip }: SafeExecuteConfig) => {
-      if (isPending || !user) return;
+      if (isFetching || !user) return;
 
       setIsInActivityWarning(false);
 
@@ -79,19 +79,19 @@ export const useActivity = function useActivity() {
       signOut.mutate({ skip: { http: skip && skip.http, errors: [401] } });
     },
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
-    [isPending, user, signOut.mutate],
+    [isFetching, user, signOut.mutate],
   );
 
   // 5. initial safe-guard check for when user is not signed in
   useEffect(() => {
-    if (!isPending || user) return;
+    if (!isFetching || user) return;
 
     doSignOut({ skip: { errors: [401] } });
-  }, [isPending, user, doSignOut]);
+  }, [isFetching, user, doSignOut]);
 
   // 6. heart-beat logic
   useEffect(() => {
-    if (isPending || !user || isInActivityWarning) {
+    if (isFetching || !user || isInActivityWarning) {
       if (heartBeatInterval.current) {
         clearInterval(heartBeatInterval.current);
         heartBeatInterval.current = null;
@@ -139,11 +139,11 @@ export const useActivity = function useActivity() {
         heartBeatInterval.current = null;
       }
     };
-  }, [isPending, user, isInActivityWarning, doSignOut]);
+  }, [isFetching, user, isInActivityWarning, doSignOut]);
 
   // 7. token refresh logic
   useEffect(() => {
-    if (isPending || !user) {
+    if (isFetching || !user) {
       if (tokenRefreshTimer.current) {
         clearTimeout(tokenRefreshTimer.current);
         tokenRefreshTimer.current = null;
@@ -220,11 +220,11 @@ export const useActivity = function useActivity() {
       }
     };
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
-  }, [isPending, user, tokenRefresh.mutate, doSignOut]);
+  }, [isFetching, user, tokenRefresh.mutate, doSignOut]);
 
   // 8. in-activity warning logic
   const doResetInActivityTimer = useCallback(() => {
-    if (isPending || !user || isInActivityWarning) return;
+    if (isFetching || !user || isInActivityWarning) return;
 
     if (inActivityTimer.current) {
       clearTimeout(inActivityTimer.current);
@@ -236,10 +236,10 @@ export const useActivity = function useActivity() {
       setIsInActivityCountDown(IN_ACTIVITY_WARNING_S);
       hasSignedOutRef.current = false;
     }, IN_ACTIVITY_TIME_OUT_MS);
-  }, [isPending, user, isInActivityWarning]);
+  }, [isFetching, user, isInActivityWarning]);
 
   useEffect(() => {
-    if (isPending || !user) return;
+    if (isFetching || !user) return;
 
     /* eslint-disable-next-line no-undef */
     const activityEvents: (keyof WindowEventMap)[] = [
@@ -267,7 +267,7 @@ export const useActivity = function useActivity() {
         inActivityTimer.current = null;
       }
     };
-  }, [isPending, user, doResetInActivityTimer]);
+  }, [isFetching, user, doResetInActivityTimer]);
 
   // 9. in-activity count down logic
   useEffect(() => {
@@ -322,7 +322,7 @@ export const useActivity = function useActivity() {
   }, [doSignOut]);
 
   return {
-    isPending,
+    isFetching,
     user,
     isInActivityWarning,
     isInActivityCountDown,

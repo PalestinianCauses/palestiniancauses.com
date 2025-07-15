@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import {
   QueryKey,
@@ -24,9 +24,8 @@ import { Fragment, MutableRefObject, useMemo, useState } from "react";
 
 import { getCollection } from "@/actions/collection";
 import { useComment, useCommentRepliesCount } from "@/hooks/use-comment";
-import { useUser } from "@/hooks/use-user";
 import { cn } from "@/lib/utils/styles";
-import { Comment } from "@/payload-types";
+import { Comment, User } from "@/payload-types";
 
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -35,9 +34,10 @@ import { ReplyCommentForm } from "./forms/reply";
 import { CommentVotes } from "./votes";
 
 export type CommentItemProps = {
-  queryKey?: QueryKey;
   isPageComment?: boolean;
+  queryKey?: QueryKey;
   depth: number;
+  user: User | null | undefined;
   comment: Comment;
   elementId: MutableRefObject<string | null>;
   // eslint-disable-next-line no-unused-vars
@@ -47,9 +47,10 @@ export type CommentItemProps = {
 TimeAgo.addLocale(en);
 
 export const CommentItem = function CommentItem({
-  queryKey,
   isPageComment = false,
+  queryKey,
   depth,
+  user,
   comment,
   elementId,
   jumpToPlusHighlight,
@@ -57,22 +58,23 @@ export const CommentItem = function CommentItem({
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { user } = useUser();
   const { deleteComment, deleteCommentReplies } = useComment();
-  const { data: repliesCount = 0 } = useCommentRepliesCount(comment.id);
+
+  const { isLoading: isLoadingRepliesCount, data: repliesCount } =
+    useCommentRepliesCount(comment.id);
 
   const [isReplyFormOpen, setIsReplyFormOpen] = useState(
     repliesCount === 0 && isPageComment,
   );
 
   const [isRepliesOpen, setIsRepliesOpen] = useState(
-    Boolean(repliesCount && isPageComment),
+    repliesCount !== 0 && isPageComment,
   );
 
   const isMaximumDepth = depth >= 3;
 
   const {
-    isPending,
+    isLoading,
     isFetching,
     isFetchingNextPage,
     hasNextPage,
@@ -224,7 +226,7 @@ export const CommentItem = function CommentItem({
           ) : null}
 
           {/* eslint-disable-next-line no-nested-ternary */}
-          {repliesCount !== 0 ? (
+          {!isLoadingRepliesCount && repliesCount !== 0 ? (
             isMaximumDepth ? (
               <Button
                 variant="ghost"
@@ -245,7 +247,7 @@ export const CommentItem = function CommentItem({
                 aria-controls={`comment-${comment.id}-replies`}
                 onClick={() => setIsRepliesOpen((previous) => !previous)}>
                 <MessageSquareTextIcon className="stroke-[1.5]" />
-                {(isFetching && "Loading replies...") ||
+                {(isLoading && "Loading replies...") ||
                   (isRepliesOpen && "Hide replies") ||
                   "Show replies"}
                 <span className="mt-0.5 font-mono">({repliesCount})</span>
@@ -284,7 +286,10 @@ export const CommentItem = function CommentItem({
                         ],
                       });
                     } else if (queryKey)
-                      queryClient.invalidateQueries({ queryKey, exact: true });
+                      queryClient.invalidateQueries({
+                        queryKey,
+                        exact: true,
+                      });
                     else
                       queryClient.invalidateQueries({
                         queryKey: ["comments"],
@@ -333,8 +338,9 @@ export const CommentItem = function CommentItem({
         </div>
       </div>
 
-      {isReplyFormOpen && (
+      {user && isReplyFormOpen && (
         <ReplyCommentForm
+          user={user}
           on={comment.on}
           parent={comment.id}
           onSuccess={() => {
@@ -352,7 +358,7 @@ export const CommentItem = function CommentItem({
           id={`comment-${comment.id}-replies`}
           className={cn(
             "relative flex w-full flex-col gap-5 pl-4 md:gap-10 md:pl-12",
-            { "pointer-events-none opacity-50": isPending || isFetching },
+            { "pointer-events-none opacity-50": isFetching },
           )}>
           <div className="absolute left-0 top-0 h-full w-px -translate-x-1/2 bg-input" />
 
@@ -360,13 +366,14 @@ export const CommentItem = function CommentItem({
             <CommentItem
               key={reply.id}
               depth={depth + 1}
+              user={user}
               comment={reply}
               elementId={elementId}
               jumpToPlusHighlight={jumpToPlusHighlight}
             />
           ))}
 
-          {!isPending && hasNextPage ? (
+          {hasNextPage ? (
             <div className="mt-6 flex w-full items-center justify-center lg:mt-12 xl:mt-16">
               <Button
                 variant="link"

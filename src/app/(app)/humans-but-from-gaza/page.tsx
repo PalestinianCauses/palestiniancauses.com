@@ -1,9 +1,12 @@
-// REVIEWED - 16
+// REVIEWED - 17
 
 import { Metadata } from "next";
 import Link from "next/link";
+import { Where } from "payload";
+import { Suspense } from "react";
 
 import { DiaryEntryList } from "@/components/diary-entry/list";
+import { DiaryEntryListLoading } from "@/components/diary-entry/loading";
 import { Container } from "@/components/globals/container";
 import {
   FilterConfig,
@@ -13,6 +16,9 @@ import { Footer } from "@/components/globals/footer";
 import { Paragraph, SectionHeading } from "@/components/globals/typography";
 import { VideoOutroScene } from "@/components/globals/video-outro-scene";
 import { Button } from "@/components/ui/button";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
 import { FiltersOptions } from "@/lib/types";
 
 export const metadata: Metadata = {
@@ -38,31 +44,37 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function HumansButFromGazaPage(props: {
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+const DiaryEntryListPreFetch = async function DiaryEntryListPreFetch({
+  filters,
+}: {
+  filters: FiltersOptions;
 }) {
-  /* eslint-disable react/destructuring-assignment */
-  const searchParams = await props.searchParams;
+  const where: Where = { ...filters.fields };
 
-  const filters: FiltersOptions = {
-    page:
-      searchParams?.page && typeof searchParams?.page === "string"
-        ? parseInt(searchParams?.page, 10)
-        : 1,
-    limit:
-      searchParams?.limit && typeof searchParams?.limit === "string"
-        ? parseInt(searchParams?.limit, 10)
-        : 50,
-    sort:
-      searchParams?.sort && typeof searchParams.sort === "string"
-        ? searchParams?.sort
-        : "-date",
-    search:
-      searchParams?.title && typeof searchParams.title === "string"
-        ? searchParams?.title
-        : "",
-    fields: { status: { equals: "approved" } },
-  };
+  if (filters.search) where.or = [{ title: { contains: filters.search } }];
+
+  const diaryEntries = await actionSafeExecute(
+    payload.find({
+      collection: "diary-entries",
+      page: filters.page,
+      limit: filters.limit,
+      sort: filters.sort,
+      where,
+    }),
+    messages.actions.comment.serverErrorGet,
+  );
+
+  return (
+    <DiaryEntryList search={filters.search} diaryEntries={diaryEntries.data} />
+  );
+};
+
+export default async function HumansButFromGazaPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const params = await searchParams;
 
   const filterConfigs: FilterConfig[] = [
     {
@@ -80,6 +92,24 @@ export default async function HumansButFromGazaPage(props: {
       ],
     },
   ];
+
+  const filters: FiltersOptions = {
+    page:
+      params?.page && typeof params.page === "string"
+        ? parseInt(params.page, 10)
+        : 1,
+    limit:
+      params?.limit && typeof params.limit === "string"
+        ? parseInt(params.limit, 10)
+        : 50,
+    sort:
+      params?.sort && typeof params.sort === "string" ? params.sort : "-date",
+    search:
+      params?.title && typeof params.title === "string"
+        ? params.title
+        : undefined,
+    fields: { status: { equals: "approved" } },
+  };
 
   return (
     <main className="relative pt-24 lg:pt-32 xl:pt-48">
@@ -103,13 +133,7 @@ export default async function HumansButFromGazaPage(props: {
       </Container>
       <Container className="mb-12 flex max-w-7xl flex-col-reverse justify-between gap-5 sm:flex-row sm:items-end xl:mb-24">
         <div className="flex max-w-3xl flex-1 flex-col justify-stretch gap-5 sm:flex-row [&_#filter-control-sort]:min-w-48 [&_#filter-control-title]:w-full">
-          <FilterControls
-            filterConfigs={filterConfigs}
-            pageDefault={filters.page}
-            limitDefault={filters.limit}
-            sortDefault={filters.sort}
-            debounceTime={500}
-          />
+          <FilterControls filterConfigs={filterConfigs} debounceTime={500} />
         </div>
         <div className="hidden sm:block">
           <Button variant="default" asChild>
@@ -118,7 +142,11 @@ export default async function HumansButFromGazaPage(props: {
         </div>
       </Container>
       <Container className="mb-12 grid max-w-7xl grid-cols-1 gap-16 xl:mb-24">
-        <DiaryEntryList filters={filters} fieldsSearch={["title"]} />
+        <Suspense
+          key={JSON.stringify(params)}
+          fallback={<DiaryEntryListLoading />}>
+          <DiaryEntryListPreFetch filters={filters} />
+        </Suspense>
       </Container>
       <Container className="mb-24 flex items-center lg:mb-32 lg:justify-center">
         <Button variant="default" className="w-full md:w-max" asChild>

@@ -1,11 +1,11 @@
-// REVIEWED  - 17
+// REVIEWED  - 18
 
 import { useQuery } from "@tanstack/react-query";
 
 import { getAuthentication } from "@/actions/auth";
 
 export const useUser = function useUser() {
-  const { isPending, isFetching, data } = useQuery({
+  const query = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await getAuthentication();
@@ -14,14 +14,9 @@ export const useUser = function useUser() {
 
       return response.user;
     },
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    staleTime: 0,
-    gcTime: 0,
   });
 
   return {
-    isPending: isPending || isFetching,
-    user: data,
+    ...query,
   };
 };

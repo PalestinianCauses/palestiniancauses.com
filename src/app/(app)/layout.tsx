@@ -1,4 +1,4 @@
-// REVIEWED - 27
+// REVIEWED - 28
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Analytics } from "@vercel/analytics/next";
@@ -7,7 +7,6 @@ import type { Metadata, Viewport } from "next";
 import { PropsWithChildren } from "react";
 import colors from "tailwindcss/colors";
 
-import { AuthenticationPreFetch } from "@/components/auth/providers";
 import { BackButton } from "@/components/globals/back-button";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -133,10 +132,8 @@ const RootLayout = function RootLayout({ children }: PropsWithChildren) {
       <body>
         <BackButton />
         <QueryProvider>
-          <AuthenticationPreFetch>
-            {children}
-            <ActivityProvider />
-          </AuthenticationPreFetch>
+          {children}
+          <ActivityProvider />
           <ReactQueryDevtools />
         </QueryProvider>
         <Toaster theme="dark" richColors />
