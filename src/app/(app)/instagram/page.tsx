@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 15
+// REVIEWED - 16
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -342,10 +342,10 @@ const InstagramStudioPage = function InstagramStudioPage() {
             The Truth Museum: Humans But From Gaza
           </SectionHeadingBadge>
           <SectionHeading className="!text-9xl font-bold text-primary lg:!leading-[0.9] xl:!leading-[0.9]">
-            What can we possibly say when mourning a{" "}
+            There are horrible stories you&apos;re not ready to{" "}
             <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
               {" "}
-              home-land?
+              hear.
             </span>
           </SectionHeading>
           <div className="mt-auto flex h-28 w-28 items-center justify-center bg-primary text-primary-foreground">
@@ -368,26 +368,26 @@ const InstagramStudioPage = function InstagramStudioPage() {
       <Frame ref={instagramFrames[1].ref} dimensions="4:5" color="primary">
         <FrameContent>
           <SectionHeadingBadge className="text-lg text-primary-foreground">
-            Authored with dedication by M.
+            Authored with dedication by Basmala.
           </SectionHeadingBadge>
           <SectionHeading className="!text-8xl font-bold text-primary-foreground lg:!leading-[0.9] xl:!leading-[0.9]">
-            From the heart of{" "}
+            A new, vital perspective from Gaza.{" "}
             <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-primary-foreground">
-              Gaza.
+              Basmala
             </span>{" "}
-            &quot;M.&quot; shares a powerful reflection.
+            has shared her diary entry.
           </SectionHeading>
           <Paragraph className="!text-4xl font-medium !leading-relaxed text-primary-foreground">
-            At the end of it all, I lifted my eyes to the vastness of the sky,
-            and I was sure that if they could have deprived us of it, they would
-            have. There, in the sky, I saw a large kite soaring above the
-            rubble, decorating the colors of our Palestinian flag. At that
-            moment, I muttered:{" "}
+            Everyone in this goddamn world was watching us, but no one took a
+            real action! We were living in one of the highest population
+            densities in the world, under gunfire, bombs, rockets, and flare
+            bombs, yet to the world, it was as if nothing was happening. I saw
+            homelessness, loss, confusion, and hesitation in the eyes around me.{" "}
             <span className="bg-primary-foreground px-2.5 font-medium text-primary">
-              Gaza might be destroyed, but
+              Our eyes were talking on our
             </span>{" "}
             <span className="bg-primary-foreground px-2.5 font-medium text-primary">
-              not defeated.
+              behalf.
             </span>
           </Paragraph>
         </FrameContent>
@@ -398,23 +398,29 @@ const InstagramStudioPage = function InstagramStudioPage() {
         color="primary-foreground">
         <FrameContent>
           <SectionHeading className="!text-8xl font-bold text-primary lg:!leading-[0.9] xl:!leading-[0.9]">
-            A{" "}
+            Basmala&apos;s words capture the overwhelming reality of trying to
+            narrate the{" "}
             <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-primary">
-              reflection
-            </span>{" "}
-            on home-land, memory, and the stories that live on even after
-            everything has{" "}
-            <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-primary">
-              changed.
+              un-narratable.
             </span>
           </SectionHeading>
           <Paragraph className="!text-4xl font-medium !leading-relaxed text-primary">
-            This is a voice that needs to be heard. Tap the link in our bio to
-            read the full entry in{" "}
+            Her entry is a testament to the countless stories of life, loss, and
+            resilience that demand to be witnessed.
+          </Paragraph>
+          <Paragraph className="!text-4xl font-medium !leading-relaxed text-primary">
+            Tap the link in our bio to read her full entry.
+          </Paragraph>
+          <Paragraph className="!text-4xl font-medium !leading-relaxed text-primary">
+            After you read,{" "}
             <span className="bg-primary px-2.5 font-medium text-primary-foreground">
-              The Truth Museum
+              please consider leaving a comment
             </span>{" "}
-            and bear witness. 🔗
+            of support to let her{" "}
+            <span className="bg-primary px-2.5 font-medium text-primary-foreground">
+              know her voice is being heard
+            </span>{" "}
+            across the distance. 🔗
           </Paragraph>
         </FrameContent>
       </Frame>

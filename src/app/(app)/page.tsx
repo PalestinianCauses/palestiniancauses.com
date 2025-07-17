@@ -1,8 +1,7 @@
-// REVIEWED - 09
+// REVIEWED - 10
 import { Metadata } from "next";
 
 import { Intro } from "@/components/globals/intro";
-import { Navigation } from "@/components/globals/navigation";
 import { PWAPromptInstall } from "@/components/pwa/prompt-install";
 
 export const metadata: Metadata = {
@@ -13,9 +12,8 @@ export const metadata: Metadata = {
 
 const HomePage = async function HomePage() {
   return (
-    <main className="grid grid-cols-1 divide-y divide-muted overflow-y-scroll lg:grid-cols-2 lg:divide-x lg:divide-y-0 [&_>_*]:h-screen [&_>_*]:max-h-screen [&_>_*]:min-h-[48rem]">
+    <main className="grid h-full max-h-screen min-h-[48rem] grid-cols-1">
       <Intro />
-      <Navigation />
       <PWAPromptInstall />
     </main>
   );
