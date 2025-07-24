@@ -85,7 +85,7 @@ export const DiaryEntryListItem = function DiaryEntryListItem({
         {diaryEntry.title}
       </SubSectionHeading>
       <Paragraph small className="mb-8 line-clamp-[8] sm:line-clamp-4">
-        {linesSplit(diaryEntry.content).filter(Boolean).slice(0, 3).join(" ")}
+        {linesSplit(diaryEntry.content).filter(Boolean).join(" ")}
       </Paragraph>
       <div>
         <Button variant="default" asChild>
