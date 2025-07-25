@@ -1,8 +1,6 @@
-// REVIEWED - 10
+// REVIEWED - 11
 import { Metadata } from "next";
-
-import { Intro } from "@/components/globals/intro";
-import { PWAPromptInstall } from "@/components/pwa/prompt-install";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Home | PalestinianCauses",
@@ -11,12 +9,7 @@ export const metadata: Metadata = {
 };
 
 const HomePage = async function HomePage() {
-  return (
-    <main className="grid h-full max-h-screen min-h-[48rem] grid-cols-1">
-      <Intro />
-      <PWAPromptInstall />
-    </main>
-  );
+  redirect("/a-human-but-from-gaza");
 };
 
 export default HomePage;

@@ -1,11 +1,10 @@
 "use client";
 
-// REVIEWED - 16
+// REVIEWED - 17
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
 import { toJpeg, toPng } from "html-to-image";
-import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import {
   forwardRef,
@@ -338,21 +337,25 @@ const InstagramStudioPage = function InstagramStudioPage() {
         dimensions="4:5"
         color="primary-foreground">
         <FrameContent>
-          <SectionHeadingBadge className="text-lg ring-primary/20">
+          <SectionHeadingBadge className="bg-background text-lg ring-primary/20">
             The Truth Museum: Humans But From Gaza
           </SectionHeadingBadge>
           <SectionHeading className="!text-9xl font-bold text-primary lg:!leading-[0.9] xl:!leading-[0.9]">
-            There are horrible stories you&apos;re not ready to{" "}
-            <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
-              {" "}
-              hear.
+            I don&apos;t want <br /> to use exclam-ation marks for only{" "}
+            <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-background before:ring-1 before:ring-input">
+              critique.
             </span>
           </SectionHeading>
-          <div className="mt-auto flex h-28 w-28 items-center justify-center bg-primary text-primary-foreground">
-            <ArrowRightIcon className="h-16 w-16 stroke-1" />
+          <div className="relative mt-auto flex h-32 w-32 items-center justify-center bg-background text-primary ring-1 ring-input">
+            <Image
+              src="/logo-primary.png"
+              alt="Primary Logo"
+              fill
+              className="!static !h-24 !w-24"
+            />
           </div>
         </FrameContent>
-        <FrameImagesGrid>
+        {/* <FrameImagesGrid>
           <div className="relative col-start-3 col-end-13 row-start-8 row-end-13 ring-2 ring-primary">
             <div className="absolute bottom-0 left-2.5 right-2.5 z-10 h-20 bg-gradient-to-t from-background to-background" />
             <Image
@@ -363,7 +366,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
               className="!relative bg-primary-foreground object-cover object-[top_left]"
             />
           </div>
-        </FrameImagesGrid>
+        </FrameImagesGrid> */}
       </Frame>
       <Frame ref={instagramFrames[1].ref} dimensions="4:5" color="primary">
         <FrameContent>
@@ -371,23 +374,24 @@ const InstagramStudioPage = function InstagramStudioPage() {
             Authored with dedication by Basmala.
           </SectionHeadingBadge>
           <SectionHeading className="!text-8xl font-bold text-primary-foreground lg:!leading-[0.9] xl:!leading-[0.9]">
-            A new, vital perspective from Gaza.{" "}
+            Basmala shares another piece of{" "}
             <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-primary-foreground">
-              Basmala
+              her
             </span>{" "}
-            has shared her diary entry.
+            soul with us.
           </SectionHeading>
           <Paragraph className="!text-4xl font-medium !leading-relaxed text-primary-foreground">
-            Everyone in this goddamn world was watching us, but no one took a
-            real action! We were living in one of the highest population
-            densities in the world, under gunfire, bombs, rockets, and flare
-            bombs, yet to the world, it was as if nothing was happening. I saw
-            homelessness, loss, confusion, and hesitation in the eyes around me.{" "}
+            I wanna use them when I take a picture of myself in the courtyard of
+            the Al-Aqsa Mosque, when the mother of the prisoner is heralded with
+            the glad tidings about her son&apos;s release from captivity. When I
+            am touching the Kaaba&apos;s covering without being drained after
+            crossing the limits between it and between the cities between my
+            town. When I understand{" "}
             <span className="bg-primary-foreground px-2.5 font-medium text-primary">
-              Our eyes were talking on our
+              a new Quranic miracle while reading
             </span>{" "}
             <span className="bg-primary-foreground px-2.5 font-medium text-primary">
-              behalf.
+              the Quran.
             </span>
           </Paragraph>
         </FrameContent>
@@ -398,29 +402,31 @@ const InstagramStudioPage = function InstagramStudioPage() {
         color="primary-foreground">
         <FrameContent>
           <SectionHeading className="!text-8xl font-bold text-primary lg:!leading-[0.9] xl:!leading-[0.9]">
-            Basmala&apos;s words capture the overwhelming reality of trying to
-            narrate the{" "}
-            <span className="relative z-10 mr-2 inline-block text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-primary">
-              un-narratable.
+            Basmala explores the un-spoken realities—the fear, exhaustion, and
+            shock that live in the pauses between{" "}
+            <span className="relative z-10 mr-2 inline-block text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-20 before:-translate-y-1/2 before:bg-background before:ring-1 before:ring-input">
+              words.
             </span>
           </SectionHeading>
           <Paragraph className="!text-4xl font-medium !leading-relaxed text-primary">
-            Her entry is a testament to the countless stories of life, loss, and
-            resilience that demand to be witnessed.
+            We invite you to read the words between the lines.
           </Paragraph>
           <Paragraph className="!text-4xl font-medium !leading-relaxed text-primary">
-            Tap the link in our bio to read her full entry.
+            Tap the link in our bio for the full entry.
           </Paragraph>
           <Paragraph className="!text-4xl font-medium !leading-relaxed text-primary">
-            After you read,{" "}
+            Please leave a comment to let{" "}
             <span className="bg-primary px-2.5 font-medium text-primary-foreground">
-              please consider leaving a comment
+              Basmala
             </span>{" "}
-            of support to let her{" "}
+            know that her silent exclamation marks are being{" "}
             <span className="bg-primary px-2.5 font-medium text-primary-foreground">
-              know her voice is being heard
+              seen and
             </span>{" "}
-            across the distance. 🔗
+            <span className="bg-primary px-2.5 font-medium text-primary-foreground">
+              felt
+            </span>{" "}
+            across the world. 🔗
           </Paragraph>
         </FrameContent>
       </Frame>
