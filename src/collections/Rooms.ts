@@ -1,4 +1,4 @@
-// REVIEWED - 13
+// REVIEWED - 14
 
 import { CollectionConfig } from "payload";
 
@@ -54,15 +54,16 @@ export const Rooms: CollectionConfig = {
     {
       admin: {
         readOnly: true,
-        description: "A URL-friendly, unique identifier for this Room.",
         components: {
           Field: {
             path: "../components/payload/fields/slug#default",
             clientProps: {
-              sourcePath: "information.name",
+              description: "A URL-friendly, unique identifier for this Room.",
+              sourcePath: "name",
               slugPath: "slug",
               label: "Slug",
               readOnly: true,
+              disabled: true,
             },
           },
         },

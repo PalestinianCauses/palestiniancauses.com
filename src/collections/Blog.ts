@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 import { CollectionConfig } from "payload";
 
 import { isAdminOrSelf, isAdminOrSystemUser } from "@/access/global";
@@ -37,10 +37,12 @@ export const Blog: CollectionConfig = {
           Field: {
             path: "../components/payload/fields/slug#default",
             clientProps: {
+              description: "",
               sourcePath: "title",
               slugPath: "slug",
               label: "Slug",
               readOnly: true,
+              disabled: true,
             },
           },
         },
