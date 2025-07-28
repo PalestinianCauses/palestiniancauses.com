@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { ChevronsUpDownIcon, Plus } from "lucide-react";
 
@@ -40,7 +40,7 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                 />
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold text-primary">
+                <span className="truncate font-semibold text-sidebar-primary">
                   PalestinianCauses.
                 </span>
                 <span className="truncate text-xs text-muted-foreground">
@@ -63,10 +63,12 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                 <DropdownMenuItem
                   key={room.name}
                   className="gap-2.5 px-2.5 leading-none">
-                  <div className="flex size-8 items-center justify-center rounded-none border border-input text-base font-medium text-primary">
+                  <div className="flex size-8 items-center justify-center rounded-none border border-input text-base font-medium text-sidebar-primary">
                     {room.name.charAt(0).toUpperCase()}
                   </div>
-                  <p className="font-medium text-primary">{room.name}</p>
+                  <p className="font-medium text-sidebar-primary">
+                    {room.name}
+                  </p>
                 </DropdownMenuItem>
               ),
             )}

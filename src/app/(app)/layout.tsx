@@ -1,4 +1,4 @@
-// REVIEWED - 29
+// REVIEWED - 30
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Analytics } from "@vercel/analytics/next";
@@ -7,11 +7,14 @@ import type { Metadata, Viewport } from "next";
 import { PropsWithChildren } from "react";
 import colors from "tailwindcss/colors";
 
-import { Navigation } from "@/components/globals/navigation";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
-import { ActivityProvider, QueryProvider } from "./providers";
+import {
+  ActivityProvider,
+  QueryProvider,
+  SidebarMainProvider,
+} from "./providers";
 
 export const metadata: Metadata = {
   applicationName: "PalestinianCauses",
@@ -131,8 +134,7 @@ const RootLayout = function RootLayout({ children }: PropsWithChildren) {
       </head>
       <body>
         <QueryProvider>
-          <Navigation />
-          {children}
+          <SidebarMainProvider>{children}</SidebarMainProvider>
           <ActivityProvider />
           <ReactQueryDevtools />
         </QueryProvider>
