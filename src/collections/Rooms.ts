@@ -1,4 +1,4 @@
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { CollectionConfig } from "payload";
 import slugify from "slugify";
@@ -238,7 +238,6 @@ export const Rooms: CollectionConfig = {
       label: "Professional Experience",
       name: "experience",
       type: "array",
-      required: true,
       fields: [
         {
           admin: {
@@ -405,7 +404,6 @@ export const Rooms: CollectionConfig = {
       label: "Professional Qualifications",
       name: "qualification",
       type: "array",
-      required: true,
       fields: [
         {
           admin: {
@@ -531,7 +529,6 @@ export const Rooms: CollectionConfig = {
       label: "Skills and Competencies",
       name: "skills",
       type: "array",
-      required: true,
       fields: [
         {
           admin: {
