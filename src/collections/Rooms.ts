@@ -1,7 +1,6 @@
-// REVIEWED - 12
+// REVIEWED - 13
 
 import { CollectionConfig } from "payload";
-import slugify from "slugify";
 
 import { isAdminOrSelf } from "@/access/global";
 import { messages } from "@/lib/messages";
@@ -44,7 +43,6 @@ export const Rooms: CollectionConfig = {
   fields: [
     {
       admin: {
-        readOnly: true,
         description: "A unique, system-generated identifier for this Room.",
       },
       label: "Room Name",
@@ -579,26 +577,4 @@ export const Rooms: CollectionConfig = {
       ],
     },
   ],
-  hooks: {
-    beforeChange: [
-      async ({ operation, req, data }) => {
-        const { user } = req;
-
-        if (!user) return data;
-
-        if (operation === "create") {
-          const dataModified = data;
-
-          if (user.firstName) {
-            dataModified.name = `${user.firstName} Room`;
-            dataModified.slug = slugify(user.firstName, { lower: true });
-          }
-
-          return dataModified;
-        }
-
-        return data;
-      },
-    ],
-  },
 };
