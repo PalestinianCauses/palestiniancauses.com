@@ -1,20 +1,32 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
-import { ChevronsUpDownIcon, LogInIcon } from "lucide-react";
+import {
+  BellIcon,
+  ChevronsUpDownIcon,
+  LogInIcon,
+  LogOutIcon,
+  Settings2Icon,
+  UserIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUser } from "@/hooks/use-user";
@@ -23,6 +35,7 @@ import { SafeHydrate } from "../safe-hydrate";
 
 export const SidebarUser = function SidebarUser() {
   const pathname = usePathname();
+  const isMobile = useSidebar();
   const { isLoading, data: user } = useUser();
 
   return (
@@ -75,6 +88,33 @@ export const SidebarUser = function SidebarUser() {
                     <ChevronsUpDownIcon className="ml-auto text-muted-foreground" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                  align="end"
+                  side={isMobile ? "bottom" : "right"}
+                  sideOffset={2}>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem className="gap-2.5 px-2.5">
+                      <UserIcon />
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="gap-2.5 px-2.5">
+                      <Settings2Icon />
+                      Account
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="gap-2.5 px-2.5">
+                      <BellIcon />
+                      Notifications
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem className="gap-2.5 px-2.5">
+                      <LogOutIcon />
+                      Sign out
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
               </DropdownMenu>
             </SidebarMenuItem>
           </SidebarMenu>
