@@ -1,38 +1,38 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { CollectionConfig } from "payload";
 import slugify from "slugify";
 
+import { isAdminOrSelf } from "@/access/global";
 import { messages } from "@/lib/messages";
 import { validateDateInRange } from "@/lib/utils/dates";
 
 export const Rooms: CollectionConfig = {
   slug: "rooms",
   access: {
-    // create: async ({ req }) => {
-    //   const { user } = req;
-    //   if (!user) return false;
+    create: async ({ req }) => {
+      const { user } = req;
+      if (!user) return false;
 
-    //   if (user.role === "admin") return true;
+      if (user.role === "admin") return true;
 
-    //   if (user.role === "system-user") {
-    //     const room = await req.payload.find({
-    //       collection: "rooms",
-    //       where: { user: { equals: user.id } },
-    //     });
+      if (user.role === "system-user") {
+        const room = await req.payload.find({
+          collection: "rooms",
+          where: { user: { equals: user.id } },
+        });
 
-    //     if (room.docs.length === 0) return true;
+        if (room.docs.length === 0) return true;
 
-    //     return false;
-    //   }
+        return false;
+      }
 
-    //   return false;
-    // },
+      return false;
+    },
     // read: isAdminOrSelf,
     // update: isAdminOrSelf,
     // delete: isAdminOrSelf,
-    create: () => false,
-    read: () => false,
+    read: isAdminOrSelf,
     update: () => false,
     delete: () => false,
   },
@@ -57,6 +57,17 @@ export const Rooms: CollectionConfig = {
       admin: {
         readOnly: true,
         description: "A URL-friendly, unique identifier for this Room.",
+        components: {
+          Field: {
+            path: "../components/payload/fields/slug#default",
+            clientProps: {
+              sourcePath: "information.name",
+              slugPath: "slug",
+              label: "Slug",
+              readOnly: true,
+            },
+          },
+        },
       },
       label: "Room Slug",
       name: "slug",
@@ -124,7 +135,6 @@ export const Rooms: CollectionConfig = {
       label: "Educational Background",
       name: "education",
       type: "array",
-      required: true,
       fields: [
         {
           admin: {
