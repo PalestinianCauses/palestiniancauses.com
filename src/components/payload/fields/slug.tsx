@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useField, useFormFields } from "@payloadcms/ui";
 import { useEffect } from "react";
@@ -54,6 +54,7 @@ export default function SlugField({
         id={slugPath}
         value={typeof slugValue === "string" ? slugValue : ""}
         readOnly={readOnly}
+        disabled={readOnly}
         className="field-type__input"
       />
     </div>
