@@ -1,9 +1,13 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
+import { useQuery } from "@tanstack/react-query";
 import { ChevronsUpDownIcon, Plus } from "lucide-react";
+import Link from "next/link";
+import { Fragment } from "react";
 
+import { getRoomsNames } from "@/actions/room";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -19,9 +23,22 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const WebsiteSwitcher = function WebsiteSwitcher() {
-  const { isMobile } = useSidebar();
+  const { isLoading, data: rooms } = useQuery({
+    queryKey: ["rooms-names"],
+    queryFn: async () => {
+      const response = await getRoomsNames();
+
+      if (!response.data || response.data.docs.length === 0 || response.error)
+        return null;
+
+      return response.data.docs;
+    },
+  });
+
+  const { isMobile, setOpenMobile } = useSidebar();
 
   return (
     <SidebarMenu>
@@ -55,24 +72,33 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
             align="start"
             side={isMobile ? "bottom" : "right"}
             sideOffset={2}>
-            <DropdownMenuLabel className="px-2.5 text-xs text-muted-foreground">
-              Rooms
-            </DropdownMenuLabel>
-            {[{ name: "Shawqi's Room" }, { name: "Gym Rat's Room" }].map(
-              (room) => (
-                <DropdownMenuItem
-                  key={room.name}
-                  className="gap-2.5 px-2.5 leading-none">
-                  <div className="flex size-8 items-center justify-center rounded-none border border-input text-base font-medium text-sidebar-primary">
-                    {room.name.charAt(0).toUpperCase()}
-                  </div>
-                  <p className="font-medium text-sidebar-primary">
-                    {room.name}
-                  </p>
-                </DropdownMenuItem>
-              ),
-            )}
-            <DropdownMenuSeparator />
+            {/* eslint-disable-next-line no-nested-ternary */}
+            {isLoading ? (
+              <Skeleton className="h-10 w-full" />
+            ) : rooms ? (
+              <Fragment>
+                <DropdownMenuLabel className="px-2.5 text-xs text-muted-foreground">
+                  Rooms
+                </DropdownMenuLabel>
+                {rooms.map((room) => (
+                  <DropdownMenuItem
+                    key={room.id}
+                    asChild
+                    onClick={() => setOpenMobile(false)}
+                    className="gap-2.5 px-2.5 leading-none">
+                    <Link href={`/rooms/${room.slug}`}>
+                      <div className="flex size-8 items-center justify-center rounded-none border border-input text-base font-medium text-sidebar-primary">
+                        {room.name.charAt(0).toUpperCase()}
+                      </div>
+                      <p className="font-medium text-sidebar-primary">
+                        {room.name}
+                      </p>
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuSeparator />
+              </Fragment>
+            ) : null}
             <DropdownMenuItem className="gap-2.5 px-2.5">
               <div className="flex size-8 items-center justify-center rounded-none border border-input bg-transparent">
                 <Plus className="size-4" />
