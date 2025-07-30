@@ -32,8 +32,8 @@ export const Rooms: CollectionConfig = {
     // update: isAdminOrSelf,
     // delete: isAdminOrSelf,
     read: isAdminOrSelf,
-    update: () => false,
-    delete: () => false,
+    update: isAdminOrSelf,
+    delete: isAdminOrSelf,
   },
   admin: {
     group: "Content",
@@ -41,6 +41,15 @@ export const Rooms: CollectionConfig = {
     useAsTitle: "name",
   },
   fields: [
+    {
+      // admin: { hidden: true },
+      label: "User",
+      name: "user",
+      type: "relationship",
+      relationTo: "users",
+      unique: true,
+      required: true,
+    },
     {
       admin: {
         description: "A unique, system-generated identifier for this Room.",
@@ -77,6 +86,22 @@ export const Rooms: CollectionConfig = {
     {
       admin: {
         description:
+          "Current publication state of the Room, indicating its visibility and availability.",
+      },
+      label: "Room Status",
+      name: "status",
+      type: "select",
+      options: [
+        { label: "Draft", value: "draft" },
+        { label: "Published", value: "published" },
+        { label: "Archived", value: "archived" },
+      ],
+      defaultValue: "draft",
+      required: true,
+    },
+    {
+      admin: {
+        description:
           "Formal personal and professional details displayed at the top of the Room profile.",
       },
       label: "Personal and Professional Information",
@@ -105,11 +130,33 @@ export const Rooms: CollectionConfig = {
         {
           admin: {
             description:
+              "A brief, impactful statement summarizing your professional identity or expertise.",
+          },
+          label: "Professional Headline",
+          name: "headline",
+          type: "text",
+          required: true,
+        },
+        {
+          admin: {
+            description:
               "A concise summary of professional background, expertise, and experience.",
           },
           label: "Professional Summary",
           name: "summary",
           type: "textarea",
+          required: true,
+        },
+        {
+          label: "Status",
+          name: "status",
+          type: "select",
+          options: [
+            { label: "Open to New Opportunities", value: "available" },
+            { label: "Currently Engaged", value: "working" },
+            { label: "Not Available", value: "unavailable" },
+          ],
+          defaultValue: "available",
           required: true,
         },
         {
@@ -578,4 +625,16 @@ export const Rooms: CollectionConfig = {
       ],
     },
   ],
+  hooks: {
+    beforeChange: [
+      ({ operation, req, data }) => {
+        if (!req.user) return data;
+
+        // eslint-disable-next-line no-param-reassign
+        if (operation === "create") data.user = req.user.id;
+
+        return data;
+      },
+    ],
+  },
 };
