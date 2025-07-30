@@ -1,4 +1,4 @@
-// REVIEWED - 25
+// REVIEWED - 26
 
 export const messages = {
   http: {
@@ -144,6 +144,9 @@ export const messages = {
         serverError:
           "Failed to retrieve author information. Please try again later.",
       },
+    },
+    room: {
+      serverError: "Failed to retrieve room. Please try again later.",
     },
   },
   forms: {

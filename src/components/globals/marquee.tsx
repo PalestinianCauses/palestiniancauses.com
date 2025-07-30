@@ -1,17 +1,20 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Variants } from "motion/react";
 import {
   HTMLAttributes,
   PropsWithChildren,
+  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
 
 import { cn } from "@/lib/utils/styles";
+
+import { SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, useSidebar } from "../ui/sidebar";
 
 import { MotionDiv } from "./motion";
 
@@ -40,6 +43,16 @@ export const InfiniteMarquee = function InfiniteMarquee({
   const marqueeRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState(0);
 
+  const { state, isMobile } = useSidebar();
+
+  const getMarqueeWidth = useCallback(() => {
+    if (isMobile) return "100vw";
+
+    if (state === "expanded") return `calc(100vw - ${SIDEBAR_WIDTH})`;
+
+    return `calc(100vw - ${SIDEBAR_WIDTH_ICON})`;
+  }, [state, isMobile]);
+
   useEffect(() => {
     if (marqueeRef.current && marqueeRef.current.scrollWidth)
       setContentWidth(marqueeRef.current.scrollWidth / 2);
@@ -61,7 +74,9 @@ export const InfiniteMarquee = function InfiniteMarquee({
   };
 
   return (
-    <div className={cn("relative h-full w-full overflow-hidden", className)}>
+    <div
+      className={cn("relative h-full overflow-hidden", className)}
+      style={{ width: getMarqueeWidth() }}>
       {contentWidth > 0 && (
         <MotionDiv
           ref={marqueeRef}

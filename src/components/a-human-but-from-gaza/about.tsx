@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { Container } from "../globals/container";
 import { InfiniteMarquee, MarqueeItem } from "../globals/marquee";
@@ -57,7 +57,7 @@ export const About = function About() {
           global attention.
         </Paragraph>
       </Container>
-      <div className="w-full bg-foreground text-background">
+      <div className="relative left-1/2 -translate-x-1/2 overflow-hidden bg-foreground text-background transition-[width] duration-100 ease-in-out">
         <InfiniteMarquee speed={80}>
           {[
             "Authentic",

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 12
+// REVIEWED - 13
 import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 
@@ -96,7 +96,7 @@ export const SidebarMainProvider = function SidebarMainProvider({
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className="flex shrink-0 items-center justify-start py-4 transition-all duration-100 ease-in-out">
+        <header className="flex shrink-0 items-center justify-start border-b border-input py-4 transition-all duration-100 ease-in-out">
           <div className="flex flex-col items-start justify-start gap-4 px-4 xs:flex-row xs:items-center">
             <SidebarTrigger />
             <Separator

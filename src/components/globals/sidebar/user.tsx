@@ -1,10 +1,11 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import {
   BellIcon,
   ChevronsUpDownIcon,
+  LayoutIcon,
   LogInIcon,
   LogOutIcon,
   Settings2Icon,
@@ -94,13 +95,21 @@ export const SidebarUser = function SidebarUser() {
                   side={isMobile ? "bottom" : "right"}
                   sideOffset={2}>
                   <DropdownMenuGroup>
+                    {user.role === "admin" || user.role === "system-user" ? (
+                      <DropdownMenuItem asChild className="gap-2.5 px-2.5">
+                        <Link href="/admin">
+                          <LayoutIcon />
+                          Admin Dashboard
+                        </Link>
+                      </DropdownMenuItem>
+                    ) : null}
                     <DropdownMenuItem className="gap-2.5 px-2.5">
                       <UserIcon />
                       Profile
                     </DropdownMenuItem>
                     <DropdownMenuItem className="gap-2.5 px-2.5">
                       <Settings2Icon />
-                      Account
+                      Account Settings
                     </DropdownMenuItem>
                     <DropdownMenuItem className="gap-2.5 px-2.5">
                       <BellIcon />

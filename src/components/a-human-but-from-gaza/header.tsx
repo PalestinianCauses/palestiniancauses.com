@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { Suspense } from "react";
 
@@ -6,6 +6,7 @@ import { getBlobsByPrefix } from "@/actions/blob";
 
 import { Container } from "../globals/container";
 import { InfiniteMarquee, MarqueeItem } from "../globals/marquee";
+import { SafeHydrate } from "../globals/safe-hydrate";
 import { SuspenseImage } from "../globals/suspense-image";
 import { Badge } from "../ui/badge";
 import { Skeleton } from "../ui/skeleton";
@@ -21,23 +22,25 @@ const HeaderImages = async function HeaderImages() {
     return null;
 
   return (
-    <InfiniteMarquee speed={80}>
-      {images.blobs
-        .filter((blob) => blob.size !== 0)
-        .map(async (blob, index) => (
-          <MarqueeItem key={blob.pathname}>
-            <SuspenseImage
-              isLoadingElement={isLoadingElement}
-              src={blob.url}
-              alt={`Book Image ${index.toString()}`}
-              fill
-              sizes="(min-width: 64rem) 10rem, 7.5rem"
-              containerClassName="w-60 lg:w-80"
-              className="!relative object-cover object-top opacity-20"
-            />
-          </MarqueeItem>
-        ))}
-    </InfiniteMarquee>
+    <SafeHydrate>
+      <InfiniteMarquee speed={80}>
+        {images.blobs
+          .filter((blob) => blob.size !== 0)
+          .map(async (blob, index) => (
+            <MarqueeItem key={blob.pathname}>
+              <SuspenseImage
+                isLoadingElement={isLoadingElement}
+                src={blob.url}
+                alt={`Book Image ${index.toString()}`}
+                fill
+                sizes="(min-width: 64rem) 10rem, 7.5rem"
+                containerClassName="w-60 lg:w-80"
+                className="!relative object-cover object-top opacity-20"
+              />
+            </MarqueeItem>
+          ))}
+      </InfiniteMarquee>
+    </SafeHydrate>
   );
 };
 
