@@ -1,4 +1,4 @@
-// REVIEWED - 14
+// REVIEWED - 15
 
 import { CollectionConfig } from "payload";
 
@@ -42,7 +42,7 @@ export const Rooms: CollectionConfig = {
   },
   fields: [
     {
-      // admin: { hidden: true },
+      admin: { hidden: true },
       label: "User",
       name: "user",
       type: "relationship",
@@ -93,8 +93,9 @@ export const Rooms: CollectionConfig = {
       type: "select",
       options: [
         { label: "Draft", value: "draft" },
+        { label: "In Progress", value: "in-progress" },
+        { label: "Coming Soon", value: "coming-soon" },
         { label: "Published", value: "published" },
-        { label: "Archived", value: "archived" },
       ],
       defaultValue: "draft",
       required: true,

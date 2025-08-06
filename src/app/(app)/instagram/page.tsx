@@ -1,39 +1,51 @@
 "use client";
 
-// REVIEWED - 17
+// REVIEWED - 18
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
-import { toJpeg, toPng } from "html-to-image";
+import { QuoteIcon } from "lucide-react";
 import Image from "next/image";
-import {
-  forwardRef,
-  HTMLAttributes,
-  PropsWithChildren,
-  RefObject,
-  useRef,
-} from "react";
+import { useRef } from "react";
 
 import {
   Paragraph,
   SectionHeading,
   SectionHeadingBadge,
 } from "@/components/globals/typography";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils/styles";
 
-type Properties = "bg" | "text" | "fill" | "stroke";
-type ThemeStyles = "fill" | "stroke";
-type ThemeColors =
+import {
+  Frame,
+  FrameContent,
+  FrameHighlight,
+  FrameImagesGrid,
+  FrameParagraph,
+  FrameParagraphHighlight,
+  FrameSquare,
+  FrameTitle,
+  ImageFrame,
+  ImageFrameRender,
+} from "./_components/frame";
+import { PSCLogo } from "./_components/psc-logo";
+
+export type Properties = "bg" | "text" | "fill" | "stroke";
+export type ThemeStyles = "fill" | "stroke";
+export type ThemeColors =
   | "primary"
   | "primary-foreground"
   | "secondary"
   | "tertiary"
   | "tertiary-2"
   | "transparent";
-type Dimensions = "open-graph" | "github" | "1:1" | "4:5" | "16:9" | "9:16";
+export type Dimensions =
+  | "open-graph"
+  | "github"
+  | "1:1"
+  | "4:5"
+  | "16:9"
+  | "9:16";
 
-const themeClasses: {
+export const themeClasses: {
   [K in ThemeColors]: { [K in Properties]: string };
 } = {
   "primary": {
@@ -74,156 +86,13 @@ const themeClasses: {
   },
 };
 
-const dimensionsClasses: { [K in Dimensions]: string } = {
+export const dimensionsClasses: { [K in Dimensions]: string } = {
   "open-graph": "w-[75rem] h-[39.375rem]",
   "github": "w-[80rem] aspect-[2/1]",
   "1:1": "w-[67.5rem] aspect-square",
   "4:5": "w-[67.5rem] aspect-[4/5]",
   "16:9": "w-[67.5rem] aspect-[16/9]",
   "9:16": "w-[67.5rem] aspect-[9/16]",
-};
-
-type PCLogoProps = {
-  style?: ThemeStyles;
-  color?: ThemeColors;
-  elements?: {
-    tashkeal?: ThemeColors;
-    dots?: ThemeColors;
-    g?: ThemeColors;
-    z?: ThemeColors;
-    a?: ThemeColors;
-  };
-};
-
-const PCLogo = function PCLogo({
-  style = "fill",
-  color = "primary",
-  elements = {},
-}: PCLogoProps) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 570 531">
-      <path
-        d="M376.712 0C376.712 7.4 371.112 12.3 363.212 12.3L193.012 12C192.712 4.9 198.212 0.0999994 206.212 0.0999994L376.712 0Z"
-        className={themeClasses[elements.tashkeal || color][style]}
-      />
-      <path
-        d="M330 34.2483C327.3 31.3483 324.3 29.1483 320.6 27.7483C314.9 25.4483 309.4 28.8483 309.4 32.5483V39.4483C318.8 39.4483 324.8 46.3483 324.8 52.9483H303.1C298.7 52.9483 293.9 50.9483 291.4 46.8483C290.1 44.8483 288.1 36.3484 284.4 36.3486C280.1 36.3489 278 42.4483 275.7 46.5483C273.7 50.3483 269.7 53.1483 264 53.1483H243.9C243.9 46.5483 249.9 39.6483 259.3 39.6483V32.7483C259.3 29.1483 253.8 25.6483 248.1 27.9483C244.4 29.2483 241.4 31.3483 238.7 34.4483C234.4 39.4483 232 46.1483 232 53.2483V66.9483H264.3C265.2 66.9483 266.1 66.9483 267 66.8483C274.1 66.2483 280.2 63.4483 284.5 58.5483L286.2 60.2483C291.2 64.6483 297.8 66.9483 304.8 66.9483H337.1V53.2483C336.9 45.8483 334.3 39.1483 330 34.2483Z"
-        className={themeClasses[elements.tashkeal || color][style]}
-      />
-      <path
-        d="M259.6 274.6C259.6 246.1 279.7 226.1 308.1 226.1H308.7V436.7C308.7 462.1 299.8 485.8 284.4 503.5C273.7 515.3 260.8 523.6 245.9 528.9C226.3 535.4 210.4 518.9 210.4 498.8V485.2C244.1 485.2 259.6 460.4 259.6 436.7V274.6Z"
-        className={themeClasses[elements.z || color][style]}
-      />
-      <path
-        d="M569.2 175.451C568.9 163.351 565.5 150.751 559.9 138.851L553.5 146.051L399.6 300.951C397.3 298.651 395.3 296.251 393.4 293.551C393.3 293.451 393.3 293.251 393.1 293.251C379.4 272.251 384.7 248.351 397.4 233.651C397.9 233.151 398.4 232.551 399.1 231.951C399.1 231.951 408.1 222.951 408.3 222.751C428.8 202.251 452 182.551 472.5 160.951C495.4 136.851 515 110.351 524 77.4505C528.3 61.5505 528.7 43.8505 523.2 28.2505C518.5 14.9505 503.2 -6.94945 486.2 2.15055C483.9 2.95055 481.9 4.15055 480 6.05055L462.5 23.5505C464.2 21.8505 473.8 46.4505 474.4 48.9505C477.7 62.4505 474.3 76.6505 467.4 88.4505C456.2 107.751 437.2 122.851 421.6 138.651C403.9 156.551 386.4 174.451 368.6 192.251C347.2 213.651 336.8 239.151 338.5 265.951C339.4 290.051 349.9 313.051 368.2 331.551L324 375.951V445.351L334 436.651L403.9 366.751L438.6 401.451L447.8 392.251C460.4 379.651 460.4 362.151 447.8 349.551L434.5 336.251L484.2 285.251L546.2 224.251C550.1 220.351 553.4 216.251 556.4 212.051C565.7 201.751 569.4 188.951 569.2 175.451Z"
-        className={themeClasses[elements.g || color][style]}
-      />
-      <path
-        d="M230.344 265.943C232.044 239.143 221.544 213.543 200.244 192.243L148.144 140.143C148.244 140.143 148.244 140.043 148.444 140.043L114.744 106.243C91.344 82.9432 84.244 42.8432 105.544 23.4432L88.044 5.84324C70.144 -12.0568 48.944 15.4432 44.344 31.0432C37.844 52.6432 42.544 78.5432 53.644 99.9432C42.444 103.743 31.844 110.243 22.744 119.243C9.34399 132.543 1.04399 150.243 0.143994 167.743C-1.15601 187.443 6.34399 206.643 22.744 223.043L151.444 351.743L244.844 445.143V375.743L200.444 331.343C218.544 312.843 229.144 289.743 230.344 265.943ZM57.144 153.943C66.544 144.543 78.344 143.043 88.544 150.643L103.144 165.243C103.244 165.143 103.244 165.143 103.444 164.943L169.744 231.243C193.144 254.643 186.044 283.443 169.344 300.243L57.344 188.243C45.444 176.443 49.244 161.843 57.144 153.943Z"
-        className={themeClasses[elements.a || color][style]}
-      />
-      <path
-        d="M220 177C233.807 177 245 165.807 245 152C245 138.193 233.807 127 220 127C206.193 127 195 138.193 195 152C195 165.807 206.193 177 220 177Z"
-        className={themeClasses[elements.dots || color][style]}
-      />
-      <path
-        d="M399 129C412.807 129 424 117.807 424 104C424 90.1929 412.807 79 399 79C385.193 79 374 90.1929 374 104C374 117.807 385.193 129 399 129Z"
-        className={themeClasses[elements.dots || color][style]}
-      />
-      <path
-        d="M349 177C362.807 177 374 165.807 374 152C374 138.193 362.807 127 349 127C335.193 127 324 138.193 324 152C324 165.807 335.193 177 349 177Z"
-        className={themeClasses[elements.dots || color][style]}
-      />
-      <path
-        d="M170 129C183.807 129 195 117.807 195 104C195 90.1929 183.807 79 170 79C156.193 79 145 90.1929 145 104C145 117.807 156.193 129 170 129Z"
-        className={themeClasses[elements.dots || color][style]}
-      />
-    </svg>
-  );
-};
-
-type ImageFrame = {
-  id: string;
-  ref: RefObject<HTMLDivElement>;
-  as?: "jpeg" | "png";
-};
-
-type ImageFrameRenderProps = {
-  frames: ImageFrame[];
-};
-
-const ImageFrameRender = function ImageFrameRender({
-  frames,
-}: ImageFrameRenderProps) {
-  const render = function render(imageFrames: ImageFrame[]) {
-    imageFrames.forEach((imageFrame) => {
-      if (!imageFrame.ref.current) return;
-
-      const functions = { jpeg: toJpeg, png: toPng };
-
-      functions[imageFrame.as || "jpeg"](imageFrame.ref.current, {
-        cacheBust: true,
-        quality: 1,
-      }).then((image) => {
-        const a = document.createElement("a");
-        a.href = image;
-        a.download = `${imageFrame.id}.${imageFrame.as || "jpeg"}`;
-        a.click();
-      });
-    });
-  };
-
-  return <Button onClick={() => render(frames)}>Render Images</Button>;
-};
-
-type FrameProps = HTMLAttributes<HTMLDivElement> & {
-  dimensions?: Dimensions;
-  color?: ThemeColors;
-};
-
-const Frame = forwardRef<HTMLDivElement, FrameProps>(
-  ({ dimensions = "1:1", color = "primary", className, children }, ref) => (
-    <div
-      ref={ref}
-      className={cn(
-        "relative isolate flex items-center justify-center overflow-hidden",
-        dimensionsClasses[dimensions],
-        themeClasses[color].bg,
-        className,
-      )}>
-      {children}
-    </div>
-  ),
-);
-
-const FrameContent = function FrameContent({
-  className,
-  children,
-}: HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn(
-        "flex h-[65rem] w-[55rem] flex-col items-start justify-start gap-12",
-        className,
-      )}>
-      {children}
-    </div>
-  );
-};
-
-const FrameImagesGrid = function FrameImagesGrid({
-  className,
-  children,
-}: PropsWithChildren & HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn(
-        "absolute inset-0 -z-10 grid scale-105 grid-cols-12 grid-rows-12 gap-5",
-        className,
-      )}>
-      {children}
-    </div>
-  );
 };
 
 const InstagramStudioPage = function InstagramStudioPage() {
@@ -326,12 +195,170 @@ const InstagramStudioPage = function InstagramStudioPage() {
     },
   ];
 
+  const nArtWorkFrames: ImageFrame[] = [
+    {
+      id: "n-art-work-01",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "n-art-work-02",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "n-art-work-03",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "n-art-work-04",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+  ];
+
   return (
     <main>
       {/* Open Graph */}
       <ImageFrameRender frames={profileImagesFrames} />
       <ImageFrameRender frames={hoodiesFrames} />
-      <ImageFrameRender frames={instagramFrames} />
+      <ImageFrameRender frames={nArtWorkFrames} />
+      {/* N's Art-Work */}
+      <Frame
+        ref={nArtWorkFrames[0].ref}
+        dimensions="4:5"
+        color="primary-foreground">
+        <FrameContent>
+          <FrameSquare className="mb-auto bg-primary-foreground text-primary ring-primary-foreground">
+            <Image
+              src="/logo-primary.png"
+              alt="Primary Logo"
+              fill
+              className="!static !h-24 !w-24"
+            />
+          </FrameSquare>
+          <FrameTitle className="flex flex-col flex-wrap items-start">
+            <FrameHighlight className="before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
+              The
+            </FrameHighlight>
+            <FrameHighlight className="before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
+              Sole
+            </FrameHighlight>
+            <FrameHighlight className="before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
+              Su<span className="-mr-1 tracking-wide">rv</span>ivor.
+            </FrameHighlight>
+          </FrameTitle>
+          <SectionHeadingBadge className="bg-primary text-lg text-primary-foreground ring-primary">
+            Artwork by N. — Digitally Enhanced for a Re
+            <span className="-mr-px tracking-wide">fi</span>ned Experience
+          </SectionHeadingBadge>
+        </FrameContent>
+        <FrameImagesGrid>
+          <div className="relative col-start-1 col-end-13 row-start-1 row-end-13">
+            <Image
+              src="/the-sole-survivor-refined.png"
+              alt="N's Art-Work no. 01"
+              fill
+              className="!static object-cover object-top"
+            />
+          </div>
+        </FrameImagesGrid>
+      </Frame>
+      <Frame
+        ref={nArtWorkFrames[1].ref}
+        dimensions="4:5"
+        color="primary-foreground">
+        <FrameContent>
+          <FrameSquare className="bg-primary text-primary-foreground ring-primary">
+            <QuoteIcon className="h-20 w-20 stroke-[1.5]" />
+          </FrameSquare>
+          <FrameParagraph>
+            As all Gazan parents do during the war when the sounds of explosions
+            around them become louder, my mother encompasses us every night with
+            her commandments:{" "}
+            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+              Let us sleep together in the same
+            </FrameParagraphHighlight>{" "}
+            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+              room—stuck together.
+            </FrameParagraphHighlight>{" "}
+            Is everyone here? Do not leave the room. Oh, Allah, we pray that a
+            missile does not hit us, but if one did,{" "}
+            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+              let us die together.
+            </FrameParagraphHighlight>{" "}
+            Later, none will be left mourned for the departure of others.
+          </FrameParagraph>
+          <FrameParagraph>
+            Today, I knew that my friend, Fairouz Al-Assi, was the{" "}
+            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+              sole survivor
+            </FrameParagraphHighlight>{" "}
+            of her family. My beloved was martyred, and my crying increased as I
+            wondered :
+          </FrameParagraph>
+        </FrameContent>
+      </Frame>
+      <Frame ref={nArtWorkFrames[2].ref} dimensions="4:5" color="primary">
+        <FrameContent className="justify-center">
+          <FrameTitle>
+            Who is the{" "}
+            <FrameHighlight className="mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
+              su<span className="-mr-1 tracking-wide">rv</span>ivor?
+            </FrameHighlight>{" "}
+            Breathing or{" "}
+            <FrameHighlight className="mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
+              dead?
+            </FrameHighlight>
+          </FrameTitle>
+          <SectionHeadingBadge className="text-current">
+            Composed by L. featured in The Volume &quot;A Human But From
+            Gaza&quot;
+          </SectionHeadingBadge>
+        </FrameContent>
+      </Frame>
+      <Frame
+        ref={nArtWorkFrames[3].ref}
+        dimensions="4:5"
+        color="primary-foreground">
+        <FrameContent>
+          <FrameTitle>
+            Discover the complete diary and{" "}
+            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:inset-y-1.5 before:bg-primary before:ring-primary">
+              further
+            </FrameHighlight>
+            <FrameHighlight className="z-20 -mx-2.5 text-primary-foreground before:-inset-x-2.5 before:inset-y-1.5 before:bg-primary before:ring-primary">
+              compelling
+            </FrameHighlight>{" "}
+            <FrameHighlight className="-mx-2.5 text-primary-foreground before:-inset-x-2.5 before:inset-y-1.5 before:bg-primary before:ring-primary">
+              narratives
+            </FrameHighlight>{" "}
+            <FrameHighlight className="-mx-2.5 text-primary-foreground before:-inset-x-2.5 before:inset-y-1.5 before:bg-primary before:ring-primary">
+              within:
+            </FrameHighlight>
+          </FrameTitle>
+          <FrameSquare className="mt-auto bg-background text-primary-foreground ring-input">
+            <Image
+              src="/logo-primary.png"
+              alt="Primary Logo"
+              fill
+              className="!static !h-24 !w-24"
+            />
+          </FrameSquare>
+        </FrameContent>
+        <FrameImagesGrid className="scale-1">
+          <div className="col-start-6 col-end-13 row-start-5 row-end-13 ring ring-primary ring-offset-8 ring-offset-primary-foreground">
+            <Image
+              src="https://nwdtauhmkupvkywh.public.blob.vercel-storage.com/book-cover/book-cover-new.png"
+              alt="A Human But From Gaza Book Cover"
+              fill
+              className="!static object-cover object-top"
+            />
+          </div>
+        </FrameImagesGrid>
+      </Frame>
+      {/* Diary Entry */}
       <Frame
         ref={instagramFrames[0].ref}
         dimensions="4:5"
@@ -437,7 +464,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
         color="primary-foreground"
         className="bg-transparent">
         <div className="-mb-16 w-[56.625rem]">
-          <PCLogo />
+          <PSCLogo />
         </div>
       </Frame>
       <Frame
@@ -446,7 +473,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
         color="primary"
         className="bg-transparent">
         <div className="-mb-16 w-[56.625rem]">
-          <PCLogo color="primary-foreground" />
+          <PSCLogo color="primary-foreground" />
         </div>
       </Frame>
       {/* Social Media Avatars */}
@@ -455,23 +482,23 @@ const InstagramStudioPage = function InstagramStudioPage() {
         dimensions="1:1"
         color="primary-foreground">
         <div className="-mb-16 w-[47.5rem]">
-          <PCLogo />
+          <PSCLogo />
         </div>
       </Frame>
       <Frame ref={profileImagesFrames[1].ref} dimensions="1:1" color="primary">
         <div className="-mb-16 w-[47.5rem]">
-          <PCLogo color="primary-foreground" />
+          <PSCLogo color="primary-foreground" />
         </div>
       </Frame>
       {/* Social Media Templates */}
       <Frame ref={frames[6].ref} dimensions="9:16" color="primary-foreground">
         <div className="mb-52 mt-auto w-[10rem]">
-          <PCLogo />
+          <PSCLogo />
         </div>
       </Frame>
       <Frame ref={frames[5].ref} dimensions="9:16" color="primary">
         <div className="mb-52 mt-auto w-[10rem]">
-          <PCLogo color="primary-foreground" />
+          <PSCLogo color="primary-foreground" />
         </div>
       </Frame>
       {/* GitHub */}
