@@ -1,4 +1,4 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { Suspense } from "react";
 
@@ -76,7 +76,7 @@ export const Header = function Header() {
           <Badge variant="outline" className="mb-4">
             Be Part Of PalestinianCauses&apos; Journey
           </Badge>
-          <h1 className="mb-6 flex w-full max-w-4xl flex-wrap justify-start gap-x-1.5 text-left text-6xl !leading-none tracking-tight sm:text-7xl md:justify-center md:text-center lg:max-w-none lg:text-8xl xl:text-9xl">
+          <h1 className="mb-6 w-full max-w-4xl text-left text-6xl !leading-none tracking-tight sm:text-7xl md:justify-center md:text-center lg:max-w-none lg:text-8xl xl:text-9xl">
             Families&apos; Shadows Over Gaza&apos;s Rubble.
           </h1>
           <p className="mb-12 max-w-5xl text-pretty text-left text-base text-muted-foreground sm:text-xl/8 md:text-center">
