@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 import { HTMLAttributes } from "react";
 
 import { cn } from "@/lib/utils/styles";
@@ -35,6 +35,31 @@ export const SectionHeadingBadge = function SectionHeadingBadge({
       ) : null}
       <Component>{children}</Component>
     </Badge>
+  );
+};
+
+export const SectionTitle = function SectionTitle({
+  as = "h1",
+  className,
+  children,
+}: {
+  as?: "h1" | "h2" | "h3" | "h4" | "p";
+} & HTMLAttributes<HTMLHeadingElement>) {
+  const Component =
+    (as === "h1" && "h1") ||
+    (as === "h2" && "h2") ||
+    (as === "h3" && "h3") ||
+    (as === "h4" && "h4") ||
+    "p";
+
+  return (
+    <Component
+      className={cn(
+        "max-w-4xl text-6xl font-normal !leading-none tracking-tight text-foreground sm:text-7xl lg:max-w-none lg:text-8xl xl:text-9xl",
+        className,
+      )}>
+      {children}
+    </Component>
   );
 };
 
