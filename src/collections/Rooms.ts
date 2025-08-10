@@ -1,4 +1,4 @@
-// REVIEWED - 15
+// REVIEWED - 16
 
 import { CollectionConfig } from "payload";
 
@@ -117,6 +117,7 @@ export const Rooms: CollectionConfig = {
           label: "Professional Name",
           name: "name",
           type: "text",
+          maxLength: 16,
           required: true,
         },
         {
@@ -126,6 +127,7 @@ export const Rooms: CollectionConfig = {
           label: "Professional Title",
           name: "title",
           type: "text",
+          maxLength: 32,
           required: true,
         },
         {
@@ -136,16 +138,7 @@ export const Rooms: CollectionConfig = {
           label: "Professional Headline",
           name: "headline",
           type: "text",
-          required: true,
-        },
-        {
-          admin: {
-            description:
-              "A concise summary of professional background, expertise, and experience.",
-          },
-          label: "Professional Summary",
-          name: "summary",
-          type: "textarea",
+          maxLength: 56,
           required: true,
         },
         {
@@ -171,6 +164,65 @@ export const Rooms: CollectionConfig = {
           relationTo: "media",
           hasMany: false,
           required: false,
+        },
+      ],
+    },
+    {
+      admin: {
+        description:
+          "Personal introduction section, providing a detailed narrative about yourself, your values, and your journey.",
+      },
+      label: "About",
+      name: "about",
+      type: "group",
+      fields: [
+        {
+          admin: {
+            description:
+              "A compelling headline that encapsulates your personal story or philosophy.",
+          },
+          label: "Headline",
+          name: "headline",
+          type: "text",
+          maxLength: 56,
+          required: true,
+        },
+        {
+          admin: {
+            description:
+              "A personal photograph to visually introduce yourself (optional).",
+          },
+          label: "Photograph",
+          name: "photograph",
+          type: "upload",
+          relationTo: "media",
+          hasMany: false,
+          required: false,
+        },
+        {
+          admin: {
+            description:
+              "A series of well-crafted paragraphs that together provide a comprehensive and authentic overview of who you are. Each paragraph should be between 350 and 500 characters. Please provide at least 3 paragraphs.",
+          },
+          label: "Paragraphs",
+          name: "paragraphs",
+          type: "array",
+          minRows: 3,
+          required: true,
+          fields: [
+            {
+              admin: {
+                description:
+                  "A single paragraph (350-500 characters) that forms part of your personal narrative.",
+              },
+              label: "Paragraph",
+              name: "paragraph",
+              type: "textarea",
+              minLength: 350,
+              maxLength: 500,
+              required: true,
+            },
+          ],
         },
       ],
     },
