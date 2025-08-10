@@ -1,4 +1,4 @@
-// REVIEWED - 16
+// REVIEWED - 17
 
 import { CollectionConfig } from "payload";
 
@@ -220,6 +220,48 @@ export const Rooms: CollectionConfig = {
               type: "textarea",
               minLength: 350,
               maxLength: 500,
+              required: true,
+            },
+          ],
+        },
+        {
+          admin: {
+            description:
+              "Key statistics that highlight your professional journey and achievements.",
+          },
+          label: "Stats",
+          name: "stats",
+          type: "group",
+          fields: [
+            {
+              admin: {
+                description:
+                  "Total number of years of professional experience.",
+              },
+              label: "Years of Experience",
+              name: "experienceYears",
+              type: "number",
+              min: 1,
+              required: true,
+            },
+            {
+              admin: {
+                description: "Number of happy clients you have worked with.",
+              },
+              label: "Happy Clients",
+              name: "happyClients",
+              type: "number",
+              min: 1,
+              required: true,
+            },
+            {
+              admin: {
+                description: "Number of projects you have completed.",
+              },
+              label: "Projects Completed",
+              name: "projectsCompleted",
+              type: "number",
+              min: 1,
               required: true,
             },
           ],
