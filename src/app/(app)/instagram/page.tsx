@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 18
+// REVIEWED - 19
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -14,6 +14,7 @@ import {
   SectionHeadingBadge,
 } from "@/components/globals/typography";
 
+// eslint-disable-next-line import/no-cycle
 import {
   Frame,
   FrameContent,
@@ -26,6 +27,7 @@ import {
   ImageFrame,
   ImageFrameRender,
 } from "./_components/frame";
+// eslint-disable-next-line import/no-cycle
 import { PSCLogo } from "./_components/psc-logo";
 
 export type Properties = "bg" | "text" | "fill" | "stroke";
@@ -216,6 +218,11 @@ const InstagramStudioPage = function InstagramStudioPage() {
       ref: useRef<HTMLDivElement>(null),
       as: "png",
     },
+    {
+      id: "n-art-work-05",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
   ];
 
   return (
@@ -240,13 +247,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
           </FrameSquare>
           <FrameTitle className="flex flex-col flex-wrap items-start">
             <FrameHighlight className="before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
-              The
-            </FrameHighlight>
-            <FrameHighlight className="before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
-              Sole
-            </FrameHighlight>
-            <FrameHighlight className="before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
-              Su<span className="-mr-1 tracking-wide">rv</span>ivor.
+              Scenarios.
             </FrameHighlight>
           </FrameTitle>
           <SectionHeadingBadge className="bg-primary text-lg text-primary-foreground ring-primary">
@@ -257,86 +258,100 @@ const InstagramStudioPage = function InstagramStudioPage() {
         <FrameImagesGrid>
           <div className="relative col-start-1 col-end-13 row-start-1 row-end-13">
             <Image
-              src="/the-sole-survivor-refined.png"
-              alt="N's Art-Work no. 01"
+              src="/scenarios-refined.png"
+              alt="N's Art-Work no. 02"
               fill
               className="!static object-cover object-top"
             />
           </div>
         </FrameImagesGrid>
       </Frame>
-      <Frame
-        ref={nArtWorkFrames[1].ref}
-        dimensions="4:5"
-        color="primary-foreground">
+      <Frame ref={nArtWorkFrames[1].ref} dimensions="4:5" color="primary">
         <FrameContent>
-          <FrameSquare className="bg-primary text-primary-foreground ring-primary">
+          <FrameSquare className="bg-primary-foreground text-primary ring-primary-foreground">
             <QuoteIcon className="h-20 w-20 stroke-[1.5]" />
           </FrameSquare>
           <FrameParagraph>
-            As all Gazan parents do during the war when the sounds of explosions
-            around them become louder, my mother encompasses us every night with
-            her commandments:{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              Let us sleep together in the same
+            That moment when the missile goes down,{" "}
+            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+              the
             </FrameParagraphHighlight>{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              room—stuck together.
+            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+              seconds between its descent and its explosion,
             </FrameParagraphHighlight>{" "}
-            Is everyone here? Do not leave the room. Oh, Allah, we pray that a
-            missile does not hit us, but if one did,{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              let us die together.
-            </FrameParagraphHighlight>{" "}
-            Later, none will be left mourned for the departure of others.
+            all of us shrink into ourselves, staring at each other.
           </FrameParagraph>
           <FrameParagraph>
-            Today, I knew that my friend, Fairouz Al-Assi, was the{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              sole survivor
+            The expected terrifying{" "}
+            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+              scenarios run through our
             </FrameParagraphHighlight>{" "}
-            of her family. My beloved was martyred, and my crying increased as I
-            wondered :
+            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+              minds:
+            </FrameParagraphHighlight>{" "}
+            somewhere now, walls are collapsing on the heads of their
+            inhabitants, panic and stuffy smoke are filling the venue, limbs are
+            separating from the bodies, children are covered in blood, tears
+            never end, wounds are unhealed, lost extends, the men are rushing to
+            the place to retrieve whatever can be retrieved from under the
+            rubble, and ambulances cannot accommodate the number of injured and
+            dead bodies.{" "}
+            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+              Then Boom!
+            </FrameParagraphHighlight>
           </FrameParagraph>
         </FrameContent>
       </Frame>
-      <Frame ref={nArtWorkFrames[2].ref} dimensions="4:5" color="primary">
+      <Frame
+        ref={nArtWorkFrames[2].ref}
+        dimensions="4:5"
+        color="primary-foreground">
         <FrameContent className="justify-center">
           <FrameTitle>
-            Who is the{" "}
-            <FrameHighlight className="mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              su<span className="-mr-1 tracking-wide">rv</span>ivor?
+            After{" "}
+            <FrameHighlight className="mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+              waiting
             </FrameHighlight>{" "}
-            Breathing or{" "}
-            <FrameHighlight className="mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              dead?
-            </FrameHighlight>
+            a few minutes, the news{" "}
+            <FrameHighlight className="mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+              confirms
+            </FrameHighlight>{" "}
+            all these{" "}
+            <FrameHighlight className="mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+              scenarios.
+            </FrameHighlight>{" "}
           </FrameTitle>
-          <SectionHeadingBadge className="text-current">
-            Composed by L. featured in The Volume &quot;A Human But From
+          <SectionHeadingBadge className="text-current ring-primary">
+            Composed by M. featured in The Volume &quot;A Human But From
             Gaza&quot;
           </SectionHeadingBadge>
         </FrameContent>
       </Frame>
+      <Frame ref={nArtWorkFrames[3].ref} dimensions="4:5" color="primary">
+        <FrameContent>
+          <FrameTitle>
+            Discover the complete diary and{" "}
+            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
+              further
+            </FrameHighlight>{" "}
+            compelling{" "}
+            <FrameHighlight className="z-20 -mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
+              narratives
+            </FrameHighlight>{" "}
+            within:
+          </FrameTitle>
+        </FrameContent>
+      </Frame>
       <Frame
-        ref={nArtWorkFrames[3].ref}
+        ref={nArtWorkFrames[4].ref}
         dimensions="4:5"
         color="primary-foreground">
         <FrameContent>
           <FrameTitle>
-            Discover the complete diary and{" "}
-            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:inset-y-1.5 before:bg-primary before:ring-primary">
-              further
-            </FrameHighlight>
-            <FrameHighlight className="z-20 -mx-2.5 text-primary-foreground before:-inset-x-2.5 before:inset-y-1.5 before:bg-primary before:ring-primary">
-              compelling
+            Link in{" "}
+            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+              bio.
             </FrameHighlight>{" "}
-            <FrameHighlight className="-mx-2.5 text-primary-foreground before:-inset-x-2.5 before:inset-y-1.5 before:bg-primary before:ring-primary">
-              narratives
-            </FrameHighlight>{" "}
-            <FrameHighlight className="-mx-2.5 text-primary-foreground before:-inset-x-2.5 before:inset-y-1.5 before:bg-primary before:ring-primary">
-              within:
-            </FrameHighlight>
           </FrameTitle>
           <FrameSquare className="mt-auto bg-background text-primary-foreground ring-input">
             <Image
@@ -348,12 +363,12 @@ const InstagramStudioPage = function InstagramStudioPage() {
           </FrameSquare>
         </FrameContent>
         <FrameImagesGrid className="scale-1">
-          <div className="col-start-6 col-end-13 row-start-5 row-end-13 ring ring-primary ring-offset-8 ring-offset-primary-foreground">
+          <div className="col-start-6 col-end-13 row-start-4 row-end-13 -translate-y-10 ring ring-primary ring-offset-8 ring-offset-primary-foreground">
             <Image
               src="https://nwdtauhmkupvkywh.public.blob.vercel-storage.com/book-cover/book-cover-new.png"
               alt="A Human But From Gaza Book Cover"
               fill
-              className="!static object-cover object-top"
+              className="!static object-cover object-[top_left]"
             />
           </div>
         </FrameImagesGrid>
