@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { ArrowRightIcon } from "lucide-react";
 
@@ -43,7 +43,7 @@ export const Header = function Header({
               typeof photograph === "object" &&
               photograph.url ? (
                 <Avatar className="z-10 h-36 w-36 border border-input md:h-48 md:w-48 lg:h-60 lg:w-60">
-                  <AvatarImage src={photograph.url} />
+                  <AvatarImage src={photograph.url} alt={photograph.alt} />
                 </Avatar>
               ) : null}
             </TooltipTrigger>
@@ -52,9 +52,16 @@ export const Header = function Header({
               align="start"
               sideOffset={8}
               avoidCollisions={false}
-              className={cn(messageBase, "max-w-[14rem]")}>
-              <TooltipArrow width={12} height={6} className="fill-primary" />
-              <p className="truncate">Hello, I am {name} 👋🏻!</p>
+              className={cn(
+                messageBase,
+                "max-w-[14rem] bg-primary-foreground text-primary",
+              )}>
+              <TooltipArrow
+                width={12}
+                height={6}
+                className="fill-primary-foreground"
+              />
+              <p className="truncate">Hello, I am {name} 👋🏻 !</p>
             </TooltipContent>
             <TooltipContent
               side="right"
@@ -84,9 +91,9 @@ export const Header = function Header({
               avoidCollisions={false}
               className={cn(
                 messageBase,
-                "max-w-[20rem] bg-accent text-accent-foreground",
+                "max-w-[20rem] bg-primary text-primary-foreground",
               )}>
-              <TooltipArrow width={12} height={6} className="fill-accent" />
+              <TooltipArrow width={12} height={6} className="fill-primary" />
               <p className="truncate">{title}</p>
             </TooltipContent>
           </Tooltip>
