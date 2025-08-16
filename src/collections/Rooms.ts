@@ -1,4 +1,4 @@
-// REVIEWED - 19
+// REVIEWED - 20
 
 import { CollectionConfig } from "payload";
 
@@ -533,6 +533,18 @@ export const Rooms: CollectionConfig = {
             "A journey of growth, impact, and meaningful professional contributions.",
           maxLength: 72,
           required: true,
+        },
+        {
+          admin: {
+            description:
+              "A formal photograph or image representing this professional experience (optional).",
+          },
+          label: "Experience Photograph",
+          name: "photograph",
+          type: "upload",
+          relationTo: "media",
+          hasMany: false,
+          required: false,
         },
         {
           label: "Experience List",
