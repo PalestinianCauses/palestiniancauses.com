@@ -1,4 +1,4 @@
-// REVIEWED - 17
+// REVIEWED - 18
 
 import { CollectionConfig } from "payload";
 
@@ -39,6 +39,11 @@ export const Rooms: CollectionConfig = {
     group: "Content",
     defaultColumns: ["id", "name", "slug", "createdAt"],
     useAsTitle: "name",
+    preview: (doc) => {
+      if (doc.slug)
+        return [process.env.NEXT_PUBLIC_URL! + doc.slug].join("/rooms/");
+      return null;
+    },
   },
   fields: [
     {
@@ -52,11 +57,12 @@ export const Rooms: CollectionConfig = {
     },
     {
       admin: {
-        description: "A unique, system-generated identifier for this Room.",
+        description: "A unique name for this Room, chosen by the user.",
       },
       label: "Room Name",
       name: "name",
       type: "text",
+      maxLength: 16,
       unique: true,
       required: true,
     },
@@ -86,15 +92,13 @@ export const Rooms: CollectionConfig = {
     {
       admin: {
         description:
-          "Current publication state of the Room, indicating its visibility and availability.",
+          "The publication status of the Room, controlling its visibility to users.",
       },
-      label: "Room Status",
+      label: "Room Publication Status",
       name: "status",
       type: "select",
       options: [
         { label: "Draft", value: "draft" },
-        { label: "In Progress", value: "in-progress" },
-        { label: "Coming Soon", value: "coming-soon" },
         { label: "Published", value: "published" },
       ],
       defaultValue: "draft",
@@ -234,35 +238,133 @@ export const Rooms: CollectionConfig = {
           type: "group",
           fields: [
             {
-              admin: {
-                description:
-                  "Total number of years of professional experience.",
-              },
               label: "Years of Experience",
-              name: "experienceYears",
-              type: "number",
-              min: 1,
-              required: true,
+              name: "experience",
+              type: "group",
+              fields: [
+                {
+                  admin: {
+                    description:
+                      "Total number of years of professional experience.",
+                  },
+                  label: "Years",
+                  name: "years",
+                  type: "number",
+                  min: 1,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "A short heading for this statistic (e.g., 'Years of dedication').",
+                  },
+                  label: "Heading",
+                  name: "heading",
+                  type: "text",
+                  defaultValue: "Years of dedication",
+                  maxLength: 20,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "A brief description to provide context for this statistic.",
+                  },
+                  label: "Description",
+                  name: "description",
+                  type: "textarea",
+                  defaultValue:
+                    "Always learning, growing, and making an impact each year",
+                  maxLength: 64,
+                  required: true,
+                },
+              ],
             },
             {
-              admin: {
-                description: "Number of happy clients you have worked with.",
-              },
               label: "Happy Clients",
               name: "happyClients",
-              type: "number",
-              min: 1,
-              required: true,
+              type: "group",
+              fields: [
+                {
+                  admin: {
+                    description:
+                      "Number of happy clients you have worked with.",
+                  },
+                  label: "Clients",
+                  name: "clients",
+                  type: "number",
+                  min: 1,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "A short heading for this statistic (e.g., 'Delighted clients').",
+                  },
+                  label: "Heading",
+                  name: "heading",
+                  type: "text",
+                  defaultValue: "Delighted clients",
+                  maxLength: 20,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "A brief description to provide context for this statistic.",
+                  },
+                  label: "Description",
+                  name: "description",
+                  type: "textarea",
+                  defaultValue:
+                    "Delivering results that delight clients, every single project",
+                  maxLength: 64,
+                  required: true,
+                },
+              ],
             },
             {
-              admin: {
-                description: "Number of projects you have completed.",
-              },
-              label: "Projects Completed",
-              name: "projectsCompleted",
-              type: "number",
-              min: 1,
-              required: true,
+              label: "Milestones Achieved",
+              name: "milestonesAchieved",
+              type: "group",
+              fields: [
+                {
+                  admin: {
+                    description:
+                      "Number of significant milestones, projects, or achievements you have completed.",
+                  },
+                  label: "Milestones",
+                  name: "milestones",
+                  type: "number",
+                  min: 1,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "A short heading for this statistic (e.g., 'Ideas turned reality').",
+                  },
+                  label: "Heading",
+                  name: "heading",
+                  type: "text",
+                  defaultValue: "Ideas turned reality",
+                  maxLength: 20,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "A brief description to provide context for this statistic.",
+                  },
+                  label: "Description",
+                  name: "description",
+                  type: "textarea",
+                  defaultValue:
+                    "Overcoming challenges to deliver successful projects",
+                  maxLength: 64,
+                  required: true,
+                },
+              ],
             },
           ],
         },
@@ -275,99 +377,138 @@ export const Rooms: CollectionConfig = {
       },
       label: "Educational Background",
       name: "education",
-      type: "array",
+      type: "group",
       fields: [
         {
           admin: {
-            description: "Official name of the educational institution.",
+            description:
+              "Summarize your entire educational background section with a concise, impactful headline.",
           },
-          label: "Institution Name",
-          name: "institution",
+          label: "Headline",
+          name: "headline",
           type: "text",
+          defaultValue:
+            "Built on Formal Education, Fueled by a Passion for Continuous Growth.",
+          maxLength: 72,
           required: true,
         },
         {
-          admin: { description: "Degree or qualification conferred." },
-          label: "Degree or Qualification",
-          name: "degree",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: { description: "Current completion status of the program." },
-          label: "Program Status",
-          name: "status",
-          type: "select",
-          options: [
-            { label: "In Progress", value: "in-progress" },
-            { label: "Completed", value: "completed" },
-            { label: "Cancelled", value: "cancelled" },
-          ],
-          required: true,
-        },
-        {
-          admin: {
-            description: "Month and year the educational program commenced.",
-            date: {
-              pickerAppearance: "monthOnly",
-              minDate: new Date(2010, 0, 1, 0, 0, 0, 0),
-              maxDate: new Date(
-                new Date(
-                  new Date().setUTCDate(new Date().getUTCDate() - 1),
-                ).setUTCHours(0, 0, 0, 0),
-              ),
+          label: "Education List",
+          name: "list",
+          type: "array",
+          fields: [
+            {
+              admin: {
+                description: "Official name of the educational institution.",
+              },
+              label: "Institution Name",
+              name: "institution",
+              type: "text",
+              maxLength: 48,
+              required: true,
             },
-          },
-          label: "Start Date",
-          name: "dateStart",
-          type: "date",
-          required: true,
-        },
-        {
-          admin: {
-            condition: (_, siblingData) => siblingData.status !== "in-progress",
-            description:
-              "Month and year the educational program was completed or ended.",
-            date: { pickerAppearance: "monthOnly" },
-          },
-          label: "End Date",
-          name: "dateEnd",
-          type: "date",
-          required: true,
-          validate: (value, { siblingData }) => {
-            if (
-              !("dateStart" in siblingData) ||
-              !siblingData.dateStart ||
-              !(
-                siblingData.dateStart instanceof Date ||
-                typeof siblingData.dateStart === "string"
-              )
-            )
-              return messages.forms.required("start date");
+            {
+              admin: {
+                description:
+                  "Physical location of the educational institution (e.g., city, state, or country).",
+              },
+              label: "Institution Location",
+              name: "location",
+              type: "text",
+              maxLength: 48,
+              required: true,
+            },
+            {
+              admin: { description: "Degree or qualification conferred." },
+              label: "Degree or Qualification",
+              name: "degree",
+              type: "text",
+              maxLength: 56,
+              required: true,
+            },
+            {
+              admin: {
+                description: "Current completion status of the program.",
+              },
+              label: "Program Status",
+              name: "status",
+              type: "select",
+              options: [
+                { label: "In Progress", value: "in-progress" },
+                { label: "Graduated", value: "graduated" },
+                { label: "Dropped Out", value: "dropped-out" },
+              ],
+              required: true,
+            },
+            {
+              admin: {
+                description:
+                  "Month and year the educational program commenced.",
+                date: {
+                  pickerAppearance: "monthOnly",
+                  minDate: new Date(2010, 0, 1, 0, 0, 0, 0),
+                  maxDate: new Date(
+                    new Date(
+                      new Date().setUTCDate(new Date().getUTCDate() - 1),
+                    ).setUTCHours(0, 0, 0, 0),
+                  ),
+                },
+              },
+              label: "Start Date",
+              name: "dateStart",
+              type: "date",
+              required: true,
+            },
+            {
+              admin: {
+                condition: (_, siblingData) =>
+                  siblingData.status !== "in-progress",
+                description:
+                  "Month and year the educational program was completed or ended.",
+                date: { pickerAppearance: "monthOnly" },
+              },
+              label: "End Date",
+              name: "dateEnd",
+              type: "date",
+              required: true,
+              validate: (value, { siblingData }) => {
+                if (
+                  !("dateStart" in siblingData) ||
+                  !siblingData.dateStart ||
+                  !(
+                    siblingData.dateStart instanceof Date ||
+                    typeof siblingData.dateStart === "string"
+                  )
+                )
+                  return messages.forms.required("start date");
 
-            const start = new Date(siblingData.dateStart);
-            const end = new Date();
-            end.setUTCDate(end.getUTCDate() - 1);
+                const start = new Date(siblingData.dateStart);
+                const end = new Date();
+                end.setUTCDate(end.getUTCDate() - 1);
 
-            return validateDateInRange(
-              value,
-              start,
-              end,
-              messages.forms.required("end date"),
-              messages.forms.valid("end date"),
-              messages.forms.date(start.toLocaleDateString(), "yesterday"),
-            );
-          },
-        },
-        {
-          admin: {
-            description:
-              "Detailed description of academic focus, coursework, and notable achievements.",
-          },
-          label: "Program Description",
-          name: "description",
-          type: "textarea",
-          required: true,
+                return validateDateInRange(
+                  value,
+                  start,
+                  end,
+                  messages.forms.required("end date"),
+                  messages.forms.valid("end date"),
+                  messages.forms.date(start.toLocaleDateString(), "yesterday"),
+                );
+              },
+            },
+            {
+              admin: {
+                description:
+                  "Detailed description of academic focus, coursework, and notable achievements.",
+              },
+              label: "Program Description",
+              name: "description",
+              type: "textarea",
+              minLength: 350,
+              maxLength: 500,
+              required: true,
+            },
+          ],
         },
       ],
     },
