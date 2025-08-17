@@ -1,4 +1,4 @@
-/* REVIEWED - 11 */
+/* REVIEWED - 12 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -117,5 +117,29 @@
       BlinkMacSystemFont,
       sans-serif;
     font-stretch: 150%;
+  }
+
+  .section-padding-start {
+    @apply pt-12 lg:pt-24 xl:pt-32;
+  }
+
+  .section-padding-start-lg {
+    @apply pt-24 lg:pt-32 xl:pt-48;
+  }
+
+  .section-padding-y-lg {
+    @apply py-24 lg:py-32 xl:py-48;
+  }
+
+  .section-margin-start {
+    @apply mt-12 lg:mt-24 xl:mt-32;
+  }
+
+  .section-gap {
+    @apply gap-12 lg:gap-24 xl:gap-32;
+  }
+
+  .section-gap-sm {
+    @apply gap-6 lg:gap-12 xl:gap-24;
   }
 }
