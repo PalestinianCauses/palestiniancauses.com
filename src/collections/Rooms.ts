@@ -1,4 +1,4 @@
-// REVIEWED - 20
+// REVIEWED - 21
 
 import { CollectionConfig } from "payload";
 
@@ -530,7 +530,7 @@ export const Rooms: CollectionConfig = {
           name: "headline",
           type: "text",
           defaultValue:
-            "A journey of growth, impact, and meaningful professional contributions.",
+            "The Evolution of My Craft & Professional Contributions.",
           maxLength: 72,
           required: true,
         },
