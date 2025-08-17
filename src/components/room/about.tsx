@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import {
   ArrowRightIcon,
@@ -84,7 +84,9 @@ const State = function State({
               <span>{state.number}</span>
             </SectionHeading>
             <div className="grid gap-1.5">
-              <SubSectionHeading small>{state.label}</SubSectionHeading>
+              <SubSectionHeading as="h3" small>
+                {state.label}
+              </SubSectionHeading>
               <Paragraph className="max-w-[20rem] !text-base sm:max-w-[22rem] xl:!text-lg">
                 {state.description}
               </Paragraph>
@@ -103,38 +105,37 @@ const CTA = function CTA() {
       as="section"
       className="mx-auto mt-12 max-w-7xl px-0 lg:mt-24 lg:px-7 xl:mt-32">
       <div className="relative isolate overflow-hidden bg-primary-foreground/50 px-5 py-24 text-center ring-1 ring-input sm:px-12">
-        <SectionHeading className="mx-auto mb-6 max-w-xl lg:max-w-3xl xl:max-w-4xl">
-          Whether it&apos;s a project, an idea, or just a hello—let&apos;s
+        <SectionHeading
+          as="h2"
+          className="mx-auto mb-6 max-w-xl lg:max-w-3xl xl:max-w-4xl">
+          Whether it&apos;s a collaboration, a goal, or just a hello—let&apos;s
           connect.
         </SectionHeading>
         <Paragraph className="mx-auto mb-12 max-w-3xl">
-          My digital door is always open. Whether you have a project in mind or
+          My digital door is always open. Whether you have something in mind or
           simply want to see more, here are the next steps.
         </Paragraph>
         <div className="flex flex-col items-center justify-center gap-2.5 sm:flex-row sm:gap-5">
-          <Button className="w-full sm:w-max">
+          <Button className="w-full hover:bg-accent sm:w-max">
             <ArrowRightIcon />
             Get in Touch
           </Button>
-          <Button className="w-full sm:w-max" variant="ghost">
-            Explore My Work
+          <Button className="w-full hover:bg-accent sm:w-max" variant="ghost">
+            Explore My Professional Journey
           </Button>
         </div>
         <svg
           viewBox="0 0 1024 1024"
           aria-hidden="true"
           className="absolute left-1/2 top-1/2 -z-10 size-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,_white,_transparent)]">
-          <circle
-            r={512}
-            cx={512}
-            cy={512}
-            fill={`url(#${id})`}
-            fillOpacity="0.75"
-          />
+          <circle r={512} cx={512} cy={512} fill={`url(#${id})`} />
           <defs>
             <radialGradient id={id}>
-              <stop style={{ stopColor: "rgb(var(--secondary))" }} />
-              <stop offset={1} style={{ stopColor: "rgb(var(--secondary))" }} />
+              <stop style={{ stopColor: "rgb(var(--primary) / 0.2)" }} />
+              <stop
+                offset={1}
+                style={{ stopColor: "rgb(var(--primary) / 0.2)" }}
+              />
             </radialGradient>
           </defs>
         </svg>
@@ -149,7 +150,7 @@ const Content = function Content({
   paragraphs: { paragraph: string }[];
 }) {
   return (
-    <Container as="section" className="mt-12 max-w-7xl lg:mt-24 xl:mt-32">
+    <Container as="section" className="section-margin-start max-w-7xl">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-12 xl:gap-24">
         {paragraphs.map((paragraph) => (
           <Paragraph key={paragraph.paragraph} className="text-foreground">
@@ -170,31 +171,30 @@ export const About = function About({
   const states = [
     {
       icon: TimerIcon,
-      number: stats.experienceYears,
-      label: "Years of dedication",
-      description: "Always learning, growing, and making an impact each year",
+      number: stats.experience.years,
+      label: stats.experience.heading,
+      description: stats.experience.description,
     },
     {
       icon: UserCheckIcon,
-      number: stats.happyClients,
-      label: "Delighted clients",
-      description:
-        "Delivering results that delight clients, every single project",
+      number: stats.happyClients.clients,
+      label: stats.happyClients.heading,
+      description: stats.happyClients.description,
     },
     {
       icon: CopyCheckIcon,
-      number: stats.projectsCompleted,
-      label: "Ideas turned reality",
-      description: "Overcoming challenges to deliver successful projects",
+      number: stats.milestonesAchieved.milestones,
+      label: stats.milestonesAchieved.heading,
+      description: stats.milestonesAchieved.description,
     },
   ];
 
   return (
     <Fragment>
-      <Container as="section" className="max-w-7xl pt-24 lg:pt-32 xl:pt-48">
-        <div className={cn("grid gap-12 lg:gap-24 xl:gap-32")}>
+      <Container as="section" className="section-padding-start-lg max-w-7xl">
+        <div className={cn("section-gap grid")}>
           <div
-            className={cn("grid gap-12 lg:grid-cols-2 lg:gap-24 xl:gap-32", {
+            className={cn("section-gap grid lg:grid-cols-2", {
               "lg:grid-cols-[2fr_1fr]":
                 !photograph ||
                 typeof photograph !== "object" ||
@@ -204,7 +204,7 @@ export const About = function About({
               <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">
                 Meet the person behind this room
               </SectionHeadingBadge>
-              <SectionHeading className="mb-6 lg:mb-12">
+              <SectionHeading as="h3" className="mb-6 lg:mb-12">
                 {headline}
               </SectionHeading>
               <Paragraph className="mb-6 lg:mb-12">
@@ -235,7 +235,7 @@ export const About = function About({
                         src={photograph.url}
                         alt={photograph.alt}
                         fill
-                        className="!static h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="!static object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : null}
 

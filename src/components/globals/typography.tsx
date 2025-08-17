@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 import { HTMLAttributes } from "react";
 
 import { cn } from "@/lib/utils/styles";
@@ -94,13 +94,14 @@ export const SubSectionHeading = function SubSectionHeading({
   className,
   children,
 }: {
-  as?: "h2" | "h3" | "h4" | "p";
+  as?: "h2" | "h3" | "h4" | "h5" | "p";
   small?: boolean;
 } & HTMLAttributes<HTMLHeadingElement>) {
   const Component =
     (as === "h2" && "h2") ||
     (as === "h3" && "h3") ||
     (as === "h4" && "h4") ||
+    (as === "h5" && "h5") ||
     "p";
 
   return (
