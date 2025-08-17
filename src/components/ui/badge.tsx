@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
@@ -19,9 +19,10 @@ const badgeVariants = cva(
         outline: "ring-1 ring-input text-foreground",
       },
       size: {
-        default: "px-5 py-2.5 text-sm",
-        lg: "px-6 py-3 text-base",
-        xl: "px-8 py-4 text-lg",
+        default: "px-6 py-2.5 text-sm",
+        sm: "px-4 py-1.5 text-xs",
+        lg: "px-6 py-3.5 text-base",
+        xl: "px-8 py-4.5 text-lg",
       },
     },
     defaultVariants: {
