@@ -1,6 +1,6 @@
-// REVIEWED
+// REVIEWED - 01
 
-import { AtSignIcon, CalendarIcon, MapIcon } from "lucide-react";
+import { AtSignIcon, MapIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils/styles";
 import { Room } from "@/payload-types";
@@ -14,6 +14,8 @@ import {
 } from "../globals/typography";
 import { Badge } from "../ui/badge";
 
+import { DateRange, InformationBadges } from "./globals";
+
 const EducationCard = function EducationCard({
   institution,
   location,
@@ -22,15 +24,7 @@ const EducationCard = function EducationCard({
   dateStart,
   dateEnd,
   description,
-}: {
-  institution: string;
-  location: string;
-  degree: string;
-  status: "in-progress" | "graduated" | "dropped-out";
-  dateStart: string;
-  dateEnd?: string | null;
-  description: string;
-}) {
+}: NonNullable<Room["education"]["list"]>[0]) {
   const statuses = {
     "in-progress": "In Progress",
     "graduated": "Graduated",
@@ -53,50 +47,20 @@ const EducationCard = function EducationCard({
           {statuses[status]}
         </Badge>
 
-        <Paragraph className="flex items-center gap-2.5 text-base font-medium text-foreground lg:text-lg">
-          <CalendarIcon className="mb-0.5 h-5 w-5 shrink-0 stroke-[1.5]" />
-          <time dateTime={dateStart}>
-            {new Date(dateStart).toLocaleString("default", {
-              year: "numeric",
-              month: "long",
-            })}
-          </time>
-          <span className="h-0.5 w-4 bg-foreground" />
-          <span>
-            {dateEnd
-              ? new Date(dateEnd).toLocaleString("default", {
-                  year: "numeric",
-                  month: "long",
-                })
-              : "Present"}
-          </span>
-        </Paragraph>
+        <DateRange dateStart={dateStart} dateEnd={dateEnd} />
       </div>
 
       <SubSectionHeading as="h4" small className="mb-6">
         {degree}
       </SubSectionHeading>
 
-      <div className="mb-6 grid grid-cols-2 gap-2.5 lg:gap-5">
-        {[
+      <InformationBadges
+        badges={[
           { icon: AtSignIcon, label: institution },
           { icon: MapIcon, label: location },
-        ].map((item) => (
-          <div
-            key={item.label}
-            className="grid grid-cols-1 content-start items-start gap-2.5 sm:grid-cols-[repeat(2,_max-content)] sm:items-center">
-            <div className="flex h-8 w-8 items-center justify-center bg-primary-foreground text-foreground ring-1 ring-input">
-              <item.icon className="mb-0.5 h-4 w-4 shrink-0 stroke-2" />
-            </div>
-            <SubSectionHeading
-              as="h5"
-              small
-              className="text-base tracking-normal lg:text-base xl:text-base">
-              {item.label}
-            </SubSectionHeading>
-          </div>
-        ))}
-      </div>
+        ]}
+      />
+
       <Paragraph>{description}</Paragraph>
     </article>
   );
@@ -111,11 +75,11 @@ export const Education = function Education({
         A Journey in Learning
       </SectionHeadingBadge>
       <SectionHeading as="h3" className="mb-12 lg:mb-24">
-        Built on Formal Education, Fueled by a Passion for Continuous Growth.
+        {education.headline}
       </SectionHeading>
       <div className="section-gap grid xl:gap-24">
-        {education
-          ? education.map((item) => (
+        {education.list
+          ? education.list.map((item) => (
               <EducationCard key={item.institution} {...item} />
             ))
           : null}
