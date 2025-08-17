@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { ArrowRightIcon } from "lucide-react";
 
@@ -68,14 +68,15 @@ export const Header = function Header({
               align="center"
               sideOffset={8}
               avoidCollisions={false}
-              className={cn(messageBase, "max-w-[16rem]", {
-                "bg-green-950/50 text-green-500": status === "available",
+              className={cn(messageBase, "hidden max-w-[16rem] 2xs:block", {
+                "border-r-2 border-tertiary-2 bg-tertiary-2/10 text-tertiary-2":
+                  status === "available",
               })}>
               <TooltipArrow
                 width={12}
                 height={6}
                 className={cn({
-                  "fill-green-950/50": status === "available",
+                  "fill-tertiary-2/10": status === "available",
                 })}
               />
               <p className="truncate">
@@ -107,7 +108,7 @@ export const Header = function Header({
       <div className="flex flex-col items-center gap-2.5 sm:flex-row sm:gap-5 md:justify-center">
         <Button size="lg" className="w-full sm:w-max">
           <ArrowRightIcon />
-          Start your project
+          Connect with me
         </Button>
         <Button variant="ghost" size="lg" className="w-full sm:w-max">
           View my services
