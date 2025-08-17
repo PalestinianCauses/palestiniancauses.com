@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import {
   CalendarFoldIcon,
@@ -87,7 +87,7 @@ export const DiaryEntryBadges = function DiaryEntryBadges({
   return (
     <div
       className={cn(
-        "relative flex flex-wrap items-center gap-3 before:absolute before:-left-5 before:top-0 before:h-full before:w-px before:bg-foreground lg:gap-5",
+        "relative flex flex-wrap items-center gap-2.5 before:absolute before:-left-5 before:top-0 before:h-full before:w-px before:bg-foreground lg:gap-5",
         className,
       )}>
       {badges.map(
@@ -95,7 +95,7 @@ export const DiaryEntryBadges = function DiaryEntryBadges({
           (badge.label && badge.icon && (
             <Paragraph
               key={badge.type}
-              className="flex items-center gap-2 text-base font-medium text-foreground lg:text-lg">
+              className="flex items-center gap-2.5 text-base font-medium text-foreground lg:text-lg">
               <badge.icon className="mb-0.5 h-5 w-5 shrink-0 stroke-[1.5]" />
               {badge.label}
             </Paragraph>
