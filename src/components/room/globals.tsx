@@ -6,6 +6,12 @@ import { ElementType, HTMLAttributes } from "react";
 import { cn } from "@/lib/utils/styles";
 
 import { Paragraph, SubSectionHeading } from "../globals/typography";
+import {
+  Tooltip,
+  TooltipArrow,
+  TooltipContent,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 export const DateRange = function DateRange({
   dateStart,
@@ -52,22 +58,30 @@ export const InformationBadges = function InformationBadges({
   return (
     <div
       className={cn(
-        "mb-6 flex flex-col gap-6 [@media(min-width:20rem)]:flex-row [@media(min-width:20rem)]:items-center",
+        "mb-6 grid w-full grid-cols-1 gap-6 [@media(min-width:20rem)]:grid-cols-2",
         className,
       )}>
       {badges.map((item) => (
         <div
           key={item.label}
-          className="grid grid-cols-1 content-start items-start gap-2.5 sm:grid-cols-[repeat(2,_max-content)] sm:items-center">
+          className="grid flex-1 grid-cols-1 content-start items-start gap-2.5 sm:grid-cols-[max-content,_auto] sm:items-center">
           <div className="flex h-8 w-8 items-center justify-center bg-primary-foreground text-foreground ring-1 ring-input">
             <item.icon className="h-4 w-4 shrink-0 stroke-2" />
           </div>
-          <SubSectionHeading
-            as="h5"
-            small
-            className="text-base tracking-normal lg:text-base xl:text-base">
-            {item.label}
-          </SubSectionHeading>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <SubSectionHeading
+                as="h5"
+                small
+                className="truncate text-base tracking-normal lg:text-base xl:text-base">
+                {item.label}
+              </SubSectionHeading>
+            </TooltipTrigger>
+            <TooltipContent>
+              <TooltipArrow />
+              <p>{item.label}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       ))}
     </div>
