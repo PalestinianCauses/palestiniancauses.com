@@ -1,14 +1,14 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { useQuery } from "@tanstack/react-query";
 import { ChevronsUpDownIcon, Plus } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
 
-import { getRoomsNames } from "@/actions/room";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { getRoomsList } from "@/actions/room";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,12 +24,13 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getMediaAltText, getMediaSizeURL } from "@/lib/utils/media";
 
 export const WebsiteSwitcher = function WebsiteSwitcher() {
   const { isLoading, data: rooms } = useQuery({
-    queryKey: ["rooms-names"],
+    queryKey: ["rooms-list"],
     queryFn: async () => {
-      const response = await getRoomsNames();
+      const response = await getRoomsList();
 
       if (!response.data || response.data.docs.length === 0 || response.error)
         return null;
@@ -74,7 +75,7 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
             sideOffset={2}>
             {/* eslint-disable-next-line no-nested-ternary */}
             {isLoading ? (
-              <Skeleton className="h-10 w-full" />
+              <Skeleton className="mb-2.5 h-10 w-full" />
             ) : rooms ? (
               <Fragment>
                 <DropdownMenuLabel className="px-2.5 text-xs text-muted-foreground">
@@ -87,10 +88,30 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                     onClick={() => setOpenMobile(false)}
                     className="gap-2.5 px-2.5 leading-none">
                     <Link href={`/rooms/${room.slug}`}>
-                      <div className="flex size-8 items-center justify-center rounded-none border border-input text-base font-medium text-sidebar-primary">
-                        {room.name.charAt(0).toUpperCase()}
-                      </div>
-                      <p className="font-medium text-sidebar-primary">
+                      {(() => {
+                        const alt = getMediaAltText(
+                          room.information.photograph,
+                        );
+
+                        const photograph = getMediaSizeURL(
+                          room.information.photograph,
+                          "room-photograph",
+                        );
+
+                        return (
+                          <Avatar className="size-8 border border-input">
+                            <AvatarImage
+                              src={photograph || undefined}
+                              alt={alt || "Room's Photograph"}
+                            />
+
+                            <AvatarFallback className="bg-background text-base font-medium text-sidebar-primary">
+                              {room.name.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                        );
+                      })()}
+                      <p className="truncate font-medium text-sidebar-primary">
                         {room.name}
                       </p>
                     </Link>
