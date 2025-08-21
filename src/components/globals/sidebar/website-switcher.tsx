@@ -24,9 +24,13 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useActiveRoom } from "@/hooks/use-active-room";
 import { getMediaAltText, getMediaSizeURL } from "@/lib/utils/media";
+import { cn } from "@/lib/utils/styles";
 
 export const WebsiteSwitcher = function WebsiteSwitcher() {
+  const { isMobile, setOpenMobile } = useSidebar();
+
   const { isLoading, data: rooms } = useQuery({
     queryKey: ["rooms-list"],
     queryFn: async () => {
@@ -39,7 +43,7 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
     },
   });
 
-  const { isMobile, setOpenMobile } = useSidebar();
+  const { activeRoom } = useActiveRoom(rooms);
 
   return (
     <SidebarMenu>
@@ -53,16 +57,26 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
               {/* size-12 group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)] border border-input */}
               <Avatar className="flex aspect-square size-12 items-center justify-center border border-input bg-sidebar text-sidebar-primary-foreground group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)]">
                 <AvatarImage
-                  src="/logo-primary.png"
-                  className="size-8 group-data-[collapsible_=_icon]:size-10"
+                  src={
+                    activeRoom
+                      ? getMediaSizeURL(
+                          activeRoom.information.photograph,
+                          "room-photograph",
+                        ) || undefined
+                      : "/logo-primary.png"
+                  }
+                  className={cn("object-cover", {
+                    "size-8 group-data-[collapsible_=_icon]:size-10":
+                      !activeRoom,
+                  })}
                 />
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold text-sidebar-primary">
-                  PalestinianCauses.
+                  {activeRoom ? activeRoom.name : "PalestinianCauses"}
                 </span>
                 <span className="truncate text-xs text-muted-foreground">
-                  Website
+                  {activeRoom ? "Room" : "Website"}
                 </span>
               </div>
               <ChevronsUpDownIcon className="ml-auto text-muted-foreground" />
@@ -87,7 +101,13 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                     asChild
                     onClick={() => setOpenMobile(false)}
                     className="gap-2.5 px-2.5 leading-none">
-                    <Link href={`/rooms/${room.slug}`}>
+                    <Link
+                      href={`/rooms/${room.slug}`}
+                      className={cn({
+                        "bg-sidebar-accent": activeRoom
+                          ? activeRoom.id === room.id
+                          : false,
+                      })}>
                       {(() => {
                         const alt = getMediaAltText(
                           room.information.photograph,
@@ -119,6 +139,25 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                 ))}
                 <DropdownMenuSeparator />
               </Fragment>
+            ) : null}
+            {activeRoom ? (
+              <DropdownMenuItem
+                asChild
+                onClick={() => setOpenMobile(false)}
+                className="gap-2.5 px-2.5 leading-none">
+                <Link href="/">
+                  <Avatar className="flex size-8 items-center justify-center border border-input">
+                    <AvatarImage
+                      src="/logo-primary.png"
+                      alt="PalestinianCauses' Logo"
+                      className="size-6"
+                    />
+                  </Avatar>
+                  <p className="truncate font-medium text-sidebar-primary">
+                    Home
+                  </p>
+                </Link>
+              </DropdownMenuItem>
             ) : null}
             <DropdownMenuItem className="gap-2.5 px-2.5">
               <div className="flex size-8 items-center justify-center rounded-none border border-input bg-transparent">
