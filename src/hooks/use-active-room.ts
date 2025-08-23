@@ -1,20 +1,20 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Room } from "@/payload-types";
 
-export const useActiveRoom = function useActiveRoom(
+export const useRoomActive = function useRoomActive(
   rooms: Room[] | null | undefined,
 ) {
   const pathname = usePathname();
   const isRoom = pathname.includes("rooms");
   const roomSlug = pathname.split("/")[2];
 
-  const [activeRoom, setActiveRoom] = useState<Pick<
+  const [roomActive, setRoomActive] = useState<Pick<
     Room,
     "id" | "name" | "slug" | "information"
   > | null>(null);
@@ -26,19 +26,17 @@ export const useActiveRoom = function useActiveRoom(
         : null;
 
       if (room) {
-        const activeRoomStateData = {
+        const roomActiveStateData = {
           id: room.id,
           name: room.name,
           slug: room.slug,
           information: room.information,
         };
 
-        setActiveRoom(activeRoomStateData);
+        setRoomActive(roomActiveStateData);
       }
-    } else setActiveRoom(null);
+    } else setRoomActive(null);
   }, [pathname, rooms, isRoom, roomSlug]);
 
-  return {
-    activeRoom,
-  };
+  return { roomActive, setRoomActive };
 };

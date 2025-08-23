@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { ArrowRightIcon } from "lucide-react";
 
@@ -101,7 +101,9 @@ export const Header = function Header({
         </TooltipProvider>
       </div>
 
-      <SectionTitle className="mb-12 text-left font-bold !leading-[0.95] md:text-center lg:mb-24">
+      <SectionTitle
+        className="mb-12 text-left font-bold !leading-[0.95] md:text-center lg:mb-24"
+        style={{ wordBreak: "break-word" }}>
         {headline}
       </SectionTitle>
 

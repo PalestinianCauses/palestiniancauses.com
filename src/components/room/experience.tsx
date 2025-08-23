@@ -1,6 +1,11 @@
 // REVIEWED
 
-import { ArrowRightIcon, AtSignIcon, MapIcon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  AtSignIcon,
+  BriefcaseIcon,
+  MapIcon,
+} from "lucide-react";
 import Image from "next/image";
 
 import { cn } from "@/lib/utils/styles";
@@ -24,12 +29,13 @@ const ExperienceCard = function ExperienceCard({
   type,
   company,
   organization,
+  title,
+  position,
   location,
   dateStart,
   dateEnd,
-  position,
   description,
-}: NonNullable<Room["experience"]["list"]>[0]) {
+}: NonNullable<NonNullable<Room["experience"]>["list"]>[0]) {
   return (
     <article className="flex flex-col items-start justify-start">
       <div className="relative mb-6 flex flex-wrap items-center gap-5">
@@ -61,17 +67,25 @@ const ExperienceCard = function ExperienceCard({
       </div>
 
       <SubSectionHeading as="h4" small className="mb-6">
-        {position}
+        {title || position}
       </SubSectionHeading>
 
       <InformationBadges
         badges={[
           ...(company || organization
-            ? [{ icon: AtSignIcon, label: String(company || organization) }]
+            ? [
+                {
+                  icon: AtSignIcon,
+                  label: String(company || organization),
+                },
+              ]
+            : []),
+          ...(type === "activity"
+            ? [{ icon: BriefcaseIcon, label: String(position) }]
             : []),
           {
             icon: MapIcon,
-            label: isRemote || !location ? "Remote" : location,
+            label: isRemote || !location ? "Remote" : String(location),
           },
         ]}
       />
@@ -83,7 +97,7 @@ const ExperienceCard = function ExperienceCard({
 
 export const Experience = function Experience({
   experience,
-}: Pick<Room, "experience">) {
+}: Required<Pick<Room, "experience">>) {
   return (
     <Container as="section" className="section-padding-start-lg max-w-7xl">
       <div className="mx-auto flex max-w-2xl flex-col items-start justify-between gap-16 lg:mx-0 lg:max-w-none lg:flex-row">
@@ -94,7 +108,7 @@ export const Experience = function Experience({
           <SectionHeading as="h3" className="mb-6 lg:mb-12">
             {experience.headline}
           </SectionHeading>
-          <Button size="lg" className="mb-12 lg:mb-24">
+          <Button className="mb-12 lg:mb-24">
             <ArrowRightIcon />
             Connect with me
           </Button>

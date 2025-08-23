@@ -1,8 +1,9 @@
 "use client";
 
-// REVIEWED - 14
+// REVIEWED - 15
 import { QueryClientProvider } from "@tanstack/react-query";
-import { PropsWithChildren } from "react";
+import { useRouter } from "next/navigation";
+import { PropsWithChildren, useEffect } from "react";
 
 import { DynamicBreadcrumb } from "@/components/globals/dynamic-breadcrumb";
 import { SafeHydrate } from "@/components/globals/safe-hydrate";
@@ -83,33 +84,46 @@ export const SidebarMainProvider = function SidebarMainProvider({
   children,
 }: PropsWithChildren) {
   return (
-    <SidebarProvider defaultOpen={false}>
-      <Sidebar collapsible="icon">
-        <SidebarHeader>
-          <WebsiteSwitcher />
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMainMenu />
-        </SidebarContent>
-        <SidebarFooter>
-          <SidebarUser />
-        </SidebarFooter>
-      </Sidebar>
-      <SidebarInset>
-        <header className="flex shrink-0 items-center justify-start py-4 transition-all duration-100 ease-in-out">
-          <div className="flex flex-col items-start justify-start gap-4 px-5 lg:px-7 xs:flex-row xs:items-center">
-            <SidebarTrigger />
-            <Separator
-              orientation="vertical"
-              className="hidden data-[orientation_=_vertical]:h-5 xs:block"
-            />
-            <SafeHydrate>
+    <SafeHydrate>
+      <SidebarProvider defaultOpen={false}>
+        <Sidebar collapsible="icon">
+          <SidebarHeader>
+            <WebsiteSwitcher />
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarMainMenu />
+          </SidebarContent>
+          <SidebarFooter>
+            <SidebarUser />
+          </SidebarFooter>
+        </Sidebar>
+        <SidebarInset>
+          <header className="flex shrink-0 items-center justify-start py-4 transition-all duration-100 ease-in-out">
+            <div className="flex flex-col items-start justify-start gap-4 px-5 lg:px-7 xs:flex-row xs:items-center">
+              <SidebarTrigger />
+              <Separator
+                orientation="vertical"
+                className="hidden data-[orientation_=_vertical]:h-5 xs:block"
+              />
               <DynamicBreadcrumb />
-            </SafeHydrate>
-          </div>
-        </header>
-        {children}
-      </SidebarInset>
-    </SidebarProvider>
+            </div>
+          </header>
+          {children}
+        </SidebarInset>
+      </SidebarProvider>
+    </SafeHydrate>
   );
+};
+
+export const RedirectProvider = function RedirectProvider({
+  path,
+  children,
+}: { path: string } & PropsWithChildren) {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push(path);
+  }, [router, path]);
+
+  return children;
 };

@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 import type { CollectionConfig } from "payload";
 
 import { isAdmin } from "@/access/global";
@@ -16,7 +16,17 @@ export const Media: CollectionConfig = {
     defaultColumns: ["id", "alt", "createdAt"],
     useAsTitle: "id",
   },
-  upload: { staticDir: "./media" },
+  upload: {
+    staticDir: "./media",
+    imageSizes: [
+      {
+        name: "room-photograph",
+        width: 360,
+        height: 360,
+        position: "center",
+      },
+    ],
+  },
   fields: [
     {
       name: "alt",

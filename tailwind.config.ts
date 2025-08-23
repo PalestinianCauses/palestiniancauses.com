@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 import colors from "tailwindcss/colors";
@@ -15,7 +15,8 @@ export default {
   theme: {
     extend: {
       screens: {
-        xs: "27rem",
+        "2xs": "22.5rem",
+        "xs": "27rem",
       },
       colors: {
         "background": "rgb(var(--background) / <alpha-value>)",
@@ -106,8 +107,8 @@ export default {
           "--primary-foreground": toRGB(colors.zinc["50"]),
           "--secondary": toRGB(colors.red["500"]),
           "--secondary-foreground": toRGB(colors.red["100"]),
-          "--tertiary": toRGB(colors.indigo["500"]),
-          "--tertiary-foreground": toRGB(colors.indigo["100"]),
+          "--tertiary": toRGB(colors.sky["500"]),
+          "--tertiary-foreground": toRGB(colors.sky["100"]),
           "--tertiary-2": toRGB(colors.green["500"]),
           "--tertiary-2-foreground": toRGB(colors.green["100"]),
           "--muted": toRGB(colors.zinc["100"]),
@@ -139,12 +140,6 @@ export default {
           "--popover-foreground": toRGB(colors.zinc["50"]),
           "--primary": toRGB(colors.zinc["50"]),
           "--primary-foreground": toRGB(colors.zinc["900"]),
-          "--secondary": toRGB(colors.red["800"]),
-          "--secondary-foreground": toRGB(colors.red["50"]),
-          "--tertiary": toRGB(colors.indigo["800"]),
-          "--tertiary-foreground": toRGB(colors.indigo["50"]),
-          "--tertiary-2": toRGB(colors.green["800"]),
-          "--tertiary-2-foreground": toRGB(colors.green["50"]),
           "--muted": toRGB(colors.zinc["800"]),
           "--muted-foreground": toRGB(colors.zinc["400"]),
           "--accent": toRGB(colors.zinc["800"]),

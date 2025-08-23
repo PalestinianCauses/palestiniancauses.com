@@ -1,11 +1,15 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { useQuery } from "@tanstack/react-query";
-import { ChevronsUpDownIcon, Plus } from "lucide-react";
+import {
+  ChevronsUpDownIcon,
+  GitCompareArrowsIcon,
+  PlusIcon,
+} from "lucide-react";
 import Link from "next/link";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 
 import { getRoomsList } from "@/actions/room";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,14 +28,14 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useActiveRoom } from "@/hooks/use-active-room";
+import { useRoomActive } from "@/hooks/use-active-room";
 import { getMediaAltText, getMediaSizeURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
 
 export const WebsiteSwitcher = function WebsiteSwitcher() {
   const { isMobile, setOpenMobile } = useSidebar();
 
-  const { isLoading, data: rooms } = useQuery({
+  const { isLoading: isRoomsLoading, data: rooms } = useQuery({
     queryKey: ["rooms-list"],
     queryFn: async () => {
       const response = await getRoomsList();
@@ -43,7 +47,8 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
     },
   });
 
-  const { activeRoom } = useActiveRoom(rooms);
+  const { roomActive } = useRoomActive(rooms);
+  const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
   return (
     <SidebarMenu>
@@ -52,31 +57,47 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              // h-auto group-data-[collapsible_=_icon]:!size-[calc(var(--sidebar-width-icon)_-_1rem)]
               className="h-auto data-[state_=_open]:bg-sidebar-accent data-[state_=_open]:text-sidebar-accent-foreground group-data-[collapsible_=_icon]:!size-[calc(var(--sidebar-width-icon)_-_1rem)]">
-              {/* size-12 group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)] border border-input */}
-              <Avatar className="flex aspect-square size-12 items-center justify-center border border-input bg-sidebar text-sidebar-primary-foreground group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)]">
-                <AvatarImage
-                  src={
-                    activeRoom
-                      ? getMediaSizeURL(
-                          activeRoom.information.photograph,
+              {isRoomsLoading || !isAvatarLoaded ? (
+                <Skeleton className="aspect-square size-12 group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)]" />
+              ) : (
+                <Avatar className="flex aspect-square size-12 items-center justify-center border border-input bg-sidebar text-sidebar-primary-foreground group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)]">
+                  {roomActive ? (
+                    <AvatarImage
+                      onLoad={() => setIsAvatarLoaded(true)}
+                      src={
+                        getMediaSizeURL(
+                          roomActive.information.photograph,
                           "room-photograph",
                         ) || undefined
-                      : "/logo-primary.png"
-                  }
-                  className={cn("object-cover", {
-                    "size-8 group-data-[collapsible_=_icon]:size-10":
-                      !activeRoom,
-                  })}
-                />
-              </Avatar>
+                      }
+                      className={cn("object-cover", {
+                        "opacity-0": isRoomsLoading || !isAvatarLoaded,
+                      })}
+                    />
+                  ) : (
+                    <AvatarImage
+                      onLoad={() => setIsAvatarLoaded(true)}
+                      src="/logo-primary.png"
+                      className={cn(
+                        "size-8 object-cover group-data-[collapsible_=_icon]:size-10",
+                        { "opacity-0": isRoomsLoading || !isAvatarLoaded },
+                      )}
+                    />
+                  )}
+
+                  <AvatarFallback className="bg-background text-xl font-medium text-sidebar-primary lg:text-2xl xl:text-3xl">
+                    {roomActive ? roomActive.name.charAt(0).toUpperCase() : "P"}
+                  </AvatarFallback>
+                </Avatar>
+              )}
+
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold text-sidebar-primary">
-                  {activeRoom ? activeRoom.name : "PalestinianCauses"}
+                  {roomActive ? roomActive.name : "PalestinianCauses"}
                 </span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {activeRoom ? "Room" : "Website"}
+                  {roomActive ? "Room" : "Website"}
                 </span>
               </div>
               <ChevronsUpDownIcon className="ml-auto text-muted-foreground" />
@@ -88,7 +109,7 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
             side={isMobile ? "bottom" : "right"}
             sideOffset={2}>
             {/* eslint-disable-next-line no-nested-ternary */}
-            {isLoading ? (
+            {isRoomsLoading ? (
               <Skeleton className="mb-2.5 h-10 w-full" />
             ) : rooms ? (
               <Fragment>
@@ -104,8 +125,8 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                     <Link
                       href={`/rooms/${room.slug}`}
                       className={cn({
-                        "bg-sidebar-accent": activeRoom
-                          ? activeRoom.id === room.id
+                        "bg-sidebar-accent": roomActive
+                          ? roomActive.id === room.id
                           : false,
                       })}>
                       {(() => {
@@ -140,20 +161,16 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                 <DropdownMenuSeparator />
               </Fragment>
             ) : null}
-            {activeRoom ? (
+            {roomActive ? (
               <DropdownMenuItem
                 asChild
                 onClick={() => setOpenMobile(false)}
                 className="gap-2.5 px-2.5 leading-none">
                 <Link href="/">
-                  <Avatar className="flex size-8 items-center justify-center border border-input">
-                    <AvatarImage
-                      src="/logo-primary.png"
-                      alt="PalestinianCauses' Logo"
-                      className="size-6"
-                    />
-                  </Avatar>
-                  <p className="truncate font-medium text-sidebar-primary">
+                  <div className="flex size-8 items-center justify-center rounded-none border border-input bg-transparent">
+                    <GitCompareArrowsIcon className="size-4 stroke-[1.5]" />
+                  </div>
+                  <p className="text-sm font-medium leading-none text-sidebar-primary">
                     Home
                   </p>
                 </Link>
@@ -161,11 +178,11 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
             ) : null}
             <DropdownMenuItem className="gap-2.5 px-2.5">
               <div className="flex size-8 items-center justify-center rounded-none border border-input bg-transparent">
-                <Plus className="size-4" />
+                <PlusIcon className="size-4 stroke-[1.5]" />
               </div>
-              <div className="text-sm font-medium leading-none text-muted-foreground">
+              <p className="text-sm font-medium leading-none text-muted-foreground">
                 Acquire Room Ownership
-              </div>
+              </p>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
