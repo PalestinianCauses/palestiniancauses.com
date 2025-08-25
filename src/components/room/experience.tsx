@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 import {
   ArrowRightIcon,
   AtSignIcon,
@@ -98,7 +98,10 @@ export const Experience = function Experience({
   experience,
 }: Required<Pick<Room, "experience">>) {
   return (
-    <Container as="section" className="section-padding-start-lg max-w-7xl">
+    <Container
+      as="section"
+      id="experience"
+      className="section-padding-start-lg max-w-7xl">
       <div className="mx-auto flex max-w-2xl flex-col items-start justify-between gap-16 lg:mx-0 lg:max-w-none lg:flex-row">
         <div className="w-full lg:sticky lg:top-12 lg:max-w-lg lg:flex-auto">
           <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">

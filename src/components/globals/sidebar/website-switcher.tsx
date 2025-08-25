@@ -1,17 +1,15 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
-import { useQuery } from "@tanstack/react-query";
 import {
+  ArrowLeftFromLineIcon,
   ChevronsUpDownIcon,
-  GitCompareArrowsIcon,
   PlusIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 
-import { getRoomsList } from "@/actions/room";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -28,26 +26,15 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRoomActive } from "@/hooks/use-active-room";
+import { useRoom } from "@/hooks/use-room";
 import { getMediaAltText, getMediaSizeURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
 
 export const WebsiteSwitcher = function WebsiteSwitcher() {
   const { isMobile, setOpenMobile } = useSidebar();
 
-  const { isLoading: isRoomsLoading, data: rooms } = useQuery({
-    queryKey: ["rooms-list"],
-    queryFn: async () => {
-      const response = await getRoomsList();
+  const { isRoomListLoading, roomList, roomActive } = useRoom();
 
-      if (!response.data || response.data.docs.length === 0 || response.error)
-        return null;
-
-      return response.data.docs;
-    },
-  });
-
-  const { roomActive } = useRoomActive(rooms);
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
   return (
@@ -58,7 +45,7 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
             <SidebarMenuButton
               size="lg"
               className="h-auto data-[state_=_open]:bg-sidebar-accent data-[state_=_open]:text-sidebar-accent-foreground group-data-[collapsible_=_icon]:!size-[calc(var(--sidebar-width-icon)_-_1rem)]">
-              {isRoomsLoading || !isAvatarLoaded ? (
+              {isRoomListLoading ? (
                 <Skeleton className="aspect-square size-12 group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)]" />
               ) : (
                 <Avatar className="flex aspect-square size-12 items-center justify-center border border-input bg-sidebar text-sidebar-primary-foreground group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)]">
@@ -72,7 +59,7 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                         ) || undefined
                       }
                       className={cn("object-cover", {
-                        "opacity-0": isRoomsLoading || !isAvatarLoaded,
+                        "opacity-0": !isAvatarLoaded,
                       })}
                     />
                   ) : (
@@ -81,14 +68,20 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                       src="/logo-primary.png"
                       className={cn(
                         "size-8 object-cover group-data-[collapsible_=_icon]:size-10",
-                        { "opacity-0": isRoomsLoading || !isAvatarLoaded },
+                        { "opacity-0": !isAvatarLoaded },
                       )}
                     />
                   )}
 
-                  <AvatarFallback className="bg-background text-xl font-medium text-sidebar-primary lg:text-2xl xl:text-3xl">
-                    {roomActive ? roomActive.name.charAt(0).toUpperCase() : "P"}
-                  </AvatarFallback>
+                  {!roomActive ||
+                  !roomActive.information.photograph ||
+                  !isAvatarLoaded ? (
+                    <AvatarFallback className="bg-background text-xl font-medium text-sidebar-primary lg:text-2xl xl:text-3xl">
+                      {roomActive
+                        ? roomActive.name.charAt(0).toUpperCase()
+                        : "P"}
+                    </AvatarFallback>
+                  ) : null}
                 </Avatar>
               )}
 
@@ -109,14 +102,14 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
             side={isMobile ? "bottom" : "right"}
             sideOffset={2}>
             {/* eslint-disable-next-line no-nested-ternary */}
-            {isRoomsLoading ? (
+            {isRoomListLoading ? (
               <Skeleton className="mb-2.5 h-10 w-full" />
-            ) : rooms ? (
+            ) : roomList ? (
               <Fragment>
                 <DropdownMenuLabel className="px-2.5 text-xs text-muted-foreground">
                   Rooms
                 </DropdownMenuLabel>
-                {rooms.map((room) => (
+                {roomList.docs.map((room) => (
                   <DropdownMenuItem
                     key={room.id}
                     asChild
@@ -168,7 +161,7 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                 className="gap-2.5 px-2.5 leading-none">
                 <Link href="/">
                   <div className="flex size-8 items-center justify-center rounded-none border border-input bg-transparent">
-                    <GitCompareArrowsIcon className="size-4 stroke-[1.5]" />
+                    <ArrowLeftFromLineIcon className="size-4 stroke-[1.5]" />
                   </div>
                   <p className="text-sm font-medium leading-none text-sidebar-primary">
                     Home

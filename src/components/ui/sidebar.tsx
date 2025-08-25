@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
@@ -607,6 +607,7 @@ const SidebarMenuButton = React.forwardRef<
           side="right"
           align="center"
           hidden={state !== "collapsed" || isMobile}
+          className="capitalize"
           {...tooltip}
         />
       </Tooltip>

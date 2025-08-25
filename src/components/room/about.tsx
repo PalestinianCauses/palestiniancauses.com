@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import {
   ArrowRightIcon,
@@ -191,7 +191,10 @@ export const About = function About({
 
   return (
     <Fragment>
-      <Container as="section" className="section-padding-start-lg max-w-7xl">
+      <Container
+        as="section"
+        id="about"
+        className="section-padding-start-lg max-w-7xl">
         <div className={cn("section-gap grid")}>
           <div
             className={cn("section-gap grid lg:grid-cols-2", {

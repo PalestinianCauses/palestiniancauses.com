@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { AtSignIcon, MapIcon } from "lucide-react";
 
@@ -70,7 +70,10 @@ export const Education = function Education({
   education,
 }: Pick<Room, "education">) {
   return (
-    <Container as="section" className="section-padding-start-lg max-w-7xl">
+    <Container
+      as="section"
+      id="education"
+      className="section-padding-start-lg max-w-7xl">
       <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">
         A Journey in Learning
       </SectionHeadingBadge>
