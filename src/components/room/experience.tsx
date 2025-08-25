@@ -1,5 +1,4 @@
-// REVIEWED
-
+// REVIEWED - 01
 import {
   ArrowRightIcon,
   AtSignIcon,
@@ -24,14 +23,14 @@ import { Button } from "../ui/button";
 import { DateRange, InformationBadges } from "./globals";
 
 const ExperienceCard = function ExperienceCard({
-  isRemote,
   isCurrent,
+  isRemote,
   type,
   company,
   organization,
+  location,
   title,
   position,
-  location,
   dateStart,
   dateEnd,
   description,
