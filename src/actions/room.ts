@@ -1,12 +1,18 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
+
+import { PaginatedDocs } from "payload";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { ResponseSafeExecute } from "@/lib/types";
+import { Room } from "@/payload-types";
 
-export const getRoomsList = async function getRoomsList() {
+export const getRoomList = async function getRoomList(): Promise<
+  ResponseSafeExecute<PaginatedDocs<Room>, string>
+> {
   const response = await actionSafeExecute(
     payload.find({
       collection: "rooms",
@@ -24,4 +30,41 @@ export const getRoomsList = async function getRoomsList() {
   );
 
   return response;
+};
+
+export const getRoomLinks = async function getRoomLinks(
+  id: number,
+): Promise<ResponseSafeExecute<{ label: keyof Room; href: string }[], string>> {
+  const response = await actionSafeExecute(
+    payload.findByID({
+      collection: "rooms",
+      id,
+      depth: 1,
+    }),
+    messages.actions.room.serverError,
+  );
+
+  if (!response.data || response.error)
+    return { data: null, error: response.error };
+
+  const links: { label: keyof Room; href: string }[] = [];
+
+  for (let i = 0; i < Object.keys(response.data).length; i += 1) {
+    const key = Object.keys(response.data)[i];
+    let value = null;
+
+    if (
+      key === "about" ||
+      key === "education" ||
+      key === "experience" ||
+      key === "qualification" ||
+      key === "skills"
+    ) {
+      value = response.data[key];
+
+      if (value) links.push({ label: key, href: `#${key}` });
+    }
+  }
+
+  return { data: links, error: null };
 };
