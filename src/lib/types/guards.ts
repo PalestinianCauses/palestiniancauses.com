@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import {
   ErrorPayload,
@@ -95,12 +95,19 @@ export class SafeExecuteError extends Error {
   }
 }
 
+// Booleans
+export const isDefined = function isDefined(
+  value: unknown,
+): value is Required<NonNullable<typeof value>> {
+  return value !== null && value !== undefined;
+};
+
 // Strings
 export const isString = function isString(value: unknown): value is string {
-  return typeof value === "string";
+  return isDefined(value) && typeof value === "string";
 };
 
 // Numbers
 export const isNumber = function isNumber(value: unknown): value is number {
-  return typeof value === "number";
+  return isDefined(value) && typeof value === "number";
 };
