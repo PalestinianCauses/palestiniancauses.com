@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 import {
   ArrowRightIcon,
   AtSignIcon,
@@ -96,7 +96,7 @@ const ExperienceCard = function ExperienceCard({
 
 export const Experience = function Experience({
   experience,
-}: Required<Pick<Room, "experience">>) {
+}: Pick<Room, "experience">) {
   return (
     <Container
       as="section"
