@@ -1,21 +1,22 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { ArrowRightIcon } from "lucide-react";
+import Link from "next/link";
 
 import { cn } from "@/lib/utils/styles";
 import { Room } from "@/payload-types";
 
 import { Container } from "../globals/container";
 import { SectionTitle } from "../globals/typography";
-import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import {
   Tooltip,
   TooltipArrow,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger,
 } from "../ui/tooltip";
+
+import { HeaderAvatar } from "./header-avatar";
 
 type Information = Pick<Room, "information">;
 export type HeaderProps = Pick<
@@ -38,15 +39,7 @@ export const Header = function Header({
       <div className="relative mb-16 flex flex-col md:items-center">
         <TooltipProvider>
           <Tooltip open>
-            <TooltipTrigger asChild>
-              {photograph &&
-              typeof photograph === "object" &&
-              photograph.url ? (
-                <Avatar className="z-10 h-36 w-36 border border-input md:h-48 md:w-48 lg:h-60 lg:w-60">
-                  <AvatarImage src={photograph.url} alt={photograph.alt} />
-                </Avatar>
-              ) : null}
-            </TooltipTrigger>
+            <HeaderAvatar name={name} photograph={photograph} />
             <TooltipContent
               side="top"
               align="start"
@@ -71,18 +64,29 @@ export const Header = function Header({
               className={cn(messageBase, "hidden max-w-[16rem] 2xs:block", {
                 "border-r-2 border-tertiary-2 bg-tertiary-2/10 text-tertiary-2":
                   status === "available",
+                "border-r-2 border-tertiary bg-tertiary/10 text-tertiary":
+                  status === "working",
+                "border-r-2 border-secondary bg-secondary/10 text-secondary":
+                  status === "unavailable",
               })}>
               <TooltipArrow
                 width={12}
                 height={6}
                 className={cn({
                   "fill-tertiary-2/10": status === "available",
+                  "fill-tertiary/10": status === "working",
+                  "fill-secondary/10": status === "unavailable",
                 })}
               />
               <p className="truncate">
+                {/* eslint-disable no-nested-ternary */}
                 {status === "available"
-                  ? "Open for New Opportunities"
-                  : "Not Available"}
+                  ? "Open to New Opportunities"
+                  : status === "working"
+                    ? "Currently Engaged"
+                    : status === "unavailable"
+                      ? "Not Available"
+                      : "Not Available"}
               </p>
             </TooltipContent>
             <TooltipContent
@@ -108,12 +112,14 @@ export const Header = function Header({
       </SectionTitle>
 
       <div className="flex flex-col items-center gap-2.5 sm:flex-row sm:gap-5 md:justify-center">
-        <Button size="lg" className="w-full sm:w-max">
-          <ArrowRightIcon />
-          Connect with me
+        <Button size="lg" className="w-full sm:w-max" asChild>
+          <Link href="#contact">
+            <ArrowRightIcon />
+            Connect with me
+          </Link>
         </Button>
-        <Button variant="ghost" size="lg" className="w-full sm:w-max">
-          View my services
+        <Button variant="ghost" size="lg" className="w-full sm:w-max" asChild>
+          <Link href="#services">View my services</Link>
         </Button>
       </div>
     </Container>
