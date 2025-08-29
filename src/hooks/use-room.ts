@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
@@ -33,7 +33,7 @@ export const useRoom = function useRoom() {
     queryFn: async () => {
       if (!roomActive) return null;
 
-      const response = await getRoomLinks(roomActive.id);
+      const response = await getRoomLinks(roomActive.slug);
 
       if (!response.data || response.data.length === 0 || response.error)
         return null;
