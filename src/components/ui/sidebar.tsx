@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { Slot } from "@radix-ui/react-slot";
 import { VariantProps, cva } from "class-variance-authority";
@@ -674,36 +674,55 @@ SidebarMenuBadge.displayName = "SidebarMenuBadge";
 const SidebarMenuSkeleton = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
-    showIcon?: boolean;
+    showSkeletonIcon?: boolean;
+    skeletonIconClassName?: string;
+    skeletonClassName?: string;
   }
->(({ className, showIcon = false, ...props }, ref) => {
-  // Random width between 50% to 90%.
-  const width = React.useMemo(
-    () => `${Math.floor(Math.random() * 40) + 50}%`,
-    [],
-  );
+>(
+  (
+    {
+      showSkeletonIcon = false,
+      skeletonIconClassName,
+      skeletonClassName,
+      className,
+      ...props
+    },
+    ref,
+  ) => {
+    // Random width between 50% to 90%.
+    const width = React.useMemo(
+      () => `${Math.floor(Math.random() * 40) + 50}%`,
+      [],
+    );
 
-  return (
-    <div
-      ref={ref}
-      data-sidebar="menu-skeleton"
-      className={cn("flex h-8 items-center gap-2 px-2", className)}
-      {...props}>
-      {showIcon && (
-        <Skeleton data-sidebar="menu-skeleton-icon" className="size-4" />
-      )}
-      <Skeleton
-        data-sidebar="menu-skeleton-text"
-        className="h-4 max-w-[--skeleton-width] flex-1"
-        style={
-          {
-            "--skeleton-width": width,
-          } as React.CSSProperties
-        }
-      />
-    </div>
-  );
-});
+    return (
+      <div
+        ref={ref}
+        data-sidebar="menu-skeleton"
+        className={cn("flex h-8 items-center gap-2 px-2", className)}
+        {...props}>
+        {showSkeletonIcon && (
+          <Skeleton
+            data-sidebar="menu-skeleton-icon"
+            className={cn("size-4", skeletonIconClassName)}
+          />
+        )}
+        <Skeleton
+          data-sidebar="menu-skeleton-text"
+          className={cn(
+            "h-4 max-w-[--skeleton-width] flex-1",
+            skeletonClassName,
+          )}
+          style={
+            {
+              "--skeleton-width": width,
+            } as React.CSSProperties
+          }
+        />
+      </div>
+    );
+  },
+);
 
 SidebarMenuSkeleton.displayName = "SidebarMenuSkeleton";
 
