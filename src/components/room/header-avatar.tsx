@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 "use client";
 
@@ -15,7 +15,7 @@ export const HeaderAvatar = function HeaderAvatar({
   name,
   photograph,
 }: Pick<Room, "name"> & Pick<Room["information"], "photograph">) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(Boolean(photograph));
 
   return (
     <TooltipTrigger asChild>
