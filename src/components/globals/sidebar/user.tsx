@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import {
   BellIcon,
@@ -30,13 +30,15 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/hooks/use-auth";
 import { useUser } from "@/hooks/use-user";
 
 import { SafeHydrate } from "../safe-hydrate";
 
 export const SidebarUser = function SidebarUser() {
   const pathname = usePathname();
-  const isMobile = useSidebar();
+  const { isMobile, setOpenMobile } = useSidebar();
+  const { signOut } = useAuth();
   const { isLoading, data: user } = useUser();
 
   return (
@@ -53,6 +55,7 @@ export const SidebarUser = function SidebarUser() {
                 <SidebarMenuButton
                   asChild
                   isActive={pathname.startsWith("/signin")}
+                  onClick={() => setOpenMobile(false)}
                   className="relative overflow-visible text-muted-foreground hover:bg-sidebar hover:text-sidebar-primary active:bg-sidebar active:font-medium active:text-sidebar-primary data-[active_=_true]:bg-sidebar data-[active_=_true]:text-sidebar-primary data-[active_=_true]:after:absolute data-[active_=_true]:after:-left-2 data-[active_=_true]:after:top-0 data-[active_=_true]:after:h-full data-[active_=_true]:after:w-px data-[active_=_true]:after:bg-sidebar-primary group-data-[collapsible_=_icon]:!size-[calc(var(--sidebar-width-icon)_-_2rem)] group-data-[collapsible_=_icon]:!p-0 group-data-[collapsible_=_icon]:data-[active_=_true]:after:-left-4">
                   <Link href="/signin">
                     <div className="flex aspect-square size-5 items-center justify-center group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_2rem)]">
@@ -118,9 +121,12 @@ export const SidebarUser = function SidebarUser() {
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem className="gap-2.5 px-2.5">
+                    <DropdownMenuItem
+                      disabled={signOut.isPending}
+                      onClick={() => signOut.mutate({})}
+                      className="gap-2.5 px-2.5">
                       <LogOutIcon />
-                      Sign out
+                      {signOut.isPending ? "Signing out..." : "Sign out"}
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
