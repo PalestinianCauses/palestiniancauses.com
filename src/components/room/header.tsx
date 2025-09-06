@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
@@ -32,7 +32,7 @@ export const Header = function Header({
   photograph,
 }: HeaderProps) {
   const messageBase =
-    "relative text-xs font-medium overflow-visible sm:text-sm sm:px-3 sm:py-2";
+    "relative z-30 text-xs font-medium overflow-visible sm:text-sm sm:px-3 sm:py-2";
 
   return (
     <Container as="section" className="max-w-7xl">
@@ -106,7 +106,7 @@ export const Header = function Header({
       </div>
 
       <SectionTitle
-        className="mb-12 text-left font-bold !leading-[0.95] md:text-center lg:mb-24"
+        className="mx-auto mb-12 text-left font-bold !leading-[0.95] md:text-center lg:mb-24"
         style={{ wordBreak: "break-word" }}>
         {headline}
       </SectionTitle>
