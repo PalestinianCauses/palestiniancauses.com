@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import {
   ArrowRightLeftIcon,
@@ -34,6 +34,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSkeleton,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useRoom } from "@/hooks/use-room";
@@ -127,7 +128,13 @@ const SidebarMenuMainItem = function SidebarMenuMainItem({
 };
 
 export const SidebarMainMenu = function SidebarMainMenu() {
-  const { isRoom, roomActive, roomLinks } = useRoom();
+  const {
+    isRoom,
+    isRoomListLoading,
+    isRoomLinksLoading,
+    roomActive,
+    roomLinks,
+  } = useRoom();
   const [activeItemHash, setActiveItemHash] = useState<string | null>(null);
 
   useEffect(() => {
@@ -169,25 +176,58 @@ export const SidebarMainMenu = function SidebarMainMenu() {
 
   return (
     <Fragment>
-      {menus.map((menu) => (
-        <SidebarGroup key={menu.label}>
-          <SidebarGroupLabel>{menu.label}</SidebarGroupLabel>
-          <SidebarMenu className="gap-1.5 group-data-[collapsible_=_icon]:gap-1">
-            {menu.links.map((link) => (
-              <SidebarMenuMainItem
-                key={link.href}
-                isRoom={isRoom}
-                item={{
-                  ...link,
-                  icon: "icon" in link ? link.icon : icons[link.label],
-                }}
-                activeItemHash={isRoom ? activeItemHash : undefined}
-                setActiveItemHash={isRoom ? setActiveItemHash : undefined}
-              />
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
-      ))}
+      {isRoomListLoading || isRoomLinksLoading ? (
+        <Fragment>
+          <SidebarGroup>
+            <SidebarMenu className="gap-1.5">
+              {[...Array(5)].map((_, index) => (
+                <SidebarMenuSkeleton
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
+                  showSkeletonIcon
+                  skeletonIconClassName="size-6 aspect-square group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1.75rem)]"
+                  skeletonClassName="h-5"
+                  className="h-full px-1.5 py-0.5 group-data-[collapsible_=_icon]:!py-0"
+                />
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
+          <SidebarGroup>
+            <SidebarMenu className="gap-1.5">
+              {[...Array(5)].map((_, index) => (
+                <SidebarMenuSkeleton
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
+                  showSkeletonIcon
+                  skeletonIconClassName="size-6 aspect-square group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1.75rem)]"
+                  skeletonClassName="h-5"
+                  className="h-full px-1.5 py-0.5 group-data-[collapsible_=_icon]:!py-0"
+                />
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
+        </Fragment>
+      ) : (
+        menus.map((menu) => (
+          <SidebarGroup key={menu.label}>
+            <SidebarGroupLabel>{menu.label}</SidebarGroupLabel>
+            <SidebarMenu className="gap-1.5">
+              {menu.links.map((link) => (
+                <SidebarMenuMainItem
+                  key={link.href}
+                  isRoom={isRoom}
+                  item={{
+                    ...link,
+                    icon: "icon" in link ? link.icon : icons[link.label],
+                  }}
+                  activeItemHash={isRoom ? activeItemHash : undefined}
+                  setActiveItemHash={isRoom ? setActiveItemHash : undefined}
+                />
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
+        ))
+      )}
       <div />
     </Fragment>
   );
