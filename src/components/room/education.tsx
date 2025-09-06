@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { AtSignIcon, MapIcon } from "lucide-react";
 
@@ -68,7 +68,11 @@ const EducationCard = function EducationCard({
 
 export const Education = function Education({
   education,
-}: Pick<Room, "education">) {
+}: Pick<Room, "education"> & {
+  education: Omit<Room["education"], "list"> & {
+    list: NonNullable<Room["education"]["list"]>;
+  };
+}) {
   return (
     <Container
       as="section"
