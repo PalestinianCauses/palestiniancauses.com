@@ -1,16 +1,17 @@
-// REVIEWED - 03
+// REVIEWED - 04
 import {
   ArrowRightIcon,
   AtSignIcon,
   BriefcaseIcon,
   MapIcon,
 } from "lucide-react";
-import Image from "next/image";
 
+import { getMediaAltText, getMediaURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
 import { Room } from "@/payload-types";
 
 import { Container } from "../globals/container";
+import { SuspenseImage } from "../globals/suspense-image";
 import {
   Paragraph,
   SectionHeading,
@@ -19,6 +20,7 @@ import {
 } from "../globals/typography";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 
 import { DateRange, InformationBadges } from "./globals";
 
@@ -96,12 +98,19 @@ const ExperienceCard = function ExperienceCard({
 
 export const Experience = function Experience({
   experience,
-}: Pick<Room, "experience">) {
+}: Pick<Room, "experience"> & {
+  experience: Omit<Room["experience"], "list"> & {
+    list: NonNullable<Room["experience"]["list"]>;
+  };
+}) {
+  const experiencePhotograph = getMediaURL(experience.photograph);
+  const experienceAltPhotograph = getMediaAltText(experience.photograph);
+
   return (
     <Container
       as="section"
       id="experience"
-      className="section-padding-start-lg max-w-7xl">
+      className="section-padding-start-lg mb-8 max-w-7xl">
       <div className="mx-auto flex max-w-2xl flex-col items-start justify-between gap-16 lg:mx-0 lg:max-w-none lg:flex-row">
         <div className="w-full lg:sticky lg:top-12 lg:max-w-lg lg:flex-auto">
           <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">
@@ -115,13 +124,16 @@ export const Experience = function Experience({
             Connect with me
           </Button>
           <div>
-            {experience.photograph &&
-            typeof experience.photograph === "object" &&
-            experience.photograph.url ? (
+            {experiencePhotograph ? (
               <div className="group relative mx-auto max-w-xl overflow-hidden border border-input bg-background">
-                <Image
-                  src={experience.photograph.url}
-                  alt={experience.photograph.alt}
+                <SuspenseImage
+                  isLoadingElement={
+                    <Skeleton className="aspect-square w-full lg:aspect-[2/3]" />
+                  }
+                  src={experiencePhotograph}
+                  alt={
+                    experienceAltPhotograph || "Room Experience's Photograph"
+                  }
                   fill
                   className="!static aspect-auto !h-auto object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -137,11 +149,9 @@ export const Experience = function Experience({
         <div className="w-full lg:max-w-xl lg:flex-auto">
           <h3 className="sr-only">Professional Experience</h3>
           <div className="section-gap -my-8 grid xl:gap-24">
-            {experience.list && experience.list.length > 0
-              ? experience.list.map((item) => (
-                  <ExperienceCard key={item.id} {...item} />
-                ))
-              : null}
+            {experience.list.map((item) => (
+              <ExperienceCard key={item.id} {...item} />
+            ))}
           </div>
         </div>
       </div>
