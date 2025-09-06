@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import {
   ErrorPayload,
@@ -110,4 +110,9 @@ export const isString = function isString(value: unknown): value is string {
 // Numbers
 export const isNumber = function isNumber(value: unknown): value is number {
   return isDefined(value) && typeof value === "number";
+};
+
+// Objects
+export const isObject = function isObject(value: unknown): value is object {
+  return isDefined(value) && typeof value === "object";
 };
