@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { PaginatedDocs } from "payload";
 
@@ -15,6 +15,7 @@ export const getRoomList = async function getRoomList(): Promise<
 > {
   const response = await actionSafeExecute(
     payload.find({
+      req: { query: { origin: { equals: "website" } } },
       collection: "rooms",
       page: 1,
       limit: 5,
@@ -25,6 +26,11 @@ export const getRoomList = async function getRoomList(): Promise<
         slug: true,
         information: { photograph: true },
       },
+      where: {
+        status: {
+          equals: "published",
+        },
+      },
     }),
     messages.actions.room.serverError,
   );
@@ -32,17 +38,30 @@ export const getRoomList = async function getRoomList(): Promise<
   return response;
 };
 
-export const getRoomLinks = async function getRoomLinks(
-  id: number,
-): Promise<ResponseSafeExecute<{ label: keyof Room; href: string }[], string>> {
+export const getRoom = async function getRoom(
+  slug: string,
+): Promise<ResponseSafeExecute<Room, string>> {
   const response = await actionSafeExecute(
-    payload.findByID({
+    payload.find({
       collection: "rooms",
-      id,
+      where: { slug: { equals: slug }, status: { equals: "published" } },
       depth: 1,
     }),
+
     messages.actions.room.serverError,
   );
+
+  if (!response.data || response.data.docs.length !== 1 || response.error)
+    if (response.error) return { data: null, error: response.error };
+    else return { data: null, error: messages.actions.room.serverError };
+
+  return { data: response.data.docs[0], error: null };
+};
+
+export const getRoomLinks = async function getRoomLinks(
+  slug: string,
+): Promise<ResponseSafeExecute<{ label: keyof Room; href: string }[], string>> {
+  const response = await getRoom(slug);
 
   if (!response.data || response.error)
     return { data: null, error: response.error };
