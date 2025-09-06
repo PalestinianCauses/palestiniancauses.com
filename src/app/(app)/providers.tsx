@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 15
+// REVIEWED - 16
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
@@ -85,7 +85,7 @@ export const SidebarMainProvider = function SidebarMainProvider({
 }: PropsWithChildren) {
   return (
     <SafeHydrate>
-      <SidebarProvider defaultOpen={false}>
+      <SidebarProvider defaultOpen>
         <Sidebar collapsible="icon">
           <SidebarHeader>
             <WebsiteSwitcher />
@@ -97,8 +97,8 @@ export const SidebarMainProvider = function SidebarMainProvider({
             <SidebarUser />
           </SidebarFooter>
         </Sidebar>
-        <SidebarInset>
-          <header className="flex shrink-0 items-center justify-start py-4 transition-all duration-100 ease-in-out">
+        <SidebarInset className="w-full max-w-full">
+          <header className="top-b fixed left-0 right-0 z-40 flex shrink-0 items-center justify-start bg-background py-4 transition-all duration-100 ease-in-out">
             <div className="flex flex-col items-start justify-start gap-4 px-5 lg:px-7 xs:flex-row xs:items-center">
               <SidebarTrigger />
               <Separator
