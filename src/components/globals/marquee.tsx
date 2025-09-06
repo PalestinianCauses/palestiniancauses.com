@@ -1,12 +1,11 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { Variants } from "motion/react";
 import {
   HTMLAttributes,
   PropsWithChildren,
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -14,15 +13,12 @@ import {
 
 import { cn } from "@/lib/utils/styles";
 
-import { SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, useSidebar } from "../ui/sidebar";
-
 import { MotionDiv } from "./motion";
 
 export const MarqueeItem = function MarqueeItem({
-  delay = 0,
   className,
   children,
-}: HTMLAttributes<HTMLDivElement> & PropsWithChildren<{ delay?: number }>) {
+}: HTMLAttributes<HTMLDivElement> & PropsWithChildren) {
   return (
     <div className={cn("relative inline-block h-full w-full", className)}>
       {children}
@@ -42,16 +38,6 @@ export const InfiniteMarquee = function InfiniteMarquee({
   }>) {
   const marqueeRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState(0);
-
-  const { state, isMobile } = useSidebar();
-
-  const getMarqueeWidth = useCallback(() => {
-    if (isMobile) return "100vw";
-
-    if (state === "expanded") return `calc(100vw - ${SIDEBAR_WIDTH})`;
-
-    return `calc(100vw - ${SIDEBAR_WIDTH_ICON})`;
-  }, [state, isMobile]);
 
   useEffect(() => {
     if (marqueeRef.current && marqueeRef.current.scrollWidth)
@@ -75,8 +61,10 @@ export const InfiniteMarquee = function InfiniteMarquee({
 
   return (
     <div
-      className={cn("relative h-full overflow-hidden", className)}
-      style={{ width: getMarqueeWidth() }}>
+      className={cn(
+        "relative mx-auto h-full w-full overflow-hidden",
+        className,
+      )}>
       {contentWidth > 0 && (
         <MotionDiv
           ref={marqueeRef}
