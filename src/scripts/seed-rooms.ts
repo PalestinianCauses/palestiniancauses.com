@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-// REVIEWED
+// REVIEWED - 01
 
 import dotenv from "dotenv";
 
 import { AboutHeadingsPlusParagraphs } from "@/collections/rooms/fields/about";
 import { EducationHeadline } from "@/collections/rooms/fields/education";
 import { ExperienceHeadline } from "@/collections/rooms/fields/experience";
+import { QualificationHeadline } from "@/collections/rooms/fields/qualification";
 import { payload } from "@/lib/payload";
 import { Room } from "@/payload-types";
 
@@ -208,6 +209,89 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
         link: "https://www.facebook.com/GazaSkyGeeks/posts/today-were-having-demos-of-young-minds-club-at-south-tech-hub-were-amazed-by-the/2294520533961663",
         description:
           "At 16, I was given my first teaching job, which was quite challenging when I was younger than the other people training and many of my students. I also successfully managed and mentored a community of over 45 dedicated individuals for 90 hours and a Basic Web Development & Technical English syllabus. It was a great test of my skills and leadership to earn my place, gain respect, and effectively impart my knowledge in an environment that asks a lot of all riders.",
+      },
+    ],
+  },
+
+  qualification: {
+    headline: QualificationHeadline,
+    list: [
+      {
+        title: "React Server Components",
+        issuer: "Epic React by Kent C. Dodds",
+        dateStart: "2025-06-01",
+        dateEnd: "2025-06-01",
+        link: "https://epicreact.dev",
+      },
+      {
+        title: "React Performance",
+        issuer: "Epic React by Kent C. Dodds",
+        dateStart: "2025-06-01",
+        dateEnd: "2025-06-01",
+        link: "https://epicreact.dev",
+      },
+      {
+        title: "Advanced React Patterns",
+        issuer: "Epic React by Kent C. Dodds",
+        dateStart: "2025-05-01",
+        dateEnd: "2025-05-01",
+        link: "https://epicreact.dev",
+      },
+      {
+        title: "The Ultimate React Course 2023: React, Redux & More",
+        issuer: "Udemy, by Jonas Schmedtmann",
+        dateStart: "2023-06-01",
+        dateEnd: "2023-07-01",
+        link: "https://udemy.com/course/the-ultimate-react-course",
+      },
+      {
+        title: "Vue - The Complete Guide (incl. Router & Composition API)",
+        issuer: "Udemy, by Maximilian Schwarzmüller",
+        dateStart: "2022-12-01",
+        dateEnd: "2023-02-01",
+        link: "https://udemy.com/course/vuejs-2-the-complete-guide",
+      },
+      {
+        title: "Node, Express, MongoDB & More: The complete Boot-camp 2023",
+        issuer: "Udemy, by Jonas Schmedtmann",
+        dateStart: "2022-08-01",
+        dateEnd: "2023-03-01",
+        link: "https://udemy.com/course/nodejs-express-mongodb-bootcamp",
+      },
+      {
+        title: "Understanding TypeScript",
+        issuer: "Udemy, by Maximilian Schwarzmüller",
+        dateStart: "2022-08-01",
+        dateEnd: "2023-04-01",
+        link: "https://udemy.com/course/understanding-typescript",
+      },
+      {
+        title: "Advanced CSS and Sass: Flex-box, Grid, Animations, and More!",
+        issuer: "Udemy, by Jonas Schmedtmann",
+        dateStart: "2021-04-01",
+        dateEnd: "2021-04-01",
+        link: "https://udemy.com/course/advanced-css-and-sass",
+      },
+      {
+        title: "The Complete JavaScript Course 2021: From Zero to Expert",
+        issuer: "Udemy, by Jonas Schmedtmann",
+        dateStart: "2021-02-01",
+        dateEnd: "2021-03-01",
+        link: "https://udemy.com/course/the-complete-javascript-course",
+      },
+      {
+        title: "JavaScript Algorithms and Data Structures",
+        issuer: "FreeCodeCamp",
+        dateStart: "2021-01-01",
+        dateEnd: "2021-02-01",
+        link: "https://freecodecamp.org/learn/javascript-algorithms-and-data-structures",
+      },
+      {
+        title: "Responsive Web Design",
+        issuer: "FreeCodeCamp",
+        dateStart: "2020-12-01",
+        dateEnd: "2021-01-01",
+        link: "https://freecodecamp.org/learn/responsive-web-design",
       },
     ],
   },
