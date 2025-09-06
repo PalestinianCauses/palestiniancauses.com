@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import {
   ArrowRightIcon,
@@ -6,13 +6,14 @@ import {
   TimerIcon,
   UserCheckIcon,
 } from "lucide-react";
-import Image from "next/image";
 import { ElementType, Fragment, useId } from "react";
 
+import { getMediaAltText, getMediaURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
 import { Room } from "@/payload-types";
 
 import { Container } from "../globals/container";
+import { SuspenseImage } from "../globals/suspense-image";
 import {
   Paragraph,
   SectionHeading,
@@ -21,13 +22,7 @@ import {
 } from "../globals/typography";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-
-type TAbout = Pick<Room, "about">;
-
-type AboutProps = Pick<
-  TAbout["about"],
-  "headline" | "paragraphs" | "photograph" | "stats"
->;
+import { Skeleton } from "../ui/skeleton";
 
 const State = function State({
   align = "left",
@@ -163,11 +158,8 @@ const Content = function Content({
 };
 
 export const About = function About({
-  headline,
-  paragraphs,
-  photograph,
-  stats,
-}: AboutProps) {
+  about: { headline, paragraphs, photograph, stats },
+}: Pick<Room, "about">) {
   const states = [
     {
       icon: TimerIcon,
@@ -189,6 +181,9 @@ export const About = function About({
     },
   ];
 
+  const aboutPhotograph = getMediaURL(photograph);
+  const aboutAltPhotograph = getMediaAltText(photograph);
+
   return (
     <Fragment>
       <Container
@@ -197,13 +192,11 @@ export const About = function About({
         className="section-padding-start-lg max-w-7xl">
         <div className={cn("section-gap grid")}>
           <div
-            className={cn("section-gap grid lg:grid-cols-2", {
-              "lg:grid-cols-[2fr_1fr]":
-                !photograph ||
-                typeof photograph !== "object" ||
-                !photograph.url,
+            className={cn("section-gap grid", {
+              "xl:grid-cols-2": aboutPhotograph,
+              "lg:grid-cols-[2fr_1fr] xl:grid-cols-2": !aboutPhotograph,
             })}>
-            <div className="order-2 flex flex-col items-start justify-start lg:order-1">
+            <div className="order-2 flex flex-col items-start justify-start xl:order-1">
               <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">
                 Meet the person behind this room
               </SectionHeadingBadge>
@@ -219,28 +212,25 @@ export const About = function About({
               </Button>
             </div>
 
-            {!photograph ||
-            typeof photograph !== "object" ||
-            !photograph.url ? (
+            {!aboutPhotograph ? (
               <div className="order-2 grid items-start gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-1">
                 {states.map((state) => (
                   <State key={state.label} align="right" state={state} />
                 ))}
               </div>
             ) : (
-              <div className="order-1 lg:order-2">
+              <div className="order-1 xl:order-2">
                 <div className="group relative h-full">
                   <div className="relative mx-auto h-full max-w-xl overflow-hidden border border-input bg-background">
-                    {photograph &&
-                    typeof photograph === "object" &&
-                    photograph.url ? (
-                      <Image
-                        src={photograph.url}
-                        alt={photograph.alt}
-                        fill
-                        className="!static object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : null}
+                    <SuspenseImage
+                      isLoadingElement={
+                        <Skeleton className="aspect-square w-full lg:aspect-auto lg:h-full" />
+                      }
+                      src={aboutPhotograph}
+                      alt={aboutAltPhotograph || "Room About's Photograph"}
+                      fill
+                      className="!static object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
 
                     <div className="absolute left-0 top-0 h-8 w-8 border-l border-t border-foreground" />
                     <div className="absolute right-0 top-0 h-8 w-8 border-r border-t border-foreground" />
@@ -252,7 +242,7 @@ export const About = function About({
             )}
           </div>
 
-          {photograph && typeof photograph === "object" && photograph.url ? (
+          {aboutPhotograph ? (
             <div className="grid items-start gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
               {states.map((state) => (
                 <State key={state.label} state={state} />
