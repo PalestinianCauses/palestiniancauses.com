@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { PaginatedDocs } from "payload";
 
@@ -25,12 +25,14 @@ export const getRoomList = async function getRoomList(): Promise<
         name: true,
         slug: true,
         information: { photograph: true },
+        links: true,
       },
       where: {
         status: {
           equals: "published",
         },
       },
+      overrideAccess: false,
     }),
     messages.actions.room.serverError,
   );
@@ -43,9 +45,11 @@ export const getRoom = async function getRoom(
 ): Promise<ResponseSafeExecute<Room, string>> {
   const response = await actionSafeExecute(
     payload.find({
+      req: { query: { origin: { equals: "website" } } },
       collection: "rooms",
       where: { slug: { equals: slug }, status: { equals: "published" } },
       depth: 1,
+      overrideAccess: false,
     }),
 
     messages.actions.room.serverError,
@@ -56,34 +60,4 @@ export const getRoom = async function getRoom(
     else return { data: null, error: messages.actions.room.serverError };
 
   return { data: response.data.docs[0], error: null };
-};
-
-export const getRoomLinks = async function getRoomLinks(
-  slug: string,
-): Promise<ResponseSafeExecute<{ label: keyof Room; href: string }[], string>> {
-  const response = await getRoom(slug);
-
-  if (!response.data || response.error)
-    return { data: null, error: response.error };
-
-  const links: { label: keyof Room; href: string }[] = [];
-
-  for (let i = 0; i < Object.keys(response.data).length; i += 1) {
-    const key = Object.keys(response.data)[i];
-    let value = null;
-
-    if (
-      key === "about" ||
-      key === "education" ||
-      key === "experience" ||
-      key === "qualification" ||
-      key === "skills"
-    ) {
-      value = response.data[key];
-
-      if (value) links.push({ label: key, href: `#${key}` });
-    }
-  }
-
-  return { data: links, error: null };
 };
