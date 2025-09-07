@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Field } from "payload";
 
@@ -27,6 +27,7 @@ export const ExperienceField: Field = {
       type: "text",
       defaultValue: ExperienceHeadline,
       maxLength: 80,
+      required: true,
     },
     {
       admin: {
