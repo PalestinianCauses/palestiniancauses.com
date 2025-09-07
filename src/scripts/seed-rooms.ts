@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import dotenv from "dotenv";
 
@@ -295,18 +295,112 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
       },
     ],
   },
+
+  skills: [
+    {
+      category: "Front-End Development",
+      skillsCategorized: [
+        { name: "React.JS", level: "expert" },
+        { name: "Vue.JS", level: "advanced" },
+        { name: "TypeScript", level: "advanced" },
+        { name: "JavaScript", level: "expert" },
+        { name: "Tailwind CSS", level: "expert" },
+        { name: "Bootstrap", level: "expert" },
+        { name: "CSS 3 & SCSS/Sass", level: "expert" },
+        { name: "HTML 5", level: "expert" },
+      ],
+    },
+    {
+      category: "Back-End Development",
+      skillsCategorized: [
+        { name: "Next.JS", level: "expert" },
+        { name: "Node.JS", level: "advanced" },
+        { name: "Express.JS", level: "advanced" },
+        { name: "API Integration (REST)", level: "advanced" },
+      ],
+    },
+    {
+      category: "Databases",
+      skillsCategorized: [
+        { name: "MySQL", level: "intermediate" },
+        { name: "MongoDB", level: "intermediate" },
+      ],
+    },
+    {
+      category: "Development Tools & DevOps",
+      skillsCategorized: [
+        { name: "Figma (for Developers)", level: "expert" },
+        { name: "Git & GitHub", level: "expert" },
+        { name: "Postman", level: "advanced" },
+        { name: "WordPress & Oxygen Builder", level: "intermediate" },
+        {
+          name: "cPanel, Vercel, Netlify & Web Hosting",
+          level: "intermediate",
+        },
+      ],
+    },
+    {
+      category: "Leadership & Management",
+      skillsCategorized: [
+        { name: "Community Building", level: "advanced" },
+        { name: "Leadership", level: "expert" },
+        { name: "Mentorship & Teaching", level: "expert" },
+        { name: "Project Management", level: "advanced" },
+        { name: "Strategic Planning", level: "advanced" },
+        { name: "Public Speaking & Pitching", level: "advanced" },
+      ],
+    },
+    {
+      category: "Professional & Soft Skills",
+      skillsCategorized: [
+        { name: "Entrepreneurship", level: "advanced" },
+        { name: "Cross-Functional Communication", level: "advanced" },
+        { name: "Remote Collaboration", level: "expert" },
+        { name: "Problem-Solving", level: "expert" },
+        { name: "Adaptability", level: "expert" },
+        { name: "Resilience", level: "expert" },
+      ],
+    },
+    {
+      category: "Languages",
+      skillsCategorized: [
+        { name: "Arabic", level: "expert" },
+        { name: "English", level: "advanced" },
+      ],
+    },
+  ],
 };
 
 const doSeedingShawqiRoom = async function doSeedingShawqiRoom() {
   try {
     console.log("🚀 Starting seeding Shawqi's room...");
 
-    const room = await payload.create({
+    const room = await payload.find({
       collection: "rooms",
-      data,
+      where: { slug: { equals: "shawqi" } },
     });
 
-    console.log(`🎉 Shawqi's room created successfully at /${room.slug}`);
+    if (room.docs.length > 1 || room.docs.length === 0) {
+      console.error("❌ There should be only one room with slug `shawqi`");
+      process.exit(0);
+    }
+
+    if (room.docs.length === 1) {
+      await payload.update({
+        collection: "rooms",
+        where: { slug: { equals: "shawqi" } },
+        data,
+      });
+    } else {
+      await payload.create({
+        collection: "rooms",
+        data,
+      });
+    }
+
+    console.log(
+      `🎉 Shawqi's room created successfully at /${room.docs[0].slug}`,
+    );
     process.exit(0);
   } catch (error) {
     console.error("❌ Seeding Shawqi's room failed:", error);
