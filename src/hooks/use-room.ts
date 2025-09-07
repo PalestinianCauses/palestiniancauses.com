@@ -1,12 +1,12 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { getRoomLinks, getRoomList } from "@/actions/room";
+import { getRoomList } from "@/actions/room";
 import { Room } from "@/payload-types";
 
 export const useRoom = function useRoom() {
@@ -28,21 +28,6 @@ export const useRoom = function useRoom() {
     },
   });
 
-  const { isLoading: isRoomLinksLoading, data: roomLinks } = useQuery({
-    queryKey: ["room-links"],
-    queryFn: async () => {
-      if (!roomActive) return null;
-
-      const response = await getRoomLinks(roomActive.slug);
-
-      if (!response.data || response.data.length === 0 || response.error)
-        return null;
-
-      return response.data;
-    },
-    enabled: Boolean(roomActive),
-  });
-
   useEffect(() => {
     if (isRoom) {
       const room = roomList
@@ -56,9 +41,7 @@ export const useRoom = function useRoom() {
   return {
     isRoom,
     isRoomListLoading,
-    isRoomLinksLoading,
     roomActive,
     roomList,
-    roomLinks,
   };
 };
