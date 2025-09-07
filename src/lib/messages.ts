@@ -1,4 +1,4 @@
-// REVIEWED - 26
+// REVIEWED - 27
 
 export const messages = {
   http: {
@@ -147,6 +147,9 @@ export const messages = {
     },
     room: {
       serverError: "Failed to retrieve room. Please try again later.",
+      links: {
+        serverError: "Failed to retrieve room links. Please try again later.",
+      },
     },
   },
   forms: {
