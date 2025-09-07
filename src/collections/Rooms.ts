@@ -1,15 +1,15 @@
-// REVIEWED - 22
+// REVIEWED - 23
 
 import { CollectionConfig } from "payload";
 
 import { isAdminOrSelf } from "@/access/global";
-import { messages } from "@/lib/messages";
-import { validateDateInRange } from "@/lib/utils/dates";
+import { isObject, isString } from "@/lib/types/guards";
 
 import { AboutField } from "./rooms/fields/about";
 import { EducationField } from "./rooms/fields/education";
 import { ExperienceField } from "./rooms/fields/experience";
 import { InformationField } from "./rooms/fields/information";
+import { QualificationField } from "./rooms/fields/qualification";
 
 export const Rooms: CollectionConfig = {
   slug: "rooms",
@@ -33,10 +33,17 @@ export const Rooms: CollectionConfig = {
 
       return false;
     },
-    // read: isAdminOrSelf,
-    // update: isAdminOrSelf,
-    // delete: isAdminOrSelf,
-    read: isAdminOrSelf,
+    read: async ({ req }) => {
+      if (
+        isObject(req.query.origin) &&
+        "equals" in req.query.origin &&
+        isString(req.query.origin.equals) &&
+        req.query.origin.equals === "website"
+      )
+        return true;
+
+      return isAdminOrSelf({ req });
+    },
     update: isAdminOrSelf,
     delete: isAdminOrSelf,
   },
@@ -113,131 +120,7 @@ export const Rooms: CollectionConfig = {
     AboutField,
     EducationField,
     ExperienceField,
-    {
-      admin: {
-        description:
-          "Catalog of professional qualifications, courses, and certifications.",
-      },
-      label: "Professional Qualifications",
-      name: "qualification",
-      type: "array",
-      fields: [
-        {
-          admin: {
-            description:
-              "Full official title of the course, certification, or qualification.",
-          },
-          label: "Qualification Title",
-          name: "title",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: {
-            description: "Name of the issuing organization or platform.",
-          },
-          label: "Issuing Organization",
-          name: "issuer",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: {
-            description: "Month and year the qualification program commenced.",
-            date: {
-              pickerAppearance: "monthOnly",
-              minDate: new Date(2010, 0, 1, 0, 0, 0, 0),
-              maxDate: new Date(
-                new Date(
-                  new Date().setUTCDate(new Date().getUTCDate() - 1),
-                ).setUTCHours(0, 0, 0, 0),
-              ),
-            },
-          },
-          label: "Start Date",
-          name: "dateStart",
-          type: "date",
-          required: true,
-        },
-        {
-          admin: {
-            description:
-              "Month and year the qualification was completed or awarded.",
-            date: { pickerAppearance: "monthOnly" },
-          },
-          label: "End Date",
-          name: "dateEnd",
-          type: "date",
-          required: true,
-          validate: (value, { siblingData }) => {
-            if (
-              !("dateStart" in siblingData) ||
-              !siblingData.dateStart ||
-              !(
-                siblingData.dateStart instanceof Date ||
-                typeof siblingData.dateStart === "string"
-              )
-            )
-              return messages.forms.required("start date");
-
-            const start = new Date(siblingData.dateStart);
-            const end = new Date();
-            end.setUTCDate(end.getUTCDate() - 1);
-
-            return validateDateInRange(
-              value,
-              start,
-              end,
-              messages.forms.required("end date"),
-              messages.forms.valid("end date"),
-              messages.forms.date(start.toLocaleDateString(), "yesterday"),
-            );
-          },
-        },
-        {
-          admin: {
-            description:
-              "Optional: Official URL to the organization, course, or certification page.",
-          },
-          label: "Reference Link",
-          name: "link",
-          type: "text",
-          required: false,
-        },
-        {
-          admin: {
-            description:
-              "Indicate whether a certificate was awarded for this qualification.",
-          },
-          label: "Certificate Awarded",
-          name: "hasCertificate",
-          type: "checkbox",
-          defaultValue: false,
-        },
-        {
-          admin: {
-            condition: (_, siblingData) => siblingData.hasCertificate === true,
-            description: "Upload the official certificate document or image.",
-          },
-          label: "Certificate Document",
-          name: "certificate",
-          type: "upload",
-          relationTo: "media",
-          hasMany: false,
-          required: true,
-        },
-        {
-          admin: {
-            description:
-              "Detailed summary of knowledge, skills, and competencies acquired.",
-          },
-          label: "Qualification Description",
-          name: "description",
-          type: "textarea",
-          required: true,
-        },
-      ],
-    },
+    QualificationField,
     {
       admin: {
         description:
@@ -295,6 +178,30 @@ export const Rooms: CollectionConfig = {
         },
       ],
     },
+    {
+      admin: {
+        readOnly: true,
+        description:
+          "Auto-generated navigation links for sections with content.",
+      },
+      label: "Links",
+      name: "links",
+      type: "array",
+      fields: [
+        {
+          label: "Name",
+          name: "label",
+          type: "text",
+          required: true,
+        },
+        {
+          label: "Link",
+          name: "href",
+          type: "text",
+          required: true,
+        },
+      ],
+    },
   ],
   hooks: {
     beforeChange: [
@@ -306,6 +213,50 @@ export const Rooms: CollectionConfig = {
 
         return data;
       },
+      ({ data }) => {
+        const links: { label: string; href: string }[] = [];
+
+        if (
+          data.about &&
+          data.about.paragraphs &&
+          Array.isArray(data.about.paragraphs) &&
+          data.about.paragraphs.length > 0
+        )
+          links.push({ label: "about", href: "#about" });
+
+        if (
+          data.education &&
+          data.education.list &&
+          Array.isArray(data.education.list) &&
+          data.education.list.length > 0
+        )
+          links.push({ label: "education", href: "#education" });
+
+        if (
+          data.experience &&
+          data.experience.list &&
+          Array.isArray(data.experience.list) &&
+          data.experience.list.length > 0
+        )
+          links.push({ label: "experience", href: "#experience" });
+
+        if (
+          data.qualification &&
+          data.qualification.list &&
+          Array.isArray(data.qualification.list) &&
+          data.qualification.list.length > 0
+        )
+          links.push({ label: "qualification", href: "#qualification" });
+
+        if (data.skills && Array.isArray(data.skills) && data.skills.length > 0)
+          links.push({ label: "skills", href: "#skills" });
+
+        // eslint-disable-next-line no-param-reassign
+        data.links = links;
+
+        return data;
+      },
     ],
+    beforeRead: [],
   },
 };
