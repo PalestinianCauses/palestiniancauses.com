@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 20
+// REVIEWED - 21
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -263,7 +263,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
   ];
 
   return (
-    <main>
+    <main className="section-padding-start-lg">
       {/* Open Graph */}
       <ImageFrameRender frames={profileImagesFrames} />
       <ImageFrameRender frames={hoodiesFrames} />
@@ -366,12 +366,12 @@ const InstagramStudioPage = function InstagramStudioPage() {
           Scan to Order Your Copy
         </SectionHeadingBadge>
       </Frame>
-      <Frame
+      {/* <Frame
         ref={qrCodeFrames[3].ref}
         dimensions="9:16"
         color="primary-foreground">
         <FrameContent></FrameContent>
-      </Frame>
+      </Frame> */}
       {/* N's Art-Work */}
       <Frame
         ref={nArtWorkFrames[0].ref}
@@ -386,15 +386,15 @@ const InstagramStudioPage = function InstagramStudioPage() {
               className="!static !h-24 !w-24"
             />
           </FrameSquare>
-          <FrameTitle className="flex flex-col flex-wrap items-start">
-            <FrameHighlight className="before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
-              We
+          <FrameTitle className="grid w-full grid-cols-1 grid-rows-3 items-start">
+            <FrameHighlight className="w-max before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
+              A
             </FrameHighlight>
-            <FrameHighlight className="before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
-              Do Not
+            <FrameHighlight className="w-max before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
+              Nefarious
             </FrameHighlight>
-            <FrameHighlight className="before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
-              Know.
+            <FrameHighlight className="w-max before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
+              Equation.
             </FrameHighlight>
           </FrameTitle>
           <SectionHeadingBadge className="bg-primary text-lg text-primary-foreground ring-primary">
@@ -405,93 +405,85 @@ const InstagramStudioPage = function InstagramStudioPage() {
         <FrameImagesGrid>
           <div className="relative col-start-1 col-end-13 row-start-1 row-end-13">
             <Image
-              src="/we-do-not-know-refined.png"
+              src="/a-nefarious-equation-refined.png"
               alt="N's Art-Work no. 03"
               fill
-              className="!static object-cover object-top"
+              className="!static object-cover object-center"
             />
           </div>
         </FrameImagesGrid>
       </Frame>
-      <Frame
-        ref={nArtWorkFrames[1].ref}
-        dimensions="4:5"
-        color="primary-foreground">
-        <FrameContent className="h-auto">
-          <FrameSquare className="shrink-0 bg-primary text-primary-foreground ring-primary">
+      <Frame ref={nArtWorkFrames[1].ref} dimensions="4:5" color="primary">
+        <FrameContent>
+          <FrameSquare className="shrink-0 bg-primary-foreground text-primary ring-primary-foreground">
             <QuoteIcon className="h-20 w-20 stroke-[1.5]" />
           </FrameSquare>
           <FrameParagraph>
-            I don&apos;t know if my memory helps me remember the sound of birds
-            alone in the morning, the sound of children&apos;s giggles, the
-            voice of my friends who argue about a discussion and then assuage
-            and start singing,{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              or even the sound of someone&apos;s radio
+            Recently, my mom mentioned that many basic supplies had run out in
+            the home, so we went to the market,{" "}
+            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+              &ldquo;what it is called a market.&ldquo;
             </FrameParagraphHighlight>{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              broadcasting any news other than
+            All sellers called for their goods: &ldquo;Local tomatoes are 35
+            shekels per kilo, a pocket of Nescafe is 7 shekels,&ldquo; and these
+            prices were double the original ones. After a few minutes, I heard a
+            young seller say: this is an unparalleled shampoo.{" "}
+            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+              Curiously, I had taken it to
             </FrameParagraphHighlight>{" "}
-            &ldquo;that building was targeted, violent raids on..., a massacre
-            of (…) family&ldquo;. No sound comes to my hearing except
-            explosions, the collapse of buildings on the heads of those like me,
-            the crying of the bereaved, and the grief of mothers, and in the
-            background is the zanana&apos;s sound that never stops.
-          </FrameParagraph>
-          <FrameParagraph>
-            I don&apos;t have enough time{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              to recall my previous life&apos;s
-            </FrameParagraphHighlight>{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              details and assume weak possibilities
-            </FrameParagraphHighlight>{" "}
-            of its existence after the war ends. All of us in this war know one
-            common thing...
+            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+              check it:
+            </FrameParagraphHighlight>
           </FrameParagraph>
         </FrameContent>
       </Frame>
-      <Frame ref={nArtWorkFrames[2].ref} dimensions="4:5" color="primary">
+      <Frame
+        ref={nArtWorkFrames[2].ref}
+        dimensions="4:5"
+        color="primary-foreground">
         <FrameContent className="justify-center">
           <FrameTitle>
-            ...that we do not{" "}
-            <FrameHighlight className="mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              know!
+            Me: It&apos;s an Israeli{" "}
+            <FrameHighlight className="mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+              product,
+            </FrameHighlight>{" "}
+            <FrameHighlight className="mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+              Damn!
             </FrameHighlight>{" "}
           </FrameTitle>
-          <SectionHeadingBadge className="text-current ring-primary-foreground">
-            Composed by L. featured in The Volume &quot;A Human But From
+          <SectionHeadingBadge>
+            Composed by M. featured in The Volume &quot;A Human But From
             Gaza&quot;
           </SectionHeadingBadge>
         </FrameContent>
       </Frame>
-      <Frame
-        ref={nArtWorkFrames[3].ref}
-        dimensions="4:5"
-        color="primary-foreground">
+      <Frame ref={nArtWorkFrames[3].ref} dimensions="4:5" color="primary">
         <FrameContent>
           <FrameTitle>
             Discover the complete diary and{" "}
-            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
               further
             </FrameHighlight>{" "}
             compelling{" "}
-            <FrameHighlight className="z-20 -mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+            <FrameHighlight className="z-20 -mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
               narratives
             </FrameHighlight>{" "}
             within:
           </FrameTitle>
         </FrameContent>
       </Frame>
-      <Frame ref={nArtWorkFrames[4].ref} dimensions="4:5" color="primary">
+      <Frame
+        ref={nArtWorkFrames[4].ref}
+        dimensions="4:5"
+        color="primary-foreground">
         <FrameContent>
           <FrameTitle>
             Link in{" "}
-            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
+            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
               bio.
             </FrameHighlight>{" "}
           </FrameTitle>
-          <FrameSquare className="mt-auto bg-primary-foreground text-primary ring-primary-foreground">
+          <FrameSquare className="mt-auto bg-background text-primary-foreground ring-input">
             <Image
               src="/logo-primary.png"
               alt="Primary Logo"
@@ -501,7 +493,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
           </FrameSquare>
         </FrameContent>
         <FrameImagesGrid className="scale-1">
-          <div className="col-start-6 col-end-13 row-start-4 row-end-13 -translate-y-10 ring ring-primary-foreground ring-offset-8 ring-offset-primary">
+          <div className="col-start-6 col-end-13 row-start-4 row-end-13 -translate-y-10 ring ring-primary ring-offset-8 ring-offset-primary-foreground">
             <Image
               src="https://nwdtauhmkupvkywh.public.blob.vercel-storage.com/book-cover/book-cover-new.png"
               alt="A Human But From Gaza Book Cover"
@@ -512,110 +504,117 @@ const InstagramStudioPage = function InstagramStudioPage() {
         </FrameImagesGrid>
       </Frame>
       {/* Diary Entry */}
-      <Frame ref={instagramFrames[0].ref} dimensions="4:5" color="primary">
+      <Frame
+        ref={instagramFrames[0].ref}
+        dimensions="4:5"
+        color="primary-foreground">
         <FrameContent>
-          <SectionHeadingBadge className="text-lg text-primary-foreground">
+          <SectionHeadingBadge className="text-lg">
             The Truth Museum: Humans But From Gaza
           </SectionHeadingBadge>
           <FrameTitle>
-            Will our Lean Years{" "}
-            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              Extend
+            Literature in the Form of{" "}
+            <span className="relative z-20">Haunting</span>
+            <FrameHighlight className="relative z-10 text-primary before:-inset-x-2.5 before:bg-background before:ring-input">
+              Nightmares.
             </FrameHighlight>{" "}
-            beyond Two Years?
           </FrameTitle>
-          <div className="relative mt-auto flex h-32 w-32 items-center justify-center bg-background text-primary ring-1 ring-background">
+          <FrameSquare className="mt-auto bg-background text-primary ring-input">
             <Image
               src="/logo-primary.png"
               alt="Primary Logo"
               fill
               className="!static !h-24 !w-24"
             />
-          </div>
+          </FrameSquare>
         </FrameContent>
       </Frame>
-      <Frame
-        ref={instagramFrames[1].ref}
-        dimensions="4:5"
-        color="primary-foreground">
+      <Frame ref={instagramFrames[1].ref} dimensions="4:5" color="primary">
         <FrameContent>
-          <FrameSquare className="shrink-0 bg-primary text-primary-foreground ring-primary">
+          <FrameSquare className="shrink-0 bg-primary-foreground text-primary ring-primary-foreground">
             <QuoteIcon className="h-20 w-20 stroke-[1.5]" />
           </FrameSquare>
           <FrameParagraph>
-            Did you understand from the beginning of the diary that we are still
-            waiting for those{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              who would
+            I find myself reading a{" "}
+            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+              Nakba novel
             </FrameParagraphHighlight>{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              liberate us from the well?
+            while living through a{" "}
+            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+              present one.
             </FrameParagraphHighlight>{" "}
-            I reconsider what I said; I retract what I said because it&apos;s
-            too late, our hope has been dashed, and the rope of the well that
-            once hung there has burned away. This time we will save ourselves.
+            I read in the book about the sound of an explosion, and then I heard
+            it exploding in my neighborhood, so I don&apos;t get bored with the
+            reality. I go to read war diaries, and I discuss with other readers
+            about our written reality between the lines at dedicated gatherings,
+            and I find them like me, deeply immersed.
           </FrameParagraph>
           <FrameParagraph>
-            I know the path&apos;s features have yet to take shape, but maybe we
-            will dig the tunnel of freedom with our empty hands, using the
-            cunning and wisdom of our ancestors,{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              the prayers of bereaved mothers,
+            I don&apos;t have the time to read{" "}
+            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+              Western literature,
             </FrameParagraphHighlight>{" "}
-            and the strength of our men, which resembles the burning power of
-            the sun that...
+            because sometimes I feel it&apos;s{" "}
+            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+              a betrayal.
+            </FrameParagraphHighlight>{" "}
+            As if there is no trace of reassurance; fear has become the
+            companion, the maze is the compass, the homelessness is the shelter,
+            and the inhalation here has...
           </FrameParagraph>
         </FrameContent>
       </Frame>
-      <Frame ref={instagramFrames[2].ref} dimensions="4:5" color="primary">
+      <Frame
+        ref={instagramFrames[2].ref}
+        dimensions="4:5"
+        color="primary-foreground">
         <FrameContent className="justify-center">
           <FrameTitle>
-            is beyond the
-            <FrameHighlight className="mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              reach
+            has <br />
+            <FrameHighlight className="mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+              become
             </FrameHighlight>{" "}
-            of anyone to{" "}
-            <FrameHighlight className="mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              extinguish
+            without <br />
+            <FrameHighlight className="mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+              exhalation!
             </FrameHighlight>{" "}
-            the power of its flame.{" "}
           </FrameTitle>
-          <SectionHeadingBadge className="text-current ring-primary-foreground">
+          <SectionHeadingBadge className="text-current ring-primary">
             Composed by Basmala featured in The Truth Museum
           </SectionHeadingBadge>
         </FrameContent>
       </Frame>
-      <Frame
-        ref={instagramFrames[3].ref}
-        dimensions="4:5"
-        color="primary-foreground">
+      <Frame ref={instagramFrames[3].ref} dimensions="4:5" color="primary">
         <FrameContent>
           <FrameTitle>
             Discover the complete diary and{" "}
-            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
               further
             </FrameHighlight>{" "}
             compelling{" "}
-            <FrameHighlight className="z-20 -mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+            <FrameHighlight className="z-20 -mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
               narratives
             </FrameHighlight>{" "}
             within:
           </FrameTitle>
         </FrameContent>
       </Frame>
-      <Frame ref={instagramFrames[4].ref} dimensions="4:5" color="primary">
+      <Frame
+        ref={instagramFrames[4].ref}
+        dimensions="4:5"
+        color="primary-foreground">
         <FrameContent>
           <FrameTitle>
             The{" "}
-            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
+            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
               Truth
             </FrameHighlight>{" "}
             Museum. Link in{" "}
-            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
+            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
               bio.
             </FrameHighlight>{" "}
           </FrameTitle>
-          <FrameSquare className="mt-auto bg-primary-foreground text-primary ring-primary-foreground">
+          <FrameSquare className="mt-auto bg-background text-primary-foreground ring-input">
             <Image
               src="/logo-primary.png"
               alt="Primary Logo"
@@ -625,7 +624,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
           </FrameSquare>
         </FrameContent>
         <FrameImagesGrid className="scale-1">
-          <div className="col-start-6 col-end-13 row-start-6 row-end-13 ring ring-primary-foreground ring-offset-8 ring-offset-primary">
+          <div className="col-start-6 col-end-13 row-start-6 row-end-13 ring ring-primary ring-offset-8 ring-offset-primary-foreground">
             <Image
               src="/The-Truth-Museum.png"
               alt="The Truth Museum"
