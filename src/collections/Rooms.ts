@@ -1,4 +1,4 @@
-// REVIEWED - 23
+// REVIEWED - 24
 
 import { CollectionConfig } from "payload";
 
@@ -48,7 +48,7 @@ export const Rooms: CollectionConfig = {
     delete: isAdminOrSelf,
   },
   admin: {
-    group: "Content",
+    group: "Rooms Content",
     defaultColumns: ["id", "name", "slug", "createdAt"],
     useAsTitle: "name",
     preview: (doc) => {
@@ -180,6 +180,40 @@ export const Rooms: CollectionConfig = {
     },
     {
       admin: {
+        description:
+          "Services you offer to clients and potential collaborators.",
+      },
+      label: "Services",
+      name: "services",
+      type: "relationship",
+      relationTo: "rooms-services",
+      hasMany: true,
+      required: false,
+    },
+    {
+      admin: {
+        description: "Service packages with pricing and bundled offerings.",
+      },
+      label: "Service Packages",
+      name: "packages",
+      type: "relationship",
+      relationTo: "rooms-packages",
+      hasMany: true,
+      required: false,
+    },
+    {
+      admin: {
+        description: "Contact information and methods for reaching you.",
+      },
+      label: "Contact Information",
+      name: "contact",
+      type: "relationship",
+      relationTo: "rooms-contact",
+      hasMany: true,
+      required: false,
+    },
+    {
+      admin: {
         readOnly: true,
         description:
           "Auto-generated navigation links for sections with content.",
@@ -250,6 +284,27 @@ export const Rooms: CollectionConfig = {
 
         if (data.skills && Array.isArray(data.skills) && data.skills.length > 0)
           links.push({ label: "skills", href: "#skills" });
+
+        if (
+          data.services &&
+          Array.isArray(data.services) &&
+          data.services.length > 0
+        )
+          links.push({ label: "services", href: "#services" });
+
+        if (
+          data.packages &&
+          Array.isArray(data.packages) &&
+          data.packages.length > 0
+        )
+          links.push({ label: "packages", href: "#packages" });
+
+        if (
+          data.contact &&
+          Array.isArray(data.contact) &&
+          data.contact.length > 0
+        )
+          links.push({ label: "contact", href: "#contact" });
 
         // eslint-disable-next-line no-param-reassign
         data.links = links;
