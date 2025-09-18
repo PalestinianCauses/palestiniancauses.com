@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Field } from "payload";
 
@@ -7,6 +7,8 @@ import { validateDateInRange } from "@/lib/utils/dates";
 
 export const QualificationHeadline =
   "Beyond the Classroom: A Commitment to Lifelong Learning and Mastery.";
+
+export const QualificationHeadlineSub = "A Record of Specialized Training";
 
 export const QualificationField: Field = {
   admin: {
@@ -27,6 +29,18 @@ export const QualificationField: Field = {
       type: "text",
       defaultValue: QualificationHeadline,
       maxLength: 80,
+      required: true,
+    },
+    {
+      admin: {
+        description:
+          "A sub-headline that provides additional context or information about the headline.",
+      },
+      label: "Sub-Headline",
+      name: "headline-sub",
+      type: "text",
+      maxLength: 32,
+      defaultValue: QualificationHeadlineSub,
       required: true,
     },
     {

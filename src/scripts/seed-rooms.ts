@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import dotenv from "dotenv";
 
@@ -16,7 +16,10 @@ import {
   ExperienceHeadline,
   ExperienceHeadlineSub,
 } from "@/collections/rooms/fields/experience";
-import { QualificationHeadline } from "@/collections/rooms/fields/qualification";
+import {
+  QualificationHeadline,
+  QualificationHeadlineSub,
+} from "@/collections/rooms/fields/qualification";
 import { payload } from "@/lib/payload";
 import { Room } from "@/payload-types";
 
@@ -227,8 +230,9 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
   },
 
   qualification: {
-    headline: QualificationHeadline,
-    list: [
+    "headline-sub": QualificationHeadlineSub,
+    "headline": QualificationHeadline,
+    "list": [
       {
         title: "React Server Components",
         issuer: "Epic React by Kent C. Dodds",
