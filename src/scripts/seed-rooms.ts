@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import dotenv from "dotenv";
 
-import { AboutHeadingsPlusParagraphs } from "@/collections/rooms/fields/about";
+import {
+  AboutHeadingsPlusParagraphs,
+  AboutHeadlineSub,
+} from "@/collections/rooms/fields/about";
 import { EducationHeadline } from "@/collections/rooms/fields/education";
 import { ExperienceHeadline } from "@/collections/rooms/fields/experience";
 import { QualificationHeadline } from "@/collections/rooms/fields/qualification";
@@ -27,9 +30,11 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
   },
 
   about: {
-    headline: "Building Bridges Between the Real World and the Digital World.",
+    "headline-sub": AboutHeadlineSub,
+    "headline":
+      "Building Bridges Between the Real World and the Digital World.",
 
-    paragraphs: [
+    "paragraphs": [
       {
         paragraph:
           "As a Next.JS Full-Stack developer, I design complete web solutions to turn ambitious ideas into scalable, user-focused web apps. My skill set ranges from building robust front-end experiences with React and Next.JS to constructing scalable back-end services using Node.JS. With a background in working with cross-disciplinary teams and managing projects, I have developed the ability to contextualize deliverables and deliver high-quality results in any setting.",
@@ -44,7 +49,7 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
       },
     ],
 
-    stats: {
+    "stats": {
       experience: {
         years: 7,
         heading: AboutHeadingsPlusParagraphs.experience.heading,

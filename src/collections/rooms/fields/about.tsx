@@ -1,6 +1,8 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Field } from "payload";
+
+export const AboutHeadlineSub = "Meet the person behind this room";
 
 export const AboutHeadingsPlusParagraphs = {
   experience: {
@@ -36,6 +38,18 @@ export const AboutField: Field = {
       name: "headline",
       type: "text",
       maxLength: 68,
+      required: true,
+    },
+    {
+      admin: {
+        description:
+          "A sub-headline that provides additional context or information about the headline.",
+      },
+      label: "Sub-Headline",
+      name: "headline-sub",
+      type: "text",
+      defaultValue: AboutHeadlineSub,
+      maxLength: 32,
       required: true,
     },
     {
