@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { Field } from "payload";
 
@@ -7,6 +7,8 @@ import { validateDateInRange } from "@/lib/utils/dates";
 
 export const ExperienceHeadline =
   "Career highlights: A snapshot of my professional life.";
+
+export const ExperienceHeadlineSub = "My Professional Journey";
 
 export const ExperienceField: Field = {
   admin: {
@@ -27,6 +29,18 @@ export const ExperienceField: Field = {
       type: "text",
       defaultValue: ExperienceHeadline,
       maxLength: 80,
+      required: true,
+    },
+    {
+      admin: {
+        description:
+          "A sub-headline that provides additional context or information about the headline.",
+      },
+      label: "Sub-Headline",
+      name: "headline-sub",
+      type: "text",
+      defaultValue: ExperienceHeadlineSub,
+      maxLength: 32,
       required: true,
     },
     {

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import dotenv from "dotenv";
 
@@ -12,7 +12,10 @@ import {
   EducationHeadline,
   EducationHeadlineSub,
 } from "@/collections/rooms/fields/education";
-import { ExperienceHeadline } from "@/collections/rooms/fields/experience";
+import {
+  ExperienceHeadline,
+  ExperienceHeadlineSub,
+} from "@/collections/rooms/fields/experience";
 import { QualificationHeadline } from "@/collections/rooms/fields/qualification";
 import { payload } from "@/lib/payload";
 import { Room } from "@/payload-types";
@@ -98,8 +101,9 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
   },
 
   experience: {
-    headline: ExperienceHeadline,
-    list: [
+    "headline-sub": ExperienceHeadlineSub,
+    "headline": ExperienceHeadline,
+    "list": [
       {
         isCurrent: true,
         isRemote: true,
