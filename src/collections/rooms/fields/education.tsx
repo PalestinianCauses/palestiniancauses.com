@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Field } from "payload";
 
@@ -7,6 +7,8 @@ import { validateDateInRange } from "@/lib/utils/dates";
 
 export const EducationHeadline =
   'Based on a formal education and fueled by a passion for "non-stop" growth.';
+export const EducationHeadlineSub = "A Journey in Learning";
+
 export const EducationField: Field = {
   admin: {
     description:
@@ -26,6 +28,18 @@ export const EducationField: Field = {
       type: "text",
       defaultValue: EducationHeadline,
       maxLength: 80,
+      required: true,
+    },
+    {
+      admin: {
+        description:
+          "A sub-headline that provides additional context or information about the headline.",
+      },
+      label: "Sub-Headline",
+      name: "headline-sub",
+      type: "text",
+      defaultValue: EducationHeadlineSub,
+      maxLength: 32,
       required: true,
     },
     {

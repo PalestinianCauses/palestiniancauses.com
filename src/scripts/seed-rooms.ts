@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import dotenv from "dotenv";
 
@@ -8,7 +8,10 @@ import {
   AboutHeadingsPlusParagraphs,
   AboutHeadlineSub,
 } from "@/collections/rooms/fields/about";
-import { EducationHeadline } from "@/collections/rooms/fields/education";
+import {
+  EducationHeadline,
+  EducationHeadlineSub,
+} from "@/collections/rooms/fields/education";
 import { ExperienceHeadline } from "@/collections/rooms/fields/experience";
 import { QualificationHeadline } from "@/collections/rooms/fields/qualification";
 import { payload } from "@/lib/payload";
@@ -69,8 +72,9 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
   },
 
   education: {
-    headline: EducationHeadline,
-    list: [
+    "headline-sub": EducationHeadlineSub,
+    "headline": EducationHeadline,
+    "list": [
       {
         institution: "University College of Applied Science",
         location: "Gaza, Palestine",
