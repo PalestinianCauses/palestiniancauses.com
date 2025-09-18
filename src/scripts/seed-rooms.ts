@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import dotenv from "dotenv";
 
@@ -17,13 +17,13 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
   user: 1,
   name: "Shawqi",
   slug: "shawqi",
-  status: "draft",
+  status: "published",
 
   information: {
     name: "Shawqi Hatem",
     title: "Full-Stack Next.JS Developer",
     headline: "Deliver Scalable & User-Friendly Web Experiences.",
-    status: "available",
+    status: "working",
   },
 
   about: {
@@ -345,6 +345,7 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
         { name: "Community Building", level: "advanced" },
         { name: "Leadership", level: "expert" },
         { name: "Mentorship & Teaching", level: "expert" },
+        { name: "Instructional Design", level: "advanced" },
         { name: "Project Management", level: "advanced" },
         { name: "Strategic Planning", level: "advanced" },
         { name: "Public Speaking & Pitching", level: "advanced" },
@@ -375,38 +376,20 @@ const doSeedingShawqiRoom = async function doSeedingShawqiRoom() {
   try {
     console.log("🚀 Starting seeding Shawqi's room...");
 
-    const room = await payload.find({
+    await payload.create({
       collection: "rooms",
-      where: { slug: { equals: "shawqi" } },
+      data,
     });
 
-    if (room.docs.length > 1 || room.docs.length === 0) {
-      console.error("❌ There should be only one room with slug `shawqi`");
-      process.exit(0);
-    }
+    console.log(`🎉 Shawqi's room created successfully at /shawqi`);
 
-    if (room.docs.length === 1) {
-      await payload.update({
-        collection: "rooms",
-        where: { slug: { equals: "shawqi" } },
-        data,
-      });
-    } else {
-      await payload.create({
-        collection: "rooms",
-        data,
-      });
-    }
-
-    console.log(
-      `🎉 Shawqi's room created successfully at /${room.docs[0].slug}`,
-    );
     process.exit(0);
   } catch (error) {
     console.error("❌ Seeding Shawqi's room failed:", error);
     console.error(
       error && typeof error === "object" && "data" in error && error?.data,
     );
+
     process.exit(1);
   }
 };

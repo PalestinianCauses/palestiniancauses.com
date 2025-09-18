@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { getPayload } from "payload";
 
@@ -59,10 +59,10 @@ const categories: Omit<ServiceCategory, "id" | "createdAt" | "updatedAt">[] = [
     order: 4,
   },
   {
-    name: "Workshops & Training",
-    slug: "workshops-and-training",
+    name: "Technical Speaking & Training",
+    slug: "technical-speaking-and-training",
     description:
-      "For educational services delivered to groups, such as live workshops, webinars, corporate training, or group fitness classes.",
+      "For all services centered on education and knowledge sharing. This includes delivering technical conference talks, leading hands-on developer workshops, and providing bespoke corporate training sessions on modern web technologies.",
     status: "active",
     color: "teal",
     system: false,
