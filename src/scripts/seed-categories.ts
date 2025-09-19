@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { getPayload } from "payload";
 
@@ -95,6 +95,8 @@ const doSeedingCategories = async function doSeedingCategories() {
 
     await Promise.all(categoriesPromises);
     console.log("🎉 Categories created successfully");
+
+    process.exit(0);
   } catch (error) {
     console.error("❌ Seeding categories failed:", error);
     console.error(

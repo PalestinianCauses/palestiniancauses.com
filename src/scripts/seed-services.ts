@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { getPayload } from "payload";
 
@@ -12,7 +12,7 @@ const services: Omit<RoomsService, "id" | "createdAt" | "updatedAt">[] = [
     description:
       "An end-to-end service for building complex, scalable, and secure web applications from the ground up. I handle everything from the front-end user experience to the back-end logic and database integration, turning your vision into a fully functional digital product.",
     status: "available",
-    category: 0,
+    category: 1,
     skills: [
       { name: "PostgreSQL" },
       { name: "API Integration (REST)" },
@@ -29,7 +29,7 @@ const services: Omit<RoomsService, "id" | "createdAt" | "updatedAt">[] = [
     description:
       "I bring your user interface designs to life by building fast, interactive, and fully responsive front-ends. This service focuses on creating an exceptional user experience with clean, high-performance code using the most modern technologies.",
     status: "available",
-    category: 0,
+    category: 1,
     skills: [
       { name: "Next.JS" },
       { name: "React.JS" },
@@ -43,7 +43,7 @@ const services: Omit<RoomsService, "id" | "createdAt" | "updatedAt">[] = [
     description:
       "This is for when you need a robust and reliable engine behind your application. I design, build, and deploy robust back-end systems and custom REST APIs that are secure, efficient, and ready to connect with any front-end or third-party service.",
     status: "unavailable",
-    category: 0,
+    category: 1,
     skills: [
       { name: "PostgreSQL" },
       { name: "API Integration (REST)" },
@@ -58,7 +58,7 @@ const services: Omit<RoomsService, "id" | "createdAt" | "updatedAt">[] = [
     description:
       "I will integrate your Next.JS or React.JS application with a modern headless CMS (like PayLoad CMS, Strapi, or Sanity), giving you the power to manage your website's content easily while maintaining top-tier performance and security.",
     status: "available",
-    category: 0,
+    category: 1,
     skills: [
       { name: "PayLoad CMS" },
       { name: "Strapi" },
@@ -75,7 +75,7 @@ const services: Omit<RoomsService, "id" | "createdAt" | "updatedAt">[] = [
     description:
       "Is your website slow? I will deeply analyze your application, identify performance bottlenecks, and implement advanced optimization techniques to dramatically improve load times, enhance user experience, and boost your SEO rankings.",
     status: "available",
-    category: 0,
+    category: 1,
     skills: [
       { name: "Web Vitals" },
       { name: "Search Engine Optimization (SEO)" },
@@ -87,7 +87,7 @@ const services: Omit<RoomsService, "id" | "createdAt" | "updatedAt">[] = [
     description:
       "Provide me with your completed Figma designs, and I will translate them into a clean, responsive, and interactive web application. I ensure every detail is perfectly matched, delivering a final product that is both beautiful and functional.",
     status: "available",
-    category: 0,
+    category: 1,
     skills: [
       { name: "Figma" },
       { name: "Next.JS" },
@@ -125,6 +125,8 @@ const doSeedingServices = async function doSeedingServices() {
 
     await Promise.all(servicesPromises);
     console.log("🎉 Services created successfully");
+
+    process.exit(0);
   } catch (error) {
     console.error("❌ Seeding services failed:", error);
     console.error(

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import dotenv from "dotenv";
 
@@ -20,6 +20,10 @@ import {
   QualificationHeadline,
   QualificationHeadlineSub,
 } from "@/collections/rooms/fields/qualification";
+import {
+  HeadlineSkill,
+  HeadlineSubSkill,
+} from "@/collections/rooms/fields/skill";
 import { payload } from "@/lib/payload";
 import { Room } from "@/payload-types";
 
@@ -313,80 +317,84 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
     ],
   },
 
-  skills: [
-    {
-      category: "Front-End Development",
-      skillsCategorized: [
-        { name: "React.JS", level: "expert" },
-        { name: "Vue.JS", level: "advanced" },
-        { name: "TypeScript", level: "advanced" },
-        { name: "JavaScript", level: "expert" },
-        { name: "Tailwind CSS", level: "expert" },
-        { name: "Bootstrap", level: "expert" },
-        { name: "CSS 3 & SCSS/Sass", level: "expert" },
-        { name: "HTML 5", level: "expert" },
-      ],
-    },
-    {
-      category: "Back-End Development",
-      skillsCategorized: [
-        { name: "Next.JS", level: "expert" },
-        { name: "Node.JS", level: "advanced" },
-        { name: "Express.JS", level: "advanced" },
-        { name: "API Integration (REST)", level: "advanced" },
-      ],
-    },
-    {
-      category: "Databases",
-      skillsCategorized: [
-        { name: "MySQL", level: "intermediate" },
-        { name: "MongoDB", level: "intermediate" },
-      ],
-    },
-    {
-      category: "Development Tools & DevOps",
-      skillsCategorized: [
-        { name: "Figma (for Developers)", level: "expert" },
-        { name: "Git & GitHub", level: "expert" },
-        { name: "Postman", level: "advanced" },
-        { name: "WordPress & Oxygen Builder", level: "intermediate" },
-        {
-          name: "cPanel, Vercel, Netlify & Web Hosting",
-          level: "intermediate",
-        },
-      ],
-    },
-    {
-      category: "Leadership & Management",
-      skillsCategorized: [
-        { name: "Community Building", level: "advanced" },
-        { name: "Leadership", level: "expert" },
-        { name: "Mentorship & Teaching", level: "expert" },
-        { name: "Instructional Design", level: "advanced" },
-        { name: "Project Management", level: "advanced" },
-        { name: "Strategic Planning", level: "advanced" },
-        { name: "Public Speaking & Pitching", level: "advanced" },
-      ],
-    },
-    {
-      category: "Professional & Soft Skills",
-      skillsCategorized: [
-        { name: "Entrepreneurship", level: "advanced" },
-        { name: "Cross-Functional Communication", level: "advanced" },
-        { name: "Remote Collaboration", level: "expert" },
-        { name: "Problem-Solving", level: "expert" },
-        { name: "Adaptability", level: "expert" },
-        { name: "Resilience", level: "expert" },
-      ],
-    },
-    {
-      category: "Languages",
-      skillsCategorized: [
-        { name: "Arabic", level: "expert" },
-        { name: "English", level: "advanced" },
-      ],
-    },
-  ],
+  skills: {
+    "headline-sub": HeadlineSubSkill,
+    "headline": HeadlineSkill,
+    "list": [
+      {
+        category: "Front-End Development",
+        skillsCategorized: [
+          { name: "React.JS", level: "expert" },
+          { name: "Vue.JS", level: "advanced" },
+          { name: "TypeScript", level: "advanced" },
+          { name: "JavaScript", level: "expert" },
+          { name: "Tailwind CSS", level: "expert" },
+          { name: "Bootstrap", level: "expert" },
+          { name: "CSS 3 & SCSS/Sass", level: "expert" },
+          { name: "HTML 5", level: "expert" },
+        ],
+      },
+      {
+        category: "Back-End Development",
+        skillsCategorized: [
+          { name: "Next.JS", level: "expert" },
+          { name: "Node.JS", level: "advanced" },
+          { name: "Express.JS", level: "advanced" },
+          { name: "API Integration (REST)", level: "advanced" },
+        ],
+      },
+      {
+        category: "Databases",
+        skillsCategorized: [
+          { name: "MySQL", level: "intermediate" },
+          { name: "MongoDB", level: "intermediate" },
+        ],
+      },
+      {
+        category: "Development Tools & DevOps",
+        skillsCategorized: [
+          { name: "Figma (for Developers)", level: "expert" },
+          { name: "Git & GitHub", level: "expert" },
+          { name: "Postman", level: "advanced" },
+          { name: "WordPress & Oxygen Builder", level: "intermediate" },
+          {
+            name: "cPanel, Vercel, Netlify & Web Hosting",
+            level: "intermediate",
+          },
+        ],
+      },
+      {
+        category: "Leadership & Management",
+        skillsCategorized: [
+          { name: "Community Building", level: "advanced" },
+          { name: "Leadership", level: "expert" },
+          { name: "Mentorship & Teaching", level: "expert" },
+          { name: "Instructional Design", level: "advanced" },
+          { name: "Project Management", level: "advanced" },
+          { name: "Strategic Planning", level: "advanced" },
+          { name: "Public Speaking & Pitching", level: "advanced" },
+        ],
+      },
+      {
+        category: "Professional & Soft Skills",
+        skillsCategorized: [
+          { name: "Entrepreneurship", level: "advanced" },
+          { name: "Cross-Functional Communication", level: "advanced" },
+          { name: "Remote Collaboration", level: "expert" },
+          { name: "Problem-Solving", level: "expert" },
+          { name: "Adaptability", level: "expert" },
+          { name: "Resilience", level: "expert" },
+        ],
+      },
+      {
+        category: "Languages",
+        skillsCategorized: [
+          { name: "Arabic", level: "expert" },
+          { name: "English", level: "advanced" },
+        ],
+      },
+    ],
+  },
 };
 
 const doSeedingShawqiRoom = async function doSeedingShawqiRoom() {
