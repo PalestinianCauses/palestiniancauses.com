@@ -1,7 +1,8 @@
-// REVIEWED - 10
+// REVIEWED - 11
 import type { CollectionConfig } from "payload";
 
 import { isAdmin, isAdminField, isAdminOrSelf } from "@/access/global";
+import { isDefined, isObject, isString } from "@/lib/types/guards";
 
 export const Users: CollectionConfig = {
   slug: "users",
@@ -12,11 +13,10 @@ export const Users: CollectionConfig = {
     },
     read: ({ req }) => {
       if (
-        !req.user &&
-        req.query.email &&
-        typeof req.query.email === "object" &&
+        !isDefined(req.user) &&
+        isObject(req.query.email) &&
         "equals" in req.query.email &&
-        typeof req.query.email.equals === "string"
+        isString(req.query.email.equals)
       )
         return true;
       return isAdminOrSelf({ req });
@@ -26,9 +26,8 @@ export const Users: CollectionConfig = {
   },
   admin: {
     group: "Database",
-    defaultColumns: ["id", "email", "firstName", "role", "createdAt"],
+    defaultColumns: ["id", "email", "firstName", "roles", "createdAt"],
     useAsTitle: "email",
-    hidden: ({ user }) => user.role !== "admin",
   },
   labels: { singular: "User", plural: "Users" },
   auth: {
@@ -55,12 +54,22 @@ export const Users: CollectionConfig = {
       defaultValue: "",
     },
     {
-      access: { update: isAdminField },
-      label: "Role",
-      name: "role",
+      admin: { position: "sidebar" },
+      label: "Previous Role",
+      name: "previousRole",
       type: "select",
       options: ["admin", "system-user", "website-user"],
       defaultValue: "website-user",
+      required: true,
+    },
+    {
+      access: { update: isAdminField },
+      admin: { position: "sidebar" },
+      label: "Roles",
+      name: "roles",
+      type: "relationship",
+      relationTo: "roles",
+      hasMany: true,
       required: true,
     },
   ],
