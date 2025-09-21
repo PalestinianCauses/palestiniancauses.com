@@ -1,4 +1,4 @@
-// REVIEWED - 11
+// REVIEWED - 12
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -8,15 +8,9 @@ import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 
-import { Blog } from "@/collections/Blog";
-import { Comments } from "@/collections/Comments";
-import { DiaryEntries } from "@/collections/DiaryEntries";
-import { Media } from "@/collections/Media";
-import { NotificationSubscriptions } from "@/collections/NotificationSubscriptions";
-import { Orders } from "@/collections/Orders";
-import { Products } from "@/collections/Products";
-import { Rooms } from "@/collections/Rooms";
 import { Users } from "@/collections/Users";
+
+import { collections } from "./collections";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -29,17 +23,7 @@ export default buildConfig({
   typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },
   editor: lexicalEditor(),
   admin: { user: Users.slug, importMap: { baseDir: path.resolve(dirname) } },
-  collections: [
-    NotificationSubscriptions,
-    Media,
-    Users,
-    Products,
-    Orders,
-    DiaryEntries,
-    Rooms,
-    Blog,
-    Comments,
-  ],
+  collections,
   sharp,
   plugins: [
     vercelBlobStorage({
