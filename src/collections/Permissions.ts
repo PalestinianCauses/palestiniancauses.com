@@ -1,11 +1,26 @@
-// REVIEWED
+// REVIEWED - 01
 
 import type { CollectionConfig } from "payload";
 
-// eslint-disable-next-line import/no-cycle
 import { isAdmin } from "@/access/global";
 
-import config from "../payload.config";
+export const collectionsPermissionsOptions = [
+  { label: "Blog", value: "blogs" },
+  { label: "Comments", value: "comments" },
+  { label: "Diary Entries", value: "diary-entries" },
+  { label: "Media", value: "media" },
+  { label: "Notification Subscriptions", value: "notification-subscriptions" },
+  { label: "Orders", value: "orders" },
+  { label: "Permissions", value: "permissions" },
+  { label: "Products", value: "products" },
+  { label: "Roles", value: "roles" },
+  { label: "Rooms", value: "rooms" },
+  { label: "Room Contact", value: "room-contact" },
+  { label: "Room Packages", value: "room-packages" },
+  { label: "Room Services", value: "room-services" },
+  { label: "Service Categories", value: "service-categories" },
+  { label: "Users", value: "users" },
+];
 
 export const Permissions: CollectionConfig = {
   slug: "permissions",
@@ -48,10 +63,7 @@ export const Permissions: CollectionConfig = {
       label: "Resource",
       name: "resource",
       type: "select",
-      options: (await config).collections.map((collection) => ({
-        label: collection.slug,
-        value: collection.slug,
-      })),
+      options: collectionsPermissionsOptions,
       required: true,
     },
     {
