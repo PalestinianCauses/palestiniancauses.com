@@ -1,4 +1,4 @@
-/* REVIEWED - 12 */
+/* REVIEWED - 13 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -55,6 +55,36 @@
   font-family: "Gilroy";
   font-weight: 900;
   src: url("../../assets/fonts/gilroy-black.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Alama";
+  font-weight: 400;
+  src: url("../../assets/fonts/FFAlama-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Alama";
+  font-weight: 700;
+  src: url("../../assets/fonts/FFAlama-Bold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "AlamaO";
+  font-weight: 400;
+  src: url("../../assets/fonts/FFAlamaO-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "AlamaO";
+  font-weight: 700;
+  src: url("../../assets/fonts/FFAlamaO-Bold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Mufreh";
+  font-weight: 400;
+  src: url("../../assets/fonts/FFMufreh-Regular.woff") format("woff");
 }
 
 @keyframes highlight {
