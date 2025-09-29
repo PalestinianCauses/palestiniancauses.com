@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 21
+// REVIEWED - 22
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -388,13 +388,13 @@ const InstagramStudioPage = function InstagramStudioPage() {
           </FrameSquare>
           <FrameTitle className="grid w-full grid-cols-1 grid-rows-3 items-start">
             <FrameHighlight className="w-max before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
-              A
+              The Unknown
             </FrameHighlight>
             <FrameHighlight className="w-max before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
-              Nefarious
+              Is Lurking
             </FrameHighlight>
             <FrameHighlight className="w-max before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
-              Equation.
+              For Gazans.
             </FrameHighlight>
           </FrameTitle>
           <SectionHeadingBadge className="bg-primary text-lg text-primary-foreground ring-primary">
@@ -405,7 +405,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
         <FrameImagesGrid>
           <div className="relative col-start-1 col-end-13 row-start-1 row-end-13">
             <Image
-              src="/a-nefarious-equation-refined.png"
+              src="/the-unknown-is-lurking-for-gazans-refined.png"
               alt="N's Art-Work no. 03"
               fill
               className="!static object-cover object-center"
@@ -413,77 +413,84 @@ const InstagramStudioPage = function InstagramStudioPage() {
           </div>
         </FrameImagesGrid>
       </Frame>
-      <Frame ref={nArtWorkFrames[1].ref} dimensions="4:5" color="primary">
+      <Frame
+        ref={nArtWorkFrames[1].ref}
+        dimensions="4:5"
+        color="primary-foreground">
         <FrameContent>
-          <FrameSquare className="shrink-0 bg-primary-foreground text-primary ring-primary-foreground">
+          <FrameSquare className="shrink-0 bg-primary text-primary-foreground ring-primary">
             <QuoteIcon className="h-20 w-20 stroke-[1.5]" />
           </FrameSquare>
           <FrameParagraph>
-            Recently, my mom mentioned that many basic supplies had run out in
-            the home, so we went to the market,{" "}
-            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-              &ldquo;what it is called a market.&ldquo;
+            Nothing can describe the feeling of a traveler spat by war at that
+            moment, filled with confusion, fear, and{" "}
+            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+              false security in front of Rafah crossing.
             </FrameParagraphHighlight>{" "}
-            All sellers called for their goods: &ldquo;Local tomatoes are 35
-            shekels per kilo, a pocket of Nescafe is 7 shekels,&ldquo; and these
-            prices were double the original ones. After a few minutes, I heard a
-            young seller say: this is an unparalleled shampoo.{" "}
-            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-              Curiously, I had taken it to
+            My friend told me that he had waited for his name on the list of
+            travelers for several weeks, but as soon as he saw it later, he
+            cried. S. was about to cross the intersection, but he looked toward
+            his father and brother,{" "}
+            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+              his eyes begging them to answer a
             </FrameParagraphHighlight>{" "}
-            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-              check it:
-            </FrameParagraphHighlight>
+            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+              straightforward question:
+            </FrameParagraphHighlight>{" "}
+            Is what I am doing right or wrong? Rescue me from traveling if it is
+            a bad decision.
+          </FrameParagraph>
+          <FrameParagraph>
+            S. says ruefully: &ldquo;One does not feel proud to be Palestinian
+            except in his \ her homeland, but outside its borders, he \ she...
           </FrameParagraph>
         </FrameContent>
       </Frame>
-      <Frame
-        ref={nArtWorkFrames[2].ref}
-        dimensions="4:5"
-        color="primary-foreground">
+      <Frame ref={nArtWorkFrames[2].ref} dimensions="4:5" color="primary">
         <FrameContent className="justify-center">
           <FrameTitle>
-            Me: It&apos;s an Israeli{" "}
-            <FrameHighlight className="mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
-              product,
+            ...understands very well the{" "}
+            <FrameHighlight className="mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
+              curse
             </FrameHighlight>{" "}
-            <FrameHighlight className="mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
-              Damn!
-            </FrameHighlight>{" "}
+            of the{" "}
+            <FrameHighlight className="mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
+              Palestinian...
+            </FrameHighlight>
           </FrameTitle>
-          <SectionHeadingBadge>
-            Composed by M. featured in The Volume &quot;A Human But From
+          <SectionHeadingBadge className="text-primary-foreground">
+            Composed by L. featured in The Volume &quot;A Human But From
             Gaza&quot;
           </SectionHeadingBadge>
         </FrameContent>
       </Frame>
-      <Frame ref={nArtWorkFrames[3].ref} dimensions="4:5" color="primary">
+      <Frame
+        ref={nArtWorkFrames[3].ref}
+        dimensions="4:5"
+        color="primary-foreground">
         <FrameContent>
           <FrameTitle>
             Discover the complete diary and{" "}
-            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
+            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
               further
             </FrameHighlight>{" "}
             compelling{" "}
-            <FrameHighlight className="z-20 -mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
+            <FrameHighlight className="z-20 -mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
               narratives
             </FrameHighlight>{" "}
             within:
           </FrameTitle>
         </FrameContent>
       </Frame>
-      <Frame
-        ref={nArtWorkFrames[4].ref}
-        dimensions="4:5"
-        color="primary-foreground">
+      <Frame ref={nArtWorkFrames[4].ref} dimensions="4:5" color="primary">
         <FrameContent>
           <FrameTitle>
             Link in{" "}
-            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
+            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
               bio.
             </FrameHighlight>{" "}
           </FrameTitle>
-          <FrameSquare className="mt-auto bg-background text-primary-foreground ring-input">
+          <FrameSquare className="mt-auto bg-primary-foreground text-primary ring-primary-foreground">
             <Image
               src="/logo-primary.png"
               alt="Primary Logo"
@@ -493,7 +500,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
           </FrameSquare>
         </FrameContent>
         <FrameImagesGrid className="scale-1">
-          <div className="col-start-6 col-end-13 row-start-4 row-end-13 -translate-y-10 ring ring-primary ring-offset-8 ring-offset-primary-foreground">
+          <div className="col-start-6 col-end-13 row-start-4 row-end-13 -translate-y-10 ring ring-primary-foreground ring-offset-8 ring-offset-primary">
             <Image
               src="https://nwdtauhmkupvkywh.public.blob.vercel-storage.com/book-cover/book-cover-new.png"
               alt="A Human But From Gaza Book Cover"
