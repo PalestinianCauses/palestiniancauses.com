@@ -1,10 +1,14 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import Image from "next/image";
 import { Fragment, ReactNode, useRef } from "react";
 
+import {
+  SectionHeading,
+  SubSectionHeading,
+} from "@/components/globals/typography";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils/styles";
 
@@ -21,11 +25,15 @@ import { ThemeColors } from "../page";
 export const DiaryEntryTemplate = function DiaryEntryTemplate({
   color,
   badge,
+  author,
   title,
+  paragraph,
 }: {
   color: ThemeColors;
   badge: ReactNode;
+  author: ReactNode;
   title: ReactNode;
+  paragraph: ReactNode;
 }) {
   const frames: ImageFrame[] = [
     {
@@ -33,15 +41,33 @@ export const DiaryEntryTemplate = function DiaryEntryTemplate({
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
+    {
+      id: "diary-entry-02",
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
   ];
   return (
     <Fragment>
-      <Frame ref={frames[0].ref} dimensions="4:5" color={color}>
+      <Frame
+        ref={frames[0].ref}
+        dimensions="4:5"
+        color={color}
+        className={cn({
+          "bg-background": color === "primary-foreground",
+          "bg-foreground": color === "primary",
+        })}>
+        <div
+          className={cn("absolute bottom-0 h-10 w-full", {
+            "bg-primary": color === "primary-foreground",
+            "bg-background": color === "primary",
+          })}
+        />
         <FrameContent>
           <FrameSquare
             className={cn("mb-auto", {
-              "bg-primary/10 ring-primary/20": color === "primary-foreground",
-              "bg-primary-foreground/10 ring-primary-foreground/20":
+              "bg-primary/5 ring-primary/15": color === "primary-foreground",
+              "bg-primary-foreground/5 ring-primary-foreground/15":
                 color === "primary",
             })}>
             <Image
@@ -58,9 +84,9 @@ export const DiaryEntryTemplate = function DiaryEntryTemplate({
           <Badge
             size="lg"
             className={cn("border-l-4 text-lg font-semibold ring-0", {
-              "border-primary bg-primary/10 text-primary hover:bg-primary/10":
+              "border-primary bg-primary/5 text-primary hover:bg-primary/5":
                 color === "primary-foreground",
-              "border-primary-foreground bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/10":
+              "border-primary-foreground bg-primary-foreground/5 text-primary-foreground hover:bg-primary-foreground/5":
                 color === "primary",
             })}>
             {badge}
@@ -68,7 +94,63 @@ export const DiaryEntryTemplate = function DiaryEntryTemplate({
           <FrameTitle>{title}</FrameTitle>
         </FrameContent>
       </Frame>
-      <div>Hello</div>
+      <Frame
+        ref={frames[1].ref}
+        dimensions="4:5"
+        color={color}
+        className={cn({
+          "bg-background": color === "primary-foreground",
+          "bg-foreground": color === "primary",
+        })}>
+        <div
+          className={cn("absolute bottom-0 h-10 w-full", {
+            "bg-primary": color === "primary-foreground",
+            "bg-background": color === "primary",
+          })}
+        />
+        <FrameContent>
+          <div className="flex items-center gap-5">
+            <FrameSquare
+              className={cn("h-20 w-20", {
+                "bg-primary text-primary-foreground ring-primary":
+                  color === "primary-foreground",
+                "bg-primary-foreground text-primary ring-primary-foreground":
+                  color === "primary",
+              })}>
+              <SectionHeading
+                className={cn({
+                  "text-primary-foreground": color === "primary-foreground",
+                  "text-primary": color === "primary",
+                })}>
+                {String(author).charAt(0).toUpperCase()}
+              </SectionHeading>
+            </FrameSquare>
+            <div className="flex flex-col gap-2.5">
+              <SubSectionHeading
+                className={cn(
+                  "font-semibold !leading-none lg:!leading-none xl:!leading-none",
+                  {
+                    "text-primary": color === "primary-foreground",
+                    "text-primary-foreground": color === "primary",
+                  },
+                )}>
+                Composed by {author}.
+              </SubSectionHeading>
+              <Badge
+                size="sm"
+                className={cn("border-l-4 text-lg font-semibold ring-0", {
+                  "border-primary bg-primary/5 text-primary hover:bg-primary/5":
+                    color === "primary-foreground",
+                  "border-primary-foreground bg-primary-foreground/5 text-primary-foreground hover:bg-primary-foreground/5":
+                    color === "primary",
+                })}>
+                Featured in The Truth Museum: Humans But From Gaza.
+              </Badge>
+            </div>
+          </div>
+          {paragraph}
+        </FrameContent>
+      </Frame>
     </Fragment>
   );
 };
