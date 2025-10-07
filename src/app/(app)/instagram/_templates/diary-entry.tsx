@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import Image from "next/image";
 import { Fragment, ReactNode, useRef } from "react";
@@ -16,33 +16,49 @@ import { cn } from "@/lib/utils/styles";
 import {
   Frame,
   FrameContent,
+  FrameHighlight,
   FrameSquare,
   FrameTitle,
   ImageFrame,
+  ImageFrameRender,
 } from "../_components/frame";
 import { ThemeColors } from "../page";
 
 export const DiaryEntryTemplate = function DiaryEntryTemplate({
+  id,
   color,
   badge,
   author,
   title,
   paragraph,
+  closure,
 }: {
+  id: string;
   color: ThemeColors;
   badge: ReactNode;
   author: ReactNode;
   title: ReactNode;
   paragraph: ReactNode;
+  closure: ReactNode;
 }) {
   const frames: ImageFrame[] = [
     {
-      id: "diary-entry-01",
+      id: `${id}-01`,
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "diary-entry-02",
+      id: `${id}-02`,
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+    {
+      id: `${id}-03`,
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+    {
+      id: `${id}-04`,
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
@@ -151,6 +167,71 @@ export const DiaryEntryTemplate = function DiaryEntryTemplate({
           {paragraph}
         </FrameContent>
       </Frame>
+      <Frame
+        ref={frames[2].ref}
+        dimensions="4:5"
+        color={color}
+        className={cn({
+          "bg-background": color === "primary-foreground",
+          "bg-foreground": color === "primary",
+        })}>
+        <div
+          className={cn("absolute bottom-0 h-10 w-full", {
+            "bg-primary": color === "primary-foreground",
+            "bg-background": color === "primary",
+          })}
+        />
+        <FrameContent>
+          <FrameTitle>{closure}</FrameTitle>
+        </FrameContent>
+      </Frame>
+      <Frame
+        ref={frames[3].ref}
+        dimensions="4:5"
+        color={color}
+        className={cn({
+          "bg-background": color === "primary-foreground",
+          "bg-foreground": color === "primary",
+        })}>
+        <div
+          className={cn("absolute bottom-0 h-10 w-full", {
+            "bg-primary": color === "primary-foreground",
+            "bg-background": color === "primary",
+          })}
+        />
+        <FrameContent className="items-center justify-center">
+          <FrameTitle className="text-center">
+            Discover the{" "}
+            <FrameHighlight
+              className={cn({
+                "frame-highlight-primary-foreground":
+                  color === "primary-foreground",
+                "frame-highlight-primary": color === "primary",
+              })}>
+              complete diary
+            </FrameHighlight>{" "}
+            and further{" "}
+            <FrameHighlight
+              className={cn({
+                "frame-highlight-primary-foreground":
+                  color === "primary-foreground",
+                "frame-highlight-primary": color === "primary",
+              })}>
+              compelling
+            </FrameHighlight>{" "}
+            narratives{" "}
+            <FrameHighlight
+              className={cn({
+                "frame-highlight-primary-foreground":
+                  color === "primary-foreground",
+                "frame-highlight-primary": color === "primary",
+              })}>
+              within...
+            </FrameHighlight>
+          </FrameTitle>
+        </FrameContent>
+      </Frame>
+      <ImageFrameRender frames={frames} />
     </Fragment>
   );
 };
