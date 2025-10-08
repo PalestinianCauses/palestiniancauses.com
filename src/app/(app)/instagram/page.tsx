@@ -1,12 +1,12 @@
 "use client";
 
-// REVIEWED - 26
+// REVIEWED - 27
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
 import { QuoteIcon } from "lucide-react";
 import Image from "next/image";
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 
 import {
   SectionHeading,
@@ -29,6 +29,8 @@ import {
 } from "./_components/frame";
 // eslint-disable-next-line import/no-cycle
 import { PSCLogo } from "./_components/psc-logo";
+// eslint-disable-next-line import/no-cycle
+import { DiaryEntryTemplate } from "./_templates/diary-entry";
 
 export type Properties = "bg" | "text" | "fill" | "stroke";
 export type ThemeStyles = "fill" | "stroke";
@@ -380,7 +382,67 @@ const InstagramStudioPage = function InstagramStudioPage() {
 
   return (
     <main className="section-padding-start-lg">
-      {/* Open Graph */}
+      {/* Diary Entry */}
+      <DiaryEntryTemplate
+        id="diary-entry-01"
+        color="primary-foreground"
+        author="Basmala"
+        badge="The Truth Museum: Humans But From Gaza"
+        title={
+          <Fragment>
+            A{" "}
+            <FrameHighlight className="frame-highlight-primary-foreground">
+              Haven
+            </FrameHighlight>{" "}
+            <br /> No Foe May Breach.
+          </Fragment>
+        }
+        paragraph={
+          <Fragment>
+            <FrameParagraph>
+              Like them, I too turned to the sea during this war. But I
+              haven&apos;t returned since that day;{" "}
+              <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+                I thought I would
+              </FrameParagraphHighlight>{" "}
+              <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+                feel better,
+              </FrameParagraphHighlight>{" "}
+              as with every visit to the sea, but the opposite happened. All the
+              people there were wandering, their eyes filled with bewilderment.
+              They were searching for a flicker of hope, a stolen peace,{" "}
+              <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+                and a lost homeland.
+              </FrameParagraphHighlight>{" "}
+              This is not just the feeling of those people there; all the Gazan
+              people are like them so. They are searching for a lost compass to
+              guide themselves toward a clear or straightforward path to walk in
+              it.
+            </FrameParagraph>
+            <FrameParagraph>
+              <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+                Fear is everywhere,
+              </FrameParagraphHighlight>{" "}
+              like a beast chasing us in the dark. It consumes our souls piece
+              by piece, for we are the only food...
+            </FrameParagraph>
+          </Fragment>
+        }
+        closure={
+          <Fragment>
+            ...making it{" "}
+            <FrameHighlight className="frame-highlight-primary-foreground">
+              strong
+            </FrameHighlight>{" "}
+            enough to{" "}
+            <FrameHighlight className="frame-highlight-primary-foreground">
+              consume
+            </FrameHighlight>{" "}
+            us entirely.
+          </Fragment>
+        }
+        link="palestiniancauses.com/humans-but-from-gaza/16"
+      />
       <ImageFrameRender frames={profileImagesFrames} />
       <ImageFrameRender frames={hoodiesFrames} />
       <ImageFrameRender frames={instagramFrames} />
@@ -583,13 +645,6 @@ const InstagramStudioPage = function InstagramStudioPage() {
           Scan to Order Your Copy
         </SectionHeadingBadge>
       </Frame>
-      {/* <Frame
-        ref={qrCodeFrames[3].ref}
-        dimensions="9:16"
-        color="primary-foreground">
-        <FrameContent></FrameContent>
-      </Frame> */}
-      {/* N's Art-Work */}
       <Frame
         ref={nArtWorkFrames[0].ref}
         dimensions="4:5"

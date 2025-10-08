@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 import { toJpeg, toPng } from "html-to-image";
 import {
   forwardRef,
@@ -27,10 +27,12 @@ export type ImageFrame = {
 
 export type ImageFrameRenderProps = {
   frames: ImageFrame[];
+  text?: string;
 };
 
 export const ImageFrameRender = function ImageFrameRender({
   frames,
+  text,
 }: ImageFrameRenderProps) {
   const render = function render(imageFrames: ImageFrame[]) {
     imageFrames.forEach((imageFrame) => {
@@ -50,7 +52,9 @@ export const ImageFrameRender = function ImageFrameRender({
     });
   };
 
-  return <Button onClick={() => render(frames)}>Render Images</Button>;
+  return (
+    <Button onClick={() => render(frames)}>{text || "Render Images"}</Button>
+  );
 };
 
 type FrameProps = HTMLAttributes<HTMLDivElement> & {
@@ -59,7 +63,10 @@ type FrameProps = HTMLAttributes<HTMLDivElement> & {
 };
 
 export const Frame = forwardRef<HTMLDivElement, FrameProps>(
-  ({ dimensions = "1:1", color = "primary", className, children }, ref) => (
+  (
+    { dimensions = "1:1", color = "primary", className, children, ...props },
+    ref,
+  ) => (
     <div
       ref={ref}
       className={cn(
@@ -68,7 +75,8 @@ export const Frame = forwardRef<HTMLDivElement, FrameProps>(
         themeClasses[color].bg,
         themeClasses[color].text,
         className,
-      )}>
+      )}
+      {...props}>
       {children}
     </div>
   ),

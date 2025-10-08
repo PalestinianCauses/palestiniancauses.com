@@ -1,11 +1,19 @@
 "use client";
 
-// REVIEWED - 02
-
-import Image from "next/image";
-import { Fragment, ReactNode, useRef } from "react";
+// REVIEWED - 03
 
 import {
+  BookOpenIcon,
+  FileHeartIcon,
+  Link2Icon,
+  MessageCircleIcon,
+  ShareIcon,
+} from "lucide-react";
+import Image from "next/image";
+import { ElementType, Fragment, ReactNode, useRef } from "react";
+
+import {
+  Paragraph,
   SectionHeading,
   SubSectionHeading,
 } from "@/components/globals/typography";
@@ -24,6 +32,52 @@ import {
 } from "../_components/frame";
 import { ThemeColors } from "../page";
 
+const SupportOptionsCard = function SupportOptionsCard({
+  color,
+  Icon,
+  title,
+  description,
+}: {
+  color: ThemeColors;
+  Icon: ElementType;
+  title: ReactNode;
+  description: ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        "relative flex aspect-square flex-col items-center justify-center p-10 ring-1 ring-inset before:absolute before:bottom-0 before:h-1 before:w-full",
+        {
+          "ring-primary/15 before:bg-primary": color === "primary-foreground",
+          "ring-primary-foreground/15 before:bg-primary-foreground":
+            color === "primary",
+        },
+      )}>
+      <Icon
+        className={cn("mb-6 h-10 w-10 stroke-[1.5]", {
+          "text-primary": color === "primary-foreground",
+          "text-primary-foreground": color === "primary",
+        })}
+      />
+      <SubSectionHeading
+        className={cn("mb-3 text-center font-bold", {
+          "text-primary": color === "primary-foreground",
+          "text-primary-foreground": color === "primary",
+        })}>
+        {title}
+      </SubSectionHeading>
+      <Paragraph
+        small
+        className={cn("-mx-5 text-center", {
+          "text-primary/75": color === "primary-foreground",
+          "text-primary-foreground/75": color === "primary",
+        })}>
+        {description}
+      </Paragraph>
+    </div>
+  );
+};
+
 export const DiaryEntryTemplate = function DiaryEntryTemplate({
   id,
   color,
@@ -32,6 +86,7 @@ export const DiaryEntryTemplate = function DiaryEntryTemplate({
   title,
   paragraph,
   closure,
+  link,
 }: {
   id: string;
   color: ThemeColors;
@@ -40,6 +95,7 @@ export const DiaryEntryTemplate = function DiaryEntryTemplate({
   title: ReactNode;
   paragraph: ReactNode;
   closure: ReactNode;
+  link: ReactNode;
 }) {
   const frames: ImageFrame[] = [
     {
@@ -59,6 +115,11 @@ export const DiaryEntryTemplate = function DiaryEntryTemplate({
     },
     {
       id: `${id}-04`,
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+    {
+      id: `${id}-05`,
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
@@ -183,6 +244,17 @@ export const DiaryEntryTemplate = function DiaryEntryTemplate({
         />
         <FrameContent>
           <FrameTitle>{closure}</FrameTitle>
+          <Badge
+            size="lg"
+            className={cn("border-l-4 text-lg font-semibold ring-0", {
+              "border-primary bg-primary/5 text-primary hover:bg-primary/5":
+                color === "primary-foreground",
+              "border-primary-foreground bg-primary-foreground/5 text-primary-foreground hover:bg-primary-foreground/5":
+                color === "primary",
+            })}>
+            <Link2Icon className="-mb-0.5 size-6" />
+            {link}
+          </Badge>
         </FrameContent>
       </Frame>
       <Frame
@@ -200,38 +272,50 @@ export const DiaryEntryTemplate = function DiaryEntryTemplate({
           })}
         />
         <FrameContent className="items-center justify-center">
-          <FrameTitle className="text-center">
-            Discover the{" "}
+          <FrameTitle className="mb-16 text-center">
+            Humans—But From{" "}
             <FrameHighlight
               className={cn({
                 "frame-highlight-primary-foreground":
                   color === "primary-foreground",
                 "frame-highlight-primary": color === "primary",
               })}>
-              complete diary
-            </FrameHighlight>{" "}
-            and further{" "}
-            <FrameHighlight
-              className={cn({
-                "frame-highlight-primary-foreground":
-                  color === "primary-foreground",
-                "frame-highlight-primary": color === "primary",
-              })}>
-              compelling
-            </FrameHighlight>{" "}
-            narratives{" "}
-            <FrameHighlight
-              className={cn({
-                "frame-highlight-primary-foreground":
-                  color === "primary-foreground",
-                "frame-highlight-primary": color === "primary",
-              })}>
-              within...
+              Gaza.
             </FrameHighlight>
           </FrameTitle>
+          <div className="mx-auto grid w-full grid-cols-[20rem_20rem] items-center justify-center gap-10">
+            <SupportOptionsCard
+              color={color}
+              Icon={BookOpenIcon}
+              title="Explore The Complete Story"
+              description="Read our full diary entry and discover our complete narrative on
+                our website"
+            />
+            <SupportOptionsCard
+              color={color}
+              Icon={MessageCircleIcon}
+              title="Join The Conversation"
+              description="Share your thoughts and engage with our community through
+                meaningful dialogue"
+            />
+            <SupportOptionsCard
+              color={color}
+              Icon={ShareIcon}
+              title="Amplify The Message"
+              description="Help spread awareness by sharing this important story with your
+                network"
+            />
+            <SupportOptionsCard
+              color={color}
+              Icon={FileHeartIcon}
+              title="Show Your Support"
+              description="Follow our journey and stay connected with our mission and
+                updates"
+            />
+          </div>
         </FrameContent>
       </Frame>
-      <ImageFrameRender frames={frames} />
+      <ImageFrameRender frames={frames} text={`Render ${id} Frames`} />
     </Fragment>
   );
 };

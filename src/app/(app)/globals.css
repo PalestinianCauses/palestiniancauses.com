@@ -1,4 +1,4 @@
-/* REVIEWED - 13 */
+/* REVIEWED - 14 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -72,19 +72,43 @@
 @font-face {
   font-family: "AlamaO";
   font-weight: 400;
-  src: url("../../assets/fonts/FFAlamaO-Regular.woff") format("woff");
+  src: url("../../assets/fonts/FFAlamaO-RegularO.woff") format("woff");
 }
 
 @font-face {
   font-family: "AlamaO";
   font-weight: 700;
-  src: url("../../assets/fonts/FFAlamaO-Bold.woff") format("woff");
+  src: url("../../assets/fonts/FFAlamaO-BoldO.woff") format("woff");
 }
 
 @font-face {
   font-family: "Mufreh";
   font-weight: 400;
   src: url("../../assets/fonts/FFMufreh-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "ShamelSansOne";
+  font-weight: 300;
+  src: url("../../assets/fonts/FFShamelSansOne-Light.woff") format("woff");
+}
+
+@font-face {
+  font-family: "ShamelSansOne";
+  font-weight: 400;
+  src: url("../../assets/fonts/FFShamelSansOne-Normal.woff") format("woff");
+}
+
+@font-face {
+  font-family: "ShamelSansOne";
+  font-weight: 500;
+  src: url("../../assets/fonts/FFShamelSansOne-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: "ShamelSansOne";
+  font-weight: 700;
+  src: url("../../assets/fonts/FFShamelSansOne-Bold.woff") format("woff");
 }
 
 @keyframes highlight {
@@ -171,5 +195,13 @@
 
   .section-gap-sm {
     @apply gap-6 lg:gap-12 xl:gap-24;
+  }
+
+  .frame-highlight-primary-foreground {
+    @apply before:!inset-y-[initial] before:-inset-x-2.5 before:!bottom-0 before:h-1/2 before:bg-primary/15 before:ring-primary-foreground;
+  }
+
+  .frame-highlight-primary {
+    @apply before:!inset-y-[initial] before:-inset-x-2.5 before:!bottom-0 before:h-1/2 before:bg-primary-foreground/15 before:ring-primary;
   }
 }
