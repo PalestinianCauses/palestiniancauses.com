@@ -1,4 +1,4 @@
-// REVIEWED - 27
+// REVIEWED - 28
 
 export const messages = {
   http: {
@@ -41,6 +41,9 @@ export const messages = {
       delete: {
         success: "User account deleted successfully.",
         serverError: "Failed to delete user account. Please try again later.",
+      },
+      roles: {
+        serverError: "Failed to retrieve user roles. Please try again later.",
       },
     },
     auth: {

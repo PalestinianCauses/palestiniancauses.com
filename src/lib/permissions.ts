@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Permission, Role, User } from "@/payload-types";
 
@@ -129,4 +129,28 @@ export const getHighestPriorityRole = function getHighestPriorityRole(
       highestPriorityRole = role;
 
   return highestPriorityRole;
+};
+
+export const getUserPermissions = function getUserPermissions(
+  user: User,
+): Permission[] {
+  if (user.roles.length === 0) return [];
+
+  const permissions: Permission[] = [];
+  const seen = new Set<string>();
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const role of user.roles)
+    if (isObject(role))
+      // eslint-disable-next-line no-restricted-syntax
+      for (const permission of role.permissions)
+        if (isObject(permission)) {
+          const permissionId = String(permission.id);
+          if (!seen.has(permissionId)) {
+            permissions.push(permission);
+            seen.add(permissionId);
+          }
+        }
+
+  return permissions;
 };
