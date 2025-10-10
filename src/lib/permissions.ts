@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { Permission, Role, User } from "@/payload-types";
 
@@ -26,14 +26,14 @@ export const hasConditions = function hasConditions(
 };
 
 export const hasPermission = async function hasPermission(
-  user: User | null,
+  user: User,
   permission: Permission,
 ): Promise<boolean> {
-  if (!user || !user.roles) return false;
+  if (user.roles.length === 0) return false;
 
   // eslint-disable-next-line no-restricted-syntax
   for (const role of user.roles) {
-    if (isObject(role) && isDefined(role.permissions)) {
+    if (isObject(role)) {
       // eslint-disable-next-line no-restricted-syntax
       for (const permissionUser of role.permissions) {
         if (
@@ -61,10 +61,10 @@ export const hasPermission = async function hasPermission(
 };
 
 export const hasAnyPermission = async function hasAnyPermission(
-  user: User | null,
+  user: User,
   permissions: Permission[],
 ): Promise<boolean> {
-  if (!user || !user.roles) return false;
+  if (user.roles.length === 0) return false;
 
   // eslint-disable-next-line no-restricted-syntax
   for (const permission of permissions)
@@ -78,10 +78,10 @@ export const hasAnyPermission = async function hasAnyPermission(
 };
 
 export const hasEveryPermissions = async function hasEveryPermissions(
-  user: User | null,
+  user: User,
   permissions: Permission[],
 ): Promise<boolean> {
-  if (!user || !user.roles) return false;
+  if (user.roles.length === 0) return false;
 
   // eslint-disable-next-line no-restricted-syntax
   for (const permission of permissions)
@@ -94,26 +94,23 @@ export const hasEveryPermissions = async function hasEveryPermissions(
   return true;
 };
 
-export const hasRole = function hasRole(
-  user: User | null,
-  role: string,
-): boolean {
-  if (!user || !user.roles) return false;
+export const hasRole = function hasRole(user: User, role: string): boolean {
+  if (user.roles.length === 0) return false;
   return user.roles.some((r) => isObject(r) && r.name === role);
 };
 
 export const hasAnyRole = function hasAnyRole(
-  user: User | null,
+  user: User,
   roles: string[],
 ): boolean {
-  if (!user || !user.roles) return false;
+  if (user.roles.length === 0) return false;
   return user.roles.some((role) => isObject(role) && roles.includes(role.name));
 };
 
 export const getHighestPriorityRole = function getHighestPriorityRole(
-  user: User | null,
+  user: User,
 ): Role | null {
-  if (!user || !user.roles || user.roles.length === 0) return null;
+  if (user.roles.length === 0) return null;
 
   let highestPriorityRole: Role | null = null;
 
