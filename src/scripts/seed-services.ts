@@ -1,10 +1,7 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
-import { getPayload } from "payload";
-
+import { payload } from "@/lib/payload";
 import { RoomsService } from "@/payload-types";
-
-import config from "../payload.config";
 
 const services: Omit<RoomsService, "id" | "createdAt" | "updatedAt">[] = [
   {
@@ -101,8 +98,6 @@ const services: Omit<RoomsService, "id" | "createdAt" | "updatedAt">[] = [
 ];
 
 const doSeedingServices = async function doSeedingServices() {
-  const payload = await getPayload({ config });
-
   try {
     console.log("🚀 Starting seeding services...");
 

@@ -1,4 +1,6 @@
-// REVIEWED - 05
+// REVIEWED - 06
+
+import { Permission } from "@/payload-types";
 
 import {
   ErrorPayload,
@@ -115,4 +117,11 @@ export const isNumber = function isNumber(value: unknown): value is number {
 // Objects
 export const isObject = function isObject(value: unknown): value is object {
   return isDefined(value) && typeof value === "object";
+};
+
+// Permissions
+export const isConditionsObject = function isConditionsObject(
+  conditions: Permission["conditions"],
+): conditions is Record<string, unknown> {
+  return isObject(conditions) && !Array.isArray(conditions);
 };
