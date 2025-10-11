@@ -1,13 +1,13 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { StarIcon, TrendingUpIcon } from "lucide-react";
-import { motion } from "motion/react";
 
 import { motions } from "@/lib/motion";
 import { cn } from "@/lib/utils/styles";
 import { Room } from "@/payload-types";
 
 import { Container } from "../globals/container";
+import { MotionDiv } from "../globals/motion";
 import {
   Paragraph,
   SectionHeading,
@@ -22,14 +22,16 @@ const ItemCard = function ItemCard({
   skill,
   index,
 }: {
-  skill: NonNullable<Room["skills"]>[0]["skillsCategorized"][0];
+  skill: NonNullable<
+    Room["skills"]["list"]
+  >[number]["skillsCategorized"][number];
   index: number;
 }) {
   const proficiencyColors = {
     beginner: "bg-secondary",
     intermediate: "bg-yellow-500",
     advanced: "bg-teal-500",
-    expert: "bg-tertiary",
+    expert: "bg-tertiary-2",
   };
 
   const proficiencyValues = {
@@ -53,7 +55,7 @@ const ItemCard = function ItemCard({
           "hover:border-secondary": skill.level === "beginner",
           "hover:border-yellow-500": skill.level === "intermediate",
           "hover:border-teal-500": skill.level === "advanced",
-          "hover:border-tertiary": skill.level === "expert",
+          "hover:border-tertiary-2": skill.level === "expert",
         })}>
         <CardContent className="flex h-full flex-col items-stretch p-5">
           <div className="mb-6 flex items-center justify-between gap-5">
@@ -71,7 +73,7 @@ const ItemCard = function ItemCard({
                   skill.level === "intermediate",
                 "border-teal-500 bg-teal-500/10 text-teal-500 hover:bg-teal-500/10":
                   skill.level === "advanced",
-                "border-tertiary bg-tertiary/10 text-tertiary hover:bg-tertiary/10":
+                "border-tertiary-2 bg-tertiary-2/10 text-tertiary-2 hover:bg-tertiary-2/10":
                   skill.level === "expert",
               })}>
               {proficiencyLabels[skill.level]}
@@ -94,7 +96,7 @@ const ItemCard = function ItemCard({
                 className="h-1.5 rounded-none bg-muted"
               />
 
-              <motion.div
+              <MotionDiv
                 initial={{ width: 0 }}
                 whileInView={{ width: `${proficiencyValues[skill.level]}%` }}
                 transition={motions.transition({ delay: index * 0.1 + 0.25 })}
@@ -125,7 +127,7 @@ const ItemCard = function ItemCard({
 const Category = function Category({
   category,
 }: {
-  category: NonNullable<Room["skills"]>[0];
+  category: NonNullable<Room["skills"]["list"]>[number];
 }) {
   return (
     <div className="flex flex-col items-stretch gap-6">
@@ -156,7 +158,9 @@ const Category = function Category({
 export const Skills = function Skills({
   skills,
 }: {
-  skills: NonNullable<Room["skills"]>;
+  skills: Omit<Room["skills"], "list"> & {
+    list: NonNullable<Room["skills"]["list"]>;
+  };
 }) {
   return (
     <Container
@@ -164,20 +168,13 @@ export const Skills = function Skills({
       id="skills"
       className="section-padding-start-lg max-w-7xl">
       <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">
-        Areas of Expertise
+        {skills["headline-sub"]}
       </SectionHeadingBadge>
-      <SectionHeading as="h3" className="mb-6 lg:mb-12">
-        My Professional Toolkit: A Showcase of Core Competencies
+      <SectionHeading as="h3" className="mb-12 lg:mb-24">
+        {skills.headline}
       </SectionHeading>
-      <Paragraph className="mb-12 max-w-5xl lg:mb-24">
-        This section provides a comprehensive overview of my core capabilities.
-        Cultivated through continuous learning and real-world application, these
-        skills represent the professional toolkit I bring to every project and
-        partnership.
-      </Paragraph>
-
       <div className="flex flex-col items-stretch gap-12 lg:gap-24">
-        {skills.map((category, index) => (
+        {skills.list.map((category, index) => (
           <Category key={category.id || index} category={category} />
         ))}
       </div>
