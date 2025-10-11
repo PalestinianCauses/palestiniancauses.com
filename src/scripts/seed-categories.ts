@@ -1,10 +1,7 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
-import { getPayload } from "payload";
-
+import { payload } from "@/lib/payload";
 import { ServiceCategory } from "@/payload-types";
-
-import config from "../payload.config";
 
 const categories: Omit<ServiceCategory, "id" | "createdAt" | "updatedAt">[] = [
   {
@@ -71,8 +68,6 @@ const categories: Omit<ServiceCategory, "id" | "createdAt" | "updatedAt">[] = [
 ];
 
 const doSeedingCategories = async function doSeedingCategories() {
-  const payload = await getPayload({ config });
-
   try {
     console.log("🚀 Starting seeding service categories...");
 
