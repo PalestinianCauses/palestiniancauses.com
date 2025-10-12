@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { payload } from "@/lib/payload";
 
@@ -34,7 +34,7 @@ export const doCleaningPreviousRoles =
           "❌ Can not proceed with cleaning up. Please assign roles to these users first.",
         );
 
-        return;
+        process.exit(1);
       }
 
       console.log(
@@ -52,20 +52,11 @@ export const doCleaningPreviousRoles =
       console.log("3. Remove this cleaning up script after completion");
 
       console.log("\n🎉 Cleaning up verification completed successfully!");
+      process.exit(0);
     } catch (error) {
       console.error("❌ Cleaning up verification failed:", error);
-      throw error;
+      process.exit(1);
     }
   };
 
-if (require.main === module) {
-  doCleaningPreviousRoles()
-    .then(() => {
-      console.log("Cleaning up verification completed successfully");
-      process.exit(0);
-    })
-    .catch((error) => {
-      console.error("Cleaning up verification failed:", error);
-      process.exit(1);
-    });
-}
+doCleaningPreviousRoles();
