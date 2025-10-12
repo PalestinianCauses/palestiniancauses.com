@@ -1,7 +1,7 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CalendarIcon } from "lucide-react";
-import { ElementType, HTMLAttributes } from "react";
+import { ElementType, Fragment, HTMLAttributes } from "react";
 
 import { cn } from "@/lib/utils/styles";
 
@@ -14,6 +14,7 @@ import {
 } from "../ui/tooltip";
 
 export const DateRange = function DateRange({
+  dateStartOnly,
   dateStart,
   dateEnd,
   options = {
@@ -22,6 +23,7 @@ export const DateRange = function DateRange({
   },
   className,
 }: {
+  dateStartOnly?: boolean;
   dateStart: string;
   dateEnd?: string | null;
   options?: Intl.DateTimeFormatOptions;
@@ -36,12 +38,16 @@ export const DateRange = function DateRange({
       <time dateTime={dateStart}>
         {new Date(dateStart).toLocaleString("default", options)}
       </time>
-      <span className="h-0.5 w-4 bg-foreground" />
-      <span>
-        {dateEnd
-          ? new Date(dateEnd).toLocaleString("default", options)
-          : "Present"}
-      </span>
+      {!dateStartOnly ? (
+        <Fragment>
+          <span className="h-0.5 w-4 bg-foreground" />
+          <span>
+            {dateEnd
+              ? new Date(dateEnd).toLocaleString("default", options)
+              : "Present"}
+          </span>
+        </Fragment>
+      ) : null}
     </Paragraph>
   );
 };

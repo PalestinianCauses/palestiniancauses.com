@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import {
   ArrowRightIcon,
@@ -158,7 +158,13 @@ const Content = function Content({
 };
 
 export const About = function About({
-  about: { headline, paragraphs, photograph, stats },
+  about: {
+    headline,
+    "headline-sub": headlineSub,
+    paragraphs,
+    photograph,
+    stats,
+  },
 }: Pick<Room, "about">) {
   const states = [
     {
@@ -198,7 +204,7 @@ export const About = function About({
             })}>
             <div className="order-2 flex flex-col items-start justify-start xl:order-1">
               <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">
-                Meet the person behind this room
+                {headlineSub}
               </SectionHeadingBadge>
               <SectionHeading as="h3" className="mb-6 lg:mb-12">
                 {headline}

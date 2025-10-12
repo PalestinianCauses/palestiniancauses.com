@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 import { HTMLAttributes } from "react";
 
 import { cn } from "@/lib/utils/styles";
@@ -92,6 +92,7 @@ export const SubSectionHeading = function SubSectionHeading({
   as = "h2",
   small = false,
   className,
+  style,
   children,
 }: {
   as?: "h2" | "h3" | "h4" | "h5" | "p";
@@ -112,7 +113,8 @@ export const SubSectionHeading = function SubSectionHeading({
           ? "text-xl lg:text-2xl xl:text-3xl"
           : "text-2xl lg:text-3xl xl:text-4xl",
         className,
-      )}>
+      )}
+      style={style}>
       {children}
     </Component>
   );

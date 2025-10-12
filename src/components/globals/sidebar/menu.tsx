@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import {
   ArrowRightLeftIcon,
@@ -12,8 +12,10 @@ import {
   CheckCheckIcon,
   CookieIcon,
   FileStackIcon,
+  FileTextIcon,
   GraduationCapIcon,
   HeartHandshakeIcon,
+  MessagesSquareIcon,
   PenLineIcon,
   ShieldCheckIcon,
   UserPenIcon,
@@ -38,7 +40,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useRoom } from "@/hooks/use-room";
-import { Room } from "@/payload-types";
 
 const policies = [
   {
@@ -73,12 +74,13 @@ const policies = [
   },
 ];
 
-const icons: Partial<Record<keyof Room, ElementType>> = {
+const icons: Partial<Record<string, ElementType>> = {
   about: BookCopyIcon,
   experience: BriefcaseIcon,
   education: GraduationCapIcon,
   qualification: FileStackIcon,
   skills: BrainIcon,
+  contact: MessagesSquareIcon,
 };
 
 const SidebarMenuMainItem = function SidebarMenuMainItem({
@@ -128,55 +130,56 @@ const SidebarMenuMainItem = function SidebarMenuMainItem({
 };
 
 export const SidebarMainMenu = function SidebarMainMenu() {
-  const {
-    isRoom,
-    isRoomListLoading,
-    isRoomLinksLoading,
-    roomActive,
-    roomLinks,
-  } = useRoom();
+  const { isRoom, isRoomListLoading, roomActive } = useRoom();
   const [activeItemHash, setActiveItemHash] = useState<string | null>(null);
 
   useEffect(() => {
     if (isRoom) setActiveItemHash(window.location.hash || null);
     else setActiveItemHash(null);
-  }, [isRoom, roomActive, roomLinks]);
+  }, [isRoom, roomActive]);
 
-  const menus =
-    roomActive && roomLinks
-      ? [{ label: "Sections", links: roomLinks }, ...policies]
-      : [
-          {
-            label: "Pages",
-            links: [
-              {
-                icon: BookOpenIcon,
-                href: "/a-human-but-from-gaza",
-                label: "A Human But From Gaza",
-              },
-              {
-                icon: PenLineIcon,
-                href: "/humans-but-from-gaza",
-                label: "Humans But From Gaza",
-              },
-              {
-                icon: UserPenIcon,
-                href: "/about-us",
-                label: "About Us",
-              },
-              {
-                icon: HeartHandshakeIcon,
-                href: "/support-us",
-                label: "Support Us",
-              },
-            ],
-          },
-          ...policies,
-        ];
+  const menus = roomActive
+    ? [
+        {
+          label: "Sections",
+          links: roomActive.links
+            ? [...roomActive.links, { label: "Contact", href: "#contact" }]
+            : [],
+        },
+        ...policies,
+      ]
+    : [
+        {
+          label: "Pages",
+          links: [
+            {
+              icon: BookOpenIcon,
+              href: "/a-human-but-from-gaza",
+              label: "A Human But From Gaza",
+            },
+            {
+              icon: PenLineIcon,
+              href: "/humans-but-from-gaza",
+              label: "Humans But From Gaza",
+            },
+            {
+              icon: UserPenIcon,
+              href: "/about-us",
+              label: "About Us",
+            },
+            {
+              icon: HeartHandshakeIcon,
+              href: "/support-us",
+              label: "Support Us",
+            },
+          ],
+        },
+        ...policies,
+      ];
 
   return (
     <Fragment>
-      {isRoomListLoading || isRoomLinksLoading ? (
+      {isRoomListLoading ? (
         <Fragment>
           <SidebarGroup>
             <SidebarMenu className="gap-1.5">
@@ -218,7 +221,10 @@ export const SidebarMainMenu = function SidebarMainMenu() {
                   isRoom={isRoom}
                   item={{
                     ...link,
-                    icon: "icon" in link ? link.icon : icons[link.label],
+                    icon:
+                      "icon" in link
+                        ? link.icon
+                        : icons[link.label.toLowerCase()] || FileTextIcon,
                   }}
                   activeItemHash={isRoom ? activeItemHash : undefined}
                   setActiveItemHash={isRoom ? setActiveItemHash : undefined}

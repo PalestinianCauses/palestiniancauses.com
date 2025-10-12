@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 import {
   ArrowRightIcon,
   AtSignIcon,
@@ -111,10 +111,10 @@ export const Experience = function Experience({
       as="section"
       id="experience"
       className="section-padding-start-lg mb-8 max-w-7xl">
-      <div className="mx-auto flex max-w-2xl flex-col items-start justify-between gap-16 lg:mx-0 lg:max-w-none lg:flex-row">
-        <div className="w-full lg:sticky lg:top-12 lg:max-w-lg lg:flex-auto">
+      <div className="mx-auto flex flex-col items-start justify-between gap-16 lg:mx-0 lg:max-w-none lg:flex-row">
+        <div className="w-full lg:sticky lg:top-24 lg:max-w-lg lg:flex-auto">
           <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">
-            My Professional Journey
+            {experience["headline-sub"]}
           </SectionHeadingBadge>
           <SectionHeading as="h3" className="mb-6 lg:mb-12">
             {experience.headline}
@@ -146,7 +146,7 @@ export const Experience = function Experience({
             ) : null}
           </div>
         </div>
-        <div className="w-full lg:max-w-xl lg:flex-auto">
+        <div className="w-full lg:flex-auto">
           <h3 className="sr-only">Professional Experience</h3>
           <div className="section-gap -my-8 grid xl:gap-24">
             {experience.list.map((item) => (

@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { AtSignIcon, AwardIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
@@ -37,7 +37,7 @@ const QualificationCard = function QualificationCard({
   return (
     <CarouselItem className="relative pl-5">
       <div className="absolute right-0 top-0 h-10 w-10 border-r border-t border-foreground" />
-      <div className="mb-6 grid w-full grid-cols-1 items-center gap-6 p-0.5 sm:grid-cols-2">
+      <div className="mb-6 grid w-full grid-cols-1 items-center gap-6 p-0.5 sm:grid-cols-[max-content_auto]">
         <InformationBadges
           badges={[{ icon: AtSignIcon, label: issuer }]}
           className="shrink-1 mb-0 [@media(min-width:20rem)]:grid-cols-1"
@@ -98,7 +98,7 @@ export const Qualification = function Qualification({
       id="qualification"
       className={cn("section-padding-start-lg max-w-7xl")}>
       <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">
-        A Record of Specialized Training
+        {qualification["headline-sub"]}
       </SectionHeadingBadge>
       <SectionHeading as="h3" className="mb-12 lg:mb-24">
         {qualification.headline}

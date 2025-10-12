@@ -1,7 +1,9 @@
-// REVIEWED - 11
+// REVIEWED - 12
 import type { CollectionConfig } from "payload";
 
 import { isAdmin, isAdminField, isAdminOrSelf } from "@/access/global";
+// eslint-disable-next-line import/no-cycle
+import { payload } from "@/lib/payload";
 import { isDefined, isObject, isString } from "@/lib/types/guards";
 
 export const Users: CollectionConfig = {
@@ -32,6 +34,28 @@ export const Users: CollectionConfig = {
   labels: { singular: "User", plural: "Users" },
   auth: {
     tokenExpiration: 24 * 60 * 60,
+  },
+  hooks: {
+    beforeChange: [
+      async ({ data, operation }) => {
+        if (
+          operation === "create" &&
+          (!data.roles || data.roles.length === 0)
+        ) {
+          const rolesDefault = await payload.find({
+            collection: "roles",
+            where: { isDefault: { equals: true } },
+            limit: 1,
+          });
+
+          if (rolesDefault.docs.length > 0)
+            // eslint-disable-next-line no-param-reassign
+            data.roles = [rolesDefault.docs[0].id];
+        }
+
+        return data;
+      },
+    ],
   },
   fields: [
     {
