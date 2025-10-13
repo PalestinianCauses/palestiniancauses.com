@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
@@ -401,6 +401,148 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
   },
 ];
 
+const permissionsRoles: Record<string, string[]> = {
+  "admin-user": [
+    "users.create",
+    "users.read",
+    "users.update",
+    "users.delete",
+    "roles.create",
+    "roles.read",
+    "roles.update",
+    "roles.delete",
+    "permissions.create",
+    "permissions.read",
+    "permissions.update",
+    "permissions.delete",
+    "blogs.create",
+    "blogs.read",
+    "blogs.update",
+    "blogs.delete",
+    "blogs.publish",
+    "comments.create",
+    "comments.read",
+    "comments.update",
+    "comments.delete",
+    "diary-entries.create",
+    "diary-entries.read",
+    "diary-entries.update",
+    "diary-entries.delete",
+    "media.create",
+    "media.read",
+    "media.update",
+    "media.delete",
+    "notification-subscriptions.create",
+    "notification-subscriptions.read",
+    "notification-subscriptions.update",
+    "notification-subscriptions.delete",
+    "orders.create",
+    "orders.read",
+    "orders.update",
+    "orders.delete",
+    "products.create",
+    "products.read",
+    "products.update",
+    "products.delete",
+    "rooms.create",
+    "rooms.read",
+    "rooms.update",
+    "rooms.delete",
+    "room-contact.create",
+    "room-contact.read",
+    "room-contact.update",
+    "room-contact.delete",
+    "room-packages.create",
+    "room-packages.read",
+    "room-packages.update",
+    "room-packages.delete",
+    "room-services.create",
+    "room-services.read",
+    "room-services.update",
+    "room-services.delete",
+    "service-categories.create",
+    "service-categories.read",
+    "service-categories.update",
+    "service-categories.delete",
+  ],
+  "system-user": [
+    "users.read",
+    "roles.read",
+    "permissions.read",
+    "blogs.create",
+    "blogs.read",
+    "blogs.update",
+    "blogs.delete",
+    "blogs.publish",
+    "comments.create",
+    "comments.read",
+    "comments.update",
+    "comments.delete",
+    "diary-entries.create",
+    "diary-entries.read",
+    "diary-entries.update",
+    "diary-entries.delete",
+    "media.create",
+    "media.read",
+    "media.update",
+    "media.delete",
+    "notification-subscriptions.read",
+    "orders.read",
+    "products.read",
+    "rooms.create",
+    "rooms.read",
+    "rooms.update",
+    "rooms.delete",
+    "room-contact.create",
+    "room-contact.read",
+    "room-contact.update",
+    "room-contact.delete",
+    "room-packages.create",
+    "room-packages.read",
+    "room-packages.update",
+    "room-packages.delete",
+    "room-services.create",
+    "room-services.read",
+    "room-services.update",
+    "room-services.delete",
+    "service-categories.create",
+    "service-categories.read",
+    "service-categories.update",
+    "service-categories.delete",
+  ],
+  "author-user": [
+    "blogs.create",
+    "blogs.read",
+    "blogs.update",
+    "blogs.delete",
+    "blogs.publish",
+    "comments.create",
+    "comments.read",
+    "comments.update",
+    "comments.delete",
+    "diary-entries.create",
+    "diary-entries.read",
+    "diary-entries.update",
+    "diary-entries.delete",
+    "media.create",
+    "media.read",
+    "media.update",
+    "media.delete",
+  ],
+  "website-user": [
+    "blogs.read",
+    "comments.create",
+    "comments.read",
+    "comments.update",
+    "comments.delete",
+    "diary-entries.create",
+    "diary-entries.read",
+    "diary-entries.update",
+    "diary-entries.delete",
+    "media.read",
+  ],
+};
+
 const roles: Omit<Role, "id" | "updatedAt" | "createdAt">[] = [
   {
     name: "admin-user",
@@ -437,6 +579,7 @@ const roles: Omit<Role, "id" | "updatedAt" | "createdAt">[] = [
 export const doSeedingPermissionsPlusRoles =
   async function doSeedingPermissionsPlusRoles() {
     try {
+      // eslint-disable-next-line no-console
       console.log("🚀 Starting seeding permissions and roles...");
 
       const existingPermissions = await payload.find({
@@ -445,18 +588,21 @@ export const doSeedingPermissionsPlusRoles =
       });
 
       if (existingPermissions.docs.length > 0) {
+        // eslint-disable-next-line no-console
         console.log("❌ Permissions exist, skipping seeding.");
-        return;
+        process.exit(0);
       }
 
-      const permissionsPromises = permissions.map((permission) =>
-        payload.create({
-          collection: "permissions",
-          data: permission,
-        }),
+      const permissionsCreated = await Promise.all(
+        permissions.map((permission) =>
+          payload.create({
+            collection: "permissions",
+            data: permission,
+          }),
+        ),
       );
 
-      await Promise.all(permissionsPromises);
+      // eslint-disable-next-line no-console
       console.log("🎉 Permissions created successfully");
 
       const existingRoles = await payload.find({
@@ -465,24 +611,56 @@ export const doSeedingPermissionsPlusRoles =
       });
 
       if (existingRoles.docs.length > 0) {
+        // eslint-disable-next-line no-console
         console.log("❌ Roles exist, skipping seeding.");
-        return;
+        process.exit(0);
       }
 
-      const rolesPromises = roles.map((role) =>
-        payload.create({
-          collection: "roles",
-          data: role,
+      // creating a map of permission names to IDs for easy looking up
+      const permissionMap = new Map();
+      permissionsCreated.forEach((permission) => {
+        permissionMap.set(permission.name, permission.id);
+      });
+
+      // creating roles with their permissions
+      const rolesCreated = await Promise.all(
+        roles.map(async (role) => {
+          // getting role permissions based on user's role name
+          const rolePermissionNames = permissionsRoles[role.name] || [];
+          // getting role permissions IDs
+          const rolePermissionIds = rolePermissionNames
+            .map((name) => permissionMap.get(name))
+            .filter(Boolean);
+
+          return payload.create({
+            collection: "roles",
+            data: {
+              ...role,
+              permissions: rolePermissionIds,
+            },
+          });
         }),
       );
 
-      await Promise.all(rolesPromises);
+      // eslint-disable-next-line no-console
       console.log("🎉 Roles created successfully");
+
+      rolesCreated.forEach((role) => {
+        const rolePermissionNames = permissionsRoles[role.name] || [];
+        // eslint-disable-next-line no-console
+        console.log(
+          `📋 ${role.name}: ${rolePermissionNames.length} permissions`,
+        );
+      });
+
+      // eslint-disable-next-line no-console
       console.log("🎉 Permissions and roles seeded successfully!");
 
       process.exit(0);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("❌ Error seeding permissions and roles:", error);
+      // eslint-disable-next-line no-console
       console.error(
         error && typeof error === "object" && "data" in error && error?.data,
       );
