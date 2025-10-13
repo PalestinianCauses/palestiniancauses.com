@@ -1,4 +1,4 @@
-// REVIEWED - 12
+// REVIEWED - 13
 
 import { CollectionConfig } from "payload";
 
@@ -7,6 +7,7 @@ import {
   isAdminOrSystemUserOrSelfOrPublished,
 } from "@/access/diary-entry";
 import { isAdminOrSystemUserField, isAuthenticated } from "@/access/global";
+import { hasAnyRole } from "@/lib/permissions";
 
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
@@ -95,10 +96,7 @@ export const DiaryEntries: CollectionConfig = {
     beforeChange: [
       async ({ req, data }) => {
         const document = data;
-        if (
-          req.user &&
-          (req.user.role === "admin" || req.user.role === "system-user")
-        )
+        if (req.user && hasAnyRole(req.user, ["admin-user", "system-user"]))
           document.status = "approved";
 
         return document;

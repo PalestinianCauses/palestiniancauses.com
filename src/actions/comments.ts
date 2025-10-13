@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -15,7 +15,7 @@ export const createComment = async function createComment(
 ): Promise<ResponseSafeExecute<string, string>> {
   const auth = await getAuthentication();
 
-  if (!auth || !auth.user)
+  if (!auth)
     return {
       data: null,
       error: messages.actions.comment.createUnAuthenticated,
@@ -73,7 +73,7 @@ export const deleteComment = async function deleteComment(
 ): Promise<ResponseSafeExecute<string, string>> {
   const auth = await getAuthentication();
 
-  if (!auth || !auth.user)
+  if (!auth)
     return {
       data: null,
       error: messages.actions.comment.deleteUnAuthenticated,
@@ -90,7 +90,7 @@ export const deleteComment = async function deleteComment(
   if (
     (typeof comment.data.user === "object"
       ? comment.data.user.id
-      : comment.data.user) !== auth.user.id
+      : comment.data.user) !== auth.id
   )
     return {
       data: null,
@@ -112,7 +112,7 @@ export const deleteCommentReplies = async function deleteCommentReplies(
 ) {
   const auth = await getAuthentication();
 
-  if (!auth || !auth.user) return;
+  if (!auth) return;
 
   const deletePromises = ids.map(async (id) => {
     const response = await actionSafeExecute(
@@ -145,13 +145,11 @@ export const voteOnComment = async function voteOnComment({
 > {
   const auth = await getAuthentication();
 
-  if (!auth || !auth.user)
+  if (!auth)
     return {
       data: null,
       error: messages.actions.comment.votes.unAuthenticated,
     };
-
-  const { user } = auth;
 
   const comment = await getComment(id);
 
@@ -165,7 +163,7 @@ export const voteOnComment = async function voteOnComment({
     (voteElement) =>
       (typeof voteElement.user === "object"
         ? voteElement.user.id
-        : voteElement.user) === user.id,
+        : voteElement.user) === auth.id,
   );
 
   if (voteExisting) {
@@ -175,11 +173,11 @@ export const voteOnComment = async function voteOnComment({
 
     if (voteExisting.vote !== vote)
       votesUpdated.push({
-        user,
+        user: auth,
         vote,
       });
   } else {
-    votesUpdated = [...votes, { user, vote }];
+    votesUpdated = [...votes, { user: auth, vote }];
   }
 
   const upVotes = votesUpdated.filter((v) => v.vote === "up").length;

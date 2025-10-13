@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import {
   BellIcon,
@@ -32,6 +32,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/use-auth";
 import { useUser } from "@/hooks/use-user";
+import { hasAnyRole } from "@/lib/permissions";
 
 import { SafeHydrate } from "../safe-hydrate";
 
@@ -98,7 +99,7 @@ export const SidebarUser = function SidebarUser() {
                   side={isMobile ? "bottom" : "right"}
                   sideOffset={2}>
                   <DropdownMenuGroup>
-                    {user.role === "admin" || user.role === "system-user" ? (
+                    {hasAnyRole(user, ["admin-user", "system-user"]) ? (
                       <DropdownMenuItem asChild className="gap-2.5 px-2.5">
                         <Link href="/admin">
                           <LayoutIcon />

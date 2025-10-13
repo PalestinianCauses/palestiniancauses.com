@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Permission, Role, User } from "@/payload-types";
 
@@ -26,10 +26,10 @@ export const hasConditions = function hasConditions(
 };
 
 export const hasPermission = async function hasPermission(
-  user: User,
+  user: User | null,
   permission: Permission,
 ): Promise<boolean> {
-  if (user.roles.length === 0) return false;
+  if (!user || !user.roles || user.roles.length === 0) return false;
 
   // eslint-disable-next-line no-restricted-syntax
   for (const role of user.roles) {
@@ -61,10 +61,10 @@ export const hasPermission = async function hasPermission(
 };
 
 export const hasAnyPermission = async function hasAnyPermission(
-  user: User,
+  user: User | null,
   permissions: Permission[],
 ): Promise<boolean> {
-  if (user.roles.length === 0) return false;
+  if (!user || !user.roles || user.roles.length === 0) return false;
 
   // eslint-disable-next-line no-restricted-syntax
   for (const permission of permissions)
@@ -78,10 +78,10 @@ export const hasAnyPermission = async function hasAnyPermission(
 };
 
 export const hasEveryPermissions = async function hasEveryPermissions(
-  user: User,
+  user: User | null,
   permissions: Permission[],
 ): Promise<boolean> {
-  if (user.roles.length === 0) return false;
+  if (!user || !user.roles || user.roles.length === 0) return false;
 
   // eslint-disable-next-line no-restricted-syntax
   for (const permission of permissions)
@@ -94,23 +94,26 @@ export const hasEveryPermissions = async function hasEveryPermissions(
   return true;
 };
 
-export const hasRole = function hasRole(user: User, role: string): boolean {
-  if (user.roles.length === 0) return false;
+export const hasRole = function hasRole(
+  user: User | null,
+  role: string,
+): boolean {
+  if (!user || !user.roles || user.roles.length === 0) return false;
   return user.roles.some((r) => isObject(r) && r.name === role);
 };
 
 export const hasAnyRole = function hasAnyRole(
-  user: User,
+  user: User | null,
   roles: string[],
 ): boolean {
-  if (user.roles.length === 0) return false;
+  if (!user || !user.roles || user.roles.length === 0) return false;
   return user.roles.some((role) => isObject(role) && roles.includes(role.name));
 };
 
 export const getHighestPriorityRole = function getHighestPriorityRole(
-  user: User,
+  user: User | null,
 ): Role | null {
-  if (user.roles.length === 0) return null;
+  if (!user || !user.roles || user.roles.length === 0) return null;
 
   let highestPriorityRole: Role | null = null;
 
@@ -129,9 +132,9 @@ export const getHighestPriorityRole = function getHighestPriorityRole(
 };
 
 export const getUserPermissions = function getUserPermissions(
-  user: User,
+  user: User | null,
 ): Permission[] {
-  if (user.roles.length === 0) return [];
+  if (!user || !user.roles || user.roles.length === 0) return [];
 
   const permissions: Permission[] = [];
   const seen = new Set<string>();

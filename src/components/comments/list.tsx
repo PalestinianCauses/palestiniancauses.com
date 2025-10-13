@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { QueryKey, useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, MessagesSquareIcon } from "lucide-react";
@@ -41,7 +41,7 @@ export const CommentList = function CommentList({
           collection: "comments",
           filters: { ...filters, page: pageParam },
           fieldsSearch,
-          depth: 1,
+          depth: 4,
         });
 
         if (!response.data || response.data.docs.length === 0 || response.error)

@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { Access, FieldAccess } from "payload";
 
@@ -17,7 +17,7 @@ export const isAuthenticated: Access = function isAuthenticated({
 };
 
 export const isAdmin: Access = function isAdmin({ req }) {
-  return isAuthenticated({ req }) && hasRole(req.user, "admin");
+  return isAuthenticated({ req }) && hasRole(req.user, "admin-user");
 };
 
 export const isAdminOrSystemUser: Access = function isAdminOrSystemUser({
@@ -36,7 +36,7 @@ export const isAdminOrSystemUserOrSelf: Access =
   };
 
 export const isAdminField: FieldAccess = function isAdminField({ req }) {
-  return isAuthenticated({ req }) && hasRole(req.user, "admin");
+  return isAuthenticated({ req }) && hasRole(req.user, "admin-user");
 };
 
 export const isAdminOrSystemUserField: FieldAccess =

@@ -1,8 +1,9 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CollectionConfig } from "payload";
 
 import { isAdminField, isAdminOrSelf } from "@/access/global";
+import { hasRole } from "@/lib/permissions";
 import { isObject, isString } from "@/lib/types/guards";
 
 export const ServiceCategories: CollectionConfig = {
@@ -12,9 +13,9 @@ export const ServiceCategories: CollectionConfig = {
       const { user } = req;
       if (!user) return false;
 
-      if (user.role === "admin") return true;
+      if (hasRole(user, "admin-user")) return true;
 
-      if (user.role === "system-user") {
+      if (hasRole(user, "system-user")) {
         const room = await req.payload.find({
           collection: "rooms",
           where: { user: { equals: user.id } },

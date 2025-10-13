@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 "use client";
 
@@ -7,6 +7,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 
 import { messages } from "@/lib/messages";
+import { hasAnyRole } from "@/lib/permissions";
 import { SafeExecuteConfig } from "@/lib/types";
 import { User } from "@/payload-types";
 
@@ -35,7 +36,7 @@ export const AuthenticatedButtons = function AuthenticatedButtons({
 }) {
   return (
     <ul className="flex flex-row items-center justify-center gap-2.5">
-      {user.role !== "website-user" ? (
+      {hasAnyRole(user, ["admin-user", "system-user", "author-user"]) ? (
         <li>
           <Button variant="ghost" asChild>
             <Link href="/admin">Admin Dashboard</Link>

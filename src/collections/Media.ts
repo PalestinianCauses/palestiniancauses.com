@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 import type { CollectionConfig } from "payload";
 
 import { isAdmin } from "@/access/global";
@@ -6,7 +6,7 @@ import { isAdmin } from "@/access/global";
 export const Media: CollectionConfig = {
   slug: "media",
   access: {
-    read: isAdmin,
+    read: () => true,
     create: isAdmin,
     update: isAdmin,
     delete: isAdmin,

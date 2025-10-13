@@ -1,10 +1,11 @@
 "use server";
 
-// REVIEWED - 13
+// REVIEWED - 14
 
 import { httpStatusesMessages, messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { hasAnyRole } from "@/lib/permissions";
 import { ErrorPayload, ResponseSafeExecute } from "@/lib/types";
 import { isResponseError } from "@/lib/types/guards";
 import { DiaryEntry, User } from "@/payload-types";
@@ -20,14 +21,12 @@ export const createDiaryEntry = async function createDiaryEntry(
 ): Promise<ResponseSafeExecute<string, string>> {
   const auth = await getAuthentication();
 
-  if (!auth || !auth.user) {
+  if (!auth) {
     return {
       data: null,
       error: messages.actions.diaryEntry.unAuthenticated,
     };
   }
-
-  const { user } = auth;
 
   const response = await actionSafeExecute<DiaryEntry, ErrorPayload>(
     payload.create({
@@ -36,11 +35,10 @@ export const createDiaryEntry = async function createDiaryEntry(
         title: data.title,
         date: data.date,
         content: data.content,
-        status:
-          user.role === "admin" || user.role === "system-user"
-            ? "approved"
-            : "pending",
-        author: user,
+        status: hasAnyRole(auth, ["admin-user", "system-user"])
+          ? "approved"
+          : "pending",
+        author: auth,
         isAuthentic: data.isAuthentic,
         isAnonymous: data.isAnonymous,
       },
@@ -68,7 +66,7 @@ export const createDiaryEntry = async function createDiaryEntry(
     return { data: null, error: messages.actions.diaryEntry.serverErrorShare };
   }
 
-  if (user.role === "admin" || user.role === "system-user") {
+  if (hasAnyRole(auth, ["admin-user", "system-user"])) {
     const url = `${process.env.NEXT_PUBLIC_URL}/humans-but-from-gaza/${response.data.id}`;
     await notifySubscribers({
       title: data.title,
@@ -78,10 +76,9 @@ export const createDiaryEntry = async function createDiaryEntry(
   }
 
   return {
-    data:
-      user.role === "admin" || user.role === "system-user"
-        ? messages.actions.diaryEntry.successPCAuthor
-        : messages.actions.diaryEntry.success,
+    data: hasAnyRole(auth, ["admin-user", "system-user"])
+      ? messages.actions.diaryEntry.successPCAuthor
+      : messages.actions.diaryEntry.success,
     error: null,
   };
 };
@@ -103,12 +100,11 @@ export const getDiaryEntry = async function getDiaryEntry(
 
 export const getDiaryEntryAuthor = async function getDiaryEntryAuthor(
   id: number,
-): Promise<ResponseSafeExecute<Partial<User>>> {
+): Promise<ResponseSafeExecute<User>> {
   const response = await actionSafeExecute(
     payload.findByID({
       collection: "users",
       id,
-      select: { firstName: true, lastName: true, role: true },
     }),
     messages.actions.diaryEntry.author.serverError,
   );

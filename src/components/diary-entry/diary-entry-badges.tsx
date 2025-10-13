@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import {
   CalendarFoldIcon,
@@ -12,6 +12,7 @@ import {
   RefAttributes,
 } from "react";
 
+import { hasAnyRole } from "@/lib/permissions";
 import { cn } from "@/lib/utils/styles";
 import { User } from "@/payload-types";
 
@@ -34,7 +35,7 @@ export const DiaryEntryBadges = function DiaryEntryBadges({
   className,
 }: {
   isAnonymous: boolean;
-  author: Partial<User> | null | undefined;
+  author: User | null | undefined;
   date: string;
 } & HTMLAttributes<HTMLDivElement>) {
   const badges: [
@@ -73,7 +74,7 @@ export const DiaryEntryBadges = function DiaryEntryBadges({
         icon: UserIcon,
       }) || { type: "name", label: "By Anonymous", icon: UserIcon },
     (author &&
-      (author.role === "admin" || author.role === "system-user") && {
+      hasAnyRole(author, ["admin-user", "system-user", "author-user"]) && {
         type: "pc-author",
         label: "Author in PalestinianCauses",
         icon: VerifiedIcon,

@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { PaginatedDocs } from "payload";
 
@@ -10,12 +10,23 @@ import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
 import { Room } from "@/payload-types";
 
+import { getAuthentication } from "./auth";
+
 export const getRoomList = async function getRoomList(): Promise<
   ResponseSafeExecute<PaginatedDocs<Room>, string>
 > {
+  const authentication = await getAuthentication();
+
   const response = await actionSafeExecute(
     payload.find({
-      req: { query: { origin: { equals: "website" } } },
+      ...(authentication ? { user: authentication } : {}),
+      req: {
+        ...(authentication
+          ? { user: { ...authentication, collection: "users" } }
+          : {}),
+        query: { origin: { equals: "website" } },
+      },
+
       collection: "rooms",
       page: 1,
       limit: 5,
@@ -27,12 +38,14 @@ export const getRoomList = async function getRoomList(): Promise<
         information: { photograph: true },
         links: true,
       },
+
       where: {
         status: {
           equals: "published",
         },
       },
-      overrideAccess: false,
+
+      ...(authentication ? { overrideAccess: false } : {}),
     }),
     messages.actions.room.serverError,
   );
@@ -43,13 +56,23 @@ export const getRoomList = async function getRoomList(): Promise<
 export const getRoom = async function getRoom(
   slug: string,
 ): Promise<ResponseSafeExecute<Room, string>> {
+  const authentication = await getAuthentication();
+
   const response = await actionSafeExecute(
     payload.find({
-      req: { query: { origin: { equals: "website" } } },
+      ...(authentication ? { user: authentication } : {}),
+      req: {
+        ...(authentication
+          ? { user: { ...authentication, collection: "users" } }
+          : {}),
+        query: { origin: { equals: "website" } },
+      },
+
       collection: "rooms",
       where: { slug: { equals: slug }, status: { equals: "published" } },
-      depth: 1,
-      overrideAccess: false,
+      depth: 3,
+
+      ...(authentication ? { overrideAccess: false } : {}),
     }),
 
     messages.actions.room.serverError,

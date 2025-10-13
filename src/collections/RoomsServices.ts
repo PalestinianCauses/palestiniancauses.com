@@ -1,8 +1,9 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CollectionConfig } from "payload";
 
 import { isAdminOrSelf } from "@/access/global";
+import { hasRole } from "@/lib/permissions";
 import { isObject, isString } from "@/lib/types/guards";
 
 export const RoomsServices: CollectionConfig = {
@@ -12,9 +13,9 @@ export const RoomsServices: CollectionConfig = {
       const { user } = req;
       if (!user) return false;
 
-      if (user.role === "admin") return true;
+      if (hasRole(user, "admin-user")) return true;
 
-      if (user.role === "system-user") {
+      if (hasRole(user, "system-user")) {
         const room = await req.payload.find({
           collection: "rooms",
           where: { user: { equals: user.id } },
@@ -42,11 +43,24 @@ export const RoomsServices: CollectionConfig = {
     delete: isAdminOrSelf,
   },
   admin: {
-    group: "Content",
+    group: "Rooms Content",
     defaultColumns: ["id", "name", "status", "category", "createdAt"],
     useAsTitle: "name",
   },
   fields: [
+    {
+      admin: {
+        hidden: true,
+        position: "sidebar",
+        description:
+          "The individual or entity responsible for and associated with this service.",
+      },
+      label: "User",
+      name: "user",
+      type: "relationship",
+      relationTo: "users",
+      required: false,
+    },
     {
       admin: {
         description: "A clear, descriptive name for this service.",
@@ -125,16 +139,6 @@ export const RoomsServices: CollectionConfig = {
     },
     {
       admin: {
-        description: "Visual representation of this service (optional).",
-      },
-      label: "Service Image",
-      name: "image",
-      type: "upload",
-      relationTo: "media",
-      required: false,
-    },
-    {
-      admin: {
         position: "sidebar",
         description:
           "Display order for this service (lower numbers appear first).",
@@ -146,4 +150,17 @@ export const RoomsServices: CollectionConfig = {
       required: true,
     },
   ],
+  hooks: {
+    beforeChange: [
+      async ({ operation, data }) => {
+        if (operation === "create")
+          if (data.user) {
+            // eslint-disable-next-line no-param-reassign
+            data.user = data.user.id;
+          }
+
+        return data;
+      },
+    ],
+  },
 };

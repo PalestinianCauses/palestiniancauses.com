@@ -1,4 +1,4 @@
-// REVIEWED  - 18
+// REVIEWED  - 19
 
 import { useQuery } from "@tanstack/react-query";
 
@@ -10,9 +10,9 @@ export const useUser = function useUser() {
     queryFn: async () => {
       const response = await getAuthentication();
 
-      if (!response || !response.user) return null;
+      if (!response) return null;
 
-      return response.user;
+      return response;
     },
   });
 

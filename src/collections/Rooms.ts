@@ -1,8 +1,9 @@
-// REVIEWED - 24
+// REVIEWED - 25
 
 import { CollectionConfig } from "payload";
 
 import { isAdminOrSelf } from "@/access/global";
+import { hasRole } from "@/lib/permissions";
 import { isObject, isString } from "@/lib/types/guards";
 
 import { AboutField } from "./rooms/fields/about";
@@ -10,6 +11,7 @@ import { EducationField } from "./rooms/fields/education";
 import { ExperienceField } from "./rooms/fields/experience";
 import { InformationField } from "./rooms/fields/information";
 import { QualificationField } from "./rooms/fields/qualification";
+import { Skill } from "./rooms/fields/skill";
 
 export const Rooms: CollectionConfig = {
   slug: "rooms",
@@ -18,9 +20,9 @@ export const Rooms: CollectionConfig = {
       const { user } = req;
       if (!user) return false;
 
-      if (user.role === "admin") return true;
+      if (hasRole(user, "admin-user")) return true;
 
-      if (user.role === "system-user") {
+      if (hasRole(user, "system-user")) {
         const room = await req.payload.find({
           collection: "rooms",
           where: { user: { equals: user.id } },
@@ -121,63 +123,7 @@ export const Rooms: CollectionConfig = {
     EducationField,
     ExperienceField,
     QualificationField,
-    {
-      admin: {
-        description:
-          "Comprehensive list of skills and corresponding proficiency levels.",
-      },
-      label: "Skills and Competencies",
-      name: "skills",
-      type: "array",
-      fields: [
-        {
-          admin: {
-            description: "Categorize related skills under a formal group.",
-          },
-          label: "Skill Category",
-          name: "category",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: {
-            description: "Enumerate individual skills within this category.",
-          },
-          label: "Skills in Category",
-          name: "skillsCategorized",
-          type: "array",
-          required: true,
-          fields: [
-            {
-              admin: {
-                description: "Official name of the skill.",
-              },
-              label: "Skill Name",
-              name: "name",
-              type: "text",
-              required: true,
-            },
-            {
-              admin: {
-                description:
-                  "Select the proficiency level that best represents your expertise in this skill.",
-              },
-              label: "Proficiency Level",
-              name: "level",
-              type: "select",
-              options: [
-                { label: "Beginner", value: "beginner" },
-                { label: "Intermediate", value: "intermediate" },
-                { label: "Advanced", value: "advanced" },
-                { label: "Expert", value: "expert" },
-              ],
-              defaultValue: "expert",
-              required: true,
-            },
-          ],
-        },
-      ],
-    },
+    Skill,
     {
       admin: {
         description:

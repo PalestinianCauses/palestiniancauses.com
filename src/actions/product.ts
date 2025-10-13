@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { redirect } from "next/navigation";
 
@@ -19,8 +19,7 @@ export const getProductFreeLinksExternal =
   ): Promise<ResponseSafeExecute<Pick<Product, "links">>> {
     const auth = await getAuthentication();
 
-    if (!auth || !auth.user)
-      redirect(["/signin", "?", "redirect", "=", redirectTo].join(""));
+    if (!auth) redirect(["/signin", "?", "redirect", "=", redirectTo].join(""));
 
     const responseProduct = await actionSafeExecute(
       payload.find({
@@ -46,7 +45,7 @@ export const getProductFreeLinksExternal =
     const responseHasOrder = await actionSafeExecute(
       payload.find({
         collection: "orders",
-        where: { user: { equals: auth.user.id } },
+        where: { user: { equals: auth.id } },
       }),
       messages.actions.order.serverError,
     );
@@ -59,7 +58,7 @@ export const getProductFreeLinksExternal =
         payload.create({
           collection: "orders",
           data: {
-            user: auth.user.id,
+            user: auth.id,
             type: "free",
             total: 0,
             status: "not-applicable",

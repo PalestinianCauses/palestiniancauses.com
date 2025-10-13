@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -36,10 +36,20 @@ export const createUser = async function createUser(
       error: messages.actions.auth.signUp.validation,
     };
 
+  const rolesDefault = await payload.find({
+    collection: "roles",
+    where: { isDefault: { equals: true } },
+    limit: 1,
+  });
+
   const response = await actionSafeExecute(
     payload.create({
       collection: "users",
-      data: { ...data, role: "website-user" },
+      data: {
+        ...data,
+        previousRole: "website-user",
+        roles: rolesDefault.docs.length > 0 ? [rolesDefault.docs[0].id] : [],
+      },
     }),
     messages.actions.auth.signUp.serverError,
     isResponseErrorHasDataPlusErrors,

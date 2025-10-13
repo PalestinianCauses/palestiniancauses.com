@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 09
+// REVIEWED - 10
 
 import {
   QueryKey,
@@ -24,6 +24,7 @@ import { Fragment, MutableRefObject, useMemo, useState } from "react";
 
 import { getCollection } from "@/actions/collection";
 import { useComment, useCommentRepliesCount } from "@/hooks/use-comment";
+import { hasAnyRole } from "@/lib/permissions";
 import { cn } from "@/lib/utils/styles";
 import { Comment, User } from "@/payload-types";
 
@@ -165,8 +166,11 @@ export const CommentItem = function CommentItem({
             className="flex items-center justify-start gap-1.5 text-base font-medium leading-none">
             {author}
             {typeof comment.user === "object" &&
-            (comment.user.role === "admin" ||
-              comment.user.role === "system-user") ? (
+            hasAnyRole(comment.user, [
+              "admin-user",
+              "system-user",
+              "author-user",
+            ]) ? (
               <span>
                 <VerifiedIcon className="h-4 w-4" />
               </span>
