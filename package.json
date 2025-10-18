@@ -14,12 +14,19 @@
     "payload:migrate": "payload migrate",
     "payload:migrate:create": "payload migrate:create",
     "payload:migrate:status": "payload migrate:status",
+    "seed:rooms": "payload run src/scripts/seed-rooms.ts",
+    "seed:categories": "payload run src/scripts/seed-categories.ts",
+    "seed:services": "payload run src/scripts/seed-services.ts",
+    "seed:roles-permissions": "payload run src/scripts/seed-roles-permissions.ts",
+    "migrate:users-roles": "payload run src/scripts/migrate-users-roles.ts",
+    "clean-up:previous-role": "payload run src/scripts/clean-up-previous-role.ts",
     "payload:types": "payload generate:types",
     "playwright:test": "playwright test",
     "format": "prettier --write ."
   },
   "dependencies": {
     "@floating-ui/react": "0.26.28",
+    "@heroicons/react": "2.2.0",
     "@hookform/resolvers": "3.9.1",
     "@payloadcms/db-mongodb": "3.30.0",
     "@payloadcms/db-postgres": "3.30.0",
@@ -124,6 +131,7 @@
     "prettier-plugin-tailwindcss": "0.6.9",
     "serwist": "9.0.14",
     "tailwindcss": "3.4.1",
+    "tsx": "^4.20.4",
     "typescript": "5"
   }
 }

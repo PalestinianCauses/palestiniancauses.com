@@ -1,11 +1,10 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 // NEEDS IMPROVEMENT
 
 import {
   getHighestPriorityRole,
-  getUserPermissions,
   hasAnyRole,
   hasPermission,
   hasRole,
@@ -19,6 +18,5 @@ export const usePermissions = function usePermissions(user: User | null) {
     hasRole: (role: string) => hasRole(user, role),
     hasAnyRole: (roles: string[]) => hasAnyRole(user, roles),
     getHighestPriorityRole: () => getHighestPriorityRole(user),
-    getUserPermissions: () => getUserPermissions(user),
   };
 };

@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CalendarIcon } from "lucide-react";
 import { ElementType, Fragment, HTMLAttributes } from "react";
@@ -55,11 +55,15 @@ export const DateRange = function DateRange({
 export const InformationBadges = function InformationBadges({
   badges,
   className,
+  iconContainerClassName,
+  iconClassName,
 }: {
   badges: {
     label: string;
     icon: ElementType;
   }[];
+  iconContainerClassName?: string;
+  iconClassName?: string;
 } & HTMLAttributes<HTMLDivElement>) {
   return (
     <div
@@ -71,8 +75,14 @@ export const InformationBadges = function InformationBadges({
         <div
           key={item.label}
           className="grid flex-1 grid-cols-1 content-start items-start gap-2.5 sm:grid-cols-[max-content,_auto] sm:items-center">
-          <div className="flex h-8 w-8 items-center justify-center bg-primary-foreground text-foreground ring-1 ring-input">
-            <item.icon className="h-4 w-4 shrink-0 stroke-2" />
+          <div
+            className={cn(
+              "flex h-8 w-8 items-center justify-center bg-primary-foreground text-foreground ring-1 ring-input",
+              iconContainerClassName,
+            )}>
+            <item.icon
+              className={cn("h-4 w-4 shrink-0 stroke-2", iconClassName)}
+            />
           </div>
           <Tooltip>
             <TooltipTrigger asChild>

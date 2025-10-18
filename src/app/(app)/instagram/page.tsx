@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 27
+// REVIEWED - 28
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -382,66 +382,70 @@ const InstagramStudioPage = function InstagramStudioPage() {
 
   return (
     <main className="section-padding-start-lg">
+      {/* A Human But From Gaza */}
+      {/* <AHumanButFromGazaTemplate /> */}
       {/* Diary Entry */}
       <DiaryEntryTemplate
-        id="diary-entry-01"
-        color="primary-foreground"
+        id="diary-entry-02"
+        color="primary"
         author="Basmala"
         badge="The Truth Museum: Humans But From Gaza"
         title={
           <Fragment>
-            A{" "}
-            <FrameHighlight className="frame-highlight-primary-foreground">
-              Haven
+            A <br />
+            <FrameHighlight className="frame-highlight-primary">
+              Deserted
             </FrameHighlight>{" "}
-            <br /> No Foe May Breach.
+            Museum <br /> of{" "}
+            <FrameHighlight className="frame-highlight-primary">
+              Cherished
+            </FrameHighlight>{" "}
+            Memories.
           </Fragment>
         }
         paragraph={
           <Fragment>
             <FrameParagraph>
-              Like them, I too turned to the sea during this war. But I
-              haven&apos;t returned since that day;{" "}
-              <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-                I thought I would
+              Our current life passes, but our words and speech are about the
+              past—on the time before this merciless war. Many of our words take
+              the form of expressions like,{" "}
+              <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+                &quot;Do you remember when we were...?&quot;
               </FrameParagraphHighlight>{" "}
-              <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-                feel better,
+              or{" "}
+              <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+                &quot;When
               </FrameParagraphHighlight>{" "}
-              as with every visit to the sea, but the opposite happened. All the
-              people there were wandering, their eyes filled with bewilderment.
-              They were searching for a flicker of hope, a stolen peace,{" "}
-              <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-                and a lost homeland.
+              <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+                did we visit that place before it was destroyed?&quot;
               </FrameParagraphHighlight>{" "}
-              This is not just the feeling of those people there; all the Gazan
-              people are like them so. They are searching for a lost compass to
-              guide themselves toward a clear or straightforward path to walk in
-              it.
+              On the other hand, our words are about the anonymous future, that
+              there is nothing we can do but wait, we let it to the time;
+              because we do not have any other choice!
             </FrameParagraph>
             <FrameParagraph>
-              <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-                Fear is everywhere,
-              </FrameParagraphHighlight>{" "}
-              like a beast chasing us in the dark. It consumes our souls piece
-              by piece, for we are the only food...
+              However, if they have controlled our physical belongings that
+              carry the weight of our memories, they cannot control the memories
+              stored in our minds.{" "}
+              <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+                These memories are delicately woven...
+              </FrameParagraphHighlight>
             </FrameParagraph>
           </Fragment>
         }
         closure={
           <Fragment>
-            ...making it{" "}
-            <FrameHighlight className="frame-highlight-primary-foreground">
-              strong
+            ...like <br />
+            <FrameHighlight className="frame-highlight-primary">
+              exhibits
             </FrameHighlight>{" "}
-            enough to{" "}
-            <FrameHighlight className="frame-highlight-primary-foreground">
-              consume
+            in an abandoned
+            <FrameHighlight className="frame-highlight-primary">
+              museum.
             </FrameHighlight>{" "}
-            us entirely.
           </Fragment>
         }
-        link="palestiniancauses.com/humans-but-from-gaza/16"
+        link="palestiniancauses.com/humans-but-from-gaza/17"
       />
       <ImageFrameRender frames={profileImagesFrames} />
       <ImageFrameRender frames={hoodiesFrames} />
@@ -776,137 +780,6 @@ const InstagramStudioPage = function InstagramStudioPage() {
             <Image
               src="https://nwdtauhmkupvkywh.public.blob.vercel-storage.com/book-cover/book-cover-new.png"
               alt="A Human But From Gaza Book Cover"
-              fill
-              className="!static object-cover object-[top_left]"
-            />
-          </div>
-        </FrameImagesGrid>
-      </Frame>
-      {/* Diary Entry */}
-      <Frame
-        ref={instagramFrames[0].ref}
-        dimensions="4:5"
-        color="primary-foreground">
-        <FrameContent>
-          <SectionHeadingBadge className="text-lg">
-            The Truth Museum: Humans But From Gaza
-          </SectionHeadingBadge>
-          <FrameTitle>
-            Literature in the Form of{" "}
-            <span className="relative z-20">Haunting</span>
-            <FrameHighlight className="relative z-10 text-primary before:-inset-x-2.5 before:bg-background before:ring-input">
-              Nightmares.
-            </FrameHighlight>{" "}
-          </FrameTitle>
-          <FrameSquare className="mt-auto bg-background text-primary ring-input">
-            <Image
-              src="/logo-primary.png"
-              alt="Primary Logo"
-              fill
-              className="!static !h-24 !w-24"
-            />
-          </FrameSquare>
-        </FrameContent>
-      </Frame>
-      <Frame ref={instagramFrames[1].ref} dimensions="4:5" color="primary">
-        <FrameContent>
-          <FrameSquare className="shrink-0 bg-primary-foreground text-primary ring-primary-foreground">
-            <QuoteIcon className="h-20 w-20 stroke-[1.5]" />
-          </FrameSquare>
-          <FrameParagraph>
-            I find myself reading a{" "}
-            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-              Nakba novel
-            </FrameParagraphHighlight>{" "}
-            while living through a{" "}
-            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-              present one.
-            </FrameParagraphHighlight>{" "}
-            I read in the book about the sound of an explosion, and then I heard
-            it exploding in my neighborhood, so I don&apos;t get bored with the
-            reality. I go to read war diaries, and I discuss with other readers
-            about our written reality between the lines at dedicated gatherings,
-            and I find them like me, deeply immersed.
-          </FrameParagraph>
-          <FrameParagraph>
-            I don&apos;t have the time to read{" "}
-            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-              Western literature,
-            </FrameParagraphHighlight>{" "}
-            because sometimes I feel it&apos;s{" "}
-            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-              a betrayal.
-            </FrameParagraphHighlight>{" "}
-            As if there is no trace of reassurance; fear has become the
-            companion, the maze is the compass, the homelessness is the shelter,
-            and the inhalation here has...
-          </FrameParagraph>
-        </FrameContent>
-      </Frame>
-      <Frame
-        ref={instagramFrames[2].ref}
-        dimensions="4:5"
-        color="primary-foreground">
-        <FrameContent className="justify-center">
-          <FrameTitle>
-            has <br />
-            <FrameHighlight className="mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
-              become
-            </FrameHighlight>{" "}
-            without <br />
-            <FrameHighlight className="mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
-              exhalation!
-            </FrameHighlight>{" "}
-          </FrameTitle>
-          <SectionHeadingBadge className="text-current ring-primary">
-            Composed by Basmala featured in The Truth Museum
-          </SectionHeadingBadge>
-        </FrameContent>
-      </Frame>
-      <Frame ref={instagramFrames[3].ref} dimensions="4:5" color="primary">
-        <FrameContent>
-          <FrameTitle>
-            Discover the complete diary and{" "}
-            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              further
-            </FrameHighlight>{" "}
-            compelling{" "}
-            <FrameHighlight className="z-20 -mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              narratives
-            </FrameHighlight>{" "}
-            within:
-          </FrameTitle>
-        </FrameContent>
-      </Frame>
-      <Frame
-        ref={instagramFrames[4].ref}
-        dimensions="4:5"
-        color="primary-foreground">
-        <FrameContent>
-          <FrameTitle>
-            The{" "}
-            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
-              Truth
-            </FrameHighlight>{" "}
-            Museum. Link in{" "}
-            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
-              bio.
-            </FrameHighlight>{" "}
-          </FrameTitle>
-          <FrameSquare className="mt-auto bg-background text-primary-foreground ring-input">
-            <Image
-              src="/logo-primary.png"
-              alt="Primary Logo"
-              fill
-              className="!static !h-24 !w-24"
-            />
-          </FrameSquare>
-        </FrameContent>
-        <FrameImagesGrid className="scale-1">
-          <div className="col-start-6 col-end-13 row-start-6 row-end-13 ring ring-primary ring-offset-8 ring-offset-primary-foreground">
-            <Image
-              src="/The-Truth-Museum.png"
-              alt="The Truth Museum"
               fill
               className="!static object-cover object-[top_left]"
             />
