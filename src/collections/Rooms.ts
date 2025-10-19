@@ -1,4 +1,4 @@
-// REVIEWED - 25
+// REVIEWED - 26
 
 import { CollectionConfig } from "payload";
 
@@ -12,6 +12,14 @@ import { ExperienceField } from "./rooms/fields/experience";
 import { InformationField } from "./rooms/fields/information";
 import { QualificationField } from "./rooms/fields/qualification";
 import { Skill } from "./rooms/fields/skill";
+
+export const ServicesHeadline =
+  "Crafting Solutions to Elevate Your Vision: My Core Offerings";
+export const ServicesHeadlineSub = "A Menu of Professional Services";
+
+export const PackagesHeadline =
+  "Your Roadmap to Results: A Clear Path to Achieving Your Goals";
+export const PackagesHeadlineSub = "Curated Packages for Common Needs";
 
 export const Rooms: CollectionConfig = {
   slug: "rooms",
@@ -51,7 +59,7 @@ export const Rooms: CollectionConfig = {
   },
   admin: {
     group: "Rooms Content",
-    defaultColumns: ["id", "name", "slug", "createdAt"],
+    defaultColumns: ["id", "name", "slug", "status", "createdAt"],
     useAsTitle: "name",
     preview: (doc) => {
       if (doc.slug)
@@ -61,124 +69,251 @@ export const Rooms: CollectionConfig = {
   },
   fields: [
     {
-      admin: { hidden: true },
-      label: "User",
-      name: "user",
-      type: "relationship",
-      relationTo: "users",
-      unique: true,
-      required: true,
-    },
-    {
-      admin: {
-        description: "A unique name for this Room, chosen by the user.",
-      },
-      label: "Room Name",
-      name: "name",
-      type: "text",
-      maxLength: 16,
-      unique: true,
-      required: true,
-    },
-    {
-      admin: {
-        readOnly: true,
-        components: {
-          Field: {
-            path: "../components/payload/fields/slug#default",
-            clientProps: {
-              description: "A URL-friendly, unique identifier for this Room.",
-              sourcePath: "name",
-              slugPath: "slug",
-              label: "Slug",
-              readOnly: true,
-              disabled: true,
+      type: "tabs",
+      tabs: [
+        {
+          label: "Basic Information",
+          description:
+            "Essential room configuration and identification details",
+          fields: [
+            {
+              admin: { hidden: true },
+              label: "Associated User Account",
+              name: "user",
+              type: "relationship",
+              relationTo: "users",
+              unique: true,
+              required: true,
             },
-          },
-        },
-      },
-      label: "Room Slug",
-      name: "slug",
-      type: "text",
-      unique: true,
-      required: true,
-    },
-    {
-      admin: {
-        description:
-          "The publication status of the Room, controlling its visibility to users.",
-      },
-      label: "Room Publication Status",
-      name: "status",
-      type: "select",
-      options: [
-        { label: "Draft", value: "draft" },
-        { label: "Published", value: "published" },
-      ],
-      defaultValue: "draft",
-      required: true,
-    },
-    InformationField,
-    AboutField,
-    EducationField,
-    ExperienceField,
-    QualificationField,
-    Skill,
-    {
-      admin: {
-        description:
-          "Services you offer to clients and potential collaborators.",
-      },
-      label: "Services",
-      name: "services",
-      type: "relationship",
-      relationTo: "rooms-services",
-      hasMany: true,
-      required: false,
-    },
-    {
-      admin: {
-        description: "Service packages with pricing and bundled offerings.",
-      },
-      label: "Service Packages",
-      name: "packages",
-      type: "relationship",
-      relationTo: "rooms-packages",
-      hasMany: true,
-      required: false,
-    },
-    {
-      admin: {
-        description: "Contact information and methods for reaching you.",
-      },
-      label: "Contact Information",
-      name: "contact",
-      type: "relationship",
-      relationTo: "rooms-contact",
-      hasMany: true,
-      required: false,
-    },
-    {
-      admin: {
-        readOnly: true,
-        description:
-          "Auto-generated navigation links for sections with content.",
-      },
-      label: "Links",
-      name: "links",
-      type: "array",
-      fields: [
-        {
-          label: "Name",
-          name: "label",
-          type: "text",
-          required: true,
+            {
+              admin: {
+                description:
+                  "A unique, memorable name for this professional room. This will be displayed prominently and used in the URL.",
+                position: "sidebar",
+              },
+              label: "Room Name",
+              name: "name",
+              type: "text",
+              maxLength: 16,
+              unique: true,
+              required: true,
+            },
+            {
+              admin: {
+                readOnly: true,
+                components: {
+                  Field: {
+                    path: "../components/payload/fields/slug#default",
+                    clientProps: {
+                      description:
+                        "A URL-friendly, unique identifier automatically generated from the room name.",
+                      sourcePath: "name",
+                      slugPath: "slug",
+                      label: "URL Slug",
+                      readOnly: true,
+                      disabled: true,
+                    },
+                  },
+                },
+                position: "sidebar",
+              },
+              label: "URL Slug",
+              name: "slug",
+              type: "text",
+              unique: true,
+              required: true,
+            },
+            {
+              admin: {
+                description:
+                  "Controls the visibility and accessibility of this room to public visitors.",
+                position: "sidebar",
+              },
+              label: "Publication Status",
+              name: "status",
+              type: "select",
+              options: [
+                { label: "Draft - Not visible to public", value: "draft" },
+                { label: "Published - Visible to public", value: "published" },
+              ],
+              defaultValue: "draft",
+              required: true,
+            },
+          ],
         },
         {
-          label: "Link",
-          name: "href",
-          type: "text",
-          required: true,
+          label: "Personal Profile",
+          description: "Personal information and professional identity",
+          fields: [InformationField, AboutField],
+        },
+        {
+          label: "Professional Background",
+          description:
+            "Educational qualifications, work experience, and professional skills",
+          fields: [EducationField, ExperienceField, QualificationField, Skill],
+        },
+        {
+          label: "Business Services",
+          description:
+            "Professional services and service packages offered to clients",
+          fields: [
+            {
+              type: "group",
+              name: "services",
+              label: "Professional Services",
+              admin: {
+                description:
+                  "Configure your professional services offering, including section presentation and service assignments.",
+                condition: (data) =>
+                  data.status === "published" || data.information?.title,
+              },
+              fields: [
+                {
+                  admin: {
+                    description:
+                      "A compelling headline that introduces your services section to visitors.",
+                    position: "sidebar",
+                  },
+                  label: "Services Section Headline",
+                  name: "headline",
+                  type: "text",
+                  defaultValue: ServicesHeadline,
+                  maxLength: 80,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "A descriptive sub-headline that explains the value and purpose of your services.",
+                    position: "sidebar",
+                  },
+                  label: "Services Section Sub-Headline",
+                  name: "headline-sub",
+                  type: "text",
+                  defaultValue: ServicesHeadlineSub,
+                  maxLength: 48,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "Select and organize the professional services you offer to clients and collaborators.",
+                  },
+                  label: "Available Services",
+                  name: "list",
+                  type: "relationship",
+                  relationTo: "rooms-services",
+                  hasMany: true,
+                  required: false,
+                },
+              ],
+            },
+            {
+              type: "group",
+              name: "packages",
+              label: "Service Packages",
+              admin: {
+                description:
+                  "Create bundled service offerings with pricing and comprehensive packages for clients.",
+                condition: (data) =>
+                  data.status === "published" ||
+                  data.services?.list?.length > 0,
+              },
+              fields: [
+                {
+                  admin: {
+                    description:
+                      "A compelling headline that introduces your service packages to potential clients.",
+                    position: "sidebar",
+                  },
+                  label: "Packages Section Headline",
+                  name: "headline",
+                  type: "text",
+                  defaultValue: PackagesHeadline,
+                  maxLength: 80,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "A descriptive sub-headline explaining your service packages, pricing approach, and value proposition.",
+                    position: "sidebar",
+                  },
+                  label: "Packages Section Sub-Headline",
+                  name: "headline-sub",
+                  type: "text",
+                  defaultValue: PackagesHeadlineSub,
+                  maxLength: 48,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "Configure service packages with bundled offerings, pricing, and comprehensive solutions.",
+                  },
+                  label: "Service Packages",
+                  name: "list",
+                  type: "relationship",
+                  relationTo: "rooms-packages",
+                  hasMany: true,
+                  required: false,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: "Contact Information",
+          description:
+            "Communication methods and contact details for client inquiries",
+          fields: [
+            {
+              admin: {
+                description:
+                  "Configure multiple contact methods and communication channels for client inquiries and collaboration opportunities.",
+                condition: (data) =>
+                  data.status === "published" || data.information?.title,
+              },
+              label: "Contact Methods",
+              name: "contact",
+              type: "relationship",
+              relationTo: "rooms-contact",
+              hasMany: true,
+              required: false,
+            },
+          ],
+        },
+        {
+          label: "Navigation & SEO",
+          description:
+            "Auto-generated navigation and search engine optimization",
+          fields: [
+            {
+              admin: {
+                readOnly: true,
+                description:
+                  "Automatically generated navigation links for sections containing content. These links appear in the room's navigation menu.",
+                position: "sidebar",
+              },
+              label: "Section Navigation Links",
+              name: "links",
+              type: "array",
+              fields: [
+                {
+                  label: "Section Name",
+                  name: "label",
+                  type: "text",
+                  required: true,
+                },
+                {
+                  label: "Section Link",
+                  name: "href",
+                  type: "text",
+                  required: true,
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -233,15 +368,17 @@ export const Rooms: CollectionConfig = {
 
         if (
           data.services &&
-          Array.isArray(data.services) &&
-          data.services.length > 0
+          data.services.list &&
+          Array.isArray(data.services.list) &&
+          data.services.list.length > 0
         )
           links.push({ label: "services", href: "#services" });
 
         if (
           data.packages &&
-          Array.isArray(data.packages) &&
-          data.packages.length > 0
+          data.packages.list &&
+          Array.isArray(data.packages.list) &&
+          data.packages.list.length > 0
         )
           links.push({ label: "packages", href: "#packages" });
 
