@@ -1,22 +1,24 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Field } from "payload";
 
 export const InformationField: Field = {
   admin: {
     description:
-      "Formal personal and professional details displayed at the top of the room profile.",
+      "Essential personal and professional identification details that form the foundation of your professional profile.",
+    position: "sidebar",
   },
-  label: "Personal and Professional Information",
+  label: "Professional Identity",
   name: "information",
   type: "group",
   fields: [
     {
       admin: {
         description:
-          "Full legal name as it should appear in professional contexts.",
+          "Your full legal name as it should appear in professional communications and documentation.",
+        position: "sidebar",
       },
-      label: "Name",
+      label: "Full Name",
       name: "name",
       type: "text",
       maxLength: 16,
@@ -24,9 +26,11 @@ export const InformationField: Field = {
     },
     {
       admin: {
-        description: "Current professional designation or job title.",
+        description:
+          "Your current professional title, role, or position that best describes your expertise and responsibilities.",
+        position: "sidebar",
       },
-      label: "Title",
+      label: "Professional Title",
       name: "title",
       type: "text",
       maxLength: 32,
@@ -35,22 +39,28 @@ export const InformationField: Field = {
     {
       admin: {
         description:
-          "A brief, impactful statement summarizing your professional identity or expertise.",
+          "A compelling professional tagline that summarizes your expertise, value proposition, or professional focus in a single impactful statement.",
+        position: "sidebar",
       },
-      label: "Headline",
+      label: "Professional Headline",
       name: "headline",
       type: "text",
       maxLength: 56,
       required: true,
     },
     {
-      label: "Status",
+      admin: {
+        description:
+          "Your current professional availability status, indicating whether you are open to new opportunities or currently engaged.",
+        position: "sidebar",
+      },
+      label: "Professional Availability",
       name: "status",
       type: "select",
       options: [
-        { label: "Open to New Opportunities", value: "available" },
-        { label: "Currently Engaged", value: "working" },
-        { label: "Not Available", value: "unavailable" },
+        { label: "Available for New Opportunities", value: "available" },
+        { label: "Currently Engaged in Projects", value: "working" },
+        { label: "Not Available for New Work", value: "unavailable" },
       ],
       defaultValue: "available",
       required: true,
@@ -58,9 +68,10 @@ export const InformationField: Field = {
     {
       admin: {
         description:
-          "A formal professional head-shot or profile photograph (optional).",
+          "A high-quality professional head-shot or profile photograph that represents your professional image (recommended but optional).",
+        position: "sidebar",
       },
-      label: "Photograph",
+      label: "Professional Photograph",
       name: "photograph",
       type: "upload",
       relationTo: "media",

@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { PaginatedDocs } from "payload";
 
@@ -70,7 +70,7 @@ export const getRoom = async function getRoom(
 
       collection: "rooms",
       where: { slug: { equals: slug }, status: { equals: "published" } },
-      depth: 3,
+      depth: 5,
 
       ...(authentication ? { overrideAccess: false } : {}),
     }),
