@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { Field } from "payload";
 
@@ -23,18 +23,20 @@ export const AboutHeadingsPlusParagraphs = {
 export const AboutField: Field = {
   admin: {
     description:
-      "Personal introduction section, providing a detailed narrative about yourself, your values, and your journey.",
+      "Personal introduction and professional narrative that tells your story, showcases your values, and establishes your professional identity.",
+    position: "sidebar",
   },
-  label: "About",
+  label: "Personal Introduction",
   name: "about",
   type: "group",
   fields: [
     {
       admin: {
         description:
-          "A compelling headline that encapsulates your personal story or philosophy.",
+          "A compelling headline that captures your personal story, professional philosophy, or unique value proposition in a single impactful statement.",
+        position: "sidebar",
       },
-      label: "Headline",
+      label: "Introduction Headline",
       name: "headline",
       type: "text",
       maxLength: 68,
@@ -43,9 +45,10 @@ export const AboutField: Field = {
     {
       admin: {
         description:
-          "A sub-headline that provides additional context or information about the headline.",
+          "A descriptive sub-headline that provides additional context about your professional journey or personal approach.",
+        position: "sidebar",
       },
-      label: "Sub-Headline",
+      label: "Introduction Sub-Headline",
       name: "headline-sub",
       type: "text",
       defaultValue: AboutHeadlineSub,
@@ -55,9 +58,10 @@ export const AboutField: Field = {
     {
       admin: {
         description:
-          "A personal photograph to visually introduce yourself (optional).",
+          "A high-quality personal photograph that visually represents your professional image and personality (optional but recommended).",
+        position: "sidebar",
       },
-      label: "Photograph",
+      label: "Personal Photograph",
       name: "photograph",
       type: "upload",
       relationTo: "media",
@@ -67,9 +71,10 @@ export const AboutField: Field = {
     {
       admin: {
         description:
-          "A series of well-crafted paragraphs that together provide a comprehensive and authentic overview of who you are. Each paragraph should be between 350 and 500 characters. Please provide at least 3 paragraphs.",
+          "A comprehensive personal narrative composed of well-crafted paragraphs that authentically represent your professional journey, values, and expertise. Each paragraph should be 350-500 characters for optimal readability.",
+        position: "sidebar",
       },
-      label: "Paragraphs",
+      label: "Personal Narrative",
       name: "paragraphs",
       type: "array",
       minRows: 3,
@@ -78,9 +83,10 @@ export const AboutField: Field = {
         {
           admin: {
             description:
-              "A single paragraph (350-500 characters) that forms part of your personal narrative.",
+              "A single paragraph (350-500 characters) that contributes to your overall personal and professional narrative.",
+            position: "sidebar",
           },
-          label: "Paragraph",
+          label: "Narrative Paragraph",
           name: "paragraph",
           type: "textarea",
           minLength: 350,
@@ -92,9 +98,10 @@ export const AboutField: Field = {
     {
       admin: {
         description:
-          "Key statistics that highlight your professional journey and achievements.",
+          "Quantifiable professional achievements and key metrics that demonstrate your expertise, experience, and impact in your field.",
+        position: "sidebar",
       },
-      label: "Stats",
+      label: "Professional Statistics",
       name: "stats",
       type: "group",
       fields: [
