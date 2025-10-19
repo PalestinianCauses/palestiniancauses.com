@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { Field } from "payload";
 
@@ -12,18 +12,20 @@ export const EducationHeadlineSub = "A Journey in Learning";
 export const EducationField: Field = {
   admin: {
     description:
-      "Academic history, including institutions attended and degrees or certifications obtained.",
+      "Comprehensive academic credentials, including formal education, degrees, certifications, and professional qualifications that establish your educational foundation.",
+    position: "sidebar",
   },
-  label: "Educational Background",
+  label: "Educational Credentials",
   name: "education",
   type: "group",
   fields: [
     {
       admin: {
         description:
-          "Summarize your entire educational background section with a concise, impactful headline.",
+          "A compelling headline that summarizes your educational journey and academic achievements in a single impactful statement.",
+        position: "sidebar",
       },
-      label: "Headline",
+      label: "Education Section Headline",
       name: "headline",
       type: "text",
       defaultValue: EducationHeadline,
@@ -33,9 +35,10 @@ export const EducationField: Field = {
     {
       admin: {
         description:
-          "A sub-headline that provides additional context or information about the headline.",
+          "A descriptive sub-headline that provides additional context about your educational background and learning philosophy.",
+        position: "sidebar",
       },
-      label: "Sub-Headline",
+      label: "Education Section Sub-Headline",
       name: "headline-sub",
       type: "text",
       defaultValue: EducationHeadlineSub,
