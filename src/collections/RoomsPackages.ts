@@ -44,164 +44,235 @@ export const RoomsPackages: CollectionConfig = {
   },
   admin: {
     group: "Rooms Content",
-    defaultColumns: ["id", "name", "status", "type", "price", "createdAt"],
+    defaultColumns: [
+      "id",
+      "name",
+      "status",
+      "pricingType",
+      "price",
+      "createdAt",
+    ],
     useAsTitle: "name",
   },
   fields: [
     {
-      admin: {
-        description: "A compelling name for this service package.",
-      },
-      label: "Package Name",
-      name: "name",
-      type: "text",
-      maxLength: 100,
-      required: true,
-    },
-    {
-      admin: {
-        description: "A brief description of what this package includes.",
-      },
-      label: "Package Description",
-      name: "description",
-      type: "textarea",
-      maxLength: 500,
-      required: true,
-    },
-    {
-      admin: {
-        description: "The services included in this package.",
-      },
-      label: "Included Services",
-      name: "services",
-      type: "relationship",
-      relationTo: "rooms-services",
-      hasMany: true,
-      required: true,
-    },
-    {
-      admin: {
-        position: "sidebar",
-        description: "Whether this package is currently available.",
-      },
-      label: "Status",
-      name: "status",
-      type: "select",
-      options: [
-        { label: "Available", value: "available" },
-        { label: "Not Available", value: "unavailable" },
-        { label: "Coming Soon", value: "coming-soon" },
-      ],
-      defaultValue: "available",
-      required: true,
-    },
-    {
-      admin: {
-        position: "sidebar",
-        description: "Package pricing type.",
-      },
-      label: "Pricing Type",
-      name: "pricingType",
-      type: "select",
-      options: [
-        { label: "Fixed Price", value: "fixed" },
-        { label: "Hourly Rate", value: "hourly" },
-        { label: "Daily Rate", value: "daily" },
-        { label: "Project-Based", value: "project" },
-        { label: "Custom Quote", value: "custom" },
-      ],
-      required: true,
-    },
-    {
-      admin: {
-        condition: (data) => data.pricingType !== "custom",
-        position: "sidebar",
-        description: "Package price (use 0 for custom quotes).",
-      },
-      label: "Price",
-      name: "price",
-      type: "number",
-      min: 0,
-      defaultValue: 0,
-      required: true,
-    },
-    {
-      admin: {
-        position: "sidebar",
-        description: "Currency for the price (ISO 4217 code).",
-      },
-      label: "Currency",
-      name: "currency",
-      type: "select",
-      options: [
-        { label: "US Dollar (USD)", value: "USD" },
-        { label: "Euro (EUR)", value: "EUR" },
-        { label: "Israeli Shekel (ILS)", value: "ILS" },
-      ],
-      defaultValue: "USD",
-      required: true,
-    },
-    {
-      admin: {
-        position: "sidebar",
-        description:
-          "Estimated duration for this package (e.g., '2-4 weeks', '1 month').",
-      },
-      label: "Duration",
-      name: "duration",
-      type: "text",
-      maxLength: 56,
-      required: false,
-    },
-    {
-      admin: {
-        description: "What makes this package special or different.",
-      },
-      label: "Package Features",
-      name: "features",
-      type: "array",
-      fields: [
+      type: "tabs",
+      tabs: [
         {
-          label: "Feature",
-          name: "feature",
-          type: "text",
-          maxLength: 100,
-          required: true,
+          label: "Package Information",
+          description: "Core package details and description",
+          fields: [
+            {
+              admin: {
+                description:
+                  "A compelling, memorable name that clearly identifies this service package and its value proposition.",
+              },
+              label: "Package Title",
+              name: "name",
+              type: "text",
+              maxLength: 100,
+              required: true,
+            },
+            {
+              admin: {
+                description:
+                  "A comprehensive description that explains what this package includes, its benefits, and what clients can expect to receive.",
+              },
+              label: "Package Description",
+              name: "description",
+              type: "textarea",
+              maxLength: 500,
+              required: true,
+            },
+            {
+              admin: {
+                description:
+                  "The primary client profile or audience for which this package is designed.",
+              },
+              label: "Intended Audience",
+              name: "audienceIntended",
+              type: "text",
+              maxLength: 80,
+              required: true,
+            },
+            {
+              admin: {
+                description:
+                  "Select the individual services that are included in this comprehensive package offering.",
+              },
+              label: "Included Services",
+              name: "services",
+              type: "relationship",
+              relationTo: "rooms-services",
+              hasMany: true,
+              required: true,
+            },
+          ],
+        },
+        {
+          label: "Pricing & Duration",
+          description: "Package pricing structure and timeline",
+          fields: [
+            {
+              admin: {
+                description:
+                  "The pricing model for this package (fixed price, hourly, daily, project-based, or custom quote).",
+              },
+              label: "Pricing Model",
+              name: "pricingType",
+              type: "select",
+              options: [
+                {
+                  label: "Fixed Price - One-time payment",
+                  value: "fixed",
+                },
+                {
+                  label: "Hourly Rate - Charged per hour",
+                  value: "hourly",
+                },
+                {
+                  label: "Daily Rate - Charged per day",
+                  value: "daily",
+                },
+                {
+                  label: "Project-Based - Custom project pricing",
+                  value: "project",
+                },
+                {
+                  label: "Custom Quote - Contact for pricing",
+                  value: "custom",
+                },
+              ],
+              required: true,
+            },
+            {
+              admin: {
+                condition: (data) => data.pricingType !== "custom",
+                description:
+                  "Package price in the selected currency (use 0 for custom quotes or hourly/daily rates).",
+              },
+              label: "Package Price",
+              name: "price",
+              type: "number",
+              min: 0,
+              defaultValue: 0,
+              required: true,
+            },
+            {
+              admin: {
+                description:
+                  "Currency for the package price (ISO 4217 standard currency codes).",
+              },
+              label: "Currency",
+              name: "currency",
+              type: "select",
+              options: [
+                { label: "US Dollar (USD)", value: "USD" },
+                { label: "Euro (EUR)", value: "EUR" },
+                { label: "Israeli Shekel (ILS)", value: "ILS" },
+              ],
+              defaultValue: "USD",
+              required: true,
+            },
+            {
+              admin: {
+                description:
+                  "Estimated time-frame for package delivery (e.g., '2-4 weeks', '1 month', 'On Going').",
+              },
+              label: "Package Duration",
+              name: "duration",
+              type: "text",
+              maxLength: 56,
+              required: false,
+            },
+          ],
+        },
+        {
+          label: "Package Features",
+          description: "Unique selling points and special features",
+          fields: [
+            {
+              admin: {
+                description:
+                  "Key features, benefits, or unique selling points that make this package special and valuable to clients.",
+              },
+              label: "Package Features & Benefits",
+              name: "features",
+              type: "array",
+              fields: [
+                {
+                  admin: {
+                    description:
+                      "A specific feature, benefit, or unique selling point of this package.",
+                  },
+                  label: "Feature or Benefit",
+                  name: "feature",
+                  type: "text",
+                  maxLength: 100,
+                  required: true,
+                },
+              ],
+            },
+            {
+              admin: {
+                description:
+                  "Visual representation of this package (optional but recommended for better presentation).",
+              },
+              label: "Package Image",
+              name: "image",
+              type: "upload",
+              relationTo: "media",
+              required: false,
+            },
+          ],
+        },
+        {
+          label: "Availability & Display",
+          description: "Package status and presentation settings",
+          fields: [
+            {
+              admin: {
+                description:
+                  "Current availability status of this package for client inquiries and bookings.",
+              },
+              label: "Package Status",
+              name: "status",
+              type: "select",
+              options: [
+                { label: "Available for New Clients", value: "available" },
+                { label: "Currently Not Available", value: "unavailable" },
+                {
+                  label: "Coming Soon - Not Yet Available",
+                  value: "coming-soon",
+                },
+              ],
+              defaultValue: "available",
+              required: true,
+            },
+            {
+              admin: {
+                description:
+                  "Whether this package should be featured prominently in your offerings (appears first or highlighted).",
+              },
+              label: "Featured Package",
+              name: "featured",
+              type: "checkbox",
+              defaultValue: false,
+            },
+            {
+              admin: {
+                description:
+                  "Display order for this package in your packages list (lower numbers appear first).",
+              },
+              label: "Display Priority",
+              name: "order",
+              type: "number",
+              defaultValue: 0,
+              required: true,
+            },
+          ],
         },
       ],
-    },
-    {
-      admin: {
-        position: "sidebar",
-        description: "Visual representation of this package (optional).",
-      },
-      label: "Package Image",
-      name: "image",
-      type: "upload",
-      relationTo: "media",
-      required: false,
-    },
-    {
-      admin: {
-        position: "sidebar",
-        description: "Whether this package is featured (appears prominently).",
-      },
-      label: "Featured Package",
-      name: "featured",
-      type: "checkbox",
-      defaultValue: false,
-    },
-    {
-      admin: {
-        position: "sidebar",
-        description:
-          "Display order for this package (lower numbers appear first).",
-      },
-      label: "Display Order",
-      name: "order",
-      type: "number",
-      defaultValue: 0,
-      required: true,
     },
   ],
 };
