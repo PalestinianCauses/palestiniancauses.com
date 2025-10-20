@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import dotenv from "dotenv";
 
+import {
+  PackagesHeadline,
+  PackagesHeadlineSub,
+  ServicesHeadline,
+  ServicesHeadlineSub,
+} from "@/collections/Rooms";
 import {
   AboutHeadingsPlusParagraphs,
   AboutHeadlineSub,
@@ -394,6 +400,16 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
         ],
       },
     ],
+  },
+
+  services: {
+    "headline": ServicesHeadline,
+    "headline-sub": ServicesHeadlineSub,
+  },
+
+  packages: {
+    "headline": PackagesHeadline,
+    "headline-sub": PackagesHeadlineSub,
   },
 };
 

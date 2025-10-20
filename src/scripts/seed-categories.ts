@@ -1,10 +1,11 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { payload } from "@/lib/payload";
 import { ServiceCategory } from "@/payload-types";
 
-const categories: Omit<ServiceCategory, "id" | "createdAt" | "updatedAt">[] = [
+const categories: Omit<ServiceCategory, "createdAt" | "updatedAt">[] = [
   {
+    id: 0,
     name: "Consulting & Strategy",
     slug: "consulting-and-strategy",
     description:
@@ -15,6 +16,7 @@ const categories: Omit<ServiceCategory, "id" | "createdAt" | "updatedAt">[] = [
     order: 0,
   },
   {
+    id: 1,
     name: "Web & Software Development",
     slug: "web-and-software-development",
     description:
@@ -25,6 +27,7 @@ const categories: Omit<ServiceCategory, "id" | "createdAt" | "updatedAt">[] = [
     order: 1,
   },
   {
+    id: 2,
     name: "Writing & Translation",
     slug: "writing-and-translation",
     description:
@@ -35,6 +38,7 @@ const categories: Omit<ServiceCategory, "id" | "createdAt" | "updatedAt">[] = [
     order: 2,
   },
   {
+    id: 3,
     name: "Health & Fitness Coaching",
     slug: "health-and-fitness-coaching",
     description:
@@ -44,8 +48,8 @@ const categories: Omit<ServiceCategory, "id" | "createdAt" | "updatedAt">[] = [
     system: true,
     order: 3,
   },
-
   {
+    id: 4,
     name: "Design & User Experience",
     slug: "design-and-user-experience",
     description:
@@ -56,6 +60,7 @@ const categories: Omit<ServiceCategory, "id" | "createdAt" | "updatedAt">[] = [
     order: 4,
   },
   {
+    id: 5,
     name: "Technical Speaking & Training",
     slug: "technical-speaking-and-training",
     description:
