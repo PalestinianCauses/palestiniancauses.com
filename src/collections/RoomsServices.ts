@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CollectionConfig } from "payload";
 
@@ -49,105 +49,137 @@ export const RoomsServices: CollectionConfig = {
   },
   fields: [
     {
-      admin: {
-        hidden: true,
-        position: "sidebar",
-        description:
-          "The individual or entity responsible for and associated with this service.",
-      },
-      label: "User",
-      name: "user",
-      type: "relationship",
-      relationTo: "users",
-      required: false,
-    },
-    {
-      admin: {
-        description: "A clear, descriptive name for this service.",
-      },
-      label: "Service Name",
-      name: "name",
-      type: "text",
-      maxLength: 68,
-      required: true,
-    },
-    {
-      admin: {
-        description: "A brief description of what this service entails.",
-      },
-      label: "Service Description",
-      name: "description",
-      type: "textarea",
-      maxLength: 500,
-      required: true,
-    },
-    {
-      admin: {
-        position: "sidebar",
-        description: "Whether this service is currently available.",
-      },
-      label: "Status",
-      name: "status",
-      type: "select",
-      options: [
-        { label: "Available", value: "available" },
-        { label: "Not Available", value: "unavailable" },
-        { label: "Coming Soon", value: "coming-soon" },
-      ],
-      defaultValue: "available",
-      required: true,
-    },
-    {
-      admin: {
-        position: "sidebar",
-        description: "Categorize this service for better organization.",
-      },
-      label: "Service Category",
-      name: "category",
-      type: "relationship",
-      relationTo: "service-categories",
-      required: true,
-    },
-    {
-      admin: {
-        position: "sidebar",
-        description:
-          "Estimated duration for this service (e.g., '2-4 weeks', '1 day').",
-      },
-      label: "Duration",
-      name: "duration",
-      type: "text",
-      maxLength: 56,
-      required: false,
-    },
-    {
-      admin: {
-        description: "Key skills or technologies involved in this service.",
-      },
-      label: "Skills & Technologies",
-      name: "skills",
-      type: "array",
-      fields: [
+      type: "tabs",
+      tabs: [
         {
-          label: "Skill/Technology",
-          name: "name",
-          type: "text",
-          maxLength: 48,
-          required: true,
+          label: "Service Information",
+          description: "Core service details and description",
+          fields: [
+            {
+              admin: {
+                hidden: true,
+                position: "sidebar",
+                description:
+                  "The individual or entity responsible for and associated with this service.",
+              },
+              label: "Service Owner",
+              name: "user",
+              type: "relationship",
+              relationTo: "users",
+              required: false,
+            },
+            {
+              admin: {
+                description:
+                  "A compelling, descriptive name that clearly identifies this professional service offering.",
+              },
+              label: "Service Title",
+              name: "name",
+              type: "text",
+              maxLength: 68,
+              required: true,
+            },
+            {
+              admin: {
+                description:
+                  "A comprehensive description that explains what this service includes, its benefits, and what clients can expect.",
+              },
+              label: "Service Description",
+              name: "description",
+              type: "textarea",
+              maxLength: 500,
+              required: true,
+            },
+            {
+              admin: {
+                description:
+                  "Categorize this service to help clients find it more easily and organize your offerings.",
+              },
+              label: "Service Category",
+              name: "category",
+              type: "relationship",
+              relationTo: "service-categories",
+              required: true,
+            },
+          ],
+        },
+        {
+          label: "Service Details",
+          description: "Technical specifications and requirements",
+          fields: [
+            {
+              admin: {
+                description:
+                  "Key skills, technologies, tools, or methodologies involved in delivering this service.",
+              },
+              label: "Required Skills & Technologies",
+              name: "skills",
+              type: "array",
+              fields: [
+                {
+                  admin: {
+                    description:
+                      "A specific skill, technology, or tool required for this service.",
+                  },
+                  label: "Skill or Technology",
+                  name: "name",
+                  type: "text",
+                  maxLength: 48,
+                  required: true,
+                },
+              ],
+            },
+            {
+              admin: {
+                description:
+                  "Estimated timeframe for service delivery (e.g., '2-4 weeks', '1 day', 'On Going').",
+              },
+              label: "Service Duration",
+              name: "duration",
+              type: "text",
+              maxLength: 56,
+              required: false,
+            },
+          ],
+        },
+        {
+          label: "Availability & Display",
+          description: "Service status and presentation settings",
+          fields: [
+            {
+              admin: {
+                description:
+                  "Current availability status of this service for client inquiries.",
+              },
+              label: "Service Status",
+              name: "status",
+              type: "select",
+              options: [
+                { label: "Available for New Clients", value: "available" },
+                { label: "Currently Not Available", value: "unavailable" },
+                {
+                  label: "Coming Soon - Not Yet Available",
+                  value: "coming-soon",
+                },
+              ],
+              defaultValue: "available",
+              required: true,
+            },
+            {
+              admin: {
+                position: "sidebar",
+                description:
+                  "Display order for this service in your services list (lower numbers appear first).",
+              },
+              label: "Display Priority",
+              name: "order",
+              type: "number",
+              defaultValue: 0,
+              required: true,
+            },
+          ],
         },
       ],
-    },
-    {
-      admin: {
-        position: "sidebar",
-        description:
-          "Display order for this service (lower numbers appear first).",
-      },
-      label: "Display Order",
-      name: "order",
-      type: "number",
-      defaultValue: 0,
-      required: true,
     },
   ],
   hooks: {
