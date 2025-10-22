@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CollectionConfig } from "payload";
 
@@ -64,6 +64,19 @@ export const RoomsPackages: CollectionConfig = {
           fields: [
             {
               admin: {
+                hidden: true,
+                position: "sidebar",
+                description:
+                  "The individual or entity responsible for abd associated with this package.",
+              },
+              label: "Package Owner",
+              name: "user",
+              type: "relationship",
+              relationTo: "users",
+              required: true,
+            },
+            {
+              admin: {
                 description:
                   "A compelling, memorable name that clearly identifies this service package and its value proposition.",
               },
@@ -92,7 +105,7 @@ export const RoomsPackages: CollectionConfig = {
               label: "Intended Audience",
               name: "audienceIntended",
               type: "text",
-              maxLength: 80,
+              maxLength: 500,
               required: true,
             },
             {
@@ -105,7 +118,7 @@ export const RoomsPackages: CollectionConfig = {
               type: "relationship",
               relationTo: "rooms-services",
               hasMany: true,
-              required: true,
+              required: false,
             },
           ],
         },
@@ -275,4 +288,15 @@ export const RoomsPackages: CollectionConfig = {
       ],
     },
   ],
+  hooks: {
+    beforeChange: [
+      async ({ operation, data, req }) => {
+        if (operation === "create")
+          // eslint-disable-next-line no-param-reassign
+          data.user = req.user?.id;
+
+        return data;
+      },
+    ],
+  },
 };

@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CollectionConfig } from "payload";
 
@@ -66,7 +66,7 @@ export const RoomsServices: CollectionConfig = {
               name: "user",
               type: "relationship",
               relationTo: "users",
-              required: false,
+              required: true,
             },
             {
               admin: {
@@ -184,12 +184,10 @@ export const RoomsServices: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [
-      async ({ operation, data }) => {
+      async ({ operation, data, req }) => {
         if (operation === "create")
-          if (data.user) {
-            // eslint-disable-next-line no-param-reassign
-            data.user = data.user.id;
-          }
+          // eslint-disable-next-line no-param-reassign
+          data.user = req.user?.id;
 
         return data;
       },
