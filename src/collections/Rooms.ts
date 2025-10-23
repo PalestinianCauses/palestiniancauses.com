@@ -1,4 +1,4 @@
-// REVIEWED - 27
+// REVIEWED - 28
 
 import { CollectionConfig } from "payload";
 
@@ -205,11 +205,16 @@ export const Rooms: CollectionConfig = {
                   relationTo: "rooms-services",
                   hasMany: true,
                   required: false,
-                  filterOptions: (siblingData) => ({
-                    user: {
-                      equals: siblingData.user?.id,
-                    },
-                  }),
+                  // eslint-disable-next-line arrow-body-style
+                  filterOptions: (siblingData) => {
+                    return siblingData.user
+                      ? {
+                          user: {
+                            equals: siblingData.user?.id,
+                          },
+                        }
+                      : { user: {} };
+                  },
                 },
               ],
             },
@@ -262,11 +267,16 @@ export const Rooms: CollectionConfig = {
                   relationTo: "rooms-packages",
                   hasMany: true,
                   required: false,
-                  filterOptions: (siblingData) => ({
-                    user: {
-                      equals: siblingData.user?.id,
-                    },
-                  }),
+                  // eslint-disable-next-line arrow-body-style
+                  filterOptions: (siblingData) => {
+                    return siblingData.user
+                      ? {
+                          user: {
+                            equals: siblingData.user.id,
+                          },
+                        }
+                      : { user: {} };
+                  },
                 },
               ],
             },

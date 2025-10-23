@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// REVIEWED - 10
+// REVIEWED - 11
 
 import dotenv from "dotenv";
 
@@ -417,40 +417,98 @@ const doSeedingShawqiRoom = async function doSeedingShawqiRoom() {
   try {
     console.log("🚀 Starting seeding Shawqi's room...");
 
-    const servicesResponse = await payload.find({
-      collection: "rooms-services",
-      limit: 100,
+    try {
+      await payload.find({
+        collection: "users",
+        limit: 1,
+      });
+
+      console.log("✅ PayLoad connection successful");
+    } catch (error) {
+      console.log("❌ PayLoad connection failed:", error);
+      process.exit(1);
+    }
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 1000);
     });
 
-    const packagesResponse = await payload.find({
-      collection: "rooms-packages",
-      limit: 100,
+    const existingRoom = await payload.find({
+      collection: "rooms",
+      where: { slug: { equals: "shawqi" } },
+      limit: 1,
     });
+
+    if (existingRoom.docs.length !== 0) {
+      console.log("❌ Room already exists, skipping seeding.");
+      process.exit(0);
+    }
+
+    let servicesResponse;
+    let packagesResponse;
+
+    try {
+      servicesResponse = await payload.find({
+        collection: "rooms-services",
+        limit: 100,
+      });
+
+      console.log(`📊 Found ${servicesResponse.docs.length} services`);
+    } catch (error) {
+      console.log(
+        "❌ Error fetching services. Please run: pnpm run seed:services-plus-packages",
+        error,
+      );
+
+      process.exit(1);
+    }
+
+    try {
+      packagesResponse = await payload.find({
+        collection: "rooms-packages",
+        limit: 100,
+      });
+
+      console.log(`📊 Found ${packagesResponse.docs.length} packages`);
+    } catch (error) {
+      console.log(
+        "❌ Error fetching packages. Please run: pnpm run seed:services-plus-packages",
+        error,
+      );
+
+      process.exit(1);
+    }
 
     if (!servicesResponse.docs.length) {
-      console.log("❌ No services found. Please seed services first.");
+      console.log(
+        "❌ No services found. Please run: pnpm run seed:services-plus-packages",
+      );
 
       process.exit(1);
     }
 
     if (!packagesResponse.docs.length) {
-      console.log("❌ No packages found. Please seed packages first.");
+      console.log(
+        "❌ No packages found. Please run: pnpm run seed:services-plus-packages",
+      );
 
       process.exit(1);
     }
 
-    const serviceIds = servicesResponse.docs
-      .filter((service) =>
-        typeof service.user === "number"
-          ? service.user === 1
-          : service.user.id === 1,
-      )
-      .map((service) => service.id);
-    const packageIds = packagesResponse.docs
-      .filter((pkg) =>
-        typeof pkg.user === "number" ? pkg.user === 1 : pkg.user.id === 1,
-      )
-      .map((pkg) => pkg.id);
+    const serviceIds = servicesResponse.docs.map((service) =>
+      Number(service.id),
+    );
+
+    const packageIds = packagesResponse.docs.map((packageElement) =>
+      Number(packageElement.id),
+    );
+
+    console.log(
+      `📊 Using ${serviceIds.length} services and ${packageIds.length} packages`,
+    );
+
+    console.log(`📊 Service IDs: ${serviceIds.join(", ")}`);
+    console.log(`📊 Package IDs: ${packageIds.join(", ")}`);
 
     const roomSeedingData = {
       ...data,
