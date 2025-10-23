@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Field } from "payload";
 
@@ -24,7 +24,6 @@ export const AboutField: Field = {
   admin: {
     description:
       "Personal introduction and professional narrative that tells your story, showcases your values, and establishes your professional identity.",
-    position: "sidebar",
   },
   label: "Personal Introduction",
   name: "about",
@@ -34,7 +33,6 @@ export const AboutField: Field = {
       admin: {
         description:
           "A compelling headline that captures your personal story, professional philosophy, or unique value proposition in a single impactful statement.",
-        position: "sidebar",
       },
       label: "Introduction Headline",
       name: "headline",
@@ -46,7 +44,6 @@ export const AboutField: Field = {
       admin: {
         description:
           "A descriptive sub-headline that provides additional context about your professional journey or personal approach.",
-        position: "sidebar",
       },
       label: "Introduction Sub-Headline",
       name: "headline-sub",

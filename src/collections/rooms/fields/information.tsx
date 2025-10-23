@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { Field } from "payload";
 
@@ -6,7 +6,6 @@ export const InformationField: Field = {
   admin: {
     description:
       "Essential personal and professional identification details that form the foundation of your professional profile.",
-    position: "sidebar",
   },
   label: "Professional Identity",
   name: "information",
@@ -16,7 +15,6 @@ export const InformationField: Field = {
       admin: {
         description:
           "Your full legal name as it should appear in professional communications and documentation.",
-        position: "sidebar",
       },
       label: "Full Name",
       name: "name",
@@ -28,7 +26,6 @@ export const InformationField: Field = {
       admin: {
         description:
           "Your current professional title, role, or position that best describes your expertise and responsibilities.",
-        position: "sidebar",
       },
       label: "Professional Title",
       name: "title",
@@ -40,7 +37,6 @@ export const InformationField: Field = {
       admin: {
         description:
           "A compelling professional tagline that summarizes your expertise, value proposition, or professional focus in a single impactful statement.",
-        position: "sidebar",
       },
       label: "Professional Headline",
       name: "headline",

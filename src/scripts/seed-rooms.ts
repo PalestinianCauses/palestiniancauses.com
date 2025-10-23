@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// REVIEWED - 09
+// REVIEWED - 10
 
 import dotenv from "dotenv";
 
@@ -417,12 +417,64 @@ const doSeedingShawqiRoom = async function doSeedingShawqiRoom() {
   try {
     console.log("🚀 Starting seeding Shawqi's room...");
 
+    const servicesResponse = await payload.find({
+      collection: "rooms-services",
+      limit: 100,
+    });
+
+    const packagesResponse = await payload.find({
+      collection: "rooms-packages",
+      limit: 100,
+    });
+
+    if (!servicesResponse.docs.length) {
+      console.log("❌ No services found. Please seed services first.");
+
+      process.exit(1);
+    }
+
+    if (!packagesResponse.docs.length) {
+      console.log("❌ No packages found. Please seed packages first.");
+
+      process.exit(1);
+    }
+
+    const serviceIds = servicesResponse.docs
+      .filter((service) =>
+        typeof service.user === "number"
+          ? service.user === 1
+          : service.user.id === 1,
+      )
+      .map((service) => service.id);
+    const packageIds = packagesResponse.docs
+      .filter((pkg) =>
+        typeof pkg.user === "number" ? pkg.user === 1 : pkg.user.id === 1,
+      )
+      .map((pkg) => pkg.id);
+
+    const roomSeedingData = {
+      ...data,
+      services: {
+        "headline": data.services?.headline || ServicesHeadline,
+        "headline-sub": data.services?.["headline-sub"] || ServicesHeadlineSub,
+        "list": serviceIds,
+      },
+      packages: {
+        "headline": data.packages?.headline || PackagesHeadline,
+        "headline-sub": data.packages?.["headline-sub"] || PackagesHeadlineSub,
+        "list": packageIds,
+      },
+    };
+
     await payload.create({
       collection: "rooms",
-      data,
+      data: roomSeedingData,
     });
 
     console.log(`🎉 Shawqi's room created successfully at /shawqi`);
+    console.log(
+      `📋 Connected ${serviceIds.length} services and ${packageIds.length} packages`,
+    );
 
     process.exit(0);
   } catch (error) {

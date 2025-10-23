@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 02
 import {
   ArrowUpRight,
   CheckIcon,
@@ -11,7 +11,12 @@ import { isObject } from "@/lib/types/guards";
 import { Room } from "@/payload-types";
 
 import { Container } from "../globals/container";
-import { Paragraph, SubSectionHeading } from "../globals/typography";
+import {
+  Paragraph,
+  SectionHeading,
+  SectionHeadingBadge,
+  SubSectionHeading,
+} from "../globals/typography";
 import { Button } from "../ui/button";
 
 import { InformationBadges } from "./globals";
@@ -19,7 +24,7 @@ import { InformationBadges } from "./globals";
 export const ServiceItem = function ServiceItem({
   service,
 }: {
-  service: NonNullable<Room["services"]>[number];
+  service: NonNullable<NonNullable<Room["services"]>["list"]>[number];
 }) {
   if (!isObject(service)) return null;
   return (
@@ -83,15 +88,23 @@ export const ServiceItem = function ServiceItem({
 export const Services = function Services({
   services,
 }: {
-  services: NonNullable<Room["services"]>;
+  services: Omit<NonNullable<Room["services"]>, "list"> & {
+    list: NonNullable<NonNullable<Room["services"]>["list"]>;
+  };
 }) {
   return (
     <Container
       as="section"
       id="services"
       className="section-padding-start-lg max-w-7xl">
+      <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">
+        {services["headline-sub"]}
+      </SectionHeadingBadge>
+      <SectionHeading as="h3" className="mb-12 lg:mb-24">
+        {services.headline}
+      </SectionHeading>
       <div className="isolate grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
-        {services.map((service) => (
+        {services.list.map((service) => (
           <ServiceItem
             key={typeof service === "number" ? service : service.id}
             service={service}

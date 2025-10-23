@@ -1,9 +1,9 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { CollectionConfig } from "payload";
 
 import { isAdminOrSelf } from "@/access/global";
-import { hasRole } from "@/lib/permissions";
+import { hasAnyRole } from "@/lib/permissions";
 import { isObject, isString } from "@/lib/types/guards";
 
 export const RoomsServices: CollectionConfig = {
@@ -13,18 +13,7 @@ export const RoomsServices: CollectionConfig = {
       const { user } = req;
       if (!user) return false;
 
-      if (hasRole(user, "admin-user")) return true;
-
-      if (hasRole(user, "system-user")) {
-        const room = await req.payload.find({
-          collection: "rooms",
-          where: { user: { equals: user.id } },
-        });
-
-        if (room.docs.length === 0) return false;
-
-        return true;
-      }
+      if (hasAnyRole(user, ["admin-user", "system-user"])) return true;
 
       return false;
     },
@@ -186,8 +175,9 @@ export const RoomsServices: CollectionConfig = {
     beforeChange: [
       async ({ operation, data, req }) => {
         if (operation === "create")
-          // eslint-disable-next-line no-param-reassign
-          data.user = req.user?.id;
+          if (req.user)
+            // eslint-disable-next-line no-param-reassign
+            data.user = req.user.id;
 
         return data;
       },

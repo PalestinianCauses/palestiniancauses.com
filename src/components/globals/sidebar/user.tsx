@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import {
   BellIcon,
@@ -41,6 +41,11 @@ export const SidebarUser = function SidebarUser() {
   const { isMobile, setOpenMobile } = useSidebar();
   const { signOut } = useAuth();
   const { isLoading, data: user } = useUser();
+
+  const isAdminOrSystemUser = hasAnyRole(user || null, [
+    "admin-user",
+    "system-user",
+  ]);
 
   return (
     <SafeHydrate
@@ -99,7 +104,7 @@ export const SidebarUser = function SidebarUser() {
                   side={isMobile ? "bottom" : "right"}
                   sideOffset={2}>
                   <DropdownMenuGroup>
-                    {hasAnyRole(user, ["admin-user", "system-user"]) ? (
+                    {isAdminOrSystemUser ? (
                       <DropdownMenuItem asChild className="gap-2.5 px-2.5">
                         <Link href="/admin">
                           <LayoutIcon />

@@ -1,4 +1,4 @@
-// REVIEWED - 12
+// REVIEWED - 13
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -22,7 +22,10 @@ export default buildConfig({
   }),
   typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },
   editor: lexicalEditor(),
-  admin: { user: Users.slug, importMap: { baseDir: path.resolve(dirname) } },
+  admin: {
+    user: Users.slug,
+    importMap: { baseDir: path.resolve(dirname, "src") },
+  },
   collections,
   sharp,
   plugins: [

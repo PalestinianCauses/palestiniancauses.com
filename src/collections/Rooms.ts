@@ -1,4 +1,4 @@
-// REVIEWED - 26
+// REVIEWED - 27
 
 import { CollectionConfig } from "payload";
 
@@ -205,6 +205,11 @@ export const Rooms: CollectionConfig = {
                   relationTo: "rooms-services",
                   hasMany: true,
                   required: false,
+                  filterOptions: (siblingData) => ({
+                    user: {
+                      equals: siblingData.user?.id,
+                    },
+                  }),
                 },
               ],
             },
@@ -257,6 +262,11 @@ export const Rooms: CollectionConfig = {
                   relationTo: "rooms-packages",
                   hasMany: true,
                   required: false,
+                  filterOptions: (siblingData) => ({
+                    user: {
+                      equals: siblingData.user?.id,
+                    },
+                  }),
                 },
               ],
             },

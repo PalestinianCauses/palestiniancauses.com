@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -102,7 +102,7 @@ export const useAuth = function useAuth() {
       }
 
       toast.success(messages.actions.auth.signIn.success);
-      queryClient.setQueryData(["user"], response.data.user);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       router.refresh();
     },
     onSettled: () => {

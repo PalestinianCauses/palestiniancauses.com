@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import {
   ArrowRightIcon,
@@ -6,7 +6,7 @@ import {
   TimerIcon,
   UserCheckIcon,
 } from "lucide-react";
-import { ElementType, Fragment, useId } from "react";
+import { ElementType, Fragment, HTMLAttributes, useId } from "react";
 
 import { getMediaAltText, getMediaURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
@@ -93,8 +93,31 @@ const State = function State({
   );
 };
 
-const CTA = function CTA() {
+export const SVGCircle = function SVGCircle({
+  className,
+}: HTMLAttributes<SVGElement>) {
   const id = useId();
+
+  return (
+    <svg
+      viewBox="0 0 1024 1024"
+      aria-hidden="true"
+      className={cn(
+        "absolute left-1/2 top-1/2 -z-10 size-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,_white,_transparent)]",
+        className,
+      )}>
+      <circle r={512} cx={512} cy={512} fill={`url(#${id})`} />
+      <defs>
+        <radialGradient id={id}>
+          <stop style={{ stopColor: "rgb(var(--primary) / 0.2)" }} />
+          <stop offset={1} style={{ stopColor: "rgb(var(--primary) / 0.2)" }} />
+        </radialGradient>
+      </defs>
+    </svg>
+  );
+};
+
+const CTA = function CTA() {
   return (
     <Container
       as="section"
@@ -119,21 +142,7 @@ const CTA = function CTA() {
             Explore My Professional Journey
           </Button>
         </div>
-        <svg
-          viewBox="0 0 1024 1024"
-          aria-hidden="true"
-          className="absolute left-1/2 top-1/2 -z-10 size-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,_white,_transparent)]">
-          <circle r={512} cx={512} cy={512} fill={`url(#${id})`} />
-          <defs>
-            <radialGradient id={id}>
-              <stop style={{ stopColor: "rgb(var(--primary) / 0.2)" }} />
-              <stop
-                offset={1}
-                style={{ stopColor: "rgb(var(--primary) / 0.2)" }}
-              />
-            </radialGradient>
-          </defs>
-        </svg>
+        <SVGCircle />
       </div>
     </Container>
   );

@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Field } from "payload";
 
@@ -158,7 +158,8 @@ export const ExperienceField: Field = {
         },
         {
           admin: {
-            description: "Indicate if this is the current or ongoing position.",
+            description:
+              "Indicate if this is the current or on-going position.",
           },
           label: "Current Position",
           name: "isCurrent",

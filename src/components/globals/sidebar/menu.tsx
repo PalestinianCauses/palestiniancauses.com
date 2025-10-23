@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import {
   ArrowRightLeftIcon,
@@ -8,6 +8,7 @@ import {
   BookCopyIcon,
   BookOpenIcon,
   BrainIcon,
+  BriefcaseBusinessIcon,
   BriefcaseIcon,
   CheckCheckIcon,
   CookieIcon,
@@ -16,6 +17,7 @@ import {
   GraduationCapIcon,
   HeartHandshakeIcon,
   MessagesSquareIcon,
+  Package2Icon,
   PenLineIcon,
   ShieldCheckIcon,
   UserPenIcon,
@@ -80,6 +82,8 @@ const icons: Partial<Record<string, ElementType>> = {
   education: GraduationCapIcon,
   qualification: FileStackIcon,
   skills: BrainIcon,
+  services: BriefcaseBusinessIcon,
+  packages: Package2Icon,
   contact: MessagesSquareIcon,
 };
 

@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 03
 
 import { ArrowUpRight, ClockIcon, PlusIcon } from "lucide-react";
 
@@ -40,7 +40,7 @@ export const Packages = function Packages({
           <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">
             {packages["headline-sub"]}
           </SectionHeadingBadge>
-          <SectionHeading as="h3" className="mb-6 lg:mb-12">
+          <SectionHeading as="h3" className="mb-12 lg:mb-24">
             {packages.headline}
           </SectionHeading>
           <div className="mx-auto grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3">
@@ -122,18 +122,19 @@ export const Packages = function Packages({
                         ]}
                       />
                     ) : null}
-                    {packageElement.features ? (
-                      <ul className="mb-6 flex flex-col gap-2.5 lg:mb-12">
-                        {packageElement.features.map((feature) => (
-                          <li
-                            key={feature.id}
-                            className="flex items-center gap-2.5 text-sm font-medium leading-snug text-foreground lg:text-base">
-                            <PlusIcon className="h-4 w-4 shrink-0 text-foreground/25" />
-                            {feature.feature}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
+                    {packageElement.features &&
+                      packageElement.features.length !== 0 && (
+                        <ul className="mb-6 flex flex-col gap-2.5 lg:mb-12">
+                          {packageElement.features.map((feature) => (
+                            <li
+                              key={feature.id}
+                              className="flex items-center gap-2.5 text-sm font-medium leading-snug text-foreground lg:text-base">
+                              <PlusIcon className="h-4 w-4 shrink-0 text-foreground/25" />
+                              {feature.feature}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     <Button className="mt-auto w-full">
                       <ArrowUpRight className="h-4 w-4" />
                       Get Started
@@ -147,5 +148,3 @@ export const Packages = function Packages({
     </Container>
   );
 };
-
-// ! FIX: categories, services, features should not be null
