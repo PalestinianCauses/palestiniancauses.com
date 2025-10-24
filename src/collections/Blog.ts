@@ -1,15 +1,15 @@
-// REVIEWED - 03
+// REVIEWED - 04
 import { CollectionConfig } from "payload";
 
-import { isAdminOrSelf, isAdminOrSystemUser } from "@/access/global";
+import { hasPermissionAccess } from "@/access/global";
 
 export const Blog: CollectionConfig = {
   slug: "blogs",
   access: {
-    read: isAdminOrSelf,
-    create: isAdminOrSystemUser,
-    update: isAdminOrSelf,
-    delete: isAdminOrSelf,
+    read: hasPermissionAccess({ resource: "blogs", action: "read" }),
+    create: hasPermissionAccess({ resource: "blogs", action: "create" }),
+    update: hasPermissionAccess({ resource: "blogs", action: "update" }),
+    delete: hasPermissionAccess({ resource: "blogs", action: "delete" }),
   },
   admin: {
     group: "Content",

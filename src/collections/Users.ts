@@ -1,37 +1,25 @@
-// REVIEWED - 14
+// REVIEWED - 15
 import type { CollectionConfig } from "payload";
 
-import { isAdminField, isSelf } from "@/access/global";
-import { hasPermission } from "@/lib/permissions";
-import { isDefined, isObject, isString } from "@/lib/types/guards";
+import {
+  hasPermissionAccess,
+  hasRoleFieldAccess,
+  isSelf,
+} from "@/access/global";
 
 export const Users: CollectionConfig = {
   slug: "users",
   access: {
-    create: ({ req }) => {
-      if (!req.user) return true;
-      return hasPermission(req.user, { resource: "users", action: "create" });
-    },
-    read: ({ req }) => {
-      if (
-        !isDefined(req.user) &&
-        isObject(req.query.email) &&
-        "equals" in req.query.email &&
-        isString(req.query.email.equals)
-      )
-        return true;
-
-      return (
-        hasPermission(req.user, { resource: "users", action: "read" }) ||
-        isSelf("id")({ req })
-      );
-    },
-    update: ({ req }) =>
-      hasPermission(req.user, { resource: "users", action: "update" }) ||
-      isSelf("id")({ req }),
-    delete: ({ req }) =>
-      hasPermission(req.user, { resource: "users", action: "delete" }) ||
-      isSelf("id")({ req }),
+    create: hasPermissionAccess({ resource: "users", action: "create" }),
+    read:
+      hasPermissionAccess({ resource: "users", action: "read" }) ||
+      isSelf("id"),
+    update:
+      hasPermissionAccess({ resource: "users", action: "update" }) ||
+      isSelf("id"),
+    delete:
+      hasPermissionAccess({ resource: "users", action: "delete" }) ||
+      isSelf("id"),
   },
   admin: {
     group: "Database",
@@ -72,7 +60,10 @@ export const Users: CollectionConfig = {
       required: true,
     },
     {
-      access: { update: isAdminField },
+      access: {
+        read: hasRoleFieldAccess("admin-user"),
+        update: hasRoleFieldAccess("admin-user"),
+      },
       admin: { position: "sidebar" },
       label: "Roles",
       name: "roles",
