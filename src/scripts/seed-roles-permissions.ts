@@ -1,87 +1,9 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
 
 const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
-  // Users management permissions
-  {
-    name: "users.create",
-    resource: "users",
-    action: "create",
-    description: "Create new users",
-  },
-  {
-    name: "users.read",
-    resource: "users",
-    action: "read",
-    description: "View users",
-  },
-  {
-    name: "users.update",
-    resource: "users",
-    action: "update",
-    description: "Update users",
-  },
-  {
-    name: "users.delete",
-    resource: "users",
-    action: "delete",
-    description: "Delete users",
-  },
-
-  // Roles management permissions
-  {
-    name: "roles.create",
-    resource: "roles",
-    action: "create",
-    description: "Create new roles",
-  },
-  {
-    name: "roles.read",
-    resource: "roles",
-    action: "read",
-    description: "View roles",
-  },
-  {
-    name: "roles.update",
-    resource: "roles",
-    action: "update",
-    description: "Update roles",
-  },
-  {
-    name: "roles.delete",
-    resource: "roles",
-    action: "delete",
-    description: "Delete roles",
-  },
-
-  // Permissions management permissions
-  {
-    name: "permissions.create",
-    resource: "permissions",
-    action: "create",
-    description: "Create new permissions",
-  },
-  {
-    name: "permissions.read",
-    resource: "permissions",
-    action: "read",
-    description: "View permissions",
-  },
-  {
-    name: "permissions.update",
-    resource: "permissions",
-    action: "update",
-    description: "Update permissions",
-  },
-  {
-    name: "permissions.delete",
-    resource: "permissions",
-    action: "delete",
-    description: "Delete permissions",
-  },
-
   // Blogs management permissions
   {
     name: "blogs.create",
@@ -244,6 +166,32 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     description: "Delete orders",
   },
 
+  // Permissions management permissions
+  {
+    name: "permissions.create",
+    resource: "permissions",
+    action: "create",
+    description: "Create new permissions",
+  },
+  {
+    name: "permissions.read",
+    resource: "permissions",
+    action: "read",
+    description: "View permissions",
+  },
+  {
+    name: "permissions.update",
+    resource: "permissions",
+    action: "update",
+    description: "Update permissions",
+  },
+  {
+    name: "permissions.delete",
+    resource: "permissions",
+    action: "delete",
+    description: "Delete permissions",
+  },
+
   // Products management permissions
   {
     name: "products.create",
@@ -268,6 +216,32 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     resource: "products",
     action: "delete",
     description: "Delete products",
+  },
+
+  // Roles management permissions
+  {
+    name: "roles.create",
+    resource: "roles",
+    action: "create",
+    description: "Create new roles",
+  },
+  {
+    name: "roles.read",
+    resource: "roles",
+    action: "read",
+    description: "View roles",
+  },
+  {
+    name: "roles.update",
+    resource: "roles",
+    action: "update",
+    description: "Update roles",
+  },
+  {
+    name: "roles.delete",
+    resource: "roles",
+    action: "delete",
+    description: "Delete roles",
   },
 
   // Rooms management permissions
@@ -399,22 +373,36 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     action: "delete",
     description: "Delete service categories",
   },
+
+  // Users management permissions
+  {
+    name: "users.create",
+    resource: "users",
+    action: "create",
+    description: "Create new users",
+  },
+  {
+    name: "users.read",
+    resource: "users",
+    action: "read",
+    description: "View users",
+  },
+  {
+    name: "users.update",
+    resource: "users",
+    action: "update",
+    description: "Update users",
+  },
+  {
+    name: "users.delete",
+    resource: "users",
+    action: "delete",
+    description: "Delete users",
+  },
 ];
 
 const permissionsRoles: Record<string, string[]> = {
   "admin-user": [
-    "users.create",
-    "users.read",
-    "users.update",
-    "users.delete",
-    "roles.create",
-    "roles.read",
-    "roles.update",
-    "roles.delete",
-    "permissions.create",
-    "permissions.read",
-    "permissions.update",
-    "permissions.delete",
     "blogs.create",
     "blogs.read",
     "blogs.update",
@@ -440,10 +428,18 @@ const permissionsRoles: Record<string, string[]> = {
     "orders.read",
     "orders.update",
     "orders.delete",
+    "permissions.create",
+    "permissions.read",
+    "permissions.update",
+    "permissions.delete",
     "products.create",
     "products.read",
     "products.update",
     "products.delete",
+    "roles.create",
+    "roles.read",
+    "roles.update",
+    "roles.delete",
     "rooms.create",
     "rooms.read",
     "rooms.update",
@@ -464,77 +460,39 @@ const permissionsRoles: Record<string, string[]> = {
     "service-categories.read",
     "service-categories.update",
     "service-categories.delete",
+    "users.create",
+    "users.read",
+    "users.update",
+    "users.delete",
   ],
   "system-user": [
-    "users.read",
-    "roles.read",
-    "permissions.read",
     "blogs.create",
     "blogs.read",
     "blogs.update",
     "blogs.delete",
     "blogs.publish",
     "comments.create",
-    "comments.read",
-    "comments.update",
-    "comments.delete",
     "diary-entries.create",
     "diary-entries.read",
     "diary-entries.update",
     "diary-entries.delete",
-    "media.create",
-    "media.read",
-    "media.update",
-    "media.delete",
-    "notification-subscriptions.read",
-    "orders.read",
-    "products.read",
     "rooms.create",
-    "rooms.read",
-    "rooms.update",
-    "rooms.delete",
     "room-contact.create",
-    "room-contact.read",
-    "room-contact.update",
-    "room-contact.delete",
     "room-packages.create",
-    "room-packages.read",
-    "room-packages.update",
-    "room-packages.delete",
     "room-services.create",
-    "room-services.read",
-    "room-services.update",
-    "room-services.delete",
     "service-categories.create",
-    "service-categories.read",
-    "service-categories.update",
-    "service-categories.delete",
   ],
   "author-user": [
     "blogs.create",
-    "blogs.read",
-    "blogs.update",
-    "blogs.delete",
     "blogs.publish",
     "comments.create",
-    "comments.read",
-    "comments.update",
-    "comments.delete",
     "diary-entries.create",
     "diary-entries.read",
     "diary-entries.update",
     "diary-entries.delete",
-    "media.create",
-    "media.read",
-    "media.update",
-    "media.delete",
   ],
   "website-user": [
-    "blogs.read",
     "comments.create",
-    "comments.read",
-    "comments.update",
-    "comments.delete",
     "diary-entries.create",
     "diary-entries.read",
     "diary-entries.update",
@@ -575,95 +533,166 @@ const roles: Omit<Role, "id" | "updatedAt" | "createdAt">[] = [
   },
 ];
 
-// more row row seedRolesAndPermissions
-export const doSeedingPermissionsPlusRoles =
+const doSeedingPermissionsPlusRoles =
   async function doSeedingPermissionsPlusRoles() {
     try {
-      // eslint-disable-next-line no-console
       console.log("🚀 Starting seeding permissions and roles...");
 
+      // Handle permissions - update if they exist
       const existingPermissions = await payload.find({
         collection: "permissions",
-        limit: 1,
+        limit: 1000,
       });
 
-      if (existingPermissions.docs.length > 0) {
-        // eslint-disable-next-line no-console
-        console.log("❌ Permissions exist, skipping seeding.");
-        process.exit(0);
+      if (existingPermissions.docs.length !== 0) {
+        console.log(
+          `📋 Found ${existingPermissions.docs.length} existing permissions, updating...`,
+        );
+
+        // Update existing permissions
+        const permissionUpdates = await Promise.all(
+          permissions.map(async (permissionData) => {
+            const existing = existingPermissions.docs.find(
+              (p) => p.name === permissionData.name,
+            );
+
+            if (existing) {
+              return payload.update({
+                collection: "permissions",
+                id: existing.id,
+                data: permissionData,
+              });
+            }
+
+            return payload.create({
+              collection: "permissions",
+              data: permissionData,
+            });
+          }),
+        );
+
+        console.log(
+          `✅ Updated ${permissionUpdates.length} permissions successfully`,
+        );
+      } else {
+        // Create new permissions
+        console.log(`📋 Creating ${permissions.length} permissions...`);
+
+        const permissionsCreated = await Promise.all(
+          permissions.map((permission) =>
+            payload.create({
+              collection: "permissions",
+              data: permission,
+            }),
+          ),
+        );
+
+        console.log(
+          `✅ Created ${permissionsCreated.length} permissions successfully`,
+        );
       }
 
-      const permissionsCreated = await Promise.all(
-        permissions.map((permission) =>
-          payload.create({
-            collection: "permissions",
-            data: permission,
-          }),
-        ),
-      );
-
-      // eslint-disable-next-line no-console
-      console.log("🎉 Permissions created successfully");
-
+      // Handle roles - update if they exist
       const existingRoles = await payload.find({
         collection: "roles",
-        limit: 1,
+        limit: 100,
       });
 
-      if (existingRoles.docs.length > 0) {
-        // eslint-disable-next-line no-console
-        console.log("❌ Roles exist, skipping seeding.");
-        process.exit(0);
+      if (existingRoles.docs.length !== 0) {
+        console.log(
+          `📋 Found ${existingRoles.docs.length} existing roles, updating...`,
+        );
+      } else {
+        console.log(`📋 Creating ${roles.length} roles...`);
       }
 
-      // creating a map of permission names to IDs for easy looking up
+      // Fetch all permissions to create permission map
+      const permissionsResponse = await payload.find({
+        collection: "permissions",
+        limit: 1000,
+      });
+
+      if (!permissionsResponse.docs.length) {
+        console.log("❌ No permissions found. Please seed permissions first.");
+        process.exit(1);
+      }
+
+      // Create permission name to ID map
       const permissionMap = new Map();
-      permissionsCreated.forEach((permission) => {
+      permissionsResponse.docs.forEach((permission) => {
         permissionMap.set(permission.name, permission.id);
       });
 
-      // creating roles with their permissions
-      const rolesCreated = await Promise.all(
-        roles.map(async (role) => {
-          // getting role permissions based on user's role name
-          const rolePermissionNames = permissionsRoles[role.name] || [];
-          // getting role permissions IDs
+      console.log(
+        `📊 Found ${permissionMap.size} permissions for role assignment`,
+      );
+
+      // Handle roles - create or update
+      const rolesProcessed = await Promise.all(
+        roles.map(async (roleSeedingData) => {
+          // Get role permissions based on role name
+          const rolePermissionNames =
+            permissionsRoles[roleSeedingData.name] || [];
+
+          // Get role permission IDs
           const rolePermissionIds = rolePermissionNames
             .map((name) => permissionMap.get(name))
             .filter(Boolean);
 
+          console.log(
+            `📋 ${roleSeedingData.name}: Assigning ${rolePermissionIds.length} permissions`,
+          );
+
+          // Check if role exists
+          const existingRole = existingRoles.docs.find(
+            (r) => r.name === roleSeedingData.name,
+          );
+
+          if (existingRole) {
+            // Update existing role
+            return payload.update({
+              collection: "roles",
+              id: existingRole.id,
+              data: {
+                ...roleSeedingData,
+                permissions: rolePermissionIds,
+              },
+            });
+          }
+          // Create new role
           return payload.create({
             collection: "roles",
             data: {
-              ...role,
+              ...roleSeedingData,
               permissions: rolePermissionIds,
             },
           });
         }),
       );
 
-      // eslint-disable-next-line no-console
-      console.log("🎉 Roles created successfully");
+      console.log(`✅ Processed ${rolesProcessed.length} roles successfully`);
 
-      rolesCreated.forEach((role) => {
+      // Display role summary
+      rolesProcessed.forEach((role) => {
         const rolePermissionNames = permissionsRoles[role.name] || [];
-        // eslint-disable-next-line no-console
         console.log(
-          `📋 ${role.name}: ${rolePermissionNames.length} permissions`,
+          `📋 ${role.name}: ${rolePermissionNames.length} permissions assigned`,
         );
       });
 
-      // eslint-disable-next-line no-console
       console.log("🎉 Permissions and roles seeded successfully!");
-
       process.exit(0);
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error("❌ Error seeding permissions and roles:", error);
-      // eslint-disable-next-line no-console
-      console.error(
-        error && typeof error === "object" && "data" in error && error?.data,
-      );
+
+      if (
+        error &&
+        typeof error === "object" &&
+        "data" in error &&
+        error?.data
+      ) {
+        console.error("Error details:", error.data);
+      }
 
       process.exit(1);
     }

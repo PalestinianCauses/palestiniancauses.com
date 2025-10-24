@@ -1,8 +1,8 @@
-// REVIEWED - 13
+// REVIEWED - 14
 import type { CollectionConfig } from "payload";
 
-import { isAdmin, isAdminField, isAdminOrSelf } from "@/access/global";
-// eslint-disable-next-line import/no-cycle
+import { isAdminField, isSelf } from "@/access/global";
+import { hasPermission } from "@/lib/permissions";
 import { isDefined, isObject, isString } from "@/lib/types/guards";
 
 export const Users: CollectionConfig = {
@@ -10,7 +10,7 @@ export const Users: CollectionConfig = {
   access: {
     create: ({ req }) => {
       if (!req.user) return true;
-      return isAdmin({ req });
+      return hasPermission(req.user, { resource: "users", action: "create" });
     },
     read: ({ req }) => {
       if (
@@ -20,10 +20,18 @@ export const Users: CollectionConfig = {
         isString(req.query.email.equals)
       )
         return true;
-      return isAdminOrSelf({ req });
+
+      return (
+        hasPermission(req.user, { resource: "users", action: "read" }) ||
+        isSelf("id")({ req })
+      );
     },
-    update: isAdminOrSelf,
-    delete: isAdminOrSelf,
+    update: ({ req }) =>
+      hasPermission(req.user, { resource: "users", action: "update" }) ||
+      isSelf("id")({ req }),
+    delete: ({ req }) =>
+      hasPermission(req.user, { resource: "users", action: "delete" }) ||
+      isSelf("id")({ req }),
   },
   admin: {
     group: "Database",
