@@ -1,16 +1,26 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { CollectionConfig } from "payload";
 
-import { isAdminOrSelf, isAuthenticated } from "@/access/global";
+import {
+  hasPermissionAccess,
+  hasRoleFieldAccess,
+  isSelf,
+} from "@/access/global";
 
 export const Comments: CollectionConfig = {
   slug: "comments",
   access: {
-    read: () => true,
-    create: isAuthenticated,
-    update: isAdminOrSelf,
-    delete: isAdminOrSelf,
+    create: hasPermissionAccess({ resource: "comments", action: "create" }),
+    read:
+      hasPermissionAccess({ resource: "comments", action: "read" }) ||
+      isSelf("id"),
+    update:
+      hasPermissionAccess({ resource: "comments", action: "update" }) ||
+      isSelf("id"),
+    delete:
+      hasPermissionAccess({ resource: "comments", action: "delete" }) ||
+      isSelf("id"),
   },
   admin: {
     group: "Content",
@@ -27,7 +37,7 @@ export const Comments: CollectionConfig = {
   },
   fields: [
     {
-      admin: { readOnly: true, position: "sidebar" },
+      admin: { hidden: true, position: "sidebar" },
       label: "Commented On",
       name: "on",
       type: "relationship",
@@ -37,7 +47,7 @@ export const Comments: CollectionConfig = {
       index: true,
     },
     {
-      admin: { readOnly: true, position: "sidebar" },
+      admin: { hidden: true, position: "sidebar" },
       label: "In Reply To",
       name: "parent",
       type: "relationship",
@@ -47,7 +57,7 @@ export const Comments: CollectionConfig = {
       index: true,
     },
     {
-      admin: { readOnly: true, position: "sidebar" },
+      admin: { hidden: true, position: "sidebar" },
       label: "User",
       name: "user",
       type: "relationship",
@@ -57,7 +67,6 @@ export const Comments: CollectionConfig = {
       index: true,
     },
     {
-      admin: { readOnly: true },
       label: "Content",
       name: "content",
       type: "textarea",
@@ -66,6 +75,7 @@ export const Comments: CollectionConfig = {
       required: true,
     },
     {
+      access: { update: hasRoleFieldAccess("admin-user") },
       admin: { position: "sidebar" },
       label: "Status",
       name: "status",
@@ -80,6 +90,7 @@ export const Comments: CollectionConfig = {
       index: true,
     },
     {
+      admin: { hidden: true },
       label: "Votes",
       name: "votes",
       type: "array",
