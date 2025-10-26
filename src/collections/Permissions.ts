@@ -1,8 +1,8 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import type { CollectionConfig } from "payload";
 
-import { isAdmin } from "@/access/global";
+import { hasPermissionAccess } from "@/access/global";
 
 export const collectionsPermissionsOptions = [
   { label: "Blog", value: "blogs" },
@@ -35,10 +35,10 @@ export const collectionsPermissionsOptions = [
 export const Permissions: CollectionConfig = {
   slug: "permissions",
   access: {
-    create: isAdmin,
-    read: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    create: hasPermissionAccess({ resource: "permissions", action: "create" }),
+    read: hasPermissionAccess({ resource: "permissions", action: "read" }),
+    update: hasPermissionAccess({ resource: "permissions", action: "update" }),
+    delete: hasPermissionAccess({ resource: "permissions", action: "delete" }),
   },
   admin: {
     group: "Authorization",
