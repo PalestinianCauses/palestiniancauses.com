@@ -1,10 +1,10 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { CollectionConfig } from "payload";
 
 import {
   hasPermissionAccess,
-  hasRoleFieldAccess,
+  hasPermissionFieldAccess,
   isSelf,
 } from "@/access/global";
 
@@ -12,15 +12,17 @@ export const Comments: CollectionConfig = {
   slug: "comments",
   access: {
     create: hasPermissionAccess({ resource: "comments", action: "create" }),
-    read:
-      hasPermissionAccess({ resource: "comments", action: "read" }) ||
-      isSelf("id"),
-    update:
-      hasPermissionAccess({ resource: "comments", action: "update" }) ||
-      isSelf("id"),
-    delete:
-      hasPermissionAccess({ resource: "comments", action: "delete" }) ||
-      isSelf("id"),
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "comments", action: "read" })({ req }) ||
+      isSelf("user")({ req }),
+    update: ({ req }) =>
+      hasPermissionAccess({ resource: "comments", action: "update" })({
+        req,
+      }) || isSelf("user")({ req }),
+    delete: ({ req }) =>
+      hasPermissionAccess({ resource: "comments", action: "delete" })({
+        req,
+      }) || isSelf("user")({ req }),
   },
   admin: {
     group: "Content",
@@ -37,7 +39,8 @@ export const Comments: CollectionConfig = {
   },
   fields: [
     {
-      admin: { hidden: true, position: "sidebar" },
+      access: { update: hasPermissionFieldAccess("comments.on", "update") },
+      admin: { position: "sidebar" },
       label: "Commented On",
       name: "on",
       type: "relationship",
@@ -47,7 +50,12 @@ export const Comments: CollectionConfig = {
       index: true,
     },
     {
-      admin: { hidden: true, position: "sidebar" },
+      access: {
+        create: hasPermissionFieldAccess("comments.parent", "create"),
+        read: hasPermissionFieldAccess("comments.parent", "read"),
+        update: hasPermissionFieldAccess("comments.parent", "update"),
+      },
+      admin: { position: "sidebar" },
       label: "In Reply To",
       name: "parent",
       type: "relationship",
@@ -57,7 +65,12 @@ export const Comments: CollectionConfig = {
       index: true,
     },
     {
-      admin: { hidden: true, position: "sidebar" },
+      access: {
+        create: hasPermissionFieldAccess("comments.user", "create"),
+        read: hasPermissionFieldAccess("comments.user", "read"),
+        update: hasPermissionFieldAccess("comments.user", "update"),
+      },
+      admin: { position: "sidebar" },
       label: "User",
       name: "user",
       type: "relationship",
@@ -75,7 +88,11 @@ export const Comments: CollectionConfig = {
       required: true,
     },
     {
-      access: { update: hasRoleFieldAccess("admin-user") },
+      access: {
+        create: hasPermissionFieldAccess("comments.status", "create"),
+        read: hasPermissionFieldAccess("comments.status", "read"),
+        update: hasPermissionFieldAccess("comments.status", "update"),
+      },
       admin: { position: "sidebar" },
       label: "Status",
       name: "status",
@@ -116,7 +133,7 @@ export const Comments: CollectionConfig = {
       ],
     },
     {
-      admin: { readOnly: true },
+      admin: { hidden: true },
       label: "Votes Score",
       name: "votesScore",
       type: "number",
@@ -124,4 +141,16 @@ export const Comments: CollectionConfig = {
       index: true,
     },
   ],
+  hooks: {
+    beforeChange: [
+      ({ req, data }) => {
+        if (!data.user)
+          if (req.user)
+            // eslint-disable-next-line no-param-reassign
+            data.user = req.user.id;
+
+        return data;
+      },
+    ],
+  },
 };

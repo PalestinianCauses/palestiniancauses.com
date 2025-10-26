@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import type { CollectionConfig } from "payload";
 
@@ -7,7 +7,14 @@ import { isAdmin } from "@/access/global";
 export const collectionsPermissionsOptions = [
   { label: "Blog", value: "blogs" },
   { label: "Comments", value: "comments" },
+  { label: "Comments On", value: "comments.on" },
+  { label: "Comments Parent", value: "comments.parent" },
+  { label: "Comments Status", value: "comments.status" },
+  { label: "Comments User", value: "comments.user" },
   { label: "Diary Entries", value: "diary-entries" },
+  { label: "Diary Entries Author", value: "diary-entries.author" },
+  { label: "Diary Entries Is Authentic", value: "diary-entries.isAuthentic" },
+  { label: "Diary Entries Status", value: "diary-entries.status" },
   { label: "Media", value: "media" },
   { label: "Notification Subscriptions", value: "notification-subscriptions" },
   { label: "Orders", value: "orders" },
@@ -20,6 +27,9 @@ export const collectionsPermissionsOptions = [
   { label: "Room Services", value: "room-services" },
   { label: "Service Categories", value: "service-categories" },
   { label: "Users", value: "users" },
+  { label: "Users Email", value: "users.email" },
+  { label: "Users Previous Role", value: "users.previousRole" },
+  { label: "Users Roles", value: "users.roles" },
 ];
 
 export const Permissions: CollectionConfig = {

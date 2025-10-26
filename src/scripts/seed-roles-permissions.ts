@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 04
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
@@ -62,6 +62,56 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     description: "Delete comments",
   },
 
+  // Comments field-level permissions
+  {
+    name: "comments.on.read",
+    resource: "comments.on",
+    action: "read",
+    description: "View comment on",
+  },
+  {
+    name: "comments.on.update",
+    resource: "comments.on",
+    action: "update",
+    description: "Update comment on",
+  },
+  {
+    name: "comments.parent.read",
+    resource: "comments.parent",
+    action: "read",
+    description: "View comment parent",
+  },
+  {
+    name: "comments.parent.update",
+    resource: "comments.parent",
+    action: "update",
+    description: "Update comment parent",
+  },
+  {
+    name: "comments.status.read",
+    resource: "comments.status",
+    action: "read",
+    description: "View comment status",
+  },
+  {
+    name: "comments.status.update",
+    resource: "comments.status",
+    action: "update",
+    description: "Update comment status",
+  },
+  {
+    name: "comments.user.read",
+    resource: "comments.user",
+    action: "read",
+    description: "View comment author",
+  },
+  {
+    name: "comments.user.update",
+    resource: "comments.user",
+    action: "update",
+    description: "Update comment author",
+  },
+
   // Diary entries management permissions
   {
     name: "diary-entries.create",
@@ -86,6 +136,50 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     resource: "diary-entries",
     action: "delete",
     description: "Delete diary entries",
+  },
+
+  // Diary entries field-level permissions
+  {
+    name: "diary-entries.author.read",
+    resource: "diary-entries.author",
+    action: "read",
+    description: "View diary entry author",
+  },
+  {
+    name: "diary-entries.author.update",
+    resource: "diary-entries.author",
+    action: "update",
+    description: "Update diary entry author",
+  },
+  {
+    name: "diary-entries.isAuthentic.read",
+    resource: "diary-entries.isAuthentic",
+    action: "read",
+    description: "View diary entry authenticity",
+  },
+  {
+    name: "diary-entries.isAuthentic.update",
+    resource: "diary-entries.isAuthentic",
+    action: "update",
+    description: "Update diary entry authenticity",
+  },
+  {
+    name: "diary-entries.status.read",
+    resource: "diary-entries.status",
+    action: "read",
+    description: "View diary entry status",
+  },
+  {
+    name: "diary-entries.status.update",
+    resource: "diary-entries.status",
+    action: "update",
+    description: "Update diary entry status",
+  },
+  {
+    name: "diary-entries.publish",
+    resource: "diary-entries",
+    action: "publish",
+    description: "Publish diary entries",
   },
 
   // Media management permissions
@@ -399,6 +493,44 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     action: "delete",
     description: "Delete users",
   },
+
+  // Users field-level permissions
+  {
+    name: "users.email.read",
+    resource: "users.email",
+    action: "read",
+    description: "View user email addresses",
+  },
+  {
+    name: "users.email.update",
+    resource: "users.email",
+    action: "update",
+    description: "Update user email addresses",
+  },
+  {
+    name: "users.previousRole.read",
+    resource: "users.previousRole",
+    action: "read",
+    description: "View user previous role",
+  },
+  {
+    name: "users.previousRole.update",
+    resource: "users.previousRole",
+    action: "update",
+    description: "Update user previous role",
+  },
+  {
+    name: "users.roles.read",
+    resource: "users.roles",
+    action: "read",
+    description: "View user roles",
+  },
+  {
+    name: "users.roles.update",
+    resource: "users.roles",
+    action: "update",
+    description: "Update user roles",
+  },
 ];
 
 const permissionsRoles: Record<string, string[]> = {
@@ -412,10 +544,25 @@ const permissionsRoles: Record<string, string[]> = {
     "comments.read",
     "comments.update",
     "comments.delete",
+    "comments.on.read",
+    "comments.on.update",
+    "comments.parent.read",
+    "comments.parent.update",
+    "comments.status.read",
+    "comments.status.update",
+    "comments.user.read",
+    "comments.user.update",
     "diary-entries.create",
     "diary-entries.read",
     "diary-entries.update",
     "diary-entries.delete",
+    "diary-entries.publish",
+    "diary-entries.author.read",
+    "diary-entries.author.update",
+    "diary-entries.isAuthentic.read",
+    "diary-entries.isAuthentic.update",
+    "diary-entries.status.read",
+    "diary-entries.status.update",
     "media.create",
     "media.read",
     "media.update",
@@ -464,6 +611,12 @@ const permissionsRoles: Record<string, string[]> = {
     "users.read",
     "users.update",
     "users.delete",
+    "users.email.read",
+    "users.email.update",
+    "users.previousRole.read",
+    "users.previousRole.update",
+    "users.roles.read",
+    "users.roles.update",
   ],
   "system-user": [
     "blogs.create",
@@ -476,6 +629,7 @@ const permissionsRoles: Record<string, string[]> = {
     "diary-entries.read",
     "diary-entries.update",
     "diary-entries.delete",
+    "diary-entries.publish",
     "rooms.create",
     "room-contact.create",
     "room-packages.create",
@@ -487,18 +641,9 @@ const permissionsRoles: Record<string, string[]> = {
     "blogs.publish",
     "comments.create",
     "diary-entries.create",
-    "diary-entries.read",
-    "diary-entries.update",
-    "diary-entries.delete",
+    "diary-entries.publish",
   ],
-  "website-user": [
-    "comments.create",
-    "diary-entries.create",
-    "diary-entries.read",
-    "diary-entries.update",
-    "diary-entries.delete",
-    "media.read",
-  ],
+  "website-user": ["comments.create", "diary-entries.create"],
 };
 
 const roles: Omit<Role, "id" | "updatedAt" | "createdAt">[] = [

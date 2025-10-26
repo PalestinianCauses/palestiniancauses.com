@@ -1,21 +1,33 @@
-// REVIEWED - 13
+// REVIEWED - 14
 
 import { CollectionConfig } from "payload";
 
 import {
-  isAdminOrSystemUserOrSelf,
-  isAdminOrSystemUserOrSelfOrPublished,
-} from "@/access/diary-entry";
-import { isAdminOrSystemUserField, isAuthenticated } from "@/access/global";
-import { hasAnyRole } from "@/lib/permissions";
+  hasPermissionAccess,
+  hasPermissionFieldAccess,
+  isSelf,
+} from "@/access/global";
+import { hasPermission } from "@/lib/permissions";
 
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
   access: {
-    create: isAuthenticated,
-    read: isAdminOrSystemUserOrSelfOrPublished,
-    update: isAdminOrSystemUserOrSelf,
-    delete: isAdminOrSystemUserOrSelf,
+    create: hasPermissionAccess({
+      resource: "diary-entries",
+      action: "create",
+    }),
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "diary-entries", action: "read" })({
+        req,
+      }) || isSelf("author")({ req }),
+    update: ({ req }) =>
+      hasPermissionAccess({ resource: "diary-entries", action: "update" })({
+        req,
+      }) || isSelf("author")({ req }),
+    delete: ({ req }) =>
+      hasPermissionAccess({ resource: "diary-entries", action: "delete" })({
+        req,
+      }) || isSelf("author")({ req }),
   },
   admin: {
     group: "Content",
@@ -58,7 +70,11 @@ export const DiaryEntries: CollectionConfig = {
       required: true,
     },
     {
-      access: { update: isAdminOrSystemUserField },
+      access: {
+        create: hasPermissionFieldAccess("diary-entries.status", "create"),
+        update: hasPermissionFieldAccess("diary-entries.status", "update"),
+      },
+      admin: { position: "sidebar" },
       label: "Status",
       name: "status",
       type: "select",
@@ -72,7 +88,11 @@ export const DiaryEntries: CollectionConfig = {
       required: true,
     },
     {
-      access: { update: isAdminOrSystemUserField },
+      access: {
+        create: hasPermissionFieldAccess("diary-entries.author", "create"),
+        update: hasPermissionFieldAccess("diary-entries.author", "update"),
+      },
+      admin: { position: "sidebar" },
       label: "Author",
       name: "author",
       type: "relationship",
@@ -80,6 +100,9 @@ export const DiaryEntries: CollectionConfig = {
       required: true,
     },
     {
+      access: {
+        update: hasPermissionFieldAccess("diary-entries.isAuthentic", "update"),
+      },
       label: "Is Authentic",
       name: "isAuthentic",
       type: "checkbox",
@@ -95,11 +118,21 @@ export const DiaryEntries: CollectionConfig = {
   hooks: {
     beforeChange: [
       async ({ req, data }) => {
-        const document = data;
-        if (req.user && hasAnyRole(req.user, ["admin-user", "system-user"]))
-          document.status = "approved";
+        if (!data.author)
+          if (req.user)
+            // eslint-disable-next-line no-param-reassign
+            data.author = req.user.id;
 
-        return document;
+        if (
+          hasPermission(req.user, {
+            resource: "diary-entries",
+            action: "publish",
+          })
+        )
+          // eslint-disable-next-line no-param-reassign
+          data.status = "approved";
+
+        return data;
       },
     ],
   },

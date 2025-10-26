@@ -1,9 +1,9 @@
-// REVIEWED - 15
+// REVIEWED - 16
 import type { CollectionConfig } from "payload";
 
 import {
   hasPermissionAccess,
-  hasRoleFieldAccess,
+  hasPermissionFieldAccess,
   isSelf,
 } from "@/access/global";
 
@@ -11,15 +11,15 @@ export const Users: CollectionConfig = {
   slug: "users",
   access: {
     create: hasPermissionAccess({ resource: "users", action: "create" }),
-    read:
-      hasPermissionAccess({ resource: "users", action: "read" }) ||
-      isSelf("id"),
-    update:
-      hasPermissionAccess({ resource: "users", action: "update" }) ||
-      isSelf("id"),
-    delete:
-      hasPermissionAccess({ resource: "users", action: "delete" }) ||
-      isSelf("id"),
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "users", action: "read" })({ req }) ||
+      isSelf("id")({ req }),
+    update: ({ req }) =>
+      hasPermissionAccess({ resource: "users", action: "update" })({ req }) ||
+      isSelf("id")({ req }),
+    delete: ({ req }) =>
+      hasPermissionAccess({ resource: "users", action: "delete" })({ req }) ||
+      isSelf("id")({ req }),
   },
   admin: {
     group: "Database",
@@ -51,6 +51,11 @@ export const Users: CollectionConfig = {
       defaultValue: "",
     },
     {
+      access: {
+        create: hasPermissionFieldAccess("users.previousRole", "create"),
+        read: hasPermissionFieldAccess("users.previousRole", "read"),
+        update: hasPermissionFieldAccess("users.previousRole", "update"),
+      },
       admin: { position: "sidebar" },
       label: "Previous Role",
       name: "previousRole",
@@ -61,8 +66,8 @@ export const Users: CollectionConfig = {
     },
     {
       access: {
-        read: hasRoleFieldAccess("admin-user"),
-        update: hasRoleFieldAccess("admin-user"),
+        create: hasPermissionFieldAccess("users.roles", "create"),
+        update: hasPermissionFieldAccess("users.roles", "update"),
       },
       admin: { position: "sidebar" },
       label: "Roles",

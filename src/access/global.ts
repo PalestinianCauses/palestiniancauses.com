@@ -1,14 +1,23 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { Access, FieldAccess } from "payload";
 
 import {
   hasAnyPermission,
+  hasAnyRole,
   hasEveryPermissions,
   hasPermission,
   hasRole,
 } from "@/lib/permissions";
 import { Permission } from "@/payload-types";
+
+export const isSelf = function isSelf(field: string) {
+  const isSelfCB: Access = function isSelfCB({ req }) {
+    return { [field]: { equals: req.user?.id } };
+  };
+
+  return isSelfCB;
+};
 
 export const isAuthenticated: Access = function isAuthenticated({
   req: { user },
@@ -44,11 +53,51 @@ export const isAdminOrSystemUserField: FieldAccess =
     return isAdminField({ req }) || hasRole(req.user, "system-user");
   };
 
-export const hasPermissionAccess = (permission: Permission) => {
-  const hasPermissionAccessCB: Access = async function hasPermissionAccessCB({
+// Roles and Permissions Access
+export const hasRoleAccess = (role: string) => {
+  const hasRoleAccessCB: Access = function hasRoleAccessCB({ req }) {
+    return hasRole(req.user, role);
+  };
+
+  return hasRoleAccessCB;
+};
+
+export const hasAnyRoleAccess = (roles: string[]) => {
+  const hasAnyRoleAccessCB: Access = function hasAnyRoleAccessCB({ req }) {
+    return hasAnyRole(req.user, roles);
+  };
+
+  return hasAnyRoleAccessCB;
+};
+
+export const hasRoleFieldAccess = (role: string) => {
+  const hasRoleFieldAccessCB: FieldAccess = function hasRoleFieldAccessCB({
     req,
   }) {
-    if (!isAuthenticated({ req })) return false;
+    return hasRole(req.user, role);
+  };
+
+  return hasRoleFieldAccessCB;
+};
+
+export const hasAnyRoleFieldAccess = (roles: string[]) => {
+  const hasAnyRoleFieldAccessCB: FieldAccess =
+    function hasAnyRoleFieldAccessCB({ req }) {
+      return hasAnyRole(req.user, roles);
+    };
+
+  return hasAnyRoleFieldAccessCB;
+};
+
+export const hasPermissionAccess = (
+  permission: Omit<
+    Permission,
+    "id" | "name" | "description" | "createdAt" | "updatedAt"
+  >,
+) => {
+  const hasPermissionAccessCB: Access = function hasPermissionAccessCB({
+    req,
+  }) {
     return hasPermission(req.user, permission);
   };
 
@@ -58,7 +107,6 @@ export const hasPermissionAccess = (permission: Permission) => {
 export const hasAnyPermissionAccess = (permissions: Permission[]) => {
   const hasAnyPermissionAccessCB: Access =
     async function hasAnyPermissionAccessCB({ req }) {
-      if (!isAuthenticated({ req })) return false;
       return hasAnyPermission(req.user, permissions);
     };
 
@@ -68,27 +116,20 @@ export const hasAnyPermissionAccess = (permissions: Permission[]) => {
 export const hasEveryPermissionsAccess = (permissions: Permission[]) => {
   const hasEveryPermissionsAccessCB: Access =
     async function hasEveryPermissionsAccessCB({ req }) {
-      if (!isAuthenticated({ req })) return false;
       return hasEveryPermissions(req.user, permissions);
     };
 
   return hasEveryPermissionsAccessCB;
 };
 
-export const hasRoleAccess = (role: string) => {
-  const hasRoleAccessCB: Access = function hasRoleAccessCB({ req }) {
-    return isAuthenticated({ req }) && hasRole(req.user, role);
-  };
+export const hasPermissionFieldAccess = (
+  resource: Permission["resource"],
+  action: Permission["action"],
+) => {
+  const hasPermissionFieldAccessCB: FieldAccess =
+    function hasPermissionFieldAccessCB({ req }) {
+      return hasPermission(req.user, { resource, action });
+    };
 
-  return hasRoleAccessCB;
-};
-
-export const hasAnyRoleAccess = (roles: string[]) => {
-  const hasAnyRoleAccessCB: Access = function hasAnyRoleAccessCB({ req }) {
-    return (
-      isAuthenticated({ req }) && roles.some((role) => hasRole(req.user, role))
-    );
-  };
-
-  return hasAnyRoleAccessCB;
+  return hasPermissionFieldAccessCB;
 };
