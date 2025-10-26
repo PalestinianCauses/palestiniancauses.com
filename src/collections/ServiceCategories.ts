@@ -1,46 +1,28 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CollectionConfig } from "payload";
 
-import { isAdminField, isAdminOrSelf } from "@/access/global";
-import { hasRole } from "@/lib/permissions";
-import { isObject, isString } from "@/lib/types/guards";
+import { hasPermissionAccess, hasPermissionFieldAccess } from "@/access/global";
 
 export const ServiceCategories: CollectionConfig = {
   slug: "service-categories",
   access: {
-    create: async ({ req }) => {
-      const { user } = req;
-      if (!user) return false;
-
-      if (hasRole(user, "admin-user")) return true;
-
-      if (hasRole(user, "system-user")) {
-        const room = await req.payload.find({
-          collection: "rooms",
-          where: { user: { equals: user.id } },
-        });
-
-        if (room.docs.length === 0) return false;
-
-        return true;
-      }
-
-      return false;
-    },
-    read: async ({ req }) => {
-      if (
-        isObject(req.query.origin) &&
-        "equals" in req.query.origin &&
-        isString(req.query.origin.equals) &&
-        req.query.origin.equals === "website"
-      )
-        return true;
-
-      return isAdminOrSelf({ req });
-    },
-    update: isAdminOrSelf,
-    delete: isAdminOrSelf,
+    create: hasPermissionAccess({
+      resource: "service-categories",
+      action: "create",
+    }),
+    read: hasPermissionAccess({
+      resource: "service-categories",
+      action: "read",
+    }),
+    update: hasPermissionAccess({
+      resource: "service-categories",
+      action: "update",
+    }),
+    delete: hasPermissionAccess({
+      resource: "service-categories",
+      action: "delete",
+    }),
   },
   admin: {
     group: "Rooms Content",
@@ -159,9 +141,18 @@ export const ServiceCategories: CollectionConfig = {
             },
             {
               access: {
-                create: isAdminField,
-                read: isAdminField,
-                update: isAdminField,
+                create: hasPermissionFieldAccess(
+                  "service-categories.system",
+                  "create",
+                ),
+                read: hasPermissionFieldAccess(
+                  "service-categories.system",
+                  "read",
+                ),
+                update: hasPermissionFieldAccess(
+                  "service-categories.system",
+                  "update",
+                ),
               },
               admin: {
                 description:
@@ -173,6 +164,20 @@ export const ServiceCategories: CollectionConfig = {
               defaultValue: false,
             },
             {
+              access: {
+                create: hasPermissionFieldAccess(
+                  "service-categories.priority",
+                  "create",
+                ),
+                read: hasPermissionFieldAccess(
+                  "service-categories.priority",
+                  "read",
+                ),
+                update: hasPermissionFieldAccess(
+                  "service-categories.priority",
+                  "update",
+                ),
+              },
               admin: {
                 description:
                   "Display order for this category in the services list (lower numbers appear first).",
