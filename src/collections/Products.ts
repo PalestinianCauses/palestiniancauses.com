@@ -1,16 +1,16 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { CollectionConfig } from "payload";
 
-import { isAdmin } from "@/access/global";
+import { hasPermissionAccess } from "@/access/global";
 
 export const Products: CollectionConfig = {
   slug: "products",
   access: {
-    read: () => true,
-    create: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    read: hasPermissionAccess({ resource: "products", action: "read" }),
+    create: hasPermissionAccess({ resource: "products", action: "create" }),
+    update: hasPermissionAccess({ resource: "products", action: "update" }),
+    delete: hasPermissionAccess({ resource: "products", action: "delete" }),
   },
   admin: {
     group: "Database",
