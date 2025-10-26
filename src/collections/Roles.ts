@@ -1,17 +1,17 @@
-// REVIEWED
+// REVIEWED - 01
 
 import type { CollectionConfig } from "payload";
 
 // eslint-disable-next-line import/no-cycle
-import { isAdmin } from "@/access/global";
+import { hasPermissionAccess } from "@/access/global";
 
 export const Roles: CollectionConfig = {
   slug: "roles",
   access: {
-    create: isAdmin,
-    read: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    create: hasPermissionAccess({ resource: "roles", action: "create" }),
+    read: hasPermissionAccess({ resource: "roles", action: "read" }),
+    update: hasPermissionAccess({ resource: "roles", action: "update" }),
+    delete: hasPermissionAccess({ resource: "roles", action: "delete" }),
   },
   admin: {
     group: "Authorization",
