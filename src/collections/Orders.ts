@@ -1,16 +1,18 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { CollectionConfig } from "payload";
 
-import { isAdmin, isAuthenticated } from "@/access/global";
+import { hasPermissionAccess, isSelf } from "@/access/global";
 
 export const Orders: CollectionConfig = {
   slug: "orders",
   access: {
-    create: isAuthenticated,
-    read: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    create: hasPermissionAccess({ resource: "orders", action: "create" }),
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "orders", action: "read" })({ req }) ||
+      isSelf("user")({ req }),
+    update: hasPermissionAccess({ resource: "orders", action: "update" }),
+    delete: hasPermissionAccess({ resource: "orders", action: "delete" }),
   },
   admin: {
     group: "Database",
