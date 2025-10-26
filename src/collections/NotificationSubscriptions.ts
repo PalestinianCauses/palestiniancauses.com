@@ -1,16 +1,28 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CollectionConfig } from "payload";
 
-import { isAdmin } from "@/access/global";
+import { hasPermissionAccess } from "@/access/global";
 
 export const NotificationSubscriptions: CollectionConfig = {
   slug: "notification-subscriptions",
   access: {
-    read: () => true,
-    create: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    create: hasPermissionAccess({
+      resource: "notification-subscriptions",
+      action: "create",
+    }),
+    read: hasPermissionAccess({
+      resource: "notification-subscriptions",
+      action: "read",
+    }),
+    update: hasPermissionAccess({
+      resource: "notification-subscriptions",
+      action: "update",
+    }),
+    delete: hasPermissionAccess({
+      resource: "notification-subscriptions",
+      action: "delete",
+    }),
   },
   admin: {
     group: "Database",

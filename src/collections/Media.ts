@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 import type { CollectionConfig } from "payload";
 
 import { hasPermissionAccess } from "@/access/global";
