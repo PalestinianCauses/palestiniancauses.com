@@ -2,9 +2,8 @@
 
 import { CollectionConfig } from "payload";
 
-import { isAdminOrSelf } from "@/access/global";
-import { hasRole } from "@/lib/permissions";
-import { isObject, isString } from "@/lib/types/guards";
+import { hasPermissionAccess, isSelf } from "@/access/global";
+import { Room } from "@/payload-types";
 
 import { AboutField } from "./rooms/fields/about";
 import { EducationField } from "./rooms/fields/education";
@@ -25,15 +24,12 @@ export const Rooms: CollectionConfig = {
   slug: "rooms",
   access: {
     create: async ({ req }) => {
-      const { user } = req;
-      if (!user) return false;
-
-      if (hasRole(user, "admin-user")) return true;
-
-      if (hasRole(user, "system-user")) {
+      if (
+        hasPermissionAccess({ resource: "rooms", action: "create" })({ req })
+      ) {
         const room = await req.payload.find({
           collection: "rooms",
-          where: { user: { equals: user.id } },
+          where: { user: { equals: req.user?.id } },
         });
 
         if (room.docs.length === 0) return true;
@@ -43,19 +39,15 @@ export const Rooms: CollectionConfig = {
 
       return false;
     },
-    read: async ({ req }) => {
-      if (
-        isObject(req.query.origin) &&
-        "equals" in req.query.origin &&
-        isString(req.query.origin.equals) &&
-        req.query.origin.equals === "website"
-      )
-        return true;
-
-      return isAdminOrSelf({ req });
-    },
-    update: isAdminOrSelf,
-    delete: isAdminOrSelf,
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "rooms", action: "read" })({ req }) ||
+      isSelf("user")({ req }),
+    update: ({ req }) =>
+      hasPermissionAccess({ resource: "rooms", action: "update" })({ req }) ||
+      isSelf("user")({ req }),
+    delete: ({ req }) =>
+      hasPermissionAccess({ resource: "rooms", action: "delete" })({ req }) ||
+      isSelf("user")({ req }),
   },
   admin: {
     group: "Rooms Content",
@@ -227,7 +219,7 @@ export const Rooms: CollectionConfig = {
                   "Create bundled service offerings with pricing and comprehensive packages for clients.",
                 condition: (data) =>
                   data.status === "published" ||
-                  data.services?.list?.length > 0,
+                  data.services?.list?.length !== 0,
               },
               fields: [
                 {
@@ -343,19 +335,21 @@ export const Rooms: CollectionConfig = {
       ({ operation, req, data }) => {
         if (!req.user) return data;
 
-        // eslint-disable-next-line no-param-reassign
-        if (operation === "create") data.user = req.user.id;
+        if (operation === "create")
+          if (!data.user)
+            // eslint-disable-next-line no-param-reassign
+            data.user = req.user.id;
 
         return data;
       },
       ({ data }) => {
-        const links: { label: string; href: string }[] = [];
+        const links: NonNullable<Room["links"]> = [];
 
         if (
           data.about &&
           data.about.paragraphs &&
           Array.isArray(data.about.paragraphs) &&
-          data.about.paragraphs.length > 0
+          data.about.paragraphs.length !== 0
         )
           links.push({ label: "about", href: "#about" });
 
@@ -363,7 +357,7 @@ export const Rooms: CollectionConfig = {
           data.education &&
           data.education.list &&
           Array.isArray(data.education.list) &&
-          data.education.list.length > 0
+          data.education.list.length !== 0
         )
           links.push({ label: "education", href: "#education" });
 
@@ -371,7 +365,7 @@ export const Rooms: CollectionConfig = {
           data.experience &&
           data.experience.list &&
           Array.isArray(data.experience.list) &&
-          data.experience.list.length > 0
+          data.experience.list.length !== 0
         )
           links.push({ label: "experience", href: "#experience" });
 
@@ -379,18 +373,22 @@ export const Rooms: CollectionConfig = {
           data.qualification &&
           data.qualification.list &&
           Array.isArray(data.qualification.list) &&
-          data.qualification.list.length > 0
+          data.qualification.list.length !== 0
         )
           links.push({ label: "qualification", href: "#qualification" });
 
-        if (data.skills && Array.isArray(data.skills) && data.skills.length > 0)
+        if (
+          data.skills &&
+          Array.isArray(data.skills) &&
+          data.skills.length !== 0
+        )
           links.push({ label: "skills", href: "#skills" });
 
         if (
           data.services &&
           data.services.list &&
           Array.isArray(data.services.list) &&
-          data.services.list.length > 0
+          data.services.list.length !== 0
         )
           links.push({ label: "services", href: "#services" });
 
@@ -398,14 +396,14 @@ export const Rooms: CollectionConfig = {
           data.packages &&
           data.packages.list &&
           Array.isArray(data.packages.list) &&
-          data.packages.list.length > 0
+          data.packages.list.length !== 0
         )
           links.push({ label: "packages", href: "#packages" });
 
         if (
           data.contact &&
           Array.isArray(data.contact) &&
-          data.contact.length > 0
+          data.contact.length !== 0
         )
           links.push({ label: "contact", href: "#contact" });
 
@@ -415,6 +413,5 @@ export const Rooms: CollectionConfig = {
         return data;
       },
     ],
-    beforeRead: [],
   },
 };

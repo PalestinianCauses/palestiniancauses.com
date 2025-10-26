@@ -1,4 +1,4 @@
-// REVIEWED - 14
+// REVIEWED - 15
 
 import { CollectionConfig } from "payload";
 
@@ -90,6 +90,7 @@ export const DiaryEntries: CollectionConfig = {
     {
       access: {
         create: hasPermissionFieldAccess("diary-entries.author", "create"),
+        read: hasPermissionFieldAccess("diary-entries.author", "read"),
         update: hasPermissionFieldAccess("diary-entries.author", "update"),
       },
       admin: { position: "sidebar" },

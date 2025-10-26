@@ -1,4 +1,4 @@
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { CollectionConfig } from "payload";
 
@@ -12,9 +12,7 @@ export const Comments: CollectionConfig = {
   slug: "comments",
   access: {
     create: hasPermissionAccess({ resource: "comments", action: "create" }),
-    read: ({ req }) =>
-      hasPermissionAccess({ resource: "comments", action: "read" })({ req }) ||
-      isSelf("user")({ req }),
+    read: hasPermissionAccess({ resource: "comments", action: "read" }),
     update: ({ req }) =>
       hasPermissionAccess({ resource: "comments", action: "update" })({
         req,
