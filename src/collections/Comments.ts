@@ -1,4 +1,4 @@
-// REVIEWED - 12
+// REVIEWED - 13
 
 import { CollectionConfig } from "payload";
 
@@ -7,12 +7,16 @@ import {
   hasPermissionFieldAccess,
   isSelf,
 } from "@/access/global";
+import { hasPermission } from "@/lib/permissions";
+import { Comment, User } from "@/payload-types";
 
 export const Comments: CollectionConfig = {
   slug: "comments",
   access: {
     create: hasPermissionAccess({ resource: "comments", action: "create" }),
-    read: hasPermissionAccess({ resource: "comments", action: "read" }),
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "comments", action: "read" })({ req }) ||
+      isSelf("user")({ req }),
     update: ({ req }) =>
       hasPermissionAccess({ resource: "comments", action: "update" })({
         req,
@@ -23,16 +27,14 @@ export const Comments: CollectionConfig = {
       }) || isSelf("user")({ req }),
   },
   admin: {
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "comments.admin",
+        action: "read",
+      }),
     group: "Content",
     useAsTitle: "id",
-    defaultColumns: [
-      "id",
-      "user",
-      "content",
-      "status",
-      "votesScore",
-      "createdAt",
-    ],
+    defaultColumns: ["id", "user", "content"],
     enableRichTextRelationship: false,
   },
   fields: [
@@ -48,12 +50,11 @@ export const Comments: CollectionConfig = {
       index: true,
     },
     {
-      access: {
-        create: hasPermissionFieldAccess("comments.parent", "create"),
-        read: hasPermissionFieldAccess("comments.parent", "read"),
-        update: hasPermissionFieldAccess("comments.parent", "update"),
+      access: { update: hasPermissionFieldAccess("comments.parent", "update") },
+      admin: {
+        condition: (_, siblingData) => Boolean((siblingData as Comment).on),
+        position: "sidebar",
       },
-      admin: { position: "sidebar" },
       label: "In Reply To",
       name: "parent",
       type: "relationship",
@@ -61,11 +62,13 @@ export const Comments: CollectionConfig = {
       hasMany: false,
       required: false,
       index: true,
+      filterOptions: ({ siblingData }) => ({
+        on: { equals: (siblingData as Comment).on },
+      }),
     },
     {
       access: {
         create: hasPermissionFieldAccess("comments.user", "create"),
-        read: hasPermissionFieldAccess("comments.user", "read"),
         update: hasPermissionFieldAccess("comments.user", "update"),
       },
       admin: { position: "sidebar" },

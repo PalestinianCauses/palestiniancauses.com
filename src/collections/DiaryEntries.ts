@@ -1,4 +1,4 @@
-// REVIEWED - 15
+// REVIEWED - 16
 
 import { CollectionConfig } from "payload";
 
@@ -8,6 +8,7 @@ import {
   isSelf,
 } from "@/access/global";
 import { hasPermission } from "@/lib/permissions";
+import { User } from "@/payload-types";
 
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
@@ -30,11 +31,15 @@ export const DiaryEntries: CollectionConfig = {
       }) || isSelf("author")({ req }),
   },
   admin: {
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "diary-entries.admin",
+        action: "read",
+      }),
     group: "Content",
     defaultColumns: ["id", "title", "date", "status", "author", "createdAt"],
     useAsTitle: "title",
   },
-  labels: { singular: "Diary Entry", plural: "Diary Entries" },
   fields: [
     {
       label: "Title",
@@ -90,7 +95,6 @@ export const DiaryEntries: CollectionConfig = {
     {
       access: {
         create: hasPermissionFieldAccess("diary-entries.author", "create"),
-        read: hasPermissionFieldAccess("diary-entries.author", "read"),
         update: hasPermissionFieldAccess("diary-entries.author", "update"),
       },
       admin: { position: "sidebar" },

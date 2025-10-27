@@ -3,7 +3,8 @@
 import { CollectionConfig } from "payload";
 
 import { hasPermissionAccess, isSelf } from "@/access/global";
-import { Room } from "@/payload-types";
+import { hasPermission } from "@/lib/permissions";
+import { Room, User } from "@/payload-types";
 
 import { AboutField } from "./rooms/fields/about";
 import { EducationField } from "./rooms/fields/education";
@@ -50,6 +51,11 @@ export const Rooms: CollectionConfig = {
       isSelf("user")({ req }),
   },
   admin: {
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "rooms.admin",
+        action: "read",
+      }),
     group: "Rooms Content",
     defaultColumns: ["id", "name", "slug", "status", "createdAt"],
     useAsTitle: "name",

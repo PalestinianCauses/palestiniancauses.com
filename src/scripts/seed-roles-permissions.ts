@@ -1,10 +1,16 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
 
 const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
   // Blogs management permissions
+  {
+    name: "blogs.admin",
+    resource: "blogs.admin",
+    action: "read",
+    description: "View blogs in admin dashboard",
+  },
   {
     name: "blogs.create",
     resource: "blogs",
@@ -35,8 +41,39 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     action: "publish",
     description: "Publish blog posts",
   },
+  // Blogs field-level permissions
+  {
+    name: "blogs.author.create",
+    resource: "blogs.author",
+    action: "create",
+    description: "Create blog author",
+  },
+  {
+    name: "blogs.author.update",
+    resource: "blogs.author",
+    action: "update",
+    description: "Update blog author",
+  },
+  {
+    name: "blogs.status.create",
+    resource: "blogs.status",
+    action: "create",
+    description: "Create blog status",
+  },
+  {
+    name: "blogs.status.update",
+    resource: "blogs.status",
+    action: "update",
+    description: "Update blog status",
+  },
 
   // Comments management permissions
+  {
+    name: "comments.admin",
+    resource: "comments.admin",
+    action: "read",
+    description: "View comments in admin dashboard",
+  },
   {
     name: "comments.create",
     resource: "comments",
@@ -88,6 +125,12 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     description: "Update comment parent",
   },
   {
+    name: "comments.status.create",
+    resource: "comments.status",
+    action: "create",
+    description: "Create comment status",
+  },
+  {
     name: "comments.status.read",
     resource: "comments.status",
     action: "read",
@@ -100,10 +143,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     description: "Update comment status",
   },
   {
-    name: "comments.user.read",
+    name: "comments.user.create",
     resource: "comments.user",
-    action: "read",
-    description: "View comment author",
+    action: "create",
+    description: "Create comment author",
   },
   {
     name: "comments.user.update",
@@ -113,6 +156,12 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
   },
 
   // Diary entries management permissions
+  {
+    name: "diary-entries.admin",
+    resource: "diary-entries.admin",
+    action: "read",
+    description: "View diary entries in admin dashboard",
+  },
   {
     name: "diary-entries.create",
     resource: "diary-entries",
@@ -137,13 +186,19 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     action: "delete",
     description: "Delete diary entries",
   },
+  {
+    name: "diary-entries.publish",
+    resource: "diary-entries",
+    action: "publish",
+    description: "Publish diary entries",
+  },
 
   // Diary entries field-level permissions
   {
-    name: "diary-entries.author.read",
+    name: "diary-entries.author.create",
     resource: "diary-entries.author",
-    action: "read",
-    description: "View diary entry author",
+    action: "create",
+    description: "Create diary entry author",
   },
   {
     name: "diary-entries.author.update",
@@ -164,10 +219,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     description: "Update diary entry authenticity",
   },
   {
-    name: "diary-entries.status.read",
+    name: "diary-entries.status.create",
     resource: "diary-entries.status",
-    action: "read",
-    description: "View diary entry status",
+    action: "create",
+    description: "Create diary entry status",
   },
   {
     name: "diary-entries.status.update",
@@ -175,14 +230,14 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     action: "update",
     description: "Update diary entry status",
   },
-  {
-    name: "diary-entries.publish",
-    resource: "diary-entries",
-    action: "publish",
-    description: "Publish diary entries",
-  },
 
   // Media management permissions
+  {
+    name: "media.admin",
+    resource: "media.admin",
+    action: "read",
+    description: "View media in admin dashboard",
+  },
   {
     name: "media.create",
     resource: "media",
@@ -210,6 +265,12 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Notification subscriptions management permissions
   {
+    name: "notification-subscriptions.admin",
+    resource: "notification-subscriptions.admin",
+    action: "read",
+    description: "View notification subscriptions in admin dashboard",
+  },
+  {
     name: "notification-subscriptions.create",
     resource: "notification-subscriptions",
     action: "create",
@@ -235,6 +296,12 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
   },
 
   // Orders management permissions
+  {
+    name: "orders.admin",
+    resource: "orders.admin",
+    action: "read",
+    description: "View orders in admin dashboard",
+  },
   {
     name: "orders.create",
     resource: "orders",
@@ -262,6 +329,12 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Permissions management permissions
   {
+    name: "permissions.admin",
+    resource: "permissions.admin",
+    action: "read",
+    description: "View permissions in admin dashboard",
+  },
+  {
     name: "permissions.create",
     resource: "permissions",
     action: "create",
@@ -287,6 +360,12 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
   },
 
   // Products management permissions
+  {
+    name: "products.admin",
+    resource: "products.admin",
+    action: "read",
+    description: "View products in admin dashboard",
+  },
   {
     name: "products.create",
     resource: "products",
@@ -314,6 +393,12 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Roles management permissions
   {
+    name: "roles.admin",
+    resource: "roles.admin",
+    action: "read",
+    description: "View roles in admin dashboard",
+  },
+  {
     name: "roles.create",
     resource: "roles",
     action: "create",
@@ -339,6 +424,12 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
   },
 
   // Rooms management permissions
+  {
+    name: "rooms.admin",
+    resource: "rooms.admin",
+    action: "read",
+    description: "View rooms in admin dashboard",
+  },
   {
     name: "rooms.create",
     resource: "rooms",
@@ -366,6 +457,12 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Room contact management permissions
   {
+    name: "room-contact.admin",
+    resource: "room-contact.admin",
+    action: "read",
+    description: "View room contact in admin dashboard",
+  },
+  {
     name: "room-contact.create",
     resource: "room-contact",
     action: "create",
@@ -391,6 +488,12 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
   },
 
   // Room packages management permissions
+  {
+    name: "room-packages.admin",
+    resource: "room-packages.admin",
+    action: "read",
+    description: "View room packages in admin dashboard",
+  },
   {
     name: "room-packages.create",
     resource: "room-packages",
@@ -418,6 +521,12 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Room services management permissions
   {
+    name: "room-services.admin",
+    resource: "room-services.admin",
+    action: "read",
+    description: "View room services in admin dashboard",
+  },
+  {
     name: "room-services.create",
     resource: "room-services",
     action: "create",
@@ -444,6 +553,12 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Service categories management permissions
   {
+    name: "service-categories.admin",
+    resource: "service-categories.admin",
+    action: "read",
+    description: "View service categories in admin dashboard",
+  },
+  {
     name: "service-categories.create",
     resource: "service-categories",
     action: "create",
@@ -468,7 +583,51 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     description: "Delete service categories",
   },
 
+  // Service categories field-level permissions
+  {
+    name: "service-categories.system.create",
+    resource: "service-categories.system",
+    action: "create",
+    description: "Create service categories system",
+  },
+  {
+    name: "service-categories.system.read",
+    resource: "service-categories.system",
+    action: "read",
+    description: "View service categories system",
+  },
+  {
+    name: "service-categories.system.update",
+    resource: "service-categories.system",
+    action: "update",
+    description: "Update service categories system",
+  },
+  {
+    name: "service-categories.priority.create",
+    resource: "service-categories.priority",
+    action: "create",
+    description: "Create service categories priority",
+  },
+  {
+    name: "service-categories.priority.read",
+    resource: "service-categories.priority",
+    action: "read",
+    description: "View service categories priority",
+  },
+  {
+    name: "service-categories.priority.update",
+    resource: "service-categories.priority",
+    action: "update",
+    description: "Update service categories priority",
+  },
+
   // Users management permissions
+  {
+    name: "users.admin",
+    resource: "users.admin",
+    action: "read",
+    description: "View users in admin dashboard",
+  },
   {
     name: "users.create",
     resource: "users",
@@ -535,11 +694,17 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
 const permissionsRoles: Record<string, string[]> = {
   "admin-user": [
+    "blogs.admin",
     "blogs.create",
     "blogs.read",
     "blogs.update",
     "blogs.delete",
     "blogs.publish",
+    "blogs.author.create",
+    "blogs.author.update",
+    "blogs.status.create",
+    "blogs.status.update",
+    "comments.admin",
     "comments.create",
     "comments.read",
     "comments.update",
@@ -548,65 +713,85 @@ const permissionsRoles: Record<string, string[]> = {
     "comments.on.update",
     "comments.parent.read",
     "comments.parent.update",
+    "comments.status.create",
     "comments.status.read",
     "comments.status.update",
-    "comments.user.read",
+    "comments.user.create",
     "comments.user.update",
+    "diary-entries.admin",
     "diary-entries.create",
     "diary-entries.read",
     "diary-entries.update",
     "diary-entries.delete",
     "diary-entries.publish",
-    "diary-entries.author.read",
+    "diary-entries.author.create",
     "diary-entries.author.update",
     "diary-entries.isAuthentic.read",
     "diary-entries.isAuthentic.update",
-    "diary-entries.status.read",
+    "diary-entries.status.create",
     "diary-entries.status.update",
+    "media.admin",
     "media.create",
     "media.read",
     "media.update",
     "media.delete",
+    "notification-subscriptions.admin",
     "notification-subscriptions.create",
     "notification-subscriptions.read",
     "notification-subscriptions.update",
     "notification-subscriptions.delete",
+    "orders.admin",
     "orders.create",
     "orders.read",
     "orders.update",
     "orders.delete",
+    "permissions.admin",
     "permissions.create",
     "permissions.read",
     "permissions.update",
     "permissions.delete",
+    "products.admin",
     "products.create",
     "products.read",
     "products.update",
     "products.delete",
+    "roles.admin",
     "roles.create",
     "roles.read",
     "roles.update",
     "roles.delete",
+    "rooms.admin",
     "rooms.create",
     "rooms.read",
     "rooms.update",
     "rooms.delete",
+    "room-contact.admin",
     "room-contact.create",
     "room-contact.read",
     "room-contact.update",
     "room-contact.delete",
+    "room-packages.admin",
     "room-packages.create",
     "room-packages.read",
     "room-packages.update",
     "room-packages.delete",
+    "room-services.admin",
     "room-services.create",
     "room-services.read",
     "room-services.update",
     "room-services.delete",
+    "service-categories.admin",
     "service-categories.create",
     "service-categories.read",
     "service-categories.update",
     "service-categories.delete",
+    "service-categories.system.create",
+    "service-categories.system.read",
+    "service-categories.system.update",
+    "service-categories.priority.create",
+    "service-categories.priority.read",
+    "service-categories.priority.update",
+    "users.admin",
     "users.create",
     "users.read",
     "users.update",
@@ -619,31 +804,60 @@ const permissionsRoles: Record<string, string[]> = {
     "users.roles.update",
   ],
   "system-user": [
+    "blogs.admin",
     "blogs.create",
     "blogs.read",
     "blogs.update",
     "blogs.delete",
     "blogs.publish",
+    "blogs.author.create",
+    "blogs.author.update",
+    "blogs.status.create",
+    "blogs.status.update",
+    "comments.admin",
     "comments.create",
+    "comments.read",
+    "comments.update",
+    "comments.delete",
+    "diary-entries.admin",
     "diary-entries.create",
     "diary-entries.read",
     "diary-entries.update",
     "diary-entries.delete",
     "diary-entries.publish",
+    "diary-entries.author.create",
+    "diary-entries.status.create",
+    "diary-entries.status.update",
+    "permissions.read",
+    "roles.read",
+    "rooms.admin",
     "rooms.create",
+    "room-contact.admin",
     "room-contact.create",
+    "room-packages.admin",
     "room-packages.create",
+    "room-services.admin",
     "room-services.create",
+    "service-categories.admin",
     "service-categories.create",
   ],
   "author-user": [
+    "blogs.admin",
     "blogs.create",
     "blogs.publish",
     "comments.create",
+    "diary-entries.admin",
     "diary-entries.create",
     "diary-entries.publish",
+    "permissions.read",
+    "roles.read",
   ],
-  "website-user": ["comments.create", "diary-entries.create"],
+  "website-user": [
+    "comments.create",
+    "diary-entries.create",
+    "permissions.read",
+    "roles.read",
+  ],
 };
 
 const roles: Omit<Role, "id" | "updatedAt" | "createdAt">[] = [

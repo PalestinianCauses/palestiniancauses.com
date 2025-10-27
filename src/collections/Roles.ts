@@ -1,9 +1,10 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import type { CollectionConfig } from "payload";
 
-// eslint-disable-next-line import/no-cycle
 import { hasPermissionAccess } from "@/access/global";
+import { hasPermission } from "@/lib/permissions";
+import { User } from "@/payload-types";
 
 export const Roles: CollectionConfig = {
   slug: "roles",
@@ -14,6 +15,11 @@ export const Roles: CollectionConfig = {
     delete: hasPermissionAccess({ resource: "roles", action: "delete" }),
   },
   admin: {
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "roles.admin",
+        action: "read",
+      }),
     group: "Authorization",
     defaultColumns: ["name", "permissions", "priority", "createdAt"],
     useAsTitle: "name",

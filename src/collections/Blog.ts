@@ -1,28 +1,52 @@
-// REVIEWED - 04
+// REVIEWED - 05
 import { CollectionConfig } from "payload";
 
-import { hasPermissionAccess } from "@/access/global";
+import {
+  hasPermissionAccess,
+  hasPermissionFieldAccess,
+  isSelf,
+} from "@/access/global";
+import { hasPermission } from "@/lib/permissions";
+import { User } from "@/payload-types";
 
 export const Blog: CollectionConfig = {
   slug: "blogs",
   access: {
-    read: hasPermissionAccess({ resource: "blogs", action: "read" }),
     create: hasPermissionAccess({ resource: "blogs", action: "create" }),
-    update: hasPermissionAccess({ resource: "blogs", action: "update" }),
-    delete: hasPermissionAccess({ resource: "blogs", action: "delete" }),
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "blogs", action: "read" })({ req }) ||
+      isSelf("author")({ req }),
+    update: ({ req }) =>
+      hasPermissionAccess({ resource: "blogs", action: "update" })({ req }) ||
+      isSelf("author")({ req }),
+    delete: ({ req }) =>
+      hasPermissionAccess({ resource: "blogs", action: "delete" })({ req }) ||
+      isSelf("author")({ req }),
   },
   admin: {
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "blogs.admin",
+        action: "read",
+      }),
     group: "Content",
     defaultColumns: ["title", "author", "status", "publishedAt", "createdAt"],
     useAsTitle: "title",
-    preview: (doc) => {
-      if (doc.slug)
-        return [process.env.NEXT_PUBLIC_URL! + doc.slug].join("/blogs/");
-      return null;
-    },
   },
   versions: { drafts: true },
   fields: [
+    {
+      access: {
+        create: hasPermissionFieldAccess("blogs.author", "create"),
+        update: hasPermissionFieldAccess("blogs.author", "update"),
+      },
+      admin: { position: "sidebar" },
+      label: "Author",
+      name: "author",
+      type: "relationship",
+      relationTo: "users",
+      required: true,
+    },
     {
       label: "Title",
       name: "title",
@@ -53,5 +77,33 @@ export const Blog: CollectionConfig = {
       index: true,
       required: true,
     },
+    {
+      access: {
+        create: hasPermissionFieldAccess("blogs.status", "create"),
+        update: hasPermissionFieldAccess("blogs.status", "update"),
+      },
+      admin: { position: "sidebar" },
+      label: "Status",
+      name: "status",
+      type: "text",
+      defaultValue: "pending",
+      required: true,
+    },
   ],
+  hooks: {
+    beforeChange: [
+      ({ data, req }) => {
+        if (!data.author)
+          if (req.user)
+            // eslint-disable-next-line no-param-reassign
+            data.author = req.user.id;
+
+        if (hasPermission(req.user, { resource: "blogs", action: "publish" }))
+          // eslint-disable-next-line no-param-reassign
+          data.status = "approved";
+
+        return data;
+      },
+    ],
+  },
 };

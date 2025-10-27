@@ -1,4 +1,4 @@
-// REVIEWED - 16
+// REVIEWED - 17
 import type { CollectionConfig } from "payload";
 
 import {
@@ -6,6 +6,12 @@ import {
   hasPermissionFieldAccess,
   isSelf,
 } from "@/access/global";
+import { hasPermission } from "@/lib/permissions";
+import { User } from "@/payload-types";
+
+/*
+when managing access collections we care about accessing content when users are browsing /dashboard not our entire website.
+*/
 
 export const Users: CollectionConfig = {
   slug: "users",
@@ -22,14 +28,16 @@ export const Users: CollectionConfig = {
       isSelf("id")({ req }),
   },
   admin: {
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "users.admin",
+        action: "read",
+      }),
     group: "Database",
-    defaultColumns: ["id", "email", "firstName", "roles", "createdAt"],
+    defaultColumns: ["id", "email", "firstName", "createdAt"],
     useAsTitle: "email",
   },
-  labels: { singular: "User", plural: "Users" },
-  auth: {
-    tokenExpiration: 24 * 60 * 60,
-  },
+  auth: { tokenExpiration: 24 * 60 * 60 },
   fields: [
     {
       label: "Email",
@@ -67,6 +75,7 @@ export const Users: CollectionConfig = {
     {
       access: {
         create: hasPermissionFieldAccess("users.roles", "create"),
+        read: hasPermissionFieldAccess("users.roles", "read"),
         update: hasPermissionFieldAccess("users.roles", "update"),
       },
       admin: { position: "sidebar" },

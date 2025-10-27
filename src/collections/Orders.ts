@@ -1,8 +1,10 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { CollectionConfig } from "payload";
 
 import { hasPermissionAccess, isSelf } from "@/access/global";
+import { hasPermission } from "@/lib/permissions";
+import { User } from "@/payload-types";
 
 export const Orders: CollectionConfig = {
   slug: "orders",
@@ -15,11 +17,15 @@ export const Orders: CollectionConfig = {
     delete: hasPermissionAccess({ resource: "orders", action: "delete" }),
   },
   admin: {
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "orders.admin",
+        action: "read",
+      }),
     group: "Database",
     defaultColumns: ["id", "user", "type", "total", "status", "createdAt"],
     useAsTitle: "id",
   },
-  labels: { singular: "Order", plural: "Orders" },
   fields: [
     {
       admin: { readOnly: true },
