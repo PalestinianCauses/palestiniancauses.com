@@ -1,37 +1,37 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { CollectionConfig } from "payload";
 
-import { isAdminOrSelf } from "@/access/global";
-import { hasAnyRole } from "@/lib/permissions";
-import { isObject, isString } from "@/lib/types/guards";
+import { hasPermissionAccess, isSelf } from "@/access/global";
+import { hasPermission } from "@/lib/permissions";
+import { User } from "@/payload-types";
 
 export const RoomsPackages: CollectionConfig = {
   slug: "rooms-packages",
   access: {
-    create: async ({ req }) => {
-      const { user } = req;
-      if (!user) return false;
-
-      if (hasAnyRole(user, ["admin-user", "system-user"])) return true;
-
-      return false;
-    },
-    read: async ({ req }) => {
-      if (
-        isObject(req.query.origin) &&
-        "equals" in req.query.origin &&
-        isString(req.query.origin.equals) &&
-        req.query.origin.equals === "website"
-      )
-        return true;
-
-      return isAdminOrSelf({ req });
-    },
-    update: isAdminOrSelf,
-    delete: isAdminOrSelf,
+    create: hasPermissionAccess({
+      resource: "room-packages",
+      action: "create",
+    }),
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "room-packages", action: "read" })({
+        req,
+      }) || isSelf("user")({ req }),
+    update: ({ req }) =>
+      hasPermissionAccess({ resource: "room-packages", action: "update" })({
+        req,
+      }) || isSelf("user")({ req }),
+    delete: ({ req }) =>
+      hasPermissionAccess({ resource: "room-packages", action: "delete" })({
+        req,
+      }) || isSelf("user")({ req }),
   },
   admin: {
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "room-services.admin",
+        action: "read",
+      }),
     group: "Rooms Content",
     defaultColumns: [
       "id",
@@ -281,9 +281,10 @@ export const RoomsPackages: CollectionConfig = {
     beforeChange: [
       async ({ operation, data, req }) => {
         if (operation === "create")
-          if (req.user)
-            // eslint-disable-next-line no-param-reassign
-            data.user = req.user.id;
+          if (!data.user)
+            if (req.user)
+              // eslint-disable-next-line no-param-reassign
+              data.user = req.user.id;
 
         return data;
       },
