@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 14
+// REVIEWED - 15
 
 import { headers } from "next/headers";
 
@@ -26,6 +26,13 @@ export const getAuthentication = async function getAuthentication() {
   // Get user with populated roles and permissions
   const userResponse = await actionSafeExecute(
     payload.findByID({
+      ...(response.data.user
+        ? {
+            req: { user: response.data.user },
+            user: response.data.user,
+            overrideAccess: false,
+          }
+        : {}),
       collection: "users",
       id: response.data.user.id,
       depth: 2, // Populate roles and their permissions

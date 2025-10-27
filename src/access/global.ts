@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { Access, FieldAccess } from "payload";
 
@@ -18,40 +18,6 @@ export const isSelf = function isSelf(field: string) {
 
   return isSelfCB;
 };
-
-export const isAuthenticated: Access = function isAuthenticated({
-  req: { user },
-}) {
-  return Boolean(user);
-};
-
-export const isAdmin: Access = function isAdmin({ req }) {
-  return isAuthenticated({ req }) && hasRole(req.user, "admin-user");
-};
-
-export const isAdminOrSystemUser: Access = function isAdminOrSystemUser({
-  req,
-}) {
-  return isAdmin({ req }) || hasRole(req.user, "system-user");
-};
-
-export const isAdminOrSelf: Access = function isAdminOrSelf({ req }) {
-  return isAdmin({ req }) || { user: { equals: req.user?.id } };
-};
-
-export const isAdminOrSystemUserOrSelf: Access =
-  function isAdminOrSystemUserOrSelf({ req }) {
-    return isAdminOrSystemUser({ req }) || { user: { equals: req.user?.id } };
-  };
-
-export const isAdminField: FieldAccess = function isAdminField({ req }) {
-  return isAuthenticated({ req }) && hasRole(req.user, "admin-user");
-};
-
-export const isAdminOrSystemUserField: FieldAccess =
-  function isAdminOrSystemUserField({ req }) {
-    return isAdminField({ req }) || hasRole(req.user, "system-user");
-  };
 
 // Roles and Permissions Access
 export const hasRoleAccess = (role: string) => {
