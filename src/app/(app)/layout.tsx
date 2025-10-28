@@ -1,4 +1,4 @@
-// REVIEWED - 30
+// REVIEWED - 31
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Analytics } from "@vercel/analytics/next";
@@ -18,9 +18,12 @@ import {
 
 export const metadata: Metadata = {
   applicationName: "PalestinianCauses",
-  title: { template: "%s | PalestinianCauses", default: "PalestinianCauses" },
+  title: {
+    template: "%s | PalestinianCauses Digital Agency",
+    default: "PalestinianCauses Digital Agency",
+  },
   description:
-    'PalestinianCauses LLC is a mission-driven creative and digital platform dedicated to illuminating the Gazan experience, with an urgent focus on amplifying authentic voices and realities from Gaza during the current crisis. Through compelling storytelling, evocative artwork (as we showcased in our project "A Human But From Gaza"), and innovative digital solutions developed by our dedicated team, we strive to build global solidarity and foster deep empathy.',
+    "PalestinianCauses is a world-class digital services agency powered by Gazan talent, delivering bespoke web applications, strategic content creation, expert translation services, and comprehensive digital marketing solutions. We forge outstanding, globally competitive digital solutions while demonstrating how resilience transforms into innovation and excellence.",
 
   keywords: [
     "palestine",
@@ -29,23 +32,23 @@ export const metadata: Metadata = {
     "gazans",
     "palestinian causes",
     "palestiniancauses",
-    "a human but from gaza",
-    "humans but from gaza",
-    "creative",
-    "digital",
-    "platform",
-    "dedicated",
-    "authentic",
-    "crisis",
-    "storytelling",
-    "artwork",
-    "innovative",
-    "solutions",
-    "global",
-    "solidarity",
-    "empathy",
+    "gazan talent",
+    "digital agency",
+    "world-class solutions",
+    "professional services",
+    "creative excellence",
+    "resilience innovation",
+    "global competitive",
+
+    "web development",
+    "content creation",
+    "translation services",
+    "digital marketing",
+
     "shawqicauses",
     "shawqi",
+    "a human but from gaza",
+    "humans but from gaza",
   ],
 
   robots: { index: true, follow: true },
@@ -87,14 +90,14 @@ export const metadata: Metadata = {
   formatDetection: { telephone: true },
 
   openGraph: {
-    siteName: "PalestinianCauses",
+    siteName: "PalestinianCauses Digital Agency",
     url: "https://palestiniancauses.com",
     images: [
       {
         url: "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXfJafovpKAixQkOwjFU9IWn4ZtucV2dL16J7T",
         width: 1200,
         height: 630,
-        alt: "PalestinianCauses Website Thumbnail",
+        alt: "PalestinianCauses Digital Agency - World-Class Solutions from Gazan Talent",
       },
     ],
   },
