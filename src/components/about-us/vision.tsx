@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { Container } from "../globals/container";
 import {
@@ -17,26 +17,33 @@ export const Vision = function Vision() {
         Our Vision: A World Where Gazan Innovation Leads Global Progress
       </SectionHeading>
       <Paragraph className="mb-8">
-        We envision PalestinianCauses as the premier digital agency that clients
-        worldwide choose not just for exceptional results, but for the
-        meaningful impact their partnership creates. Our vision extends beyond
-        immediate support to establish PalestinianCauses as a self-sustaining
-        entity rooted in Gazan talent, where every successful project
-        demonstrates Gazan excellence and empowers community development through
-        outstanding creative work.
+        We aspire for PalestinianCauses to be the agency clients everywhere
+        choose, not just for excellent outcomes. Still, for the meaningful
+        change, their partnership helps effect.
+      </Paragraph>
+      <Paragraph className="mb-8">
+        Going beyond just backing us in the present, this vision is one of
+        PalestinianCauses being self-sustaining, founded on Gazan talent, where
+        every successful project is another telling, distinguished example of
+        Gazan talent and success; every exceptional creative work is another
+        project driving community development.
+      </Paragraph>
+      <Paragraph className="mb-8">
+        We see PalestinianCauses becoming a major, worldwide brand: Gazan
+        resilience, resourcefulness, and skill aid in reshaping how the
+        implications of digital service work are material to economic
+        empowerment. The effect of a direct, self-sustaining community
+        development on our clients can not be overstated.
       </Paragraph>
       <Paragraph>
-        Our ultimate vision is a world where Gazan resilience, creativity, and
-        expertise are globally recognized and celebrated, powering impactful
-        digital services that contribute directly to economic empowerment. This
-        sustainable model will drive community development, cultivate long-term
-        opportunities leveraging Gazan skills, and enable Gazans to rebuild with
-        dignity, achieve self-sufficiency, thrive in freedom, shape their
-        prosperous futures, realize their right to self-determination, and
-        contribute significantly to community renewal and lasting justice—all
-        while delivering world-class digital solutions to clients across the
-        globe and demonstrating how adversity transforms into innovation and
-        excellence.
+        It will all foster the development of long-term aspects and pathways for
+        Gazan opportunity, allowing Gazans to get back to reconstruction with
+        dignity, to perpetuate themselves, to thrive in freedom and safety, to
+        orient their globally diversified futures, to flourish in their moral
+        and human right to self-determination, and, above all, Gazan community
+        revival and enduring justice, while continually creating and delivering
+        outstanding world service to the globe, exhibiting Gazan reality that
+        hardship can solve, evolve, and produce.
       </Paragraph>
     </Container>
   );
