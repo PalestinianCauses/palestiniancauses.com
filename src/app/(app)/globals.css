@@ -1,4 +1,4 @@
-/* REVIEWED - 15 */
+/* REVIEWED - 16 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -201,11 +201,11 @@
     @apply gap-6 lg:gap-12 xl:gap-24;
   }
 
-  .frame-highlight-primary-foreground {
+  .section-heading-highlight-primary-foreground {
     @apply before:!inset-y-[initial] before:-inset-x-2.5 before:!bottom-0 before:h-1/2 before:bg-primary/15 before:ring-primary-foreground;
   }
 
-  .frame-highlight-primary {
+  .section-heading-highlight-primary {
     @apply before:!inset-y-[initial] before:-inset-x-2.5 before:!bottom-0 before:h-1/2 before:bg-primary-foreground/15 before:ring-primary;
   }
 }

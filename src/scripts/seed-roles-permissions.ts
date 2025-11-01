@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
@@ -840,6 +840,7 @@ const permissionsRoles: Record<string, string[]> = {
     "room-services.create",
     "service-categories.admin",
     "service-categories.create",
+    "users.roles.read",
   ],
   "author-user": [
     "blogs.admin",
@@ -851,12 +852,14 @@ const permissionsRoles: Record<string, string[]> = {
     "diary-entries.publish",
     "permissions.read",
     "roles.read",
+    "users.roles.read",
   ],
   "website-user": [
     "comments.create",
     "diary-entries.create",
     "permissions.read",
     "roles.read",
+    "users.roles.read",
   ],
 };
 

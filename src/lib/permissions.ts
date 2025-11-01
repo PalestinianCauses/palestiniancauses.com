@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { Permission, Role, User } from "@/payload-types";
 
@@ -25,10 +25,13 @@ export const hasConditions = function hasConditions(
   return true;
 };
 
-export const hasPermission = async function hasPermission(
+export const hasPermission = function hasPermission(
   user: User | null,
-  permission: Permission,
-): Promise<boolean> {
+  permission: Omit<
+    Permission,
+    "id" | "name" | "description" | "createdAt" | "updatedAt"
+  >,
+): boolean {
   if (!user || !user.roles || user.roles.length === 0) return false;
 
   // eslint-disable-next-line no-restricted-syntax

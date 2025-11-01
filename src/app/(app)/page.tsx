@@ -1,4 +1,4 @@
-// REVIEWED - 13
+// REVIEWED - 14
 import { Metadata } from "next";
 
 import { Loading } from "@/components/globals/loading";
@@ -7,9 +7,7 @@ import { SafeHydrate } from "@/components/globals/safe-hydrate";
 import { RedirectProvider } from "./providers";
 
 export const metadata: Metadata = {
-  title: "Home | PalestinianCauses Digital Agency",
-  description:
-    "PalestinianCauses is a world-class digital services agency powered by Gazan talent, delivering bespoke web applications, strategic content creation, expert translation services, and comprehensive digital marketing solutions. We forge outstanding, globally competitive digital solutions while demonstrating how resilience transforms into innovation and excellence.",
+  title: "Home",
 };
 
 const HomePage = function HomePage() {

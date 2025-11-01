@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { Metadata } from "next";
 
@@ -57,9 +57,7 @@ const sequence = [
 ];
 
 export const metadata: Metadata = {
-  title: "About Us - PalestinianCauses Digital Agency",
-  description:
-    "Meet the creators behind PalestinianCauses Digital Agency - a collective of world-class talent from Gaza delivering bespoke web applications, strategic content creation, expert translation services, and comprehensive digital marketing solutions. Learn how we turn adversity into competitive advantage and forge outstanding solutions from experience.",
+  title: "About Us",
   openGraph: {
     images: [
       {

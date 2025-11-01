@@ -1,4 +1,4 @@
-// REVIEWED - 31
+// REVIEWED - 32
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Analytics } from "@vercel/analytics/next";
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     default: "PalestinianCauses Digital Agency",
   },
   description:
-    "PalestinianCauses is a world-class digital services agency powered by Gazan talent, delivering bespoke web applications, strategic content creation, expert translation services, and comprehensive digital marketing solutions. We forge outstanding, globally competitive digital solutions while demonstrating how resilience transforms into innovation and excellence.",
+    "A world-class digital services agency powered by Gazan talent, PalestinianCauses specializes in Branded Web Applications, Strategic Content Creation, Expert Translation Services, and Comprehensive Digital Marketing Solutions. PalestinianCauses is where resilience turns into innovation and excellence, developing and delivering outstanding, globally competitive digital solutions.",
 
   keywords: [
     "palestine",

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import {
   BookOpenIcon,
@@ -276,9 +276,9 @@ export const DiaryEntryTemplate = function DiaryEntryTemplate({
             Humans—But From{" "}
             <FrameHighlight
               className={cn({
-                "frame-highlight-primary-foreground":
+                "section-heading-highlight-primary-foreground":
                   color === "primary-foreground",
-                "frame-highlight-primary": color === "primary",
+                "section-heading-highlight-primary": color === "primary",
               })}>
               Gaza.
             </FrameHighlight>
