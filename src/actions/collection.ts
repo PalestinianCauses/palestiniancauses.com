@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 13
+// REVIEWED - 14
 
 import {
   GeneratedTypes,
@@ -23,6 +23,7 @@ type CollectionOptions<TSlug extends CollectionTypes> = {
   filters: FiltersOptions;
   fieldsSearch?: (keyof GeneratedTypes["collections"][TSlug])[];
   depth?: number;
+  overrideAccess?: boolean;
 };
 
 export type ResponseDataCollection<TSlug extends CollectionTypes> =
@@ -47,6 +48,7 @@ export const getCollection = async function getCollection<
   },
   fieldsSearch,
   depth = 0,
+  overrideAccess = false,
 }: CollectionOptions<TSlug>): Promise<ResponseCollection<TSlug>> {
   const where: Where = { ...fieldsFilter };
 
@@ -59,14 +61,13 @@ export const getCollection = async function getCollection<
   const response = await actionSafeExecute(
     payload.find({
       req,
-      user,
       collection,
       page,
       limit,
       sort,
       where,
       depth,
-      ...(user ? { overrideAccess: false } : {}),
+      ...(user ? { user, overrideAccess: overrideAccess || false } : {}),
     }),
     messages.actions.collection.serverError,
   );
