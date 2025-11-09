@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 10
+// REVIEWED - 11
 
 import {
   QueryKey,
@@ -59,7 +59,7 @@ export const CommentItem = function CommentItem({
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { deleteComment, deleteCommentReplies } = useComment();
+  const { deleteComment } = useComment();
 
   const { isLoading: isLoadingRepliesCount, data: repliesCount } =
     useCommentRepliesCount(comment.id);
@@ -268,50 +268,52 @@ export const CommentItem = function CommentItem({
               variant="ghost"
               className="p-0 text-muted-foreground hover:bg-transparent"
               disabled={deleteComment.isPending}
-              onClick={() =>
-                deleteComment.mutate(comment.id, {
-                  onSuccess: () => {
-                    if (comment.parent) {
-                      queryClient.invalidateQueries({
-                        queryKey: [
-                          "comment-replies",
-                          typeof comment.parent === "object"
-                            ? comment.parent.id
-                            : comment.parent,
-                        ],
-                      });
+              onClick={() => {
+                const repliesIds =
+                  replies.length !== 0
+                    ? replies.map((reply) => reply.id)
+                    : undefined;
+                deleteComment.mutate(
+                  { id: comment.id, repliesIds },
+                  {
+                    onSuccess: () => {
+                      if (comment.parent) {
+                        queryClient.invalidateQueries({
+                          queryKey: [
+                            "comment-replies",
+                            typeof comment.parent === "object"
+                              ? comment.parent.id
+                              : comment.parent,
+                          ],
+                        });
 
-                      queryClient.invalidateQueries({
-                        queryKey: [
-                          "comment-replies-count",
-                          typeof comment.parent === "object"
-                            ? comment.parent.id
-                            : comment.parent,
-                        ],
-                      });
-                    } else if (queryKey)
-                      queryClient.invalidateQueries({
-                        queryKey,
-                        exact: true,
-                      });
-                    else
-                      queryClient.invalidateQueries({
-                        queryKey: ["comments"],
-                        exact: false,
-                      });
+                        queryClient.invalidateQueries({
+                          queryKey: [
+                            "comment-replies-count",
+                            typeof comment.parent === "object"
+                              ? comment.parent.id
+                              : comment.parent,
+                          ],
+                        });
+                      } else if (queryKey)
+                        queryClient.invalidateQueries({
+                          queryKey,
+                          exact: true,
+                        });
+                      else
+                        queryClient.invalidateQueries({
+                          queryKey: ["comments"],
+                          exact: false,
+                        });
 
-                    if (isPageComment)
-                      router.push(
-                        `/${comment.on.relationTo === "diary-entries" ? "humans-but-from-gaza" : "blog"}/${typeof comment.on.value === "object" ? comment.on.value.id : comment.on.value}`,
-                      );
-
-                    if (replies.length !== 0) {
-                      const repliesIds = replies.map((reply) => reply.id);
-                      deleteCommentReplies.mutate(repliesIds);
-                    }
+                      if (isPageComment)
+                        router.push(
+                          `/${comment.on.relationTo === "diary-entries" ? "humans-but-from-gaza" : "blog"}/${typeof comment.on.value === "object" ? comment.on.value.id : comment.on.value}`,
+                        );
+                    },
                   },
-                })
-              }>
+                );
+              }}>
               <Trash2Icon className="stroke-[1.5]" />
               {deleteComment.isPending ? "Deleting..." : "Delete"}
             </Button>

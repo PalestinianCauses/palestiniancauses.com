@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import {
   InfiniteData,
@@ -12,7 +12,6 @@ import { ResponseDataCollection } from "@/actions/collection";
 import {
   createComment,
   deleteComment,
-  deleteCommentReplies,
   getCommentRepliesCount,
   voteOnComment,
 } from "@/actions/comments";
@@ -60,8 +59,14 @@ export const useComment = function useComment() {
   });
 
   const deleteCommentMutation = useMutation({
-    mutationFn: async (id: number) => {
-      const response = await deleteComment(id);
+    mutationFn: async ({
+      id,
+      repliesIds,
+    }: {
+      id: number;
+      repliesIds?: number[];
+    }) => {
+      const response = await deleteComment(id, repliesIds);
       return { id, ...response };
     },
     onSuccess: async (response) => {
@@ -71,13 +76,6 @@ export const useComment = function useComment() {
       }
 
       toast.success(response.data);
-    },
-  });
-
-  const deleteCommentRepliesMutation = useMutation({
-    mutationFn: async (ids: number[]) => {
-      const response = await deleteCommentReplies(ids);
-      return response;
     },
   });
 
@@ -163,6 +161,5 @@ export const useComment = function useComment() {
     createComment: createCommentMutation,
     voteOnComment: voteOnCommentMutation,
     deleteComment: deleteCommentMutation,
-    deleteCommentReplies: deleteCommentRepliesMutation,
   };
 };

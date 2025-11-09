@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -23,8 +23,11 @@ export const createComment = async function createComment(
 
   const response = await actionSafeExecute(
     payload.create({
+      req: { user: { collection: "users", ...auth } },
+      user: auth,
       collection: "comments",
       data,
+      overrideAccess: false,
     }),
     messages.actions.comment.serverErrorCreate,
   );
@@ -70,6 +73,7 @@ export const getComment = async function getComment(
 
 export const deleteComment = async function deleteComment(
   id: number,
+  repliesIds?: number[],
 ): Promise<ResponseSafeExecute<string, string>> {
   const auth = await getAuthentication();
 
@@ -98,40 +102,40 @@ export const deleteComment = async function deleteComment(
     };
 
   const response = await actionSafeExecute(
-    payload.delete({ collection: "comments", id }),
+    payload.delete({
+      req: { user: { collection: "users", ...auth } },
+      user: auth,
+      collection: "comments",
+      id,
+      overrideAccess: false,
+    }),
     messages.actions.comment.serverErrorDelete,
   );
 
   if (!response.data || response.error) return response;
 
-  return { data: messages.actions.comment.successDelete, error: null };
-};
-
-export const deleteCommentReplies = async function deleteCommentReplies(
-  ids: number[],
-) {
-  const auth = await getAuthentication();
-
-  if (!auth) return;
-
-  const deletePromises = ids.map(async (id) => {
-    const response = await actionSafeExecute(
-      payload.delete({
-        collection: "comments",
-        id,
-      }),
-      messages.actions.comment.serverErrorDelete,
-    );
-
-    if (!response.data || response.error)
-      console.error(
-        "Error in `deleteCommentReplies` in `comments.ts` while trying to delete comment replies",
-        id,
-        response,
+  if (repliesIds) {
+    const deletePromises = repliesIds.map(async (replyId) => {
+      const repliesResponse = await actionSafeExecute(
+        payload.delete({
+          collection: "comments",
+          id: replyId,
+        }),
+        messages.actions.comment.serverErrorDelete,
       );
-  });
 
-  await Promise.all(deletePromises);
+      if (!repliesResponse.data || repliesResponse.error)
+        console.error(
+          "Error in `deleteCommentReplies` in `comments.ts` while trying to delete comment replies",
+          id,
+          response,
+        );
+    });
+
+    await Promise.all(deletePromises);
+  }
+
+  return { data: messages.actions.comment.successDelete, error: null };
 };
 
 export const voteOnComment = async function voteOnComment({
