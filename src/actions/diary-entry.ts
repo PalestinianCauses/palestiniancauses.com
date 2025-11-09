@@ -1,11 +1,11 @@
 "use server";
 
-// REVIEWED - 14
+// REVIEWED - 15
 
 import { httpStatusesMessages, messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
-import { hasAnyRole } from "@/lib/permissions";
+import { hasAnyRole, hasPermission } from "@/lib/permissions";
 import { ErrorPayload, ResponseSafeExecute } from "@/lib/types";
 import { isResponseError } from "@/lib/types/guards";
 import { DiaryEntry, User } from "@/payload-types";
@@ -30,6 +30,8 @@ export const createDiaryEntry = async function createDiaryEntry(
 
   const response = await actionSafeExecute<DiaryEntry, ErrorPayload>(
     payload.create({
+      req: { user: { collection: "users", ...auth } },
+      user: auth,
       collection: "diary-entries",
       data: {
         title: data.title,
@@ -42,6 +44,7 @@ export const createDiaryEntry = async function createDiaryEntry(
         isAuthentic: data.isAuthentic,
         isAnonymous: data.isAnonymous,
       },
+      overrideAccess: false,
     }),
     messages.actions.diaryEntry.serverErrorShare,
     isResponseError,
@@ -66,7 +69,7 @@ export const createDiaryEntry = async function createDiaryEntry(
     return { data: null, error: messages.actions.diaryEntry.serverErrorShare };
   }
 
-  if (hasAnyRole(auth, ["admin-user", "system-user"])) {
+  if (hasPermission(auth, { resource: "diary-entries", action: "publish" })) {
     const url = `${process.env.NEXT_PUBLIC_URL}/humans-but-from-gaza/${response.data.id}`;
     await notifySubscribers({
       title: data.title,
@@ -76,7 +79,7 @@ export const createDiaryEntry = async function createDiaryEntry(
   }
 
   return {
-    data: hasAnyRole(auth, ["admin-user", "system-user"])
+    data: hasPermission(auth, { resource: "diary-entries", action: "publish" })
       ? messages.actions.diaryEntry.successPCAuthor
       : messages.actions.diaryEntry.success,
     error: null,
