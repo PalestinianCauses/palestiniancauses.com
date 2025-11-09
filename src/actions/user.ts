@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -11,13 +11,20 @@ import { isResponseErrorHasDataPlusErrors } from "@/lib/types/guards";
 import { isResilientPassword } from "@/lib/utils/passwords";
 import { User } from "@/payload-types";
 
+import { getAuthentication } from "./auth";
+
 export const getUserByEmail = async function getUserByEmail(email: string) {
-  const query = { email: { equals: email } };
+  const authentication = await getAuthentication();
   const response = await payload.find({
+    ...(authentication
+      ? {
+          req: { user: { ...authentication, collection: "users" } },
+          user: authentication,
+          overrideAccess: false,
+        }
+      : {}),
     collection: "users",
-    where: query,
-    overrideAccess: false,
-    req: { query },
+    where: { email: { equals: email } },
   });
 
   return response;
@@ -36,7 +43,16 @@ export const createUser = async function createUser(
       error: messages.actions.auth.signUp.validation,
     };
 
+  const authentication = await getAuthentication();
+
   const rolesDefault = await payload.find({
+    ...(authentication
+      ? {
+          req: { user: { ...authentication, collection: "users" } },
+          user: authentication,
+          overrideAccess: false,
+        }
+      : {}),
     collection: "roles",
     where: { isDefault: { equals: true } },
     limit: 1,
@@ -44,6 +60,13 @@ export const createUser = async function createUser(
 
   const response = await actionSafeExecute(
     payload.create({
+      ...(authentication
+        ? {
+            req: { user: { ...authentication, collection: "users" } },
+            user: authentication,
+            overrideAccess: false,
+          }
+        : {}),
       collection: "users",
       data: {
         ...data,
