@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Container } from "../globals/container";
 import {
@@ -17,20 +17,20 @@ export const Vision = function Vision() {
         Our Vision: A World Where Gazan Innovation Leads Global Progress
       </SectionHeading>
       <Paragraph className="mb-8">
-        We aspire for PalestinianCauses to be the agency clients everywhere
+        We aspire for PalestinianCauses to be the agency that clients everywhere
         choose, not just for excellent outcomes. Still, for the meaningful
         change, their partnership helps effect.
       </Paragraph>
       <Paragraph className="mb-8">
         Going beyond just backing us in the present, this vision is one of
         PalestinianCauses being self-sustaining, founded on Gazan talent, where
-        every successful project is another telling, distinguished example of
-        Gazan talent and success; every exceptional creative work is another
-        project driving community development.
+        every successful project is a telling, distinguished example of Gazan
+        talent and success; every exceptional creative work is another project
+        driving community development.
       </Paragraph>
       <Paragraph className="mb-8">
         We see PalestinianCauses becoming a major, worldwide brand: Gazan
-        resilience, resourcefulness, and skill aid in reshaping how the
+        resilience, resourcefulness, and skill, aiding in reshaping how the
         implications of digital service work are material to economic
         empowerment. The effect of a direct, self-sustaining community
         development on our clients can not be overstated.

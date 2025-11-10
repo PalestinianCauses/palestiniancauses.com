@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 import { Container } from "../globals/container";
 import {
   Paragraph,
@@ -19,8 +19,8 @@ export const OurModel = function OurModel() {
         PalestinianCauses embodies a revolutionary manifesto, illustrating how
         adversity is the foundation of world-class creation. Our engagements are
         meticulously structured—from our clear road maps, transparent pricing,
-        and guaranteed outcomes—to ensure their refinement emerges from the
-        bottom of experience.
+        and guaranteed outcomes—to ensure clients objectives are successfully
+        accomplished.
       </Paragraph>
       <Paragraph className="mb-8">
         All the projects we design and deliver follow a carefully laid-out path.
@@ -38,21 +38,16 @@ export const OurModel = function OurModel() {
         outcomes.
       </Paragraph>
       <Paragraph className="mb-8">
-        This client&apos;s onus approach maximizes each cent spent on our
-        services while directly funding our initiatives, demonstrating Gazan
-        excellence and creative innovation.
+        This client-centric approach maximizes each cent spent on our services
+        while directly funding our initiatives, demonstrating Gazan excellence
+        and creative innovation.
       </Paragraph>
       <Paragraph className="mb-8">
         This sustainable model will advance community resurgence, foster
         long-term opportunities rooted in Gazan skills, and let Gazans rebuild
-        with self-respect. Gazan self-sufficiency will be negotiated, power will
+        with self-respect. Gazan self-sufficiency will be reclaimed, power will
         be retained, dreams of freedom will flourish, and the present and future
         of the Gazan state will be explicitly defined.
-      </Paragraph>
-      <Paragraph>
-        Gazans will enjoy the freedom to determine and cause live justice
-        actively, allowing them to be part of the revitalization and equity
-        continuum for generations.
       </Paragraph>
     </Container>
   );

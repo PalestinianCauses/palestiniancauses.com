@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { ArrowUpRightIcon } from "lucide-react";
 import Link from "next/link";
@@ -22,7 +22,7 @@ const team = [
   {
     letter: "N.",
     description:
-      "Talented artist who gave our projects their soul through original, powerful illustrations and artwork. She instills new shape into the emotions and continued spirit of the people of Gaza, converting and simplifying complex concepts into intricate visual stories.",
+      "Talented artist who gives our projects their soul through original, powerful illustrations and artwork. She instills new shape into the emotions and continued spirit of the people of Gaza, converting and simplifying complex concepts into intricate visual stories.",
   },
   {
     letter: "L.",

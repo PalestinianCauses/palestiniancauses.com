@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
@@ -40,18 +40,18 @@ export const CTA = function CTA() {
       <SectionHeading
         as="h3"
         className="mb-8 max-w-none lg:!max-w-2xl xl:!max-w-3xl">
-        Ready to Partner? Let&apos;s Build Something Extraordinary Together
+        Ready to Partner? Let&apos;s Build Something Extraordinary Together!
       </SectionHeading>
       <Paragraph className="mb-12 xl:mb-24">
-        Now that you have read about our mission and efforts to deliver the best
+        Now that you have read our mission and efforts to deliver the best
         digital services to the world, see how Gazan experience turns into
-        innovation and excellence. Now it is your turn to turn awareness into
+        innovation and excellence. It is your turn to turn awareness into
         action. By hiring PalestinianCauses, you enjoy exceptional
         output—empowering Gazan talent, funding projects that demonstrate Gazan
-        excellence, and championing sustainable development. By partnering on
-        our work, you are helping us tell crucial stories, show how resilience
-        makes excellence, and invest in the long term to empower Gazan
-        creativity and expertise for a self-reliant future built on excellence.
+        excellence, and championing sustainable development. By partnering with
+        us, you are helping to tell crucial stories, show how resilience makes
+        excellence, and invest in the long term empowerment of Gazan creativity
+        and expertise for a self-reliant future.
       </Paragraph>
       <ul className="grid h-full grid-rows-4">
         {ctas.map(({ title, href }) => (

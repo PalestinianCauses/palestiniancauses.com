@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { Container } from "../globals/container";
 import {
@@ -26,17 +26,17 @@ const values = [
   {
     title: "Solidarity",
     description:
-      "We are unwaveringly by the side of the people of Gaza and do not waver. In our professional work, we act as advocates of justice for their rights and leverage our learning to help amplify their voices and stories.",
+      "We are by the side of the people of Gaza and do not waver. In our professional work, we act as advocates of justice for their rights and leverage our learning to help amplify their voices and stories.",
   },
   {
     title: "Empowerment",
     description:
-      "We believe in enabling Gazan voices, creativity, and talent through long-term economic opportunities. Our agency model uniquely establishes replica rights to foster self-reliance, economic development, and community growth.",
+      "We believe in enabling Gazan voices, creativity, and talent through long-term economic opportunities. Our agency model uniquely establishes self-reliance, economic development, and community growth.",
   },
   {
     title: "Integrity",
     description:
-      "We uphold transparency and accountability and greatly regard the people whose perspectives we promote, the people we assist, and the clients who entrust us with their favorite projects.",
+      "We uphold transparency and accountability. We have a high regard for the people whose perspectives we promote, the people we assist, and the clients who entrust us with their favorite projects.",
   },
   {
     title: "Innovation",
@@ -58,7 +58,7 @@ export const CoreValues = function CoreValues() {
           Our Core Values
         </SectionHeadingBadge>
         <SectionHeading as="h3" className="mb-12 text-background xl:mb-24">
-          The Principles That Drive Our Excellence and Define Our Character
+          The Principles That Determine Our Excellence and Define Our Character
         </SectionHeading>
         <ul className="grid w-full grid-cols-1 items-start gap-8 text-background md:grid-cols-2">
           {values.map(({ title, description }) => (
