@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { payload } from "@/lib/payload";
 
@@ -25,7 +25,7 @@ export const doMigratingUsersRoles = async function doMigratingUsersRoles() {
     if (users.docs.length === 0) {
       // eslint-disable-next-line no-console
       console.log("✅ No users to migrate.");
-      return;
+      process.exit(0);
     }
 
     const roles = await payload.find({

@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { payload } from "@/lib/payload";
 import { ServiceCategory } from "@/payload-types";
@@ -83,7 +83,7 @@ const doSeedingCategories = async function doSeedingCategories() {
 
     if (existingCategories.docs.length > 0) {
       console.log("❌ Categories exist, skipping seeding.");
-      return;
+      process.exit(1);
     }
 
     const categoriesPromises = categories.map((category) =>

@@ -1,4 +1,4 @@
-// REVIEWED - 28
+// REVIEWED - 29
 
 import { CollectionConfig } from "payload";
 
@@ -298,6 +298,14 @@ export const Rooms: CollectionConfig = {
               relationTo: "rooms-contact",
               hasMany: true,
               required: false,
+              // eslint-disable-next-line arrow-body-style
+              filterOptions: (siblingData) => {
+                return {
+                  user: {
+                    equals: siblingData.user?.id,
+                  },
+                };
+              },
             },
           ],
         },

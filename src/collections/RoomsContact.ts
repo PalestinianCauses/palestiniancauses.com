@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CollectionConfig } from "payload";
 
@@ -34,7 +34,7 @@ export const RoomsContact: CollectionConfig = {
       }),
     group: "Rooms Content",
     defaultColumns: ["id", "type", "value", "status", "createdAt"],
-    useAsTitle: "value",
+    useAsTitle: "type",
   },
   fields: [
     {

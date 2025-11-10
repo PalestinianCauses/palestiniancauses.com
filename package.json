@@ -17,6 +17,7 @@
     "seed:rooms": "payload run src/scripts/seed-rooms.ts",
     "seed:categories": "payload run src/scripts/seed-categories.ts",
     "seed:services-plus-packages": "payload run src/scripts/seed-services.ts",
+    "seed:contact": "payload run src/scripts/seed-contact.ts",
     "seed:roles-permissions": "payload run src/scripts/seed-roles-permissions.ts",
     "migrate:users-roles": "payload run src/scripts/migrate-users-roles.ts",
     "clean-up:previous-role": "payload run src/scripts/clean-up-previous-role.ts",
