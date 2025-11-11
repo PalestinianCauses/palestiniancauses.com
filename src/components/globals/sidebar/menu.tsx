@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import {
   ArrowRightLeftIcon,
@@ -142,44 +142,43 @@ export const SidebarMainMenu = function SidebarMainMenu() {
     else setActiveItemHash(null);
   }, [isRoom, roomActive]);
 
-  const menus = roomActive
-    ? [
-        {
-          label: "Sections",
-          links: roomActive.links
-            ? [...roomActive.links, { label: "Contact", href: "#contact" }]
-            : [],
-        },
-        ...policies,
-      ]
-    : [
-        {
-          label: "Pages",
-          links: [
-            {
-              icon: BookOpenIcon,
-              href: "/a-human-but-from-gaza",
-              label: "A Human But From Gaza",
-            },
-            {
-              icon: PenLineIcon,
-              href: "/humans-but-from-gaza",
-              label: "Humans But From Gaza",
-            },
-            {
-              icon: UserPenIcon,
-              href: "/about-us",
-              label: "About Us",
-            },
-            {
-              icon: HeartHandshakeIcon,
-              href: "/support-us",
-              label: "Support Us",
-            },
-          ],
-        },
-        ...policies,
-      ];
+  const menus =
+    roomActive && roomActive.links && roomActive.links.length !== 0
+      ? [
+          {
+            label: "Sections",
+            links: roomActive.links,
+          },
+          ...policies,
+        ]
+      : [
+          {
+            label: "Pages",
+            links: [
+              {
+                icon: BookOpenIcon,
+                href: "/a-human-but-from-gaza",
+                label: "A Human But From Gaza",
+              },
+              {
+                icon: PenLineIcon,
+                href: "/humans-but-from-gaza",
+                label: "Humans But From Gaza",
+              },
+              {
+                icon: UserPenIcon,
+                href: "/about-us",
+                label: "About Us",
+              },
+              {
+                icon: HeartHandshakeIcon,
+                href: "/support-us",
+                label: "Support Us",
+              },
+            ],
+          },
+          ...policies,
+        ];
 
   return (
     <Fragment>
