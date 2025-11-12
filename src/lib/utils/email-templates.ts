@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 /**
  * Generic email template builder using Tailwind CSS-inspired design system
  * Note: Email clients don't support Tailwind CSS, so we use inline styles
@@ -12,7 +12,7 @@ import { isDefined } from "../types/guards";
 
 export type EmailTemplateData = Record<string, unknown>;
 
-export interface EmailTemplateOptions {
+export interface OptionsTemplateEmail {
   title: string;
   titleSub?: string;
   fields?: Array<{
@@ -25,7 +25,7 @@ export interface EmailTemplateOptions {
   colorBackground?: string;
 }
 
-export const createTemplateEmail = (options: EmailTemplateOptions): string => {
+export const createTemplateEmail = (options: OptionsTemplateEmail): string => {
   const { title, titleSub, fields = [], footer } = options;
 
   const rowsField = fields
@@ -119,7 +119,7 @@ export const createTemplateEmail = (options: EmailTemplateOptions): string => {
   `;
 };
 
-export const createOrderTemplateEmail = (data: {
+export type OptionsOrderTemplateEmail = {
   itemName: string;
   itemType: Order["orderType"];
   itemPrice: Order["total"] | null;
@@ -127,7 +127,11 @@ export const createOrderTemplateEmail = (data: {
   customerEmail: Order["customerEmail"];
   customerPhone?: Order["customerPhone"];
   customerMessage?: Order["customerMessage"];
-}): string => {
+};
+
+export const createOrderTemplateEmail = (
+  data: OptionsOrderTemplateEmail,
+): string => {
   const itemTypeLabel =
     //   eslint-disable-next-line no-nested-ternary
     data.itemType === "service"
