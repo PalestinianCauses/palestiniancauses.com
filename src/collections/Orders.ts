@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { CollectionConfig } from "payload";
 
@@ -46,7 +46,7 @@ export const Orders: CollectionConfig = {
   },
   fields: [
     {
-      admin: { readOnly: true, position: "sidebar" },
+      admin: { position: "sidebar" },
       name: "user",
       label: "Customer (User Account)",
       type: "relationship",
@@ -55,7 +55,7 @@ export const Orders: CollectionConfig = {
       required: true,
     },
     {
-      admin: { readOnly: true, position: "sidebar" },
+      admin: { position: "sidebar" },
       name: "roomOwner",
       label: "Room Owner",
       type: "relationship",
@@ -64,7 +64,7 @@ export const Orders: CollectionConfig = {
       required: false,
     },
     {
-      admin: { readOnly: true, position: "sidebar" },
+      admin: { position: "sidebar" },
       name: "orderType",
       label: "Order Type",
       type: "select",
@@ -79,7 +79,6 @@ export const Orders: CollectionConfig = {
     {
       admin: {
         condition: (_, dataSibling) => dataSibling.orderType !== "product",
-        readOnly: true,
       },
       name: "customerName",
       label: "Customer Name",
@@ -90,7 +89,6 @@ export const Orders: CollectionConfig = {
     {
       admin: {
         condition: (_, dataSibling) => dataSibling.orderType !== "product",
-        readOnly: true,
       },
       name: "customerEmail",
       label: "Customer Email",
@@ -101,7 +99,6 @@ export const Orders: CollectionConfig = {
     {
       admin: {
         condition: (_, dataSibling) => dataSibling.orderType !== "product",
-        readOnly: true,
       },
       name: "customerPhone",
       label: "Customer Phone",
@@ -111,7 +108,6 @@ export const Orders: CollectionConfig = {
     {
       admin: {
         condition: (_, dataSibling) => dataSibling.orderType !== "product",
-        readOnly: true,
       },
       name: "customerMessage",
       label: "Customer Message",
@@ -121,7 +117,7 @@ export const Orders: CollectionConfig = {
     {
       admin: {
         condition: (_, dataSibling) => dataSibling.orderType === "product",
-        readOnly: true,
+
         position: "sidebar",
       },
       name: "productOrderType",
@@ -135,7 +131,7 @@ export const Orders: CollectionConfig = {
       required: false,
     },
     {
-      admin: { readOnly: true, position: "sidebar" },
+      admin: { position: "sidebar" },
       name: "total",
       label: "Total",
       type: "number",
@@ -147,7 +143,7 @@ export const Orders: CollectionConfig = {
       admin: {
         condition: (_, dataSibling) =>
           dataSibling.orderType === "product" && dataSibling.type !== "free",
-        readOnly: true,
+
         position: "sidebar",
       },
       name: "productOrderStatus",
@@ -164,7 +160,7 @@ export const Orders: CollectionConfig = {
       required: false,
     },
     {
-      admin: { readOnly: true, position: "sidebar" },
+      admin: { position: "sidebar" },
       name: "orderStatus",
       label: "Order Status",
       type: "select",
@@ -179,14 +175,14 @@ export const Orders: CollectionConfig = {
       required: true,
     },
     {
-      admin: { readOnly: true },
+      admin: {},
       name: "items",
       label: "Items",
       type: "array",
       required: true,
       fields: [
         {
-          admin: { readOnly: true },
+          admin: {},
           name: "itemType",
           label: "Item Type",
           type: "select",
@@ -201,7 +197,6 @@ export const Orders: CollectionConfig = {
         {
           admin: {
             condition: (_, dataSibling) => dataSibling.itemType === "service",
-            readOnly: true,
           },
           name: "service",
           label: "Service",
@@ -213,7 +208,6 @@ export const Orders: CollectionConfig = {
         {
           admin: {
             condition: (_, dataSibling) => dataSibling.itemType === "package",
-            readOnly: true,
           },
           name: "package",
           label: "Package",
@@ -225,7 +219,6 @@ export const Orders: CollectionConfig = {
         {
           admin: {
             condition: (_, dataSibling) => dataSibling.itemType === "product",
-            readOnly: true,
           },
           name: "product",
           label: "Product",
@@ -235,7 +228,7 @@ export const Orders: CollectionConfig = {
           required: false,
         },
         {
-          admin: { readOnly: true },
+          admin: {},
           name: "quantity",
           label: "Quantity",
           type: "number",
@@ -243,7 +236,7 @@ export const Orders: CollectionConfig = {
           defaultValue: 1,
         },
         {
-          admin: { readOnly: true },
+          admin: {},
           name: "price",
           label: "Price",
           type: "number",
@@ -266,6 +259,8 @@ export const Orders: CollectionConfig = {
             ? doc.roomOwner
             : doc.roomOwner.id;
 
+          console.log("Room Owner ID:", roomOwnerId);
+
           if (!roomOwnerId) return;
 
           const roomOwner = await req.payload.findByID({
@@ -281,6 +276,8 @@ export const Orders: CollectionConfig = {
             limit: 1,
             depth: 2,
           });
+
+          console.log("Room Response:", roomResponse);
 
           const contacts: RoomsContact[] = [];
 
@@ -314,35 +311,99 @@ export const Orders: CollectionConfig = {
               if (
                 "itemType" in item &&
                 item.itemType === "service" &&
-                "service" in item &&
-                isObject(item.service) &&
-                "name" in item.service
+                "service" in item
               ) {
-                itemName = String(item.service.name) || "Anonymous Service";
-                itemType = "service";
-                itemPrice =
-                  "price" in item && isNumber(item.price) ? item.price : null;
+                // Service might be a number (ID) or an object (populated)
+                let serviceId: number | null = null;
+                let serviceData: { name?: string } | null = null;
+
+                if (isNumber(item.service)) serviceId = item.service;
+                else if (isObject(item.service))
+                  serviceData = { name: item.service.name };
+
+                // if we only have an ID, fetch service
+                if (serviceId && !serviceData) {
+                  try {
+                    const serviceFetched = await req.payload.findByID({
+                      collection: "rooms-services",
+                      id: serviceId,
+                      depth: 0,
+                    });
+
+                    if (isObject(serviceFetched))
+                      serviceData = { name: serviceFetched.name };
+                  } catch {
+                    // if fetch fails, continue with what we have
+                  }
+                }
+
+                if (serviceData && "name" in serviceData) {
+                  itemName = String(serviceData.name) || "Anonymous Service";
+                  itemType = "service";
+                  itemPrice = null;
+                }
+                // Skip if we can't get service data
+                else return null;
               } else if (
                 "itemType" in item &&
                 item.itemType === "package" &&
-                "package" in item &&
-                isObject(item.package) &&
-                "name" in item.package
+                "package" in item
               ) {
-                itemName = String(item.package.name) || "Anonymous Package";
-                itemType = "package";
-                itemPrice =
-                  "price" in item && isNumber(item.price) ? item.price : null;
-              } else if ("itemType" in item && item.itemType === "product")
+                // Package might be a number (ID) or an object (populated)
+                let packageId: number | null = null;
+                let packageData: {
+                  name?: string;
+                  price?: number | null;
+                } | null = null;
+
+                if (isNumber(item.package)) packageId = item.package;
+                else if (isObject(item.package)) {
+                  packageData = {
+                    name: item.package.name,
+                    price: item.package.price,
+                  };
+                }
+
+                // if we only have an ID, fetch package
+                if (packageId && !packageData) {
+                  try {
+                    const packageFetched = await req.payload.findByID({
+                      collection: "rooms-packages",
+                      id: packageId,
+                      depth: 0,
+                    });
+
+                    if (isObject(packageFetched))
+                      packageData = {
+                        name: packageFetched.name,
+                        price: packageFetched.price,
+                      };
+                  } catch {
+                    // if fetch fails, continue with what we have
+                  }
+                }
+
+                if (packageData && "name" in packageData) {
+                  itemName = String(packageData.name) || "Anonymous Package";
+                  itemType = "package";
+                  itemPrice =
+                    "price" in item && isNumber(item.price)
+                      ? item.price
+                      : packageData.price || null;
+                }
+                // Skip if we can't get package data
+                else return null;
+              } else if ("itemType" in item && item.itemType === "product") {
                 // Products are not supported for email notifications
                 return null;
+              }
               // Skip items without valid data
               else return null;
 
               const notificationData = {
                 itemName,
                 itemType,
-                itemPrice,
+                itemPrice: itemPrice && itemPrice > 0 ? itemPrice : null,
                 customerName: doc.customerName,
                 customerEmail: doc.customerEmail,
                 customerPhone: doc.customerPhone || undefined,
@@ -388,7 +449,8 @@ export const Orders: CollectionConfig = {
 
           // Wait for all notifications to be sent
           await Promise.all(notificationPromises);
-        } catch {
+        } catch (error) {
+          console.error("Error sending notifications:", error);
           // Don't fail order creation if notification fails
           // Error handling is intentionally silent to not interrupt order creation
         }

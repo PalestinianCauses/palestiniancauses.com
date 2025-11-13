@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 /**
  * Generic email template builder using Tailwind CSS-inspired design system
  * Note: Email clients don't support Tailwind CSS, so we use inline styles
@@ -97,7 +97,7 @@ export const createTemplateEmail = (options: OptionsTemplateEmail): string => {
                         <!-- Footer -->
                         ${
                           footer
-                            ? `<tr><td style="background-color: #f8f8f8; padding: 1.5rem 2rem; border-top: 0.0625rem solid #000000; border-radius: 0 0 0.5rem 0.5rem;"><p style="font-size: 0.875rem; color: #a8a8a8; line-height: 1.5; margin: 0;">${footer}</p></td></tr>`
+                            ? `<tr><td style="background-color: #f8f8f8; padding: 1.5rem 2rem; border-top: 0.0625rem solid #000000; border-radius: 0 0 0.5rem 0.5rem;"><p style="font-size: 0.875rem; color: #000000; line-height: 1.5; margin: 0;">${footer}</p></td></tr>`
                             : ""
                         }
                     </table>
@@ -105,7 +105,7 @@ export const createTemplateEmail = (options: OptionsTemplateEmail): string => {
                     <table role="presentation" style="max-width: 37.5rem; margin: 1.5rem auto 0;">
                         <tr>
                             <td style="text-align: center; padding: 1rem 1.25rem;">
-                                <p style="font-size: 0.75rem; line-height: 1.5; color: #a8a8a8;">
+                                <p style="font-size: 0.75rem; line-height: 1.5; color: #8a8a8a;">
                                     This is an automated notification from PalestinianCauses. Please do not reply to this email.
                                 </p>
                             </td>
