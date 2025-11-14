@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { CollectionConfig } from "payload";
 
@@ -140,6 +140,21 @@ export const Orders: CollectionConfig = {
       required: true,
     },
     {
+      admin: { position: "sidebar" },
+      name: "orderStatus",
+      label: "Order Status",
+      type: "select",
+      options: [
+        { label: "New", value: "new" },
+        { label: "In Progress", value: "in-progress" },
+        { label: "Completed", value: "completed" },
+        { label: "Cancelled", value: "cancelled" },
+        { label: "N/A", value: "not-applicable" },
+      ],
+      defaultValue: "not-applicable",
+      required: true,
+    },
+    {
       admin: {
         condition: (_, dataSibling) =>
           dataSibling.orderType === "product" && dataSibling.type !== "free",
@@ -158,21 +173,6 @@ export const Orders: CollectionConfig = {
       ],
       defaultValue: "pending",
       required: false,
-    },
-    {
-      admin: { position: "sidebar" },
-      name: "orderStatus",
-      label: "Order Status",
-      type: "select",
-      options: [
-        { label: "New", value: "new" },
-        { label: "In Progress", value: "in-progress" },
-        { label: "Completed", value: "completed" },
-        { label: "Cancelled", value: "cancelled" },
-        { label: "N/A", value: "not-applicable" },
-      ],
-      defaultValue: "not-applicable",
-      required: true,
     },
     {
       admin: {},
@@ -259,8 +259,6 @@ export const Orders: CollectionConfig = {
             ? doc.roomOwner
             : doc.roomOwner.id;
 
-          console.log("Room Owner ID:", roomOwnerId);
-
           if (!roomOwnerId) return;
 
           const roomOwner = await req.payload.findByID({
@@ -276,8 +274,6 @@ export const Orders: CollectionConfig = {
             limit: 1,
             depth: 2,
           });
-
-          console.log("Room Response:", roomResponse);
 
           const contacts: RoomsContact[] = [];
 

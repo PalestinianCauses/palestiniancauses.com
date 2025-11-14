@@ -1,4 +1,4 @@
-// REVIEWED - 28
+// REVIEWED - 29
 
 export const messages = {
   http: {
@@ -100,7 +100,14 @@ export const messages = {
       serverError: "Failed to retrieve product. Please try again later.",
     },
     order: {
+      pending: "Creating your order...",
+      success: "Order created successfully! We will contact you soon.",
       serverError: "Failed to create order. Please try again later.",
+      unAuthenticated:
+        "Authentication required to create an order. Please sign in.",
+      inCorrectOrderTypeError:
+        "The order type is in-correct. Please try again.",
+      noOrderItemsError: "No order items found. Please try again.",
     },
     collection: {
       serverError: "Failed to retrieve collection. Please try again later.",
