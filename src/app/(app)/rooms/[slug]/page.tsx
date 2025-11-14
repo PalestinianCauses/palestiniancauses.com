@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Metadata } from "next";
 
@@ -93,6 +93,11 @@ export default async function RoomPage({
             ...response.data.services,
             list: servicesList,
           }}
+          roomOwner={
+            typeof response.data.user === "number"
+              ? response.data.user
+              : response.data.user.id
+          }
         />
       ) : null}
 
@@ -102,6 +107,11 @@ export default async function RoomPage({
             ...response.data.packages,
             list: packagesList,
           }}
+          roomOwner={
+            typeof response.data.user === "number"
+              ? response.data.user
+              : response.data.user.id
+          }
         />
       ) : null}
 

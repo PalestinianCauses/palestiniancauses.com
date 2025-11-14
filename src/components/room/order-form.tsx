@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -144,8 +144,7 @@ export const OrderForm = function OrderForm({
                   key={index}
                   className={cn("border-l-2 p-2.5 pr-5", {
                     "border-teal-500 bg-teal-500/10": orderType === "service",
-                    "border-yellow-500 bg-yellow-500/10":
-                      orderType === "package",
+                    "border-tertiary bg-tertiary/10": orderType === "package",
                     "border-tertiary-2 bg-tertiary-2/10":
                       orderType === "product",
                   })}>
@@ -156,7 +155,7 @@ export const OrderForm = function OrderForm({
                       )}
 
                       {orderType === "package" && (
-                        <PackageIcon className="h-6 w-6 stroke-[1.5] text-yellow-300" />
+                        <PackageIcon className="h-6 w-6 stroke-[1.5] text-tertiary" />
                       )}
 
                       {orderType === "product" && (
@@ -275,7 +274,7 @@ export const OrderForm = function OrderForm({
                   ) : (
                     <Fragment>
                       <ArrowUpRight />
-                      Order
+                      <span className="capitalize">Order {orderType}</span>
                     </Fragment>
                   )}
                 </Button>

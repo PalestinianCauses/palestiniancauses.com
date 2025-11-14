@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { redirect } from "next/navigation";
 
@@ -8,6 +8,7 @@ import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
+import { isNumber, isObject } from "@/lib/types/guards";
 import { Product } from "@/payload-types";
 
 import { getAuthentication } from "./auth";
@@ -45,7 +46,7 @@ export const getProductFreeLinksExternal =
     const responseHasOrder = await actionSafeExecute(
       payload.find({
         collection: "orders",
-        where: { user: { equals: auth.id } },
+        where: { user: { equals: auth.id }, orderType: { equals: "product" } },
       }),
       messages.actions.order.serverError,
     );
@@ -53,17 +54,29 @@ export const getProductFreeLinksExternal =
     if (!responseHasOrder.data || responseHasOrder.error)
       return responseHasOrder;
 
-    if (responseHasOrder.data.docs.length === 0) {
+    const hasOrder = responseHasOrder.data.docs.find((order) =>
+      order.items.some(
+        (item) =>
+          item.itemType === "product" &&
+          ((isNumber(item.product) && item.product === product.id) ||
+            (isObject(item.product) && item.product.id === product.id)),
+      ),
+    );
+
+    if (!hasOrder) {
       const responseOrder = await actionSafeExecute(
         payload.create({
           collection: "orders",
           data: {
             user: auth.id,
-            type: "free",
+            orderType: "product",
+            productOrderType: "free",
             total: 0,
-            status: "not-applicable",
+            orderStatus: "not-applicable",
+            productOrderStatus: "not-applicable",
             items: [
               {
+                itemType: "product",
                 product: product.id,
                 quantity: 1,
                 price: 0,

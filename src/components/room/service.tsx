@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 import {
   ArrowUpRight,
   CheckIcon,
@@ -20,13 +20,19 @@ import {
 import { Button } from "../ui/button";
 
 import { InformationBadges } from "./globals";
+import { OrderForm } from "./order-form";
 
 export const ServiceItem = function ServiceItem({
   service,
+  roomOwner,
 }: {
   service: NonNullable<NonNullable<Room["services"]>["list"]>[number];
+  roomOwner: number;
 }) {
   if (!isObject(service)) return null;
+
+  const isAvailable = service.status === "available";
+
   return (
     <div className="pt-16 lg:pt-0">
       <InformationBadges
@@ -77,20 +83,38 @@ export const ServiceItem = function ServiceItem({
           },
         ]}
       />
-      <Button variant="outline">
-        <ArrowUpRight className="!size-5" />
-        Order Service
-      </Button>
+      {isAvailable && (
+        <OrderForm
+          roomOwner={roomOwner}
+          orderType="service"
+          items={[
+            {
+              itemType: "service",
+              service,
+              price: 0,
+              quantity: 1,
+            },
+          ]}
+          trigger={
+            <Button variant="outline" className="mt-auto w-full">
+              <ArrowUpRight />
+              Order Service
+            </Button>
+          }
+        />
+      )}
     </div>
   );
 };
 
 export const Services = function Services({
   services,
+  roomOwner,
 }: {
   services: Omit<NonNullable<Room["services"]>, "list"> & {
     list: NonNullable<NonNullable<Room["services"]>["list"]>;
   };
+  roomOwner: number;
 }) {
   return (
     <Container
@@ -108,6 +132,7 @@ export const Services = function Services({
           <ServiceItem
             key={typeof service === "number" ? service : service.id}
             service={service}
+            roomOwner={roomOwner}
           />
         ))}
       </div>

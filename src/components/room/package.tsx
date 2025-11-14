@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { ArrowUpRight, ClockIcon, PlusIcon } from "lucide-react";
 
@@ -17,13 +17,16 @@ import { Button } from "../ui/button";
 
 import { SVGCircle } from "./about";
 import { InformationBadges } from "./globals";
+import { OrderForm } from "./order-form";
 
 export const Packages = function Packages({
   packages,
+  roomOwner,
 }: {
   packages: Omit<NonNullable<Room["packages"]>, "list"> & {
     list: NonNullable<NonNullable<Room["packages"]>["list"]>;
   };
+  roomOwner: number;
 }) {
   return (
     <Container
@@ -135,10 +138,24 @@ export const Packages = function Packages({
                           ))}
                         </ul>
                       )}
-                    <Button className="mt-auto w-full">
-                      <ArrowUpRight className="h-4 w-4" />
-                      Get Started
-                    </Button>
+                    <OrderForm
+                      roomOwner={roomOwner}
+                      orderType="package"
+                      items={[
+                        {
+                          itemType: "package",
+                          package: packageElement,
+                          price: packageElement.price || 0,
+                          quantity: 1,
+                        },
+                      ]}
+                      trigger={
+                        <Button className="mt-auto w-full">
+                          <ArrowUpRight />
+                          Get Started
+                        </Button>
+                      }
+                    />
                   </div>
                 </div>
               ))}
