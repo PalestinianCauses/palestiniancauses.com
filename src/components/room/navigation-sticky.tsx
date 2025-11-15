@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { ChevronUp, Menu, X } from "lucide-react";
 import Link from "next/link";
@@ -75,6 +75,7 @@ export const NavigationSticky = function NavigationSticky({
   return (
     <nav
       data-navigation-sticky
+      aria-label="Page navigation"
       className={cn(
         "fixed bottom-5 right-5 z-40 flex translate-y-2.5 flex-col gap-2.5 transition-all duration-500 ease-in-out",
         isScrolled

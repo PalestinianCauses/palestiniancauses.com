@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { ClipboardIcon, Share2 } from "lucide-react";
 import { ElementType, HTMLAttributes, useState } from "react";
@@ -114,14 +114,16 @@ export const ShareButton = function ShareButton({
         <Button
           variant="default"
           size="icon"
+          aria-label="Share this page"
           className={cn("h-10 w-10", className)}>
           <Share2 className="!size-5" />
-          <span className="sr-only">Share</span>
+          <span className="sr-only">Share this page</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         side="left"
         align="end"
+        aria-label="Share options"
         className="flex w-48 flex-col items-stretch justify-start gap-1.5">
         <DropdownMenuItem onClick={() => handleShare("whatsapp")}>
           <icons.whatsapp className="!size-4" />

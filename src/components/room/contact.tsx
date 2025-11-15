@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { AtSignIcon, MailIcon } from "lucide-react";
 import Link from "next/link";
@@ -152,7 +152,10 @@ export const Contact = function Contact({
           explore how we can achieve something remarkable together.
         </Paragraph>
       </div>
-      <div className="grid flex-1 grid-cols-1 gap-12 sm:grid-cols-2">
+      <div
+        role="list"
+        aria-label="Contact methods"
+        className="grid flex-1 grid-cols-1 gap-12 sm:grid-cols-2">
         {activeContacts.map((contactItem) => (
           <ContactItem
             key={typeof contactItem === "number" ? contactItem : contactItem.id}

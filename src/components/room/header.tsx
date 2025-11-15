@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
@@ -106,6 +106,7 @@ export const Header = function Header({
       </div>
 
       <SectionTitle
+        as="h1"
         className="mx-auto mb-12 text-left font-bold !leading-[0.95] md:text-center lg:mb-24"
         style={{ wordBreak: "break-word" }}>
         {headline}
@@ -113,13 +114,13 @@ export const Header = function Header({
 
       <div className="flex flex-col items-center gap-2.5 sm:flex-row sm:gap-5 md:justify-center">
         <Button size="lg" className="w-full sm:w-max" asChild>
-          <Link href="#contact">
+          <Link href="#packages">
             <ArrowRightIcon />
-            Connect with me
+            View my packages & pricing
           </Link>
         </Button>
         <Button variant="ghost" size="lg" className="w-full sm:w-max" asChild>
-          <Link href="#services">View my services</Link>
+          <Link href="#contact">Connect with me</Link>
         </Button>
       </div>
     </Container>

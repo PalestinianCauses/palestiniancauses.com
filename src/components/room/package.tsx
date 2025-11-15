@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { ArrowUpRight, ClockIcon, Package2Icon, PlusIcon } from "lucide-react";
 import { Fragment, useState } from "react";
@@ -45,11 +45,14 @@ const PackagesPlusFilters = function PackagesPlusFilters({
         />
       )}
       {packagesFiltered.length !== 0 ? (
-        <div className="mx-auto grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3">
+        <div
+          role="list"
+          aria-label="Packages list"
+          className="mx-auto grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3">
           {packagesFiltered.map(
             (packageElement) =>
               isObject(packageElement) && (
-                <div key={packageElement.id}>
+                <article key={packageElement.id}>
                   <div
                     className={cn(
                       "relative flex h-full flex-col justify-between border border-input bg-primary-foreground p-5 sm:p-10",
@@ -154,13 +157,16 @@ const PackagesPlusFilters = function PackagesPlusFilters({
                       }
                     />
                   </div>
-                </div>
+                </article>
               ),
           )}
         </div>
       ) : (
-        <div className="py-12 text-center">
-          <Package2Icon className="mx-auto mb-6 h-20 w-20 stroke-[1.5] text-foreground" />
+        <div role="status" aria-live="polite" className="py-12 text-center">
+          <Package2Icon
+            className="mx-auto mb-6 h-20 w-20 stroke-[1.5] text-foreground"
+            aria-hidden="true"
+          />
           <SubSectionHeading
             as="h4"
             className="mx-auto text-center text-xl font-medium text-foreground lg:text-xl xl:text-xl">

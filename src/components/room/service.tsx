@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import {
   ArrowUpRight,
@@ -40,7 +40,7 @@ export const ServiceItem = function ServiceItem({
   const isAvailable = service.status === "available";
 
   return (
-    <div className="pt-16 lg:pt-0">
+    <article className="pt-16 lg:pt-0">
       <InformationBadges
         className="[@media(min-width:20rem)]:grid-cols-1"
         iconContainerClassName="bg-transparent text-foreground ring-0"
@@ -109,7 +109,7 @@ export const ServiceItem = function ServiceItem({
           }
         />
       )}
-    </div>
+    </article>
   );
 };
 
@@ -143,7 +143,10 @@ export const Services = function Services({
         />
       )}
       {servicesFiltered.length !== 0 ? (
-        <div className="isolate grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
+        <div
+          role="list"
+          aria-label="Services list"
+          className="isolate grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
           {servicesFiltered.map((service) => (
             <ServiceItem
               key={typeof service === "number" ? service : service.id}
@@ -153,8 +156,11 @@ export const Services = function Services({
           ))}
         </div>
       ) : (
-        <div className="py-12 text-center">
-          <BriefcaseBusinessIcon className="mx-auto mb-6 h-20 w-20 stroke-[1.5] text-foreground" />
+        <div role="status" aria-live="polite" className="py-12 text-center">
+          <BriefcaseBusinessIcon
+            className="mx-auto mb-6 h-20 w-20 stroke-[1.5] text-foreground"
+            aria-hidden="true"
+          />
           <SubSectionHeading
             as="h4"
             className="mx-auto text-center text-xl font-medium text-foreground lg:text-xl xl:text-xl">

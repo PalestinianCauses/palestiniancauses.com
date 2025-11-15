@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import {
   ArrowRightIcon,
@@ -6,6 +6,7 @@ import {
   TimerIcon,
   UserCheckIcon,
 } from "lucide-react";
+import Link from "next/link";
 import { ElementType, Fragment, HTMLAttributes, useId } from "react";
 
 import { getMediaAltText, getMediaURL } from "@/lib/utils/media";
@@ -221,9 +222,11 @@ export const About = function About({
               <Paragraph className="mb-6 lg:mb-12">
                 {paragraphs[0].paragraph}
               </Paragraph>
-              <Button>
-                <ArrowRightIcon />
-                Start your project
+              <Button asChild>
+                <Link href="#packages">
+                  <ArrowRightIcon />
+                  Start your project
+                </Link>
               </Button>
             </div>
 

@@ -1,10 +1,11 @@
-// REVIEWED - 05
+// REVIEWED - 06
 import {
   ArrowRightIcon,
   AtSignIcon,
   BriefcaseIcon,
   MapIcon,
 } from "lucide-react";
+import Link from "next/link";
 
 import { getMediaAltText, getMediaURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
@@ -119,9 +120,11 @@ export const Experience = function Experience({
           <SectionHeading as="h3" className="mb-6 lg:mb-12">
             {experience.headline}
           </SectionHeading>
-          <Button className="mb-12 lg:mb-24">
-            <ArrowRightIcon />
-            Connect with me
+          <Button className="mb-12 lg:mb-24" asChild>
+            <Link href="#contact">
+              <ArrowRightIcon />
+              Connect with me
+            </Link>
           </Button>
           <div>
             {experiencePhotograph ? (

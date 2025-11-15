@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CalendarIcon } from "lucide-react";
 import { ElementType, Fragment, HTMLAttributes } from "react";
@@ -10,6 +10,7 @@ import {
   Tooltip,
   TooltipArrow,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
 
@@ -84,20 +85,22 @@ export const InformationBadges = function InformationBadges({
               className={cn("h-4 w-4 shrink-0 stroke-2", iconClassName)}
             />
           </div>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <SubSectionHeading
-                as="h5"
-                small
-                className="truncate text-base tracking-normal lg:text-base xl:text-base">
-                {item.label}
-              </SubSectionHeading>
-            </TooltipTrigger>
-            <TooltipContent>
-              <TooltipArrow />
-              <p>{item.label}</p>
-            </TooltipContent>
-          </Tooltip>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="w-full min-w-0 cursor-default overflow-hidden text-left">
+                <SubSectionHeading
+                  as="h5"
+                  small
+                  className="w-full truncate text-base tracking-normal lg:text-base xl:text-base">
+                  {item.label}
+                </SubSectionHeading>
+              </TooltipTrigger>
+              <TooltipContent>
+                <TooltipArrow />
+                <p>{item.label}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       ))}
     </div>
