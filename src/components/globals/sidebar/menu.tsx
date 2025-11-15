@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import {
   ArrowRightLeftIcon,
@@ -76,7 +76,7 @@ const policies = [
   },
 ];
 
-const icons: Partial<Record<string, ElementType>> = {
+export const icons: Record<string, ElementType> = {
   about: BookCopyIcon,
   experience: BriefcaseIcon,
   education: GraduationCapIcon,

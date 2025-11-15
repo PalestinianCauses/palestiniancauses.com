@@ -1,11 +1,16 @@
-// REVIEWED - 03
+"use client";
+
+// REVIEWED - 04
+
 import {
   ArrowUpRight,
+  BriefcaseBusinessIcon,
   CheckIcon,
   ClockIcon,
   TagsIcon,
   XIcon,
 } from "lucide-react";
+import { useState } from "react";
 
 import { isObject } from "@/lib/types/guards";
 import { Room } from "@/payload-types";
@@ -21,6 +26,7 @@ import { Button } from "../ui/button";
 
 import { InformationBadges } from "./globals";
 import { OrderForm } from "./order-form";
+import { ServiceFilters } from "./service-filters";
 
 export const ServiceItem = function ServiceItem({
   service,
@@ -116,6 +122,8 @@ export const Services = function Services({
   };
   roomOwner: number;
 }) {
+  const [servicesFiltered, setServicesFiltered] = useState(services.list);
+
   return (
     <Container
       as="section"
@@ -127,15 +135,33 @@ export const Services = function Services({
       <SectionHeading as="h3" className="mb-12 lg:mb-24">
         {services.headline}
       </SectionHeading>
-      <div className="isolate grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
-        {services.list.map((service) => (
-          <ServiceItem
-            key={typeof service === "number" ? service : service.id}
-            service={service}
-            roomOwner={roomOwner}
-          />
-        ))}
-      </div>
+      {services.list.length > 3 && (
+        <ServiceFilters
+          services={services.list}
+          onFilterChange={setServicesFiltered}
+          className="mb-8"
+        />
+      )}
+      {servicesFiltered.length !== 0 ? (
+        <div className="isolate grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
+          {servicesFiltered.map((service) => (
+            <ServiceItem
+              key={typeof service === "number" ? service : service.id}
+              service={service}
+              roomOwner={roomOwner}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="py-12 text-center">
+          <BriefcaseBusinessIcon className="mx-auto mb-6 h-20 w-20 stroke-[1.5] text-foreground" />
+          <SubSectionHeading
+            as="h4"
+            className="mx-auto text-center text-xl font-medium text-foreground lg:text-xl xl:text-xl">
+            No service found matching your filters.
+          </SubSectionHeading>
+        </div>
+      )}
     </Container>
   );
 };

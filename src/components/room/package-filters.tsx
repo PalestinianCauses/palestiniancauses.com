@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { Search, X } from "lucide-react";
 import { HTMLAttributes, useEffect, useMemo, useState } from "react";
@@ -105,7 +105,7 @@ export const PackageFilters = function PackageFilters({
         )}
       </div>
       <Select value={bySort} onValueChange={setBySort}>
-        <SelectTrigger className="w-full sm:w-[200px]">
+        <SelectTrigger className="w-full sm:w-[12.5rem]">
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
         <SelectContent>

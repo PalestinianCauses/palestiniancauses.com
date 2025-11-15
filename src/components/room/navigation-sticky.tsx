@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { ChevronUp, Menu, X } from "lucide-react";
 import Link from "next/link";
@@ -10,6 +10,7 @@ import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 import { useSectionObserver } from "@/hooks/use-section-observer";
 import { cn } from "@/lib/utils/styles";
 
+import { icons } from "../globals/sidebar/menu";
 import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
 import {
@@ -117,6 +118,7 @@ export const NavigationSticky = function NavigationSticky({
           <div className="flex flex-col items-stretch justify-start">
             {items.map((item) => {
               const isActive = activeSection === item.id;
+              const Icon = icons[item.label.toLowerCase()];
               return (
                 <TooltipProvider key={item.id}>
                   <Tooltip>
@@ -125,7 +127,7 @@ export const NavigationSticky = function NavigationSticky({
                         variant="ghost"
                         size="sm"
                         className={cn(
-                          "h-auto justify-start border-l-2 border-transparent px-5 py-2.5 text-left text-muted-foreground",
+                          "h-auto justify-start gap-2.5 border-l-2 border-transparent px-5 py-2.5 text-left capitalize text-muted-foreground",
                           isActive &&
                             "border-foreground bg-foreground/5 text-foreground",
                         )}
@@ -142,6 +144,7 @@ export const NavigationSticky = function NavigationSticky({
                             if (element)
                               element.scrollIntoView({ behavior: "smooth" });
                           }}>
+                          <Icon />
                           {item.label}
                         </Link>
                       </Button>

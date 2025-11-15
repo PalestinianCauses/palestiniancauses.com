@@ -1,4 +1,4 @@
-/* REVIEWED - 16 */
+/* REVIEWED - 17 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -151,6 +151,25 @@
       animation-iteration-count: infinite;
       animation-duration: 1s;
     }
+  }
+
+  input[type="search"]::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  input[type="search"]::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  input[type="search"]::-webkit-search-decoration,
+  input[type="search"]::-webkit-search-results-button,
+  input[type="search"]::-webkit-search-results-decoration,
+  input[type="search"]::-webkit-search-cancel-button {
+    display: none;
   }
 }
 

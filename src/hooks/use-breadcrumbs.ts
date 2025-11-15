@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -86,7 +86,10 @@ export const useBreadcrumbs = (): UseBreadcrumbs[] => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const updateTitle = () => {
-        const title = document.title.replace(" | PalestinianCauses", "");
+        const title = document.title.replace(
+          " | PalestinianCauses Digital Agency",
+          "",
+        );
         setDocumentTitle(title);
       };
 

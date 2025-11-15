@@ -1,16 +1,16 @@
-// REVIEWED
+// REVIEWED - 01
 
-import {
-  AtSignIcon,
-  GithubIcon,
-  Instagram,
-  LinkedinIcon,
-  MailIcon,
-  MessageCircleIcon,
-  TwitterIcon,
-} from "lucide-react";
+import { AtSignIcon, MailIcon } from "lucide-react";
 import Link from "next/link";
 import { ElementType } from "react";
+import {
+  RiGithubLine,
+  RiInstagramLine,
+  RiLinkedinLine,
+  RiTelegram2Line,
+  RiTwitterXFill,
+  RiWhatsappLine,
+} from "react-icons/ri";
 
 import { isDefined, isNumber, isObject } from "@/lib/types/guards";
 import { cn } from "@/lib/utils/styles";
@@ -30,27 +30,27 @@ const contactIcons: Record<string, { icon: ElementType; label: string }> = {
     label: "Email",
   },
   whatsapp: {
-    icon: MessageCircleIcon,
+    icon: RiWhatsappLine,
     label: "WhatsApp",
   },
   telegram: {
-    icon: MessageCircleIcon,
+    icon: RiTelegram2Line,
     label: "Telegram",
   },
   twitter: {
-    icon: TwitterIcon,
+    icon: RiTwitterXFill,
     label: "Twitter/X",
   },
   instagram: {
-    icon: Instagram,
+    icon: RiInstagramLine,
     label: "Instagram",
   },
   linkedin: {
-    icon: LinkedinIcon,
+    icon: RiLinkedinLine,
     label: "LinkedIn",
   },
   github: {
-    icon: GithubIcon,
+    icon: RiGithubLine,
     label: "GitHub",
   },
   other: {
@@ -102,7 +102,7 @@ const ContactItem = function ContactItem({
         "group relative flex flex-col items-start justify-start gap-5",
       )}>
       <div className="flex h-20 w-20 flex-col items-center justify-center bg-background text-foreground ring-1 ring-input transition duration-300 ease-in-out group-hover:bg-foreground group-hover:text-background">
-        <Icon className={cn("h-10 w-10 stroke-[1.5]")} />
+        <Icon className={cn("h-10 w-10")} />
       </div>
       <SubSectionHeading
         as="h4"

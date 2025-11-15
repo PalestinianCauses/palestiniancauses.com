@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useEffect, useState } from "react";
 
@@ -14,7 +14,7 @@ export const useSectionObserver = function useSectionObserver(
   options: SectionObserverOptions = {},
 ) {
   const {
-    rootMargin = "-20% 0rem -75% 0rem",
+    rootMargin = "-20% 0px -75% 0px",
     threshold = 0,
     sectionIds,
   } = options;

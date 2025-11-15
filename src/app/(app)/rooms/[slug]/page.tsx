@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { Metadata } from "next";
 
@@ -12,6 +12,7 @@ import { Experience } from "@/components/room/experience";
 import { Header } from "@/components/room/header";
 import { Packages } from "@/components/room/package";
 import { Qualification } from "@/components/room/qualification";
+import { RoomInteractive } from "@/components/room/room-interactive";
 import { Services } from "@/components/room/service";
 import { Skills } from "@/components/room/skills";
 
@@ -41,6 +42,10 @@ export default async function RoomPage({
 
   return (
     <div className="py-48 lg:py-32 xl:py-48">
+      <RoomInteractive
+        room={response.data}
+        roomOwner={response.data.information.name}
+      />
       <Header
         name={response.data.information.name}
         title={response.data.information.title}
