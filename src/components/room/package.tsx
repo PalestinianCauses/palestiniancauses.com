@@ -1,7 +1,11 @@
-// REVIEWED - 04
+"use client";
 
-import { ArrowUpRight, ClockIcon, PlusIcon } from "lucide-react";
+// REVIEWED - 05
 
+import { ArrowUpRight, ClockIcon, Package2Icon, PlusIcon } from "lucide-react";
+import { Fragment, useState } from "react";
+
+import { isObject } from "@/lib/types/guards";
 import { cn } from "@/lib/utils/styles";
 import { Room } from "@/payload-types";
 
@@ -18,40 +22,33 @@ import { Button } from "../ui/button";
 import { SVGCircle } from "./about";
 import { InformationBadges } from "./globals";
 import { OrderForm } from "./order-form";
+import { PackageFilters } from "./package-filters";
 
-export const Packages = function Packages({
+const PackagesPlusFilters = function PackagesPlusFilters({
   packages,
   roomOwner,
 }: {
-  packages: Omit<NonNullable<Room["packages"]>, "list"> & {
-    list: NonNullable<NonNullable<Room["packages"]>["list"]>;
-  };
+  packages: NonNullable<NonNullable<Room["packages"]>["list"]>;
   roomOwner: number;
 }) {
+  const [packagesFiltered, setPackagesFiltered] = useState<
+    NonNullable<NonNullable<Room["packages"]>["list"]>
+  >(packages.filter((packageElement) => isObject(packageElement)));
+
   return (
-    <Container
-      as="section"
-      id="packages"
-      className="section-padding-start-lg isolate overflow-hidden">
-      <div className="pb-96">
-        <div className="relative">
-          <SVGCircle />
-        </div>
-      </div>
-      <div className="section-padding-end -mx-5 flow-root border-t border-input bg-background lg:-mx-7">
-        <div className="mx-auto -mt-80 max-w-7xl px-5 lg:px-7">
-          <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">
-            {packages["headline-sub"]}
-          </SectionHeadingBadge>
-          <SectionHeading as="h3" className="mb-12 lg:mb-24">
-            {packages.headline}
-          </SectionHeading>
-          <div className="mx-auto grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3">
-            {packages.list
-              .filter((packageElement) => typeof packageElement === "object")
-              .sort((a, b) => a.order - b.order)
-              .reverse()
-              .map((packageElement) => (
+    <Fragment>
+      {packages.length > 3 && (
+        <PackageFilters
+          packages={packages}
+          onFilterChange={setPackagesFiltered}
+          className="mb-10"
+        />
+      )}
+      {packagesFiltered.length !== 0 ? (
+        <div className="mx-auto grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3">
+          {packagesFiltered.map(
+            (packageElement) =>
+              isObject(packageElement) && (
                 <div key={packageElement.id}>
                   <div
                     className={cn(
@@ -158,8 +155,51 @@ export const Packages = function Packages({
                     />
                   </div>
                 </div>
-              ))}
-          </div>
+              ),
+          )}
+        </div>
+      ) : (
+        <div className="py-12 text-center">
+          <Package2Icon className="mx-auto mb-6 h-20 w-20 stroke-[1.5] text-foreground" />
+          <SubSectionHeading
+            as="h4"
+            className="mx-auto text-center text-xl font-medium text-foreground lg:text-xl xl:text-xl">
+            No packages found matching your filters.
+          </SubSectionHeading>
+        </div>
+      )}
+    </Fragment>
+  );
+};
+
+export const Packages = function Packages({
+  packages,
+  roomOwner,
+}: {
+  packages: Omit<NonNullable<Room["packages"]>, "list"> & {
+    list: NonNullable<NonNullable<Room["packages"]>["list"]>;
+  };
+  roomOwner: number;
+}) {
+  return (
+    <Container
+      as="section"
+      id="packages"
+      className="section-padding-start-lg isolate overflow-hidden">
+      <div className="pb-96">
+        <div className="relative">
+          <SVGCircle />
+        </div>
+      </div>
+      <div className="section-padding-end -mx-5 flow-root border-t border-input bg-background lg:-mx-7">
+        <div className="mx-auto -mt-80 max-w-7xl px-5 lg:px-7">
+          <SectionHeadingBadge as="h2" className="mb-3 lg:mb-6">
+            {packages["headline-sub"]}
+          </SectionHeadingBadge>
+          <SectionHeading as="h3" className="mb-12 lg:mb-24">
+            {packages.headline}
+          </SectionHeading>
+          <PackagesPlusFilters packages={packages.list} roomOwner={roomOwner} />
         </div>
       </div>
     </Container>
