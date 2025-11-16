@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -17,15 +17,54 @@ export const DELETE = async function DELETE(request: Request) {
   }
 
   const body = (await json()) as { email: string };
+
+  if (!body.email || typeof body.email !== "string")
+    return new Response(
+      JSON.stringify("Email is required and must be a string"),
+      { status: 400 },
+    );
+
+  const userResponse = await payload.find({
+    collection: "users",
+    where: { email: { equals: body.email } },
+    limit: 1,
+  });
+
+  if (!userResponse.docs.length)
+    return new Response(JSON.stringify(messages.actions.user.notFound), {
+      status: 404,
+    });
+
+  const userId = userResponse.docs[0].id;
+
+  const diaryEntriesResponse = await payload.find({
+    collection: "diary-entries",
+    where: { author: { equals: userId } },
+    limit: 1000,
+  });
+
+  if (diaryEntriesResponse.docs.length)
+    // eslint-disable-next-line no-restricted-syntax
+    for (const entry of diaryEntriesResponse.docs) {
+      // eslint-disable-next-line no-await-in-loop
+      await actionSafeExecute(
+        payload.delete({
+          collection: "diary-entries",
+          id: entry.id,
+        }),
+        messages.actions.user.delete.serverError,
+      );
+    }
+
   const response = await actionSafeExecute(
     payload.delete({
       collection: "users",
-      where: { email: { equals: body.email } },
+      id: userId,
     }),
     messages.actions.user.delete.serverError,
   );
 
-  if (!response.data || response.data.errors.length > 0 || response.error) {
+  if (!response.data || response.error) {
     return new Response(JSON.stringify(response.error), {
       status: 400,
     });

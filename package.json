@@ -22,7 +22,7 @@
     "migrate:users-roles": "payload run src/scripts/migrate-users-roles.ts",
     "clean-up:previous-role": "payload run src/scripts/clean-up-previous-role.ts",
     "payload:types": "payload generate:types",
-    "playwright:test": "playwright test",
+    "playwright:test": "playwright test --ui",
     "format": "prettier --write ."
   },
   "dependencies": {

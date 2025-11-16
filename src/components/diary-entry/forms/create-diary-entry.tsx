@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -108,11 +108,9 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
                         )}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent
-                      className="w-auto p-0"
-                      align="start"
-                      data-testid="diary-date-calendar">
+                    <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
+                        data-testid="diary-date-calendar"
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}

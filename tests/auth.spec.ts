@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { expect, test } from "@playwright/test";
 
@@ -24,7 +24,7 @@ test.describe("Authentication: Sign Up Flows", () => {
       page.getByText(messages.actions.auth.signIn.success),
     ).toBeVisible();
 
-    await expect(page).toHaveURL("/");
+    await expect(page).toHaveURL("/a-human-but-from-gaza");
 
     const response = await httpSafeExecute<string, string>({
       http: fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`, {
@@ -114,7 +114,7 @@ test.describe("Authentication: Sign In Flows", () => {
       page.getByText(messages.actions.auth.signIn.success),
     ).toBeVisible();
 
-    await expect(page).toHaveURL("/");
+    await expect(page).toHaveURL("/a-human-but-from-gaza");
   });
 
   test("should show error when user is not yet a family member", async ({
