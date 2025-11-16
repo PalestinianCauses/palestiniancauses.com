@@ -1,10 +1,15 @@
 "use client";
 
-// REVIEWED - 28
+// REVIEWED - 29
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
-import { QuoteIcon } from "lucide-react";
+import {
+  BookOpenIcon,
+  HeartPulseIcon,
+  PenLineIcon,
+  QuoteIcon,
+} from "lucide-react";
 import Image from "next/image";
 import { Fragment, useRef } from "react";
 
@@ -12,7 +17,10 @@ import {
   SectionHeading,
   SectionHeadingBadge,
   SectionTitle,
+  SubSectionHeading,
 } from "@/components/globals/typography";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils/styles";
 
 // eslint-disable-next-line import/no-cycle
 import {
@@ -28,9 +36,9 @@ import {
   ImageFrameRender,
 } from "./_components/frame";
 // eslint-disable-next-line import/no-cycle
-import { PSCLogo } from "./_components/psc-logo";
-// eslint-disable-next-line import/no-cycle
 import { DiaryEntryTemplate } from "./_templates/diary-entry";
+// eslint-disable-next-line import/no-cycle
+import { PSCLogo } from "./_components/psc-logo";
 
 export type Properties = "bg" | "text" | "fill" | "stroke";
 export type ThemeStyles = "fill" | "stroke";
@@ -380,72 +388,223 @@ const InstagramStudioPage = function InstagramStudioPage() {
     },
   ];
 
+  const otherFrames: ImageFrame[] = [
+    {
+      id: "instagram-profile-links-01",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "instagram-profile-links-02",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+    {
+      id: "instagram-profile-links-03",
+      ref: useRef<HTMLDivElement>(null),
+      as: "png",
+    },
+  ];
+
+  const color: ThemeColors = "primary-foreground";
+  const author = "Lelyan";
+
   return (
     <main className="section-padding-start-lg">
-      {/* A Human But From Gaza */}
-      {/* <AHumanButFromGazaTemplate /> */}
       {/* Diary Entry */}
+      <ImageFrameRender frames={otherFrames} />
+      <Frame
+        ref={otherFrames[0].ref}
+        dimensions="1:1"
+        color="primary-foreground">
+        <FrameContent className="items-center justify-center">
+          <BookOpenIcon className="size-[40rem] stroke-[1]" />
+        </FrameContent>
+      </Frame>
+      <Frame ref={otherFrames[1].ref} dimensions="1:1" color="primary">
+        <FrameContent className="items-center justify-center">
+          <PenLineIcon className="size-[40rem] stroke-[1]" />
+        </FrameContent>
+      </Frame>
+      <Frame
+        ref={otherFrames[2].ref}
+        dimensions="1:1"
+        color="primary-foreground">
+        <FrameContent className="items-center justify-center">
+          <HeartPulseIcon className="size-[40rem] stroke-[1]" />
+        </FrameContent>
+      </Frame>
+      <Frame
+        dimensions="9:16"
+        color={color}
+        className={cn({
+          "bg-background": color === "primary-foreground",
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          "bg-foreground": color === "primary",
+        })}>
+        <div
+          className={cn("absolute bottom-0 h-10 w-full", {
+            "bg-primary": color === "primary-foreground",
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            "bg-background": color === "primary",
+          })}
+        />
+        <FrameContent className="-mt-24 h-[90rem]">
+          <div className="flex items-center gap-5">
+            <FrameSquare
+              className={cn("h-20 w-20", {
+                "bg-primary text-primary-foreground ring-primary":
+                  color === "primary-foreground",
+                "bg-primary-foreground text-primary ring-primary-foreground":
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  color === "primary",
+              })}>
+              <SectionHeading
+                className={cn({
+                  "text-primary-foreground": color === "primary-foreground",
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  "text-primary": color === "primary",
+                })}>
+                {String(author).charAt(0).toUpperCase()}
+              </SectionHeading>
+            </FrameSquare>
+            <div className="flex flex-col gap-2.5">
+              <SubSectionHeading
+                className={cn(
+                  "font-semibold !leading-none lg:!leading-none xl:!leading-none",
+                  {
+                    "text-primary": color === "primary-foreground",
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    "text-primary-foreground": color === "primary",
+                  },
+                )}>
+                Composed by {author}.
+              </SubSectionHeading>
+              <Badge
+                size="sm"
+                className={cn("border-l-4 text-lg font-semibold ring-0", {
+                  "border-primary bg-primary/5 text-primary hover:bg-primary/5":
+                    color === "primary-foreground",
+                  "border-primary-foreground bg-primary-foreground/5 text-primary-foreground hover:bg-primary-foreground/5":
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    color === "primary",
+                })}>
+                Featured in The Truth Museum: Humans But From Gaza.
+              </Badge>
+            </div>
+          </div>
+          <FrameParagraph>
+            Then, from the radio, we heard a sound we know all too well,{" "}
+            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+              unmistakable to any heart or ear.
+            </FrameParagraphHighlight>{" "}
+            The sound of tragedy at the very moment it strikes. In the
+            background, a tone rises that cannot be put into words. It is not a
+            scream, nor a cry, but something in between... something
+            unutterable. The news anchor&apos;s voice trembled as he spoke: the
+            occupation had committed a massacre, it had bombed{" "}
+            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+              Al-Ahli
+            </FrameParagraphHighlight>{" "}
+            <br />
+            <FrameParagraphHighlight className="bg-primary pr-0 text-primary-foreground">
+              &ldquo;Al-
+            </FrameParagraphHighlight>
+            <FrameParagraphHighlight className="bg-primary pl-0 text-primary-foreground">
+              Ma&apos;amadani&ldquo;
+            </FrameParagraphHighlight>{" "}
+            Hospital in Gaza City. A hospital!
+          </FrameParagraph>
+          <FrameParagraph>
+            A wave of continuous weeping swept over us in a single moment.{" "}
+            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+              Hundreds of souls were stolen,
+            </FrameParagraphHighlight>{" "}
+            souls that had sought refuge in a place they believed would protect
+            them. A massacre that took with it new victims, dignity, feelings,
+            memories, and future dreams. It was a clear declaration, there is no
+            safe place in Gaza. That moment was the point at which{" "}
+            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+              all hope for the world to act ceased.
+            </FrameParagraphHighlight>{" "}
+            Time kept moving, but without a sound...
+          </FrameParagraph>
+          <FrameTitle className="-mt-8">
+            without an{" "}
+            <FrameHighlight className="section-heading-highlight-primary-foreground">
+              action.
+            </FrameHighlight>
+          </FrameTitle>
+        </FrameContent>
+      </Frame>
       <DiaryEntryTemplate
-        id="diary-entry-02"
+        id="diary-entry-08"
         color="primary"
         author="Basmala"
         badge="The Truth Museum: Humans But From Gaza"
         title={
           <Fragment>
-            A <br />
-            <FrameHighlight className="frame-highlight-primary">
-              Deserted
+            A{" "}
+            <FrameHighlight className="section-heading-highlight-primary mb-2.5">
+              Dead One
             </FrameHighlight>{" "}
-            Museum <br /> of{" "}
-            <FrameHighlight className="frame-highlight-primary">
-              Cherished
-            </FrameHighlight>{" "}
-            Memories.
+            Taking Shape in the Faces of the{" "}
+            <FrameHighlight className="section-heading-highlight-primary mb-2.5">
+              Living.
+            </FrameHighlight>
           </Fragment>
         }
         paragraph={
           <Fragment>
             <FrameParagraph>
-              Our current life passes, but our words and speech are about the
-              past—on the time before this merciless war. Many of our words take
-              the form of expressions like,{" "}
+              At the beginning of this war, I was texting and calling my
+              friend—Shahed,{" "}
               <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-                &quot;Do you remember when we were...?&quot;
+                but I received no answer.
               </FrameParagraphHighlight>{" "}
-              or{" "}
+              At that time the phone connection was really poor. It was hard to
+              deliver or receive the two-words message{" "}
               <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-                &quot;When
+                &ldquo;We survived,&ldquo;
               </FrameParagraphHighlight>{" "}
-              <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-                did we visit that place before it was destroyed?&quot;
-              </FrameParagraphHighlight>{" "}
-              On the other hand, our words are about the anonymous future, that
-              there is nothing we can do but wait, we let it to the time;
-              because we do not have any other choice!
+              whether from my family or my friends.
             </FrameParagraph>
             <FrameParagraph>
-              However, if they have controlled our physical belongings that
-              carry the weight of our memories, they cannot control the memories
-              stored in our minds.{" "}
+              Every now and then, I tried to call my friend Shahed whenever I
+              remembered her, in the morning or at night, and when the
+              connection was possible, but the answer was the same—there was no
+              reply. I recall once withdrawing from the gathering of my
+              uncle&apos;s family, who had taken refuge in my home at that time,{" "}
               <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-                These memories are delicately woven...
-              </FrameParagraphHighlight>
+                hoping to hear or see any news about
+              </FrameParagraphHighlight>{" "}
+              <FrameParagraphHighlight className="bg-primary-foreground text-primary">
+                Shahed,
+              </FrameParagraphHighlight>{" "}
+              but after the same reply, a terrible thought haunted me—that she
+              passed away. I put down the phone and left my place...
             </FrameParagraph>
           </Fragment>
         }
         closure={
           <Fragment>
-            ...like <br />
-            <FrameHighlight className="frame-highlight-primary">
-              exhibits
+            trying to{" "}
+            <FrameHighlight className="section-heading-highlight-primary">
+              escape
             </FrameHighlight>{" "}
-            in an abandoned
-            <FrameHighlight className="frame-highlight-primary">
-              museum.
-            </FrameHighlight>{" "}
+            the thought of this{" "}
+            <FrameHighlight className="section-heading-highlight-primary">
+              probability.
+            </FrameHighlight>
           </Fragment>
         }
-        link="palestiniancauses.com/humans-but-from-gaza/17"
+        link="palestiniancauses.com/humans-but-from-gaza/30"
       />
       <ImageFrameRender frames={profileImagesFrames} />
       <ImageFrameRender frames={hoodiesFrames} />

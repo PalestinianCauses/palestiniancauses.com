@@ -1,4 +1,4 @@
-// REVIEWED - 16
+// REVIEWED - 17
 
 import { CollectionConfig } from "payload";
 
@@ -54,12 +54,7 @@ export const DiaryEntries: CollectionConfig = {
       admin: {
         date: {
           pickerAppearance: "dayOnly",
-          minDate: new Date(2023, 9, 7, 0, 0, 0, 0),
-          maxDate: new Date(
-            new Date(
-              new Date().setUTCDate(new Date().getUTCDate() - 1),
-            ).setUTCHours(0, 0, 0, 0),
-          ),
+          maxDate: new Date(new Date().setUTCHours(23, 59, 59, 999)),
         },
       },
       label: "Date",
