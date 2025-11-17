@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -108,6 +108,7 @@ export const ReplyCommentForm = function ReplyCommentForm({
                 <FormControl>
                   <Textarea
                     {...field}
+                    data-testid="comment-reply-content-input"
                     disabled={createComment.isPending}
                     rows={4}
                     className="!mb-2 resize-none"
@@ -119,6 +120,7 @@ export const ReplyCommentForm = function ReplyCommentForm({
           />
           <Button
             type="submit"
+            data-testid="comment-reply-submit-button"
             disabled={createComment.isPending}
             className="w-full self-end text-center md:w-max">
             {createComment.isPending ? "Replying..." : "Reply"}

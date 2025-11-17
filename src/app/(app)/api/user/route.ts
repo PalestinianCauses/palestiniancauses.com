@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -43,6 +43,12 @@ export const DELETE = async function DELETE(request: Request) {
     limit: 1000,
   });
 
+  const commentsResponse = await payload.find({
+    collection: "comments",
+    where: { user: { equals: userId } },
+    limit: 1000,
+  });
+
   if (diaryEntriesResponse.docs.length)
     // eslint-disable-next-line no-restricted-syntax
     for (const entry of diaryEntriesResponse.docs) {
@@ -51,6 +57,19 @@ export const DELETE = async function DELETE(request: Request) {
         payload.delete({
           collection: "diary-entries",
           id: entry.id,
+        }),
+        messages.actions.user.delete.serverError,
+      );
+    }
+
+  if (commentsResponse.docs.length)
+    // eslint-disable-next-line no-restricted-syntax
+    for (const comment of commentsResponse.docs) {
+      // eslint-disable-next-line no-await-in-loop
+      await actionSafeExecute(
+        payload.delete({
+          collection: "comments",
+          id: comment.id,
         }),
         messages.actions.user.delete.serverError,
       );

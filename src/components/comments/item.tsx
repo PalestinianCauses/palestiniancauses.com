@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 11
+// REVIEWED - 12
 
 import {
   QueryKey,
@@ -213,6 +213,7 @@ export const CommentItem = function CommentItem({
           {user ? (
             <Button
               variant="ghost"
+              data-testid="comment-reply-button"
               className="p-0 text-muted-foreground hover:bg-transparent"
               onClick={() => setIsReplyFormOpen((previous) => !previous)}>
               {isReplyFormOpen ? (
@@ -245,6 +246,7 @@ export const CommentItem = function CommentItem({
             ) : (
               <Button
                 variant="ghost"
+                data-testid="comment-show-replies-button"
                 className="p-0 text-muted-foreground hover:bg-transparent"
                 disabled={isFetching}
                 aria-expanded={isRepliesOpen}
@@ -266,6 +268,7 @@ export const CommentItem = function CommentItem({
               : comment.user) ? (
             <Button
               variant="ghost"
+              data-testid="comment-delete-button"
               className="p-0 text-muted-foreground hover:bg-transparent"
               disabled={deleteComment.isPending}
               onClick={() => {

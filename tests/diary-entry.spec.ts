@@ -1,12 +1,8 @@
-// REVIEWED
-
-import test, { expect } from "@playwright/test";
+// REVIEWED - 01
 
 import { messages } from "@/lib/messages";
-import { httpSafeExecute } from "@/lib/network";
 
-let userTestingEmail: string | null = null;
-let userTestingPassword: string | null = null;
+import { expect, test } from "./fixtures/auth";
 
 const repeat = (value: string, times: number) =>
   Array.from({ length: times }, (_) => value).join("");
@@ -14,35 +10,35 @@ const repeat = (value: string, times: number) =>
 const diaryEntryContent = repeat("A ", 1500);
 
 test.describe("Diary Entry: Create Diary Entry", () => {
-  test.beforeEach(async ({ page }) => {
-    userTestingEmail = ["testing-", Date.now(), "@example.com"].join("");
-    userTestingPassword = "Secure-Password-012345678@";
+  test("should create a diary entry successfully", async ({
+    pageAuthenticated,
+  }) => {
+    await pageAuthenticated.goto("/humans-but-from-gaza/share");
 
-    await page.goto("/signup");
-    await page.getByTestId("first-name-input").fill("Testing");
-    await page.getByTestId("last-name-input").fill("User");
-    await page.getByTestId("email-input").fill(userTestingEmail);
-    await page.getByTestId("password-input").fill(userTestingPassword);
-    await page.getByTestId("signup-button").click();
+    const title = `Testing Diary Entry ${Date.now()}`;
 
-    await expect(page).toHaveURL("/a-human-but-from-gaza");
-  });
+    await pageAuthenticated.getByTestId("diary-title-input").fill(title);
+    await pageAuthenticated.getByTestId("diary-title-input").blur();
 
-  test("should create a diary entry successfully", async ({ page }) => {
-    await page.goto("/humans-but-from-gaza/share");
-    await page
-      .getByTestId("diary-title-input")
-      .fill(`Testing Diary Entry ${Date.now()}`);
-    await page.getByTestId("diary-date-trigger").click();
-    await page.getByTestId("diary-date-calendar").getByText("16").click();
-    await page.getByTestId("diary-content-input").fill(diaryEntryContent);
-    await page.getByTestId("diary-submit-button").click();
+    const dateTrigger = pageAuthenticated.getByTestId("diary-date-trigger");
+    await expect(dateTrigger).not.toContainText("Choose a date");
+
+    await pageAuthenticated
+      .getByTestId("diary-content-input")
+      .fill(diaryEntryContent);
+    await pageAuthenticated.getByTestId("diary-content-input").blur();
+    await pageAuthenticated.waitForTimeout(1000);
+
+    const submitButton = pageAuthenticated.getByTestId("diary-submit-button");
+
+    await expect(submitButton).toBeEnabled();
+    await submitButton.click();
 
     await expect(
-      page.getByText(messages.actions.diaryEntry.success),
-    ).toBeVisible();
+      pageAuthenticated.getByText(messages.actions.diaryEntry.success),
+    ).toBeVisible({ timeout: 5000 });
 
-    await expect(page).toHaveURL(
+    await expect(pageAuthenticated).toHaveURL(
       [
         "/humans-but-from-gaza",
         [
@@ -52,51 +48,36 @@ test.describe("Diary Entry: Create Diary Entry", () => {
         ].join("&"),
       ].join("?"),
     );
-
-    const response = await httpSafeExecute<string, string>({
-      http: fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`, {
-        method: "DELETE",
-
-        headers: {
-          "X-Testing-Clean-Up-Secret":
-            process.env.PLAYWRIGHT_TESTING_USER_CLEAN_UP_SECRET!,
-        },
-
-        body: JSON.stringify({ email: userTestingEmail }),
-      }),
-      errorDefault: messages.http.serverError,
-      isData: (data) => typeof data === "string",
-    });
-
-    if (response.data) console.log(response.data);
-
-    userTestingEmail = null;
-    userTestingPassword = null;
   });
 
   test("should show error when diary entry title is duplicated", async ({
-    page,
+    pageAuthenticated,
   }) => {
-    await page.goto("/humans-but-from-gaza/share");
-    await page
-      .getByTestId("diary-title-input")
-      .fill("Debugging While the Lights are Out (Somewhere Else)");
-    await page.getByTestId("diary-date-trigger").click();
-    await page.getByTestId("diary-date-calendar").getByText("16").click();
-    await page.getByTestId("diary-content-input").fill(diaryEntryContent);
-    await page.getByTestId("diary-submit-button").click();
+    await pageAuthenticated.goto("/humans-but-from-gaza/share");
+
+    const title = "Silent Exclamation Marks between Lines";
+
+    await pageAuthenticated.getByTestId("diary-title-input").fill(title);
+    await pageAuthenticated.getByTestId("diary-title-input").blur();
+
+    const dateTrigger = pageAuthenticated.getByTestId("diary-date-trigger");
+    await expect(dateTrigger).not.toContainText("Choose a date");
+
+    await pageAuthenticated
+      .getByTestId("diary-content-input")
+      .fill(diaryEntryContent);
+    await pageAuthenticated.getByTestId("diary-content-input").blur();
+    await pageAuthenticated.waitForTimeout(1000);
+
+    const submitButton = pageAuthenticated.getByTestId("diary-submit-button");
+
+    await expect(submitButton).toBeEnabled();
+    await submitButton.click();
 
     await expect(
-      page.getByText(
-        messages.actions.diaryEntry.unique(
-          "Debugging While the Lights are Out (Somewhere Else)",
-        ),
-      ),
-    ).toBeVisible();
+      pageAuthenticated.getByText(messages.actions.diaryEntry.unique(title)),
+    ).toBeVisible({ timeout: 10000 });
 
-    await expect(page).toHaveURL("/humans-but-from-gaza/share");
-
-    userTestingEmail = null;
-    userTestingPassword = null;
+    await expect(pageAuthenticated).toHaveURL("/humans-but-from-gaza/share");
   });
 });

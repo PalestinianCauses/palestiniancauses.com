@@ -1,98 +1,59 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { expect, test } from "@playwright/test";
 
 import { messages } from "@/lib/messages";
-import { httpSafeExecute } from "@/lib/network";
 
-let userTestingEmail: string | null = null;
-let userTestingPassword: string | null = null;
+import { test as testWithFixtures } from "./fixtures/auth";
+import { signIn } from "./helpers/auth";
+import { getExistingUserTest } from "./helpers/user";
 
 test.describe("Authentication: Sign Up Flows", () => {
-  test("should allow user to sign up successfully", async ({ page }) => {
-    userTestingEmail = ["testing-", Date.now(), "@example.com"].join("");
-    userTestingPassword = "Secure-Password-012345678@";
+  testWithFixtures(
+    "should allow user to sign up successfully",
+    async ({ pageAuthenticated: _pageAuthenticated }) => {
+      // User is automatically created, signed up, and will be cleaned up
+    },
+  );
 
-    await page.goto("/signup");
-    await page.getByTestId("first-name-input").fill("Testing");
-    await page.getByTestId("last-name-input").fill("User");
-    await page.getByTestId("email-input").fill(userTestingEmail);
-    await page.getByTestId("password-input").fill(userTestingPassword);
-    await page.getByTestId("signup-button").click();
+  testWithFixtures(
+    "should show error when password entered is not as resilient as Gaza's people",
+    async ({ page, newUser }) => {
+      const user = newUser;
+      user.password = "password";
 
-    await expect(
-      page.getByText(messages.actions.auth.signIn.success),
-    ).toBeVisible();
+      await page.goto("/signup");
+      await page
+        .getByTestId("first-name-input")
+        .fill(user.firstName || "Testing");
+      await page.getByTestId("last-name-input").fill(user.lastName || "User");
+      await page.getByTestId("email-input").fill(user.email);
+      await page.getByTestId("password-input").fill(user.password);
+      await page.getByTestId("signup-button").click();
 
-    await expect(page).toHaveURL("/a-human-but-from-gaza");
+      await expect(
+        page.getByText(messages.actions.auth.signUp.password),
+      ).toBeVisible();
 
-    const response = await httpSafeExecute<string, string>({
-      http: fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`, {
-        method: "DELETE",
-
-        headers: {
-          "X-Testing-Clean-Up-Secret":
-            process.env.PLAYWRIGHT_TESTING_USER_CLEAN_UP_SECRET!,
-        },
-
-        body: JSON.stringify({ email: userTestingEmail }),
-      }),
-      errorDefault: messages.http.serverError,
-      isData: (data) => typeof data === "string",
-    });
-
-    if (response.data) console.log(response.data);
-
-    userTestingEmail = null;
-    userTestingPassword = null;
-  });
-
-  test("should show error when password entered is not as resilient as Gaza's people", async ({
-    page,
-  }) => {
-    userTestingEmail = ["testing-", Date.now(), "@example.com"].join("");
-    userTestingPassword = "password";
-
-    await page.goto("/signup");
-    await page.getByTestId("first-name-input").fill("Testing");
-    await page.getByTestId("last-name-input").fill("User");
-    await page.getByTestId("email-input").fill(userTestingEmail);
-    await page.getByTestId("password-input").fill(userTestingPassword);
-    await page.getByTestId("signup-button").click();
-
-    await expect(
-      page.getByText(messages.actions.auth.signUp.password),
-    ).toBeVisible();
-
-    await expect(page).toHaveURL("/signup");
-
-    userTestingEmail = null;
-    userTestingPassword = null;
-  });
+      await expect(page).toHaveURL("/signup");
+    },
+  );
 
   test("should show error when user is already a family member", async ({
     page,
   }) => {
-    await page.goto("/signup");
+    const existingUser = getExistingUserTest();
 
+    await page.goto("/signup");
     await page.getByTestId("first-name-input").fill("Testing");
     await page.getByTestId("last-name-input").fill("User");
-
-    await page
-      .getByTestId("email-input")
-      .fill(process.env.PLAYWRIGHT_TESTING_USER_EMAIL!);
-
-    await page
-      .getByTestId("password-input")
-      .fill(process.env.PLAYWRIGHT_TESTING_USER_PASSWORD!);
-
+    await page.getByTestId("email-input").fill(existingUser.email);
+    await page.getByTestId("password-input").fill(existingUser.password);
     await page.getByTestId("signup-button").click();
 
     await expect(
       page.getByText(
-        messages.actions.auth.signUp.duplication(
-          process.env.PLAYWRIGHT_TESTING_USER_EMAIL!,
-        ),
+        messages.actions.auth.signUp.duplication(existingUser.email),
       ),
     ).toBeVisible();
 
@@ -102,34 +63,26 @@ test.describe("Authentication: Sign Up Flows", () => {
 
 test.describe("Authentication: Sign In Flows", () => {
   test("should allow user to sign in successfully", async ({ page }) => {
-    userTestingEmail = process.env.PLAYWRIGHT_TESTING_USER_EMAIL!;
-    userTestingPassword = process.env.PLAYWRIGHT_TESTING_USER_PASSWORD!;
+    const user = getExistingUserTest();
 
-    await page.goto("/signin");
-    await page.getByTestId("email-input").fill(userTestingEmail);
-    await page.getByTestId("password-input").fill(userTestingPassword);
-    await page.getByTestId("signin-button").click();
-
-    await expect(
-      page.getByText(messages.actions.auth.signIn.success),
-    ).toBeVisible();
-
-    await expect(page).toHaveURL("/a-human-but-from-gaza");
+    await signIn(page, user);
   });
 
   test("should show error when user is not yet a family member", async ({
     page,
   }) => {
-    userTestingEmail = "non-existing-user@palestiniancauses.com";
-    userTestingPassword = "Secure-Password-012345678@";
+    const user = {
+      email: "non-existing-user@palestiniancauses.com",
+      password: "Secure-Password-012345678@",
+    };
 
     await page.goto("/signin");
-    await page.getByTestId("email-input").fill(userTestingEmail);
-    await page.getByTestId("password-input").fill(userTestingPassword);
+    await page.getByTestId("email-input").fill(user.email);
+    await page.getByTestId("password-input").fill(user.password);
     await page.getByTestId("signin-button").click();
 
     await expect(
-      page.getByText(messages.actions.auth.signIn.notFound(userTestingEmail)),
+      page.getByText(messages.actions.auth.signIn.notFound(user.email)),
     ).toBeVisible();
 
     await expect(page).toHaveURL("/signin");
@@ -138,18 +91,16 @@ test.describe("Authentication: Sign In Flows", () => {
   test("should show error when user's password entered is not correct", async ({
     page,
   }) => {
-    userTestingEmail = process.env.PLAYWRIGHT_TESTING_USER_EMAIL!;
-    userTestingPassword = "wrong-password";
+    const user = getExistingUserTest();
+    user.password = "wrong-password";
 
     await page.goto("/signin");
-    await page.getByTestId("email-input").fill(userTestingEmail);
-    await page.getByTestId("password-input").fill(userTestingPassword);
+    await page.getByTestId("email-input").fill(user.email);
+    await page.getByTestId("password-input").fill(user.password);
     await page.getByTestId("signin-button").click();
 
     await expect(
-      page.getByText(
-        messages.actions.auth.signIn.unAuthenticated(userTestingEmail),
-      ),
+      page.getByText(messages.actions.auth.signIn.unAuthenticated(user.email)),
     ).toBeVisible();
 
     await expect(page).toHaveURL("/signin");
