@@ -1,4 +1,4 @@
-// REVIEWED - 17
+// REVIEWED - 18
 import type { CollectionConfig } from "payload";
 
 import {
@@ -16,6 +16,8 @@ when managing access collections we care about accessing content when users are 
 export const Users: CollectionConfig = {
   slug: "users",
   access: {
+    admin: ({ req }) =>
+      hasPermission(req.user, { resource: "users", action: "manage" }),
     create: hasPermissionAccess({ resource: "users", action: "create" }),
     read: ({ req }) =>
       hasPermissionAccess({ resource: "users", action: "read" })({ req }) ||
@@ -30,8 +32,8 @@ export const Users: CollectionConfig = {
   admin: {
     hidden: ({ user }) =>
       !hasPermission(user as unknown as User, {
-        resource: "users.admin",
-        action: "read",
+        resource: "users",
+        action: "manage",
       }),
     group: "Database",
     defaultColumns: ["id", "email", "firstName", "createdAt"],
@@ -47,6 +49,21 @@ export const Users: CollectionConfig = {
       unique: true,
     },
     {
+      admin: { position: "sidebar" },
+      label: "Account Verified",
+      name: "accountVerified",
+      type: "checkbox",
+      defaultValue: false,
+      required: true,
+    },
+    {
+      admin: { position: "sidebar" },
+      label: "Pending Email",
+      name: "pendingEmail",
+      type: "email",
+      required: false,
+    },
+    {
       label: "First Name",
       name: "firstName",
       type: "text",
@@ -57,6 +74,92 @@ export const Users: CollectionConfig = {
       name: "lastName",
       type: "text",
       defaultValue: "",
+    },
+    {
+      label: "Bio",
+      name: "bio",
+      type: "textarea",
+      required: false,
+      maxLength: 500,
+    },
+    {
+      label: "Avatar",
+      name: "avatar",
+      type: "upload",
+      relationTo: "media",
+      required: false,
+    },
+    {
+      label: "Social Links",
+      name: "linksSocial",
+      type: "group",
+      fields: [
+        {
+          label: "GitHub",
+          name: "github",
+          type: "text",
+          required: false,
+        },
+        {
+          label: "Instagram",
+          name: "instagram",
+          type: "text",
+          required: false,
+        },
+        {
+          label: "Twitter/X",
+          name: "twitter",
+          type: "text",
+          required: false,
+        },
+        {
+          label: "LinkedIn",
+          name: "linkedin",
+          type: "text",
+          required: false,
+        },
+        {
+          label: "Website",
+          name: "website",
+          type: "text",
+          required: false,
+        },
+      ],
+    },
+    {
+      label: "Privacy Settings",
+      name: "privacySettings",
+      type: "group",
+      fields: [
+        {
+          label: "Show Email on Public Profile",
+          name: "showEmail",
+          type: "checkbox",
+          defaultValue: false,
+          required: true,
+        },
+        {
+          label: "Show Activity on Public Profile",
+          name: "showActivity",
+          type: "checkbox",
+          defaultValue: true,
+          required: true,
+        },
+        {
+          label: "Show Achievements on Public Profile",
+          name: "showAchievements",
+          type: "checkbox",
+          defaultValue: true,
+          required: true,
+        },
+        {
+          label: "Show Orders on Public Profile",
+          name: "showOrders",
+          type: "checkbox",
+          defaultValue: false,
+          required: true,
+        },
+      ],
     },
     {
       access: {
