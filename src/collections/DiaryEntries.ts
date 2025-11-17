@@ -1,4 +1,4 @@
-// REVIEWED - 17
+// REVIEWED - 18
 
 import { CollectionConfig } from "payload";
 
@@ -13,6 +13,8 @@ import { User } from "@/payload-types";
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
   access: {
+    admin: ({ req }) =>
+      hasPermission(req.user, { resource: "diary-entries", action: "manage" }),
     create: hasPermissionAccess({
       resource: "diary-entries",
       action: "create",
@@ -33,8 +35,8 @@ export const DiaryEntries: CollectionConfig = {
   admin: {
     hidden: ({ user }) =>
       !hasPermission(user as unknown as User, {
-        resource: "diary-entries.admin",
-        action: "read",
+        resource: "diary-entries",
+        action: "manage",
       }),
     group: "Content",
     defaultColumns: ["id", "title", "date", "status", "author", "createdAt"],

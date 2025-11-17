@@ -1,15 +1,46 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
 
 const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
+  // Achievements notifications management permissions
+  {
+    name: "achievement-notifications.manage",
+    resource: "achievement-notifications",
+    action: "manage",
+    description: "Manage achievement notifications in admin dashboard",
+  },
+  {
+    name: "achievement-notifications.create",
+    resource: "achievement-notifications",
+    action: "create",
+    description: "Create achievement notifications",
+  },
+  {
+    name: "achievement-notifications.read",
+    resource: "achievement-notifications",
+    action: "read",
+    description: "View achievement notifications",
+  },
+  {
+    name: "achievement-notifications.update",
+    resource: "achievement-notifications",
+    action: "update",
+    description: "Update achievement notifications",
+  },
+  {
+    name: "achievement-notifications.delete",
+    resource: "achievement-notifications",
+    action: "delete",
+    description: "Delete achievement notifications",
+  },
   // Blogs management permissions
   {
-    name: "blogs.admin",
-    resource: "blogs.admin",
-    action: "read",
-    description: "View blogs in admin dashboard",
+    name: "blogs.manage",
+    resource: "blogs",
+    action: "manage",
+    description: "Manage blogs in admin dashboard",
   },
   {
     name: "blogs.create",
@@ -69,10 +100,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Comments management permissions
   {
-    name: "comments.admin",
-    resource: "comments.admin",
-    action: "read",
-    description: "View comments in admin dashboard",
+    name: "comments.manage",
+    resource: "comments",
+    action: "manage",
+    description: "Manage comments in admin dashboard",
   },
   {
     name: "comments.create",
@@ -157,10 +188,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Diary entries management permissions
   {
-    name: "diary-entries.admin",
-    resource: "diary-entries.admin",
-    action: "read",
-    description: "View diary entries in admin dashboard",
+    name: "diary-entries.manage",
+    resource: "diary-entries",
+    action: "manage",
+    description: "Manage diary entries in admin dashboard",
   },
   {
     name: "diary-entries.create",
@@ -233,10 +264,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Media management permissions
   {
-    name: "media.admin",
-    resource: "media.admin",
-    action: "read",
-    description: "View media in admin dashboard",
+    name: "media.manage",
+    resource: "media",
+    action: "manage",
+    description: "Manage media in admin dashboard",
   },
   {
     name: "media.create",
@@ -265,10 +296,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Notification subscriptions management permissions
   {
-    name: "notification-subscriptions.admin",
-    resource: "notification-subscriptions.admin",
-    action: "read",
-    description: "View notification subscriptions in admin dashboard",
+    name: "notification-subscriptions.manage",
+    resource: "notification-subscriptions",
+    action: "manage",
+    description: "Manage notification subscriptions in admin dashboard",
   },
   {
     name: "notification-subscriptions.create",
@@ -297,10 +328,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Orders management permissions
   {
-    name: "orders.admin",
-    resource: "orders.admin",
-    action: "read",
-    description: "View orders in admin dashboard",
+    name: "orders.manage",
+    resource: "orders",
+    action: "manage",
+    description: "Manage orders in admin dashboard",
   },
   {
     name: "orders.create",
@@ -329,10 +360,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Permissions management permissions
   {
-    name: "permissions.admin",
-    resource: "permissions.admin",
-    action: "read",
-    description: "View permissions in admin dashboard",
+    name: "permissions.manage",
+    resource: "permissions",
+    action: "manage",
+    description: "Manage permissions in admin dashboard",
   },
   {
     name: "permissions.create",
@@ -361,10 +392,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Products management permissions
   {
-    name: "products.admin",
-    resource: "products.admin",
-    action: "read",
-    description: "View products in admin dashboard",
+    name: "products.manage",
+    resource: "products",
+    action: "manage",
+    description: "Manage products in admin dashboard",
   },
   {
     name: "products.create",
@@ -391,12 +422,43 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     description: "Delete products",
   },
 
+  // Reset tokens password management permissions
+  {
+    name: "reset-tokens-password.manage",
+    resource: "reset-tokens-password",
+    action: "manage",
+    description: "Manage reset tokens password in admin dashboard",
+  },
+  {
+    name: "reset-tokens-password.create",
+    resource: "reset-tokens-password",
+    action: "create",
+    description: "Create reset tokens password",
+  },
+  {
+    name: "reset-tokens-password.read",
+    resource: "reset-tokens-password",
+    action: "read",
+    description: "View reset tokens password",
+  },
+  {
+    name: "reset-tokens-password.update",
+    resource: "reset-tokens-password",
+    action: "update",
+    description: "Update reset tokens password",
+  },
+  {
+    name: "reset-tokens-password.delete",
+    resource: "reset-tokens-password",
+    action: "delete",
+    description: "Delete reset tokens password",
+  },
   // Roles management permissions
   {
-    name: "roles.admin",
-    resource: "roles.admin",
-    action: "read",
-    description: "View roles in admin dashboard",
+    name: "roles.manage",
+    resource: "roles",
+    action: "manage",
+    description: "Manage roles in admin dashboard",
   },
   {
     name: "roles.create",
@@ -425,10 +487,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Rooms management permissions
   {
-    name: "rooms.admin",
-    resource: "rooms.admin",
-    action: "read",
-    description: "View rooms in admin dashboard",
+    name: "rooms.manage",
+    resource: "rooms",
+    action: "manage",
+    description: "Manage rooms in admin dashboard",
   },
   {
     name: "rooms.create",
@@ -457,10 +519,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Room contact management permissions
   {
-    name: "room-contact.admin",
-    resource: "room-contact.admin",
-    action: "read",
-    description: "View room contact in admin dashboard",
+    name: "room-contact.manage",
+    resource: "room-contact",
+    action: "manage",
+    description: "Manage room contact in admin dashboard",
   },
   {
     name: "room-contact.create",
@@ -489,10 +551,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Room packages management permissions
   {
-    name: "room-packages.admin",
-    resource: "room-packages.admin",
-    action: "read",
-    description: "View room packages in admin dashboard",
+    name: "room-packages.manage",
+    resource: "room-packages",
+    action: "manage",
+    description: "Manage room packages in admin dashboard",
   },
   {
     name: "room-packages.create",
@@ -521,10 +583,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Room services management permissions
   {
-    name: "room-services.admin",
-    resource: "room-services.admin",
-    action: "read",
-    description: "View room services in admin dashboard",
+    name: "room-services.manage",
+    resource: "room-services",
+    action: "manage",
+    description: "Manage room services in admin dashboard",
   },
   {
     name: "room-services.create",
@@ -553,10 +615,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Service categories management permissions
   {
-    name: "service-categories.admin",
-    resource: "service-categories.admin",
-    action: "read",
-    description: "View service categories in admin dashboard",
+    name: "service-categories.manage",
+    resource: "service-categories",
+    action: "manage",
+    description: "Manage service categories in admin dashboard",
   },
   {
     name: "service-categories.create",
@@ -623,10 +685,10 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Users management permissions
   {
-    name: "users.admin",
-    resource: "users.admin",
-    action: "read",
-    description: "View users in admin dashboard",
+    name: "users.manage",
+    resource: "users",
+    action: "manage",
+    description: "Manage users in admin dashboard",
   },
   {
     name: "users.create",
@@ -690,11 +752,48 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     action: "update",
     description: "Update user roles",
   },
+
+  // Verification tokens email management permissions
+  {
+    name: "verification-tokens-email.manage",
+    resource: "verification-tokens-email",
+    action: "manage",
+    description: "Manage verification tokens email in admin dashboard",
+  },
+  {
+    name: "verification-tokens-email.create",
+    resource: "verification-tokens-email",
+    action: "create",
+    description: "Create verification tokens email",
+  },
+  {
+    name: "verification-tokens-email.read",
+    resource: "verification-tokens-email",
+    action: "read",
+    description: "View verification tokens email",
+  },
+  {
+    name: "verification-tokens-email.update",
+    resource: "verification-tokens-email",
+    action: "update",
+    description: "Update verification tokens email",
+  },
+  {
+    name: "verification-tokens-email.delete",
+    resource: "verification-tokens-email",
+    action: "delete",
+    description: "Delete verification tokens email",
+  },
 ];
 
 const permissionsRoles: Record<string, string[]> = {
   "admin-user": [
-    "blogs.admin",
+    "achievement-notifications.manage",
+    "achievement-notifications.create",
+    "achievement-notifications.read",
+    "achievement-notifications.update",
+    "achievement-notifications.delete",
+    "blogs.manage",
     "blogs.create",
     "blogs.read",
     "blogs.update",
@@ -704,7 +803,7 @@ const permissionsRoles: Record<string, string[]> = {
     "blogs.author.update",
     "blogs.status.create",
     "blogs.status.update",
-    "comments.admin",
+    "comments.manage",
     "comments.create",
     "comments.read",
     "comments.update",
@@ -718,7 +817,7 @@ const permissionsRoles: Record<string, string[]> = {
     "comments.status.update",
     "comments.user.create",
     "comments.user.update",
-    "diary-entries.admin",
+    "diary-entries.manage",
     "diary-entries.create",
     "diary-entries.read",
     "diary-entries.update",
@@ -730,57 +829,62 @@ const permissionsRoles: Record<string, string[]> = {
     "diary-entries.isAuthentic.update",
     "diary-entries.status.create",
     "diary-entries.status.update",
-    "media.admin",
+    "media.manage",
     "media.create",
     "media.read",
     "media.update",
     "media.delete",
-    "notification-subscriptions.admin",
+    "notification-subscriptions.manage",
     "notification-subscriptions.create",
     "notification-subscriptions.read",
     "notification-subscriptions.update",
     "notification-subscriptions.delete",
-    "orders.admin",
+    "orders.manage",
     "orders.create",
     "orders.read",
     "orders.update",
     "orders.delete",
-    "permissions.admin",
+    "permissions.manage",
     "permissions.create",
     "permissions.read",
     "permissions.update",
     "permissions.delete",
-    "products.admin",
+    "products.manage",
     "products.create",
     "products.read",
     "products.update",
     "products.delete",
-    "roles.admin",
+    "reset-tokens-password.manage",
+    "reset-tokens-password.create",
+    "reset-tokens-password.read",
+    "reset-tokens-password.update",
+    "reset-tokens-password.delete",
+    "roles.manage",
     "roles.create",
     "roles.read",
     "roles.update",
     "roles.delete",
-    "rooms.admin",
+    "rooms.manage",
     "rooms.create",
     "rooms.read",
     "rooms.update",
     "rooms.delete",
-    "room-contact.admin",
+    "room-contact.manage",
     "room-contact.create",
     "room-contact.read",
     "room-contact.update",
     "room-contact.delete",
-    "room-packages.admin",
+    "room-packages.manage",
     "room-packages.create",
     "room-packages.read",
     "room-packages.update",
     "room-packages.delete",
-    "room-services.admin",
+    "room-services.manage",
     "room-services.create",
     "room-services.read",
     "room-services.update",
     "room-services.delete",
-    "service-categories.admin",
+    "service-categories.manage",
     "service-categories.create",
     "service-categories.read",
     "service-categories.update",
@@ -791,7 +895,7 @@ const permissionsRoles: Record<string, string[]> = {
     "service-categories.priority.create",
     "service-categories.priority.read",
     "service-categories.priority.update",
-    "users.admin",
+    "users.manage",
     "users.create",
     "users.read",
     "users.update",
@@ -802,9 +906,14 @@ const permissionsRoles: Record<string, string[]> = {
     "users.previousRole.update",
     "users.roles.read",
     "users.roles.update",
+    "verification-tokens-email.manage",
+    "verification-tokens-email.create",
+    "verification-tokens-email.read",
+    "verification-tokens-email.update",
+    "verification-tokens-email.delete",
   ],
   "system-user": [
-    "blogs.admin",
+    "blogs.manage",
     "blogs.create",
     "blogs.read",
     "blogs.update",
@@ -814,12 +923,12 @@ const permissionsRoles: Record<string, string[]> = {
     "blogs.author.update",
     "blogs.status.create",
     "blogs.status.update",
-    "comments.admin",
+    "comments.manage",
     "comments.create",
     "comments.read",
     "comments.update",
     "comments.delete",
-    "diary-entries.admin",
+    "diary-entries.manage",
     "diary-entries.create",
     "diary-entries.read",
     "diary-entries.update",
@@ -830,24 +939,24 @@ const permissionsRoles: Record<string, string[]> = {
     "diary-entries.status.update",
     "permissions.read",
     "roles.read",
-    "rooms.admin",
+    "rooms.manage",
     "rooms.create",
-    "room-contact.admin",
+    "room-contact.manage",
     "room-contact.create",
-    "room-packages.admin",
+    "room-packages.manage",
     "room-packages.create",
-    "room-services.admin",
+    "room-services.manage",
     "room-services.create",
-    "service-categories.admin",
+    "service-categories.manage",
     "service-categories.create",
     "users.roles.read",
   ],
   "author-user": [
-    "blogs.admin",
+    "blogs.manage",
     "blogs.create",
     "blogs.publish",
     "comments.create",
-    "diary-entries.admin",
+    "diary-entries.manage",
     "diary-entries.create",
     "diary-entries.publish",
     "permissions.read",

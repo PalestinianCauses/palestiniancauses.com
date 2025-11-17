@@ -1,4 +1,4 @@
-// REVIEWED - 13
+// REVIEWED - 14
 
 import { CollectionConfig } from "payload";
 
@@ -13,6 +13,8 @@ import { Comment, User } from "@/payload-types";
 export const Comments: CollectionConfig = {
   slug: "comments",
   access: {
+    admin: ({ req }) =>
+      hasPermission(req.user, { resource: "comments", action: "manage" }),
     create: hasPermissionAccess({ resource: "comments", action: "create" }),
     read: ({ req }) =>
       hasPermissionAccess({ resource: "comments", action: "read" })({ req }) ||
@@ -29,8 +31,8 @@ export const Comments: CollectionConfig = {
   admin: {
     hidden: ({ user }) =>
       !hasPermission(user as unknown as User, {
-        resource: "comments.admin",
-        action: "read",
+        resource: "comments",
+        action: "manage",
       }),
     group: "Content",
     useAsTitle: "id",

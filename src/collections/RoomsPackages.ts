@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { CollectionConfig } from "payload";
 
@@ -9,6 +9,8 @@ import { User } from "@/payload-types";
 export const RoomsPackages: CollectionConfig = {
   slug: "rooms-packages",
   access: {
+    admin: ({ req }) =>
+      hasPermission(req.user, { resource: "room-packages", action: "manage" }),
     create: hasPermissionAccess({
       resource: "room-packages",
       action: "create",
@@ -29,8 +31,8 @@ export const RoomsPackages: CollectionConfig = {
   admin: {
     hidden: ({ user }) =>
       !hasPermission(user as unknown as User, {
-        resource: "room-services.admin",
-        action: "read",
+        resource: "room-packages",
+        action: "manage",
       }),
     group: "Rooms Content",
     defaultColumns: [

@@ -1,4 +1,4 @@
-// REVIEWED - 29
+// REVIEWED - 30
 
 import { CollectionConfig } from "payload";
 
@@ -24,6 +24,8 @@ export const PackagesHeadlineSub = "Curated Packages for Common Needs";
 export const Rooms: CollectionConfig = {
   slug: "rooms",
   access: {
+    admin: ({ req }) =>
+      hasPermission(req.user, { resource: "rooms", action: "manage" }),
     create: async ({ req }) => {
       if (
         hasPermissionAccess({ resource: "rooms", action: "create" })({ req })
@@ -53,8 +55,8 @@ export const Rooms: CollectionConfig = {
   admin: {
     hidden: ({ user }) =>
       !hasPermission(user as unknown as User, {
-        resource: "rooms.admin",
-        action: "read",
+        resource: "rooms",
+        action: "manage",
       }),
     group: "Rooms Content",
     defaultColumns: ["id", "name", "slug", "status", "createdAt"],

@@ -1,4 +1,4 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { CollectionConfig } from "payload";
 
@@ -9,6 +9,8 @@ import { User } from "@/payload-types";
 export const Products: CollectionConfig = {
   slug: "products",
   access: {
+    admin: ({ req }) =>
+      hasPermission(req.user, { resource: "products", action: "manage" }),
     read: hasPermissionAccess({ resource: "products", action: "read" }),
     create: hasPermissionAccess({ resource: "products", action: "create" }),
     update: hasPermissionAccess({ resource: "products", action: "update" }),
@@ -17,8 +19,8 @@ export const Products: CollectionConfig = {
   admin: {
     hidden: ({ user }) =>
       !hasPermission(user as unknown as User, {
-        resource: "products.admin",
-        action: "read",
+        resource: "products",
+        action: "manage",
       }),
     group: "Database",
     defaultColumns: ["id", "title", "price", "type", "createdAt"],

@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CollectionConfig } from "payload";
 
@@ -6,7 +6,7 @@ import { hasPermissionAccess } from "@/access/global";
 import { hasPermission } from "@/lib/permissions";
 import { User } from "@/payload-types";
 
-export const EmailVerificationTokens: CollectionConfig = {
+export const VerificationTokensEmail: CollectionConfig = {
   slug: "verification-tokens-email",
   access: {
     admin: ({ req }) =>
