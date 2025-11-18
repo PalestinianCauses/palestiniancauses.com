@@ -1,33 +1,44 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { ResponseSafeExecute } from "@/lib/types";
 
 import { getAuthentication } from "./auth";
 import { getUserAchievements } from "./user-achievements";
 
 export const checkingPlusNotifyingAchievements =
   async function checkingPlusNotifyingAchievements(): Promise<
-    Array<{ id: string; name: string; description: string }>
+    ResponseSafeExecute<
+      Array<{ id: string; name: string; description: string }>
+    >
   > {
     const auth = await getAuthentication();
 
-    if (!auth) return [];
+    if (!auth) return { data: [], error: null };
 
     // Get user achievements
     const achievements = await getUserAchievements();
 
     // Get all existing notification records for this user
-    const notificationsExisting = await payload.find({
-      collection: "achievement-notifications",
-      where: { user: { equals: auth.id } },
-      depth: 0,
-    });
+    const notificationsExisting = await actionSafeExecute(
+      payload.find({
+        collection: "achievement-notifications",
+        where: { user: { equals: auth.id } },
+        depth: 0,
+      }),
+      messages.http.serverError,
+    );
+
+    if (!notificationsExisting.data || notificationsExisting.error)
+      return { data: [], error: null };
 
     // Create a map of achievement ID to notification record
     const notificationMap = new Map(
-      notificationsExisting.docs.map((n) => [n.achievement, n]),
+      notificationsExisting.data.docs.map((n) => [n.achievement, n]),
     );
 
     // Find newly unlocked achievements that haven't been notified yet
@@ -66,9 +77,12 @@ export const checkingPlusNotifyingAchievements =
       );
     }
 
-    return achievementsNew.map((a) => ({
-      id: a.id,
-      name: a.name,
-      description: a.description,
-    }));
+    return {
+      data: achievementsNew.map((a) => ({
+        id: a.id,
+        name: a.name,
+        description: a.description,
+      })),
+      error: null,
+    };
   };
