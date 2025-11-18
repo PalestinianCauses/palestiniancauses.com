@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { payload } from "@/lib/payload";
 
@@ -79,7 +79,7 @@ export const doMigratingUsersRoles = async function doMigratingUsersRoles() {
         if (!newRoleId) {
           // eslint-disable-next-line no-console
           console.error(
-            `❌ Role "${newRoleName}" not found in database for user ${user.email}, cannot assign default role.`,
+            `❌ Role "${newRoleName}" not found in database for user ${user.email}, can not assign default role.`,
           );
 
           errorCount += 1;
