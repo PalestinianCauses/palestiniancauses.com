@@ -1,4 +1,4 @@
-// REVIEWED - 18
+// REVIEWED - 19
 import type { CollectionConfig } from "payload";
 
 import {
@@ -173,7 +173,7 @@ export const Users: CollectionConfig = {
       type: "select",
       options: ["admin", "system-user", "website-user"],
       defaultValue: "website-user",
-      required: true,
+      required: false,
     },
     {
       access: {

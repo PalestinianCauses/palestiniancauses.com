@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { payload } from "@/lib/payload";
 
@@ -7,6 +7,8 @@ const mappingRoles = {
   "system-user": "system-user",
   "website-user": "website-user",
 };
+
+const DEFAULT_ROLE = "website-user";
 
 export const doMigratingUsersRoles = async function doMigratingUsersRoles() {
   try {
@@ -49,26 +51,38 @@ export const doMigratingUsersRoles = async function doMigratingUsersRoles() {
 
       try {
         const { previousRole } = user;
-        const newRoleName = mappingRoles[previousRole];
 
-        if (!newRoleName) {
+        let newRoleName: string;
+
+        if (!previousRole) {
           // eslint-disable-next-line no-console
           console.log(
-            `⚠️  Un-known role "${previousRole}" for user ${user.email}, skipping.`,
+            `⚠️  User ${user.email} has no previous role, assigning default role "${DEFAULT_ROLE}".`,
           );
 
-          // eslint-disable-next-line no-continue
-          continue;
+          newRoleName = DEFAULT_ROLE;
+        } else {
+          newRoleName = mappingRoles[previousRole];
+
+          if (!newRoleName) {
+            // eslint-disable-next-line no-console
+            console.log(
+              `⚠️  Un-known role "${previousRole}" for user ${user.email}, assigning default role "${DEFAULT_ROLE}".`,
+            );
+
+            newRoleName = DEFAULT_ROLE;
+          }
         }
 
         const newRoleId = map.get(newRoleName);
 
         if (!newRoleId) {
           // eslint-disable-next-line no-console
-          console.log(
-            `⚠️  Role "${newRoleName}" not found for user ${user.email}, skipping.`,
+          console.error(
+            `❌ Role "${newRoleName}" not found in database for user ${user.email}, cannot assign default role.`,
           );
 
+          errorCount += 1;
           // eslint-disable-next-line no-continue
           continue;
         }
@@ -87,7 +101,7 @@ export const doMigratingUsersRoles = async function doMigratingUsersRoles() {
 
           // eslint-disable-next-line no-console
           console.log(
-            `🔄 User ${user.email} already has roles, merging with ${previousRole} → ${newRoleName}`,
+            `🔄 User ${user.email} already has roles, merging with ${previousRole || "none"} → ${newRoleName}`,
           );
         }
 
@@ -104,7 +118,7 @@ export const doMigratingUsersRoles = async function doMigratingUsersRoles() {
 
         // eslint-disable-next-line no-console
         console.log(
-          `✅ Migrated user ${user.email}: ${previousRole} → ${newRoleName}.`,
+          `✅ Migrated user ${user.email}: ${previousRole || "none"} → ${newRoleName}.`,
         );
 
         migrateCount += 1;
