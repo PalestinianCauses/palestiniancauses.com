@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import crypto from "crypto";
 
@@ -8,9 +8,9 @@ import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
+import { isObject } from "@/lib/types/guards";
 import { createVerificationEmail } from "@/lib/utils/email-templates-auth";
 
-import { isObject } from "@/lib/types/guards";
 import { getAuthentication } from "./auth";
 
 export const doNotifyVerificationEmail =
