@@ -1,0 +1,147 @@
+"use server";
+
+// REVIEWED
+
+import { PaginatedDocs } from "payload";
+
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
+import { ResponseSafeExecute } from "@/lib/types";
+import { isObject } from "@/lib/types/guards";
+import { Notification } from "@/payload-types";
+
+import { getAuthentication } from "./auth";
+
+export const getNotifications = async function getNotifications(): Promise<
+  ResponseSafeExecute<PaginatedDocs<Notification>>
+> {
+  const auth = await getAuthentication();
+
+  if (!auth)
+    return { data: null, error: messages.actions.user.unAuthenticated };
+
+  const notificationsResponse = await actionSafeExecute(
+    payload.find({
+      collection: "notifications",
+      where: { user: { equals: auth.id } },
+      sort: "-createdAt",
+      limit: 50,
+      depth: 0,
+    }),
+    messages.actions.notification.serverError,
+  );
+
+  if (!notificationsResponse.data || notificationsResponse.error)
+    return {
+      data: null,
+      error: notificationsResponse.error,
+    };
+
+  return { data: notificationsResponse.data, error: null };
+};
+
+export const markingNotificationAsRead =
+  async function markingNotificationAsRead(
+    id: number,
+  ): Promise<ResponseSafeExecute<string>> {
+    const auth = await getAuthentication();
+
+    if (!auth)
+      return {
+        data: null,
+        error: messages.actions.user.unAuthenticated,
+      };
+
+    const notificationResponse = await actionSafeExecute(
+      payload.findByID({
+        collection: "notifications",
+        id,
+        depth: 0,
+      }),
+      messages.actions.notification.serverError,
+    );
+
+    if (!notificationResponse.data || notificationResponse.error)
+      return {
+        data: null,
+        error: messages.actions.notification.notFound,
+      };
+
+    const notification = notificationResponse.data;
+    const notificationUserId = isObject(notification.user)
+      ? notification.user.id
+      : notification.user;
+
+    if (notificationUserId !== auth.id)
+      return {
+        data: null,
+        error: messages.actions.notification.unAuthorized,
+      };
+
+    const updateResponse = await actionSafeExecute(
+      payload.update({
+        collection: "notifications",
+        id,
+        data: { read: true },
+      }),
+      messages.actions.notification.serverError,
+    );
+
+    if (!updateResponse.data || updateResponse.error)
+      return {
+        data: null,
+        error: messages.actions.notification.serverError,
+      };
+
+    return { data: messages.actions.notification.successRead, error: null };
+  };
+
+export const markingEveryNotificationAsRead =
+  async function markingEveryNotificationAsRead(): Promise<
+    ResponseSafeExecute<string>
+  > {
+    const auth = await getAuthentication();
+
+    if (!auth)
+      return {
+        data: null,
+        error: messages.actions.notification.unAuthenticated,
+      };
+
+    const notificationsResponse = await actionSafeExecute(
+      payload.find({
+        collection: "notifications",
+        where: { user: { equals: auth.id }, read: { equals: false } },
+        limit: 1000,
+        depth: 0,
+      }),
+      messages.actions.notification.serverError,
+    );
+
+    if (!notificationsResponse.data || notificationsResponse.error)
+      return {
+        data: null,
+        error: notificationsResponse.error,
+      };
+
+    const { data } = notificationsResponse;
+
+    await Promise.all(
+      data.docs.map((notification) =>
+        actionSafeExecute(
+          payload.update({
+            collection: "notifications",
+            id: notification.id,
+            data: { read: true },
+          }),
+          messages.actions.notification.serverError,
+        ),
+      ),
+    );
+
+    return {
+      data: messages.actions.notification.successEveryRead,
+      error: null,
+    };
+  };
