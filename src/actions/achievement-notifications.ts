@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -57,22 +57,29 @@ export const checkingPlusNotifyingAchievements =
         achievementsNew.map(async (achievement) => {
           const existing = notificationMap.get(achievement.id);
 
-          if (existing)
-            await payload.update({
-              collection: "achievement-notifications",
-              id: existing.id,
-              data: { notified: true, notifiedAt: now },
-            });
-          else
-            await payload.create({
-              collection: "achievement-notifications",
-              data: {
-                user: auth.id,
-                achievement: achievement.id,
-                notified: true,
-                notifiedAt: now,
-              },
-            });
+          if (existing) {
+            await actionSafeExecute(
+              payload.update({
+                collection: "achievement-notifications",
+                id: existing.id,
+                data: { notified: true, notifiedAt: now },
+              }),
+              messages.http.serverError,
+            );
+          } else {
+            await actionSafeExecute(
+              payload.create({
+                collection: "achievement-notifications",
+                data: {
+                  user: auth.id,
+                  achievement: achievement.id,
+                  notified: true,
+                  notifiedAt: now,
+                },
+              }),
+              messages.http.serverError,
+            );
+          }
         }),
       );
     }

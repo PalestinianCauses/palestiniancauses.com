@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import type { CollectionConfig } from "payload";
 
@@ -21,6 +21,7 @@ export const collectionsPermissionsOptions = [
   { label: "Diary Entries Is Authentic", value: "diary-entries.isAuthentic" },
   { label: "Diary Entries Status", value: "diary-entries.status" },
   { label: "Media", value: "media" },
+  { label: "Notifications", value: "notifications" },
   {
     label: "Notification Subscriptions",
     value: "notification-subscriptions",
