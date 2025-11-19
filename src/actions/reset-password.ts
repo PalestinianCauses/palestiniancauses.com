@@ -1,12 +1,12 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
-import { isObject } from "@/lib/types/guards";
+import { isResponseError } from "@/lib/types/guards";
 import { isResilientPassword } from "@/lib/utils/passwords";
 
 export const resetPassword = async function resetPassword(data: {
@@ -20,67 +20,28 @@ export const resetPassword = async function resetPassword(data: {
     };
   }
 
-  // Find reset token
-  const tokenResponse = await actionSafeExecute(
-    payload.find({
-      collection: "reset-tokens-password",
-      where: { token: { equals: data.token }, used: { equals: false } },
-      depth: 1,
-    }),
-    messages.actions.auth.resetPassword.serverError,
-  );
-
-  if (
-    !tokenResponse.data ||
-    tokenResponse.error ||
-    tokenResponse.data.docs.length === 0
-  )
-    return {
-      data: null,
-      error: messages.actions.auth.resetPassword.tokenNotFound,
-    };
-
-  const resetToken = tokenResponse.data.docs[0];
-
-  // Check if token is expired
-  if (new Date(resetToken.expiresAt) < new Date())
-    return {
-      data: null,
-      error: messages.actions.auth.resetPassword.tokenExpired,
-    };
-
-  // Update user password
-  const user = isObject(resetToken.user) ? resetToken.user : null;
-  if (!user)
-    return {
-      data: null,
-      error: messages.actions.auth.resetPassword.serverError,
-    };
-
-  const updateResponse = await actionSafeExecute(
-    payload.update({
+  const response = await actionSafeExecute(
+    payload.resetPassword({
       collection: "users",
-      id: user.id,
-      data: { password: data.password },
+      data: { token: data.token, password: data.password },
+      overrideAccess: true,
     }),
     messages.actions.auth.resetPassword.serverError,
+    isResponseError,
   );
 
-  if (!updateResponse.data || updateResponse.error)
+  if (response.error) {
+    if (isResponseError(response.error))
+      return {
+        data: null,
+        error: response.error.message,
+      };
+
     return {
       data: null,
-      error: messages.actions.auth.resetPassword.serverError,
+      error: response.error,
     };
-
-  // Mark token as used
-  await actionSafeExecute(
-    payload.update({
-      collection: "reset-tokens-password",
-      id: resetToken.id,
-      data: { used: true },
-    }),
-    messages.actions.auth.resetPassword.serverError,
-  );
+  }
 
   return {
     data: messages.actions.auth.resetPassword.success,

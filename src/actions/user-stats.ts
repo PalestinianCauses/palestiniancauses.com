@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -21,21 +21,23 @@ export type UserStats = {
   }>;
 };
 
-export const getUserStats = async function getUserStats(): Promise<
-  ResponseSafeExecute<UserStats>
-> {
-  const auth = await getAuthentication();
+export const getUserStats = async function getUserStats(
+  userId?: number,
+): Promise<ResponseSafeExecute<UserStats>> {
+  let targetUserId: number;
 
-  if (!auth)
-    return {
-      data: {
-        comments: 0,
-        diaryEntries: 0,
-        orders: 0,
-        activityRecent: [],
-      },
-      error: null,
-    };
+  if (userId !== undefined) targetUserId = userId;
+  else {
+    const auth = await getAuthentication();
+
+    if (!auth)
+      return {
+        data: { comments: 0, diaryEntries: 0, orders: 0, activityRecent: [] },
+        error: null,
+      };
+
+    targetUserId = auth.id;
+  }
 
   const [
     commentsCount,
@@ -48,7 +50,14 @@ export const getUserStats = async function getUserStats(): Promise<
     actionSafeExecute(
       payload.count({
         collection: "comments",
-        where: { user: { equals: auth.id }, status: { equals: "approved" } },
+        where: {
+          user: {
+            equals: targetUserId,
+          },
+          status: {
+            equals: "approved",
+          },
+        },
         depth: 0,
       }),
       messages.actions.comment.serverErrorGet,
@@ -56,7 +65,14 @@ export const getUserStats = async function getUserStats(): Promise<
     actionSafeExecute(
       payload.count({
         collection: "diary-entries",
-        where: { author: { equals: auth.id }, status: { equals: "approved" } },
+        where: {
+          author: {
+            equals: targetUserId,
+          },
+          status: {
+            equals: "approved",
+          },
+        },
         depth: 0,
       }),
       messages.actions.diaryEntry.serverErrorGet,
@@ -64,7 +80,7 @@ export const getUserStats = async function getUserStats(): Promise<
     actionSafeExecute(
       payload.count({
         collection: "orders",
-        where: { user: { equals: auth.id } },
+        where: { user: { equals: targetUserId } },
         depth: 0,
       }),
       messages.actions.order.serverErrorGet,
@@ -72,9 +88,16 @@ export const getUserStats = async function getUserStats(): Promise<
     actionSafeExecute(
       payload.find({
         collection: "comments",
-        where: { user: { equals: auth.id }, status: { equals: "approved" } },
+        where: {
+          user: {
+            equals: targetUserId,
+          },
+          status: {
+            equals: "approved",
+          },
+        },
         sort: "-createdAt",
-        limit: 5,
+        limit: 3,
         depth: 1,
       }),
       messages.actions.comment.serverErrorGet,
@@ -82,9 +105,16 @@ export const getUserStats = async function getUserStats(): Promise<
     actionSafeExecute(
       payload.find({
         collection: "diary-entries",
-        where: { author: { equals: auth.id }, status: { equals: "approved" } },
+        where: {
+          author: {
+            equals: targetUserId,
+          },
+          status: {
+            equals: "approved",
+          },
+        },
         sort: "-createdAt",
-        limit: 5,
+        limit: 3,
         depth: 1,
       }),
       messages.actions.diaryEntry.serverErrorGet,
@@ -92,9 +122,9 @@ export const getUserStats = async function getUserStats(): Promise<
     actionSafeExecute(
       payload.find({
         collection: "orders",
-        where: { user: { equals: auth.id } },
+        where: { user: { equals: targetUserId } },
         sort: "-createdAt",
-        limit: 5,
+        limit: 3,
         depth: 1,
       }),
       messages.actions.order.serverErrorGet,
@@ -132,9 +162,11 @@ export const getUserStats = async function getUserStats(): Promise<
 
   return {
     data: {
-      comments: commentsCount.data?.totalDocs ?? 0,
-      diaryEntries: diaryEntriesCount.data?.totalDocs ?? 0,
-      orders: ordersCount.data?.totalDocs ?? 0,
+      comments: commentsCount.data ? commentsCount.data.totalDocs : 0,
+      diaryEntries: diaryEntriesCount.data
+        ? diaryEntriesCount.data.totalDocs
+        : 0,
+      orders: ordersCount.data ? ordersCount.data.totalDocs : 0,
       activityRecent,
     },
     error: null,

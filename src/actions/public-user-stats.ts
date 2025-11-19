@@ -1,12 +1,14 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
 import { User } from "@/payload-types";
+
+import { getUserStats } from "./user-stats";
 
 export type PublicUserStats = {
   user: User;
@@ -38,45 +40,22 @@ export const getPublicUserStats = async function getPublicUserStats(
     showOrders: false,
   };
 
-  const [comments, diaryEntries, orders] = await Promise.all([
-    privacySettings.showActivity
-      ? actionSafeExecute(
-          payload.count({
-            collection: "comments",
-            where: { user: { equals: userId }, status: { equals: "approved" } },
-          }),
-          messages.actions.comment.serverErrorGet,
-        )
-      : { data: { totalDocs: 0 }, error: null },
-    privacySettings.showActivity
-      ? actionSafeExecute(
-          payload.count({
-            collection: "diary-entries",
-            where: {
-              author: { equals: userId },
-              status: { equals: "approved" },
-            },
-          }),
-          messages.actions.diaryEntry.serverErrorGet,
-        )
-      : { data: { totalDocs: 0 }, error: null },
-    privacySettings.showOrders
-      ? actionSafeExecute(
-          payload.count({
-            collection: "orders",
-            where: { user: { equals: userId } },
-          }),
-          messages.actions.order.serverErrorGet,
-        )
-      : { data: { totalDocs: 0 }, error: null },
-  ]);
+  const statsResponse = await getUserStats(userId);
+
+  if (!statsResponse.data || statsResponse.error)
+    return {
+      data: null,
+      error: statsResponse.error,
+    };
 
   return {
     data: {
       user,
-      comments: comments.data?.totalDocs ?? 0,
-      diaryEntries: diaryEntries.data?.totalDocs ?? 0,
-      orders: orders.data?.totalDocs ?? 0,
+      comments: privacySettings.showActivity ? statsResponse.data.comments : 0,
+      diaryEntries: privacySettings.showActivity
+        ? statsResponse.data.diaryEntries
+        : 0,
+      orders: privacySettings.showOrders ? statsResponse.data.orders : 0,
     },
     error: null,
   };
