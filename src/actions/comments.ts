@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -37,6 +37,7 @@ export const createComment = async function createComment(
   return { data: messages.actions.comment.successCreate, error: null };
 };
 
+// public information no need to override access
 export const getCommentRepliesCount = async function getCommentRepliesCount(
   id: number,
 ): Promise<number> {
@@ -53,6 +54,7 @@ export const getCommentRepliesCount = async function getCommentRepliesCount(
   return response.data.totalDocs || 0;
 };
 
+// public information no need to override access
 export const getComment = async function getComment(
   id: number,
 ): Promise<ResponseSafeExecute<Comment & { repliesCount: number }>> {
@@ -66,6 +68,12 @@ export const getComment = async function getComment(
   );
 
   if (!response.data || response.error) return response;
+
+  if (response.data.status !== "approved")
+    return {
+      data: null,
+      error: messages.actions.comment.notFound,
+    };
 
   const repliesCount = await getCommentRepliesCount(id);
   return { data: { ...response.data, repliesCount }, error: null };
@@ -138,6 +146,7 @@ export const deleteComment = async function deleteComment(
   return { data: messages.actions.comment.successDelete, error: null };
 };
 
+// limited document update no need to override access
 export const voteOnComment = async function voteOnComment({
   id,
   vote,

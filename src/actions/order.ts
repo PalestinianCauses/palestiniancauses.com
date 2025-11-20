@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -28,12 +28,11 @@ export const createOrder = async function createOrder(
   // Create order
   const orderResponse = await actionSafeExecute(
     payload.create({
+      req: { user: { collection: "users", ...authentication } },
+      user: authentication,
       collection: "orders",
-      data: {
-        ...data,
-        user: authentication.id,
-        total: pricesTotal,
-      },
+      data: { ...data, user: authentication.id, total: pricesTotal },
+      overrideAccess: false,
     }),
     messages.actions.order.serverError,
   );

@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -30,7 +30,7 @@ export const resetPassword = async function resetPassword(data: {
     isResponseError,
   );
 
-  if (response.error) {
+  if (!response.data || response.error) {
     if (isResponseError(response.error))
       return {
         data: null,

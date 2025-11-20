@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -26,9 +26,12 @@ export const checkingPlusNotifyingAchievements =
     // Get all existing notification records for this user
     const notificationsExisting = await actionSafeExecute(
       payload.find({
+        req: { user: { ...auth, collection: "users" } },
+        user: auth,
         collection: "achievement-notifications",
         where: { user: { equals: auth.id } },
         depth: 0,
+        overrideAccess: false,
       }),
       messages.http.serverError,
     );
@@ -60,15 +63,20 @@ export const checkingPlusNotifyingAchievements =
           if (existing) {
             await actionSafeExecute(
               payload.update({
+                req: { user: { ...auth, collection: "users" } },
+                user: auth,
                 collection: "achievement-notifications",
                 id: existing.id,
                 data: { notified: true, notifiedAt: now },
+                overrideAccess: false,
               }),
               messages.http.serverError,
             );
           } else {
             await actionSafeExecute(
               payload.create({
+                req: { user: { ...auth, collection: "users" } },
+                user: auth,
                 collection: "achievement-notifications",
                 data: {
                   user: auth.id,
@@ -76,6 +84,7 @@ export const checkingPlusNotifyingAchievements =
                   notified: true,
                   notifiedAt: now,
                 },
+                overrideAccess: false,
               }),
               messages.http.serverError,
             );

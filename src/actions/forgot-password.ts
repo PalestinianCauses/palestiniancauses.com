@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -21,12 +21,11 @@ export const forgotPassword = async function forgotPassword(data: {
 
   // PayLoad returns success even if email doesn't exist (security best practice)
   // So we always return success message
-  if (response.error) {
+  if (!response.data || response.error)
     return {
       data: null,
-      error: messages.actions.auth.forgotPassword.serverError,
+      error: response.error || messages.actions.auth.forgotPassword.serverError,
     };
-  }
 
   return {
     data: messages.actions.auth.forgotPassword.success,

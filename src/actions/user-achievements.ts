@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -50,6 +50,7 @@ export const getUserAchievements = async function getUserAchievements(
         where: {
           author: { equals: targetUserId },
           status: { equals: "approved" },
+          isAnonymous: { equals: false },
         },
         depth: 0,
       }),
@@ -65,9 +66,11 @@ export const getUserAchievements = async function getUserAchievements(
     ),
   ]);
 
-  const comments = commentsCount.data?.totalDocs ?? 0;
-  const diaryEntries = diaryEntriesCount.data?.totalDocs ?? 0;
-  const orders = ordersCount.data?.totalDocs ?? 0;
+  const comments = commentsCount.data ? commentsCount.data.totalDocs : 0;
+  const diaryEntries = diaryEntriesCount.data
+    ? diaryEntriesCount.data.totalDocs
+    : 0;
+  const orders = ordersCount.data ? ordersCount.data.totalDocs : 0;
 
   const achievements: Achievement[] = [
     {

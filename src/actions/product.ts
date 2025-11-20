@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { redirect } from "next/navigation";
 
@@ -13,6 +13,7 @@ import { Product } from "@/payload-types";
 
 import { getAuthentication } from "./auth";
 
+// public information no need to override access
 export const getProductFreeLinksExternal =
   async function getProductFreeLinksExternal(
     productSlug: string,
@@ -66,6 +67,8 @@ export const getProductFreeLinksExternal =
     if (!hasOrder) {
       const responseOrder = await actionSafeExecute(
         payload.create({
+          req: { user: { collection: "users", ...auth } },
+          user: auth,
           collection: "orders",
           data: {
             user: auth.id,
@@ -83,6 +86,7 @@ export const getProductFreeLinksExternal =
               },
             ],
           },
+          overrideAccess: false,
         }),
         messages.actions.order.serverError,
       );

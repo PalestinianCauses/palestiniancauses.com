@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -37,6 +37,8 @@ export const uploadMedia = async function uploadMedia({
 
   const response = await actionSafeExecute(
     payload.create({
+      req: { user: { collection: "users", ...auth } },
+      user: auth,
       collection: "media",
       data: { alt: alt || file.name },
       file: {
@@ -45,6 +47,7 @@ export const uploadMedia = async function uploadMedia({
         name: file.name,
         size: file.size,
       },
+      overrideAccess: false,
     }),
     messages.actions.media.upload.serverError,
   );

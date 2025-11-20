@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { PaginatedDocs } from "payload";
 
@@ -16,7 +16,6 @@ import { User } from "@/payload-types";
 import { getAuthentication } from "./auth";
 // eslint-disable-next-line import/no-cycle
 import { requestChangeEmail } from "./email-change";
-import { doNotifyVerificationEmail } from "./email-verification";
 
 export const getUserByEmail = async function getUserByEmail(
   email: string,
@@ -120,14 +119,8 @@ export const createUser = async function createUser(
     };
   }
 
-  // Send verification email after user creation
-  // Don't await - send in background
-  doNotifyVerificationEmail(response.data.id, response.data.email).catch(
-    (error) => {
-      console.error("Failed to send verification email:", error);
-    },
-  );
-
+  // PayLoad CMS automatically sends verification email on user creation
+  // when verify: true is set in Users collection config
   return response;
 };
 

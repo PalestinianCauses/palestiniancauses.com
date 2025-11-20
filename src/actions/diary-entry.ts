@@ -1,11 +1,11 @@
 "use server";
 
-// REVIEWED - 15
+// REVIEWED - 16
 
 import { httpStatusesMessages, messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
-import { hasAnyRole, hasPermission } from "@/lib/permissions";
+import { hasPermission } from "@/lib/permissions";
 import { ErrorPayload, ResponseSafeExecute } from "@/lib/types";
 import { isResponseError } from "@/lib/types/guards";
 import { DiaryEntry, User } from "@/payload-types";
@@ -37,7 +37,10 @@ export const createDiaryEntry = async function createDiaryEntry(
         title: data.title,
         date: data.date,
         content: data.content,
-        status: hasAnyRole(auth, ["admin-user", "system-user"])
+        status: hasPermission(auth, {
+          resource: "diary-entries",
+          action: "publish",
+        })
           ? "approved"
           : "pending",
         author: auth,
@@ -86,6 +89,7 @@ export const createDiaryEntry = async function createDiaryEntry(
   };
 };
 
+// public information no need to override access
 export const getDiaryEntry = async function getDiaryEntry(
   id: number,
 ): Promise<ResponseSafeExecute<DiaryEntry>> {
@@ -98,9 +102,16 @@ export const getDiaryEntry = async function getDiaryEntry(
     messages.actions.diaryEntry.serverErrorGet,
   );
 
+  if (response.data && response.data.status !== "approved")
+    return {
+      data: null,
+      error: messages.actions.diaryEntry.notFound,
+    };
+
   return response;
 };
 
+// public information no need to override access
 export const getDiaryEntryAuthor = async function getDiaryEntryAuthor(
   id: number,
 ): Promise<ResponseSafeExecute<User>> {

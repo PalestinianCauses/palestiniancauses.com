@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -72,6 +72,9 @@ export const getUserStats = async function getUserStats(
           status: {
             equals: "approved",
           },
+          isAnonymous: {
+            equals: false,
+          },
         },
         depth: 0,
       }),
@@ -111,6 +114,9 @@ export const getUserStats = async function getUserStats(
           },
           status: {
             equals: "approved",
+          },
+          isAnonymous: {
+            equals: false,
           },
         },
         sort: "-createdAt",

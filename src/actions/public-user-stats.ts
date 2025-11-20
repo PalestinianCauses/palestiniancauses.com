@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -17,6 +17,7 @@ export type PublicUserStats = {
   orders: number;
 };
 
+// public information no need to override access
 export const getPublicUserStats = async function getPublicUserStats(
   userId: number,
 ): Promise<ResponseSafeExecute<PublicUserStats>> {

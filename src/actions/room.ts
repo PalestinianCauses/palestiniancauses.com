@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { PaginatedDocs } from "payload";
 
@@ -12,6 +12,7 @@ import { Room } from "@/payload-types";
 
 import { getAuthentication } from "./auth";
 
+// public information no need to override access
 export const getRoomList = async function getRoomList(): Promise<
   ResponseSafeExecute<PaginatedDocs<Room>, string>
 > {
@@ -19,13 +20,12 @@ export const getRoomList = async function getRoomList(): Promise<
 
   const response = await actionSafeExecute(
     payload.find({
-      ...(authentication ? { user: authentication } : {}),
       req: {
         ...(authentication
           ? { user: { ...authentication, collection: "users" } }
           : {}),
-        query: { origin: { equals: "website" } },
       },
+      ...(authentication ? { user: authentication } : {}),
 
       collection: "rooms",
       page: 1,
@@ -60,13 +60,12 @@ export const getRoom = async function getRoom(
 
   const response = await actionSafeExecute(
     payload.find({
-      ...(authentication ? { user: authentication } : {}),
       req: {
         ...(authentication
           ? { user: { ...authentication, collection: "users" } }
           : {}),
-        query: { origin: { equals: "website" } },
       },
+      ...(authentication ? { user: authentication } : {}),
 
       collection: "rooms",
       where: { slug: { equals: slug }, status: { equals: "published" } },

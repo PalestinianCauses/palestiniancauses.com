@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { PaginatedDocs } from "payload";
 
@@ -23,11 +23,14 @@ export const getNotifications = async function getNotifications(): Promise<
 
   const notificationsResponse = await actionSafeExecute(
     payload.find({
+      req: { user: { collection: "users", ...auth } },
+      user: auth,
       collection: "notifications",
       where: { user: { equals: auth.id } },
       sort: "-createdAt",
       limit: 50,
       depth: 0,
+      overrideAccess: false,
     }),
     messages.actions.notification.serverError,
   );
@@ -55,9 +58,12 @@ export const markingNotificationAsRead =
 
     const notificationResponse = await actionSafeExecute(
       payload.findByID({
+        req: { user: { collection: "users", ...auth } },
+        user: auth,
         collection: "notifications",
         id,
         depth: 0,
+        overrideAccess: false,
       }),
       messages.actions.notification.serverError,
     );
@@ -81,9 +87,12 @@ export const markingNotificationAsRead =
 
     const updateResponse = await actionSafeExecute(
       payload.update({
+        req: { user: { collection: "users", ...auth } },
+        user: auth,
         collection: "notifications",
         id,
         data: { read: true },
+        overrideAccess: false,
       }),
       messages.actions.notification.serverError,
     );
@@ -110,11 +119,13 @@ export const markingEveryNotificationAsRead =
       };
 
     const notificationsResponse = await actionSafeExecute(
-      payload.find({
+      payload.update({
+        req: { user: { collection: "users", ...auth } },
+        user: auth,
         collection: "notifications",
         where: { user: { equals: auth.id }, read: { equals: false } },
-        limit: 1000,
-        depth: 0,
+        data: { read: true },
+        overrideAccess: false,
       }),
       messages.actions.notification.serverError,
     );
@@ -124,21 +135,6 @@ export const markingEveryNotificationAsRead =
         data: null,
         error: notificationsResponse.error,
       };
-
-    const { data } = notificationsResponse;
-
-    await Promise.all(
-      data.docs.map((notification) =>
-        actionSafeExecute(
-          payload.update({
-            collection: "notifications",
-            id: notification.id,
-            data: { read: true },
-          }),
-          messages.actions.notification.serverError,
-        ),
-      ),
-    );
 
     return {
       data: messages.actions.notification.successEveryRead,
