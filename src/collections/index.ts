@@ -1,10 +1,11 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { AchievementNotifications } from "./AchievementNotifications";
 import { Blog } from "./Blog";
 import { Comments } from "./Comments";
 import { DiaryEntries } from "./DiaryEntries";
 import { Media } from "./Media";
+import { Notifications } from "./Notifications";
 import { NotificationSubscriptions } from "./NotificationSubscriptions";
 import { Orders } from "./Orders";
 import { Permissions } from "./Permissions";
@@ -17,7 +18,6 @@ import { RoomsPackages } from "./RoomsPackages";
 import { RoomsServices } from "./RoomsServices";
 import { ServiceCategories } from "./ServiceCategories";
 import { Users } from "./Users";
-import { VerificationTokensEmail } from "./VerificationTokensEmail";
 
 export const collections = [
   AchievementNotifications,
@@ -25,6 +25,7 @@ export const collections = [
   Comments,
   DiaryEntries,
   Media,
+  Notifications,
   NotificationSubscriptions,
   Orders,
   Permissions,
@@ -37,5 +38,4 @@ export const collections = [
   RoomsServices,
   ServiceCategories,
   Users,
-  VerificationTokensEmail,
 ];

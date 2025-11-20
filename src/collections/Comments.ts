@@ -1,4 +1,4 @@
-// REVIEWED - 14
+// REVIEWED - 15
 
 import { CollectionConfig } from "payload";
 
@@ -8,6 +8,7 @@ import {
   isSelf,
 } from "@/access/global";
 import { hasPermission } from "@/lib/permissions";
+import { isObject } from "@/lib/types/guards";
 import { Comment, User } from "@/payload-types";
 
 export const Comments: CollectionConfig = {
@@ -153,6 +154,73 @@ export const Comments: CollectionConfig = {
             data.user = req.user.id;
 
         return data;
+      },
+    ],
+    afterChange: [
+      async ({ doc, previousDoc, req, operation }) => {
+        const document = doc as Comment;
+        const previousDocument = previousDoc as Comment | null;
+
+        const onId = isObject(document.on.value)
+          ? document.on.value.id
+          : document.on.value;
+        const commenterId = isObject(document.user)
+          ? document.user.id
+          : document.user;
+
+        const resource = await req.payload.findByID({
+          collection: document.on.relationTo,
+          id: onId,
+          depth: 0,
+        });
+
+        let resourceUserId: number | null = null;
+
+        if (resource) {
+          resourceUserId = isObject(resource.author)
+            ? resource.author.id
+            : resource.author;
+        }
+
+        const createNotificationPromise = resourceUserId
+          ? req.payload.create({
+              collection: "notifications",
+              data: {
+                user: resourceUserId,
+                type: "comment",
+                resource: {
+                  relationTo: document.on.relationTo,
+                  value: isObject(document.on.value)
+                    ? document.on.value.id
+                    : document.on.value,
+                },
+                resourceType: document.on.relationTo,
+                title: "New Comment",
+                message: `Someone has commented on your ${document.on.relationTo === "diary-entries" ? "diary entry" : "blog post"}: "${resource.title}".`,
+                read: false,
+              },
+            })
+          : null;
+
+        if (
+          operation === "create" &&
+          document.on &&
+          document.user &&
+          document.status === "approved"
+        ) {
+          if (resourceUserId && resourceUserId !== commenterId)
+            if (createNotificationPromise) await createNotificationPromise;
+        } else if (
+          operation === "update" &&
+          document.on &&
+          document.user &&
+          document.status === "approved" &&
+          previousDocument &&
+          previousDocument.status !== "approved"
+        ) {
+          if (resourceUserId && resourceUserId !== commenterId)
+            if (createNotificationPromise) await createNotificationPromise;
+        }
       },
     ],
   },

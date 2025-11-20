@@ -1,4 +1,4 @@
-// REVIEWED - 18
+// REVIEWED - 19
 
 import { CollectionConfig } from "payload";
 
@@ -8,7 +8,8 @@ import {
   isSelf,
 } from "@/access/global";
 import { hasPermission } from "@/lib/permissions";
-import { User } from "@/payload-types";
+import { isObject } from "@/lib/types/guards";
+import { DiaryEntry, User } from "@/payload-types";
 
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
@@ -135,6 +136,50 @@ export const DiaryEntries: CollectionConfig = {
           data.status = "approved";
 
         return data;
+      },
+    ],
+    afterChange: [
+      async ({ doc, req, previousDoc, operation }) => {
+        if (
+          hasPermission(req.user, {
+            resource: "diary-entries",
+            action: "publish",
+          })
+        )
+          return;
+
+        const document = doc as DiaryEntry;
+        const previousDocument = previousDoc as DiaryEntry | null;
+
+        const authorId = isObject(document.author)
+          ? document.author.id
+          : document.author;
+
+        const createNotificationPromise = req.payload.create({
+          collection: "notifications",
+          data: {
+            user: authorId,
+            type: "diary-entry",
+            resource: {
+              relationTo: "diary-entries",
+              value: document.id,
+            },
+            resourceType: "diary-entries",
+            title: "Diary Entry Approved",
+            message: `Your diary entry "${document.title}" has been approved and published.`,
+            read: false,
+          },
+        });
+
+        if (operation === "create" && document.status === "approved")
+          await createNotificationPromise;
+        else if (
+          operation === "update" &&
+          document.status === "approved" &&
+          previousDocument &&
+          previousDocument.status !== "approved"
+        )
+          await createNotificationPromise;
       },
     ],
   },

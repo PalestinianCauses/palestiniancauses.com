@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CollectionConfig } from "payload";
 
@@ -58,6 +58,7 @@ export const Notifications: CollectionConfig = {
       label: "Type",
       type: "select",
       options: [
+        { label: "Blog", value: "blog" },
         { label: "Comment", value: "comment" },
         { label: "Diary Entry", value: "diary-entry" },
         { label: "Order", value: "order" },
@@ -70,7 +71,7 @@ export const Notifications: CollectionConfig = {
       name: "resource",
       label: "Resource",
       type: "relationship",
-      relationTo: ["comments", "diary-entries", "orders"],
+      relationTo: ["blogs", "comments", "diary-entries", "orders"],
       required: false,
     },
     {
@@ -78,6 +79,7 @@ export const Notifications: CollectionConfig = {
       label: "Resource Type",
       type: "select",
       options: [
+        { label: "Blog", value: "blogs" },
         { label: "Comment", value: "comments" },
         { label: "Diary Entry", value: "diary-entries" },
         { label: "Order", value: "orders" },
