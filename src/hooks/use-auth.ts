@@ -1,17 +1,18 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { PaginatedDocs } from "payload";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { deleteCookie, getCookie } from "@/actions/cookies";
+import { forgotPassword as forgotPassAction } from "@/actions/forgot-password";
+import { resetPassword as resetPassAction } from "@/actions/reset-password";
 import { createUser, getUserByEmail } from "@/actions/user";
 import { messages } from "@/lib/messages";
-import { actionSafeExecute, httpSafeExecute } from "@/lib/network";
+import { httpSafeExecute } from "@/lib/network";
 import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
 import {
   ErrorPayload,
@@ -24,7 +25,6 @@ import {
   isResponseDataAuthenticationHasRefreshedToken,
   isResponseError,
 } from "@/lib/types/guards";
-import { User } from "@/payload-types";
 
 export const useAuth = function useAuth() {
   const router = useRouter();
@@ -58,13 +58,7 @@ export const useAuth = function useAuth() {
           return { data: null, error: responseSignIn.error };
 
         if (responseSignIn.error === 401) {
-          const responseUserExists = await actionSafeExecute<
-            PaginatedDocs<User>,
-            string
-          >(
-            getUserByEmail(signInData.email),
-            messages.actions.auth.signIn.serverError,
-          );
+          const responseUserExists = await getUserByEmail(signInData.email);
 
           if (!responseUserExists.data || responseUserExists.error)
             return responseUserExists;
@@ -221,10 +215,48 @@ export const useAuth = function useAuth() {
     retryDelay: 1000,
   });
 
+  const forgotPassword = useMutation({
+    mutationFn: forgotPassAction,
+    onSuccess: (response) => {
+      if (!response.data || response.error) {
+        toast.error(
+          response.error || messages.actions.auth.forgotPassword.serverError,
+        );
+
+        return;
+      }
+
+      toast.success(messages.actions.auth.forgotPassword.success);
+    },
+    onSettled: () => {
+      toast.dismiss("forgot-password");
+    },
+  });
+
+  const resetPassword = useMutation({
+    mutationFn: resetPassAction,
+    onSuccess: (response) => {
+      if (!response.data || response.error) {
+        toast.error(
+          response.error || messages.actions.auth.resetPassword.serverError,
+        );
+
+        return;
+      }
+
+      toast.success(messages.actions.auth.resetPassword.success);
+    },
+    onSettled: () => {
+      toast.dismiss("reset-password");
+    },
+  });
+
   return {
     signIn,
     signUp,
     signOut,
     tokenRefresh,
+    forgotPassword,
+    resetPassword,
   };
 };
