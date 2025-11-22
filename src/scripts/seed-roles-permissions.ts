@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
@@ -294,6 +294,38 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     description: "Delete media files",
   },
 
+  // Notifications management permissions
+  {
+    name: "notifications.manage",
+    resource: "notifications",
+    action: "manage",
+    description: "Manage notifications in admin dashboard",
+  },
+  {
+    name: "notifications.create",
+    resource: "notifications",
+    action: "create",
+    description: "Create notifications",
+  },
+  {
+    name: "notifications.read",
+    resource: "notifications",
+    action: "read",
+    description: "View notifications",
+  },
+  {
+    name: "notifications.update",
+    resource: "notifications",
+    action: "update",
+    description: "Update notifications",
+  },
+  {
+    name: "notifications.delete",
+    resource: "notifications",
+    action: "delete",
+    description: "Delete notifications",
+  },
+
   // Notification subscriptions management permissions
   {
     name: "notification-subscriptions.manage",
@@ -422,37 +454,6 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     description: "Delete products",
   },
 
-  // Reset tokens password management permissions
-  {
-    name: "reset-tokens-password.manage",
-    resource: "reset-tokens-password",
-    action: "manage",
-    description: "Manage reset tokens password in admin dashboard",
-  },
-  {
-    name: "reset-tokens-password.create",
-    resource: "reset-tokens-password",
-    action: "create",
-    description: "Create reset tokens password",
-  },
-  {
-    name: "reset-tokens-password.read",
-    resource: "reset-tokens-password",
-    action: "read",
-    description: "View reset tokens password",
-  },
-  {
-    name: "reset-tokens-password.update",
-    resource: "reset-tokens-password",
-    action: "update",
-    description: "Update reset tokens password",
-  },
-  {
-    name: "reset-tokens-password.delete",
-    resource: "reset-tokens-password",
-    action: "delete",
-    description: "Delete reset tokens password",
-  },
   // Roles management permissions
   {
     name: "roles.manage",
@@ -752,38 +753,6 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     action: "update",
     description: "Update user roles",
   },
-
-  // Verification tokens email management permissions
-  {
-    name: "verification-tokens-email.manage",
-    resource: "verification-tokens-email",
-    action: "manage",
-    description: "Manage verification tokens email in admin dashboard",
-  },
-  {
-    name: "verification-tokens-email.create",
-    resource: "verification-tokens-email",
-    action: "create",
-    description: "Create verification tokens email",
-  },
-  {
-    name: "verification-tokens-email.read",
-    resource: "verification-tokens-email",
-    action: "read",
-    description: "View verification tokens email",
-  },
-  {
-    name: "verification-tokens-email.update",
-    resource: "verification-tokens-email",
-    action: "update",
-    description: "Update verification tokens email",
-  },
-  {
-    name: "verification-tokens-email.delete",
-    resource: "verification-tokens-email",
-    action: "delete",
-    description: "Delete verification tokens email",
-  },
 ];
 
 const permissionsRoles: Record<string, string[]> = {
@@ -834,6 +803,11 @@ const permissionsRoles: Record<string, string[]> = {
     "media.read",
     "media.update",
     "media.delete",
+    "notifications.manage",
+    "notifications.create",
+    "notifications.read",
+    "notifications.update",
+    "notifications.delete",
     "notification-subscriptions.manage",
     "notification-subscriptions.create",
     "notification-subscriptions.read",
@@ -854,11 +828,6 @@ const permissionsRoles: Record<string, string[]> = {
     "products.read",
     "products.update",
     "products.delete",
-    "reset-tokens-password.manage",
-    "reset-tokens-password.create",
-    "reset-tokens-password.read",
-    "reset-tokens-password.update",
-    "reset-tokens-password.delete",
     "roles.manage",
     "roles.create",
     "roles.read",
@@ -906,13 +875,9 @@ const permissionsRoles: Record<string, string[]> = {
     "users.previousRole.update",
     "users.roles.read",
     "users.roles.update",
-    "verification-tokens-email.manage",
-    "verification-tokens-email.create",
-    "verification-tokens-email.read",
-    "verification-tokens-email.update",
-    "verification-tokens-email.delete",
   ],
   "system-user": [
+    "achievement-notifications.create",
     "blogs.manage",
     "blogs.create",
     "blogs.read",
@@ -937,6 +902,9 @@ const permissionsRoles: Record<string, string[]> = {
     "diary-entries.author.create",
     "diary-entries.status.create",
     "diary-entries.status.update",
+    "media.create",
+    "notifications.create",
+    "orders.create",
     "permissions.read",
     "roles.read",
     "rooms.manage",
@@ -952,6 +920,7 @@ const permissionsRoles: Record<string, string[]> = {
     "users.roles.read",
   ],
   "author-user": [
+    "achievement-notifications.create",
     "blogs.manage",
     "blogs.create",
     "blogs.publish",
@@ -959,13 +928,21 @@ const permissionsRoles: Record<string, string[]> = {
     "diary-entries.manage",
     "diary-entries.create",
     "diary-entries.publish",
+    "media.create",
+    "notifications.create",
+    "orders.create",
     "permissions.read",
     "roles.read",
     "users.roles.read",
   ],
   "website-user": [
+    "achievement-notifications.create",
     "comments.create",
+    "diary-entries.manage",
     "diary-entries.create",
+    "media.create",
+    "notification.create",
+    "orders.create",
     "permissions.read",
     "roles.read",
     "users.roles.read",

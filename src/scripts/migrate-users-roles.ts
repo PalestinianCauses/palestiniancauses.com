@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { payload } from "@/lib/payload";
 
@@ -19,6 +19,7 @@ export const doMigratingUsersRoles = async function doMigratingUsersRoles() {
       collection: "users",
       where: { previousRole: { exists: true } },
       limit: 1000,
+      sort: "createdAt",
     });
 
     // eslint-disable-next-line no-console
@@ -110,10 +111,7 @@ export const doMigratingUsersRoles = async function doMigratingUsersRoles() {
         await payload.update({
           collection: "users",
           id: user.id,
-          data: {
-            previousRole: undefined,
-            roles: rolesToAssign,
-          },
+          data: { roles: rolesToAssign },
         });
 
         // eslint-disable-next-line no-console
