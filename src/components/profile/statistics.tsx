@@ -1,17 +1,10 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
-import {
-  BarChart3Icon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  MessagesSquareIcon,
-  Package2Icon,
-  PencilLineIcon,
-} from "lucide-react";
+import { BarChart3Icon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import colors from "tailwindcss/colors";
 
 import { Button } from "@/components/ui/button";
@@ -37,30 +30,25 @@ import { Paragraph, SubSectionHeading } from "../globals/typography";
 const chartConfig = {
   comments: {
     label: "Comments",
-    color: colors.yellow["500"],
+    color: colors.green["200"],
   },
   diary: {
     label: "Diary Entries",
-    color: colors.teal["500"],
+    color: colors.green["500"],
   },
   orders: {
     label: "Orders",
-    color: "rgb(var(--tertiary))",
+    color: colors.green["800"],
   },
-} as const;
+};
 
 export const ProfileStatistics = function ProfileStatistics() {
-  const { isLoading, data: stats } = useUserStats();
+  const { isLoading: isStatsLoading, data: stats } = useUserStats();
+
   const [offsetMonth, setOffsetMonth] = useState(0);
 
   const chartData = useMemo(() => {
-    if (
-      !stats ||
-      !stats.data ||
-      stats.error ||
-      stats.data.activityRecent.length === 0
-    )
-      return null;
+    if (isStatsLoading || !stats || !stats.data || stats.error) return null;
 
     // Group activities by month for 6 months based on offset
     const months: Record<
@@ -107,17 +95,17 @@ export const ProfileStatistics = function ProfileStatistics() {
     }
 
     // Count diary comments, diary entries, and orders by month from `activityRecent`
-    stats.data.activityRecent.forEach((activity) => {
-      const date = new Date(activity.date);
+    stats.data.forEach((stat) => {
+      const date = new Date(stat.createdAt);
       const monthKey = date.toLocaleDateString("en-US", {
         month: "short",
         year: "numeric",
       });
 
       if (months[monthKey]) {
-        if (activity.type === "comment") months[monthKey].comments += 1;
-        else if (activity.type === "diary-entry") months[monthKey].diary += 1;
-        else if (activity.type === "order") months[monthKey].orders += 1;
+        if (stat.type === "comment") months[monthKey].comments += 1;
+        else if (stat.type === "diary-entry") months[monthKey].diary += 1;
+        else if (stat.type === "order") months[monthKey].orders += 1;
       }
     });
 
@@ -127,10 +115,10 @@ export const ProfileStatistics = function ProfileStatistics() {
       diary: months[label].diary,
       orders: months[label].orders,
     }));
-  }, [stats, offsetMonth]);
+  }, [isStatsLoading, stats, offsetMonth]);
 
   // Show skeleton only on initial load (when no data exists yet)
-  if (isLoading)
+  if (isStatsLoading)
     return (
       <Card>
         <CardHeader>
@@ -143,7 +131,7 @@ export const ProfileStatistics = function ProfileStatistics() {
       </Card>
     );
 
-  if (!stats || !stats.data || !chartData || chartData.length === 0)
+  if (!stats || !stats.data || !chartData)
     return (
       <Card>
         <CardHeader>
@@ -165,7 +153,7 @@ export const ProfileStatistics = function ProfileStatistics() {
             <SubSectionHeading
               as="h2"
               className="flex items-center gap-2.5 text-xl !leading-none lg:text-xl lg:!leading-none xl:text-xl xl:!leading-none">
-              <BarChart3Icon className="size-5 stroke-[1.5]" />
+              <BarChart3Icon className="size-6 stroke-[1.5]" />
               Activity Statistics
             </SubSectionHeading>
             <Paragraph className="text-sm lg:text-sm">
@@ -178,14 +166,14 @@ export const ProfileStatistics = function ProfileStatistics() {
             <Button
               variant="outline"
               size="icon"
-              disabled={isLoading}
+              disabled={isStatsLoading}
               onClick={() => setOffsetMonth((p) => p + 6)}>
               <ChevronLeftIcon />
             </Button>
             <Button
               variant="outline"
               size="icon"
-              disabled={isLoading || offsetMonth === 0}
+              disabled={isStatsLoading || offsetMonth === 0}
               onClick={() => setOffsetMonth((p) => Math.max(0, p - 6))}>
               <ChevronRightIcon />
             </Button>
@@ -195,47 +183,10 @@ export const ProfileStatistics = function ProfileStatistics() {
       <CardContent>
         <div className="space-y-10">
           <ChartContainer config={chartConfig} className="h-96 w-full">
-            <AreaChart
+            <BarChart
+              accessibilityLayer
               data={chartData}
-              margin={{ top: 10, right: 10, left: 10, bottom: 40 }}>
-              <defs>
-                <linearGradient id="commentsFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor={chartConfig.comments.color}
-                    stopOpacity={0.95}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor={chartConfig.comments.color}
-                    stopOpacity={0.05}
-                  />
-                </linearGradient>
-                <linearGradient id="diaryFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor={chartConfig.diary.color}
-                    stopOpacity={0.95}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor={chartConfig.diary.color}
-                    stopOpacity={0.05}
-                  />
-                </linearGradient>
-                <linearGradient id="ordersFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor={chartConfig.orders.color}
-                    stopOpacity={0.95}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor={chartConfig.orders.color}
-                    stopOpacity={0.05}
-                  />
-                </linearGradient>
-              </defs>
+              margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
               <CartesianGrid
                 strokeDasharray="5 5"
                 className="stroke-muted/50"
@@ -257,77 +208,24 @@ export const ProfileStatistics = function ProfileStatistics() {
                 cursor={false}
                 content={<ChartTooltipContent indicator="line" />}
               />
-              <Area
-                type="monotone"
+              <Bar
                 dataKey="comments"
                 name="comments"
-                stroke={chartConfig.comments.color}
-                stackId="1"
-                strokeWidth={0}
-                fill="url(#commentsFill)"
+                fill={chartConfig.comments.color}
               />
-              <Area
-                type="monotone"
+              <Bar
                 dataKey="diary"
                 name="diary"
-                stroke={chartConfig.diary.color}
-                stackId="1"
-                strokeWidth={0}
-                fill="url(#diaryFill)"
+                fill={chartConfig.diary.color}
               />
-              <Area
-                type="monotone"
+              <Bar
                 dataKey="orders"
                 name="orders"
-                stroke={chartConfig.orders.color}
-                stackId="1"
-                strokeWidth={0}
-                fill="url(#ordersFill)"
+                fill={chartConfig.orders.color}
               />
               <ChartLegend content={<ChartLegendContent />} />
-            </AreaChart>
+            </BarChart>
           </ChartContainer>
-          <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
-            <div className="flex flex-col items-start justify-center gap-2.5 border-l-2 border-yellow-500 bg-yellow-500/5 p-5">
-              <SubSectionHeading
-                as="h3"
-                className="flex items-center gap-2.5 text-lg !leading-none lg:text-lg lg:!leading-none xl:text-lg xl:!leading-none">
-                <MessagesSquareIcon className="size-6 stroke-[1.5]" />
-                <span className="truncate">Total Comments</span>
-              </SubSectionHeading>
-              <SubSectionHeading
-                as="p"
-                className="!leading-none text-yellow-500 lg:!leading-none xl:!leading-none">
-                {stats.data.comments ?? 0}
-              </SubSectionHeading>
-            </div>
-            <div className="flex flex-col items-start justify-center gap-2.5 border-l-2 border-teal-500 bg-teal-500/5 p-5">
-              <SubSectionHeading
-                as="h3"
-                className="flex items-center gap-2.5 text-lg !leading-none lg:text-lg lg:!leading-none xl:text-lg xl:!leading-none">
-                <PencilLineIcon className="size-6 stroke-[1.5]" />
-                <span className="truncate">Total Diary Entries</span>
-              </SubSectionHeading>
-              <SubSectionHeading
-                as="p"
-                className="!leading-none text-teal-500 lg:!leading-none xl:!leading-none">
-                {stats.data.diaryEntries ?? 0}
-              </SubSectionHeading>
-            </div>
-            <div className="flex flex-col items-start justify-center gap-2.5 border-l-2 border-tertiary bg-tertiary/5 p-5">
-              <SubSectionHeading
-                as="h3"
-                className="flex items-center gap-2.5 text-lg !leading-none lg:text-lg lg:!leading-none xl:text-lg xl:!leading-none">
-                <Package2Icon className="size-6 stroke-[1.5]" />
-                <span className="truncate">Total Orders</span>
-              </SubSectionHeading>
-              <SubSectionHeading
-                as="p"
-                className="!leading-none text-tertiary lg:!leading-none xl:!leading-none">
-                {stats.data.orders ?? 0}
-              </SubSectionHeading>
-            </div>
-          </div>
         </div>
       </CardContent>
     </Card>

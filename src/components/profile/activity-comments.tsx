@@ -1,8 +1,8 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
   ArrowDownIcon,
   ArrowUpRightIcon,
@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 
 import { getCollection } from "@/actions/collection";
+import { getUserActivityCommentsStats } from "@/actions/user-activity-comments";
 import { useUser } from "@/hooks/use-user";
 import { isObject } from "@/lib/types/guards";
 import { cn } from "@/lib/utils/styles";
@@ -26,10 +27,21 @@ import { Paragraph, SubSectionHeading } from "../globals/typography";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
+// eslint-disable-next-line import/no-cycle
 import { LoadingActivity, StatCard } from "./activity";
 
 export const ActivityComments = function ActivityComments() {
   const { isLoading: isLoadingUser, data: user } = useUser();
+
+  const { isLoading: isLoadingStats, data: stats } = useQuery({
+    queryKey: ["user-activity-comments-stats", user?.id],
+    queryFn: async () => {
+      const response = await getUserActivityCommentsStats();
+      return response;
+    },
+    enabled: Boolean(user?.id),
+    refetchOnWindowFocus: false,
+  });
 
   const queryKey = useMemo(
     () => ["user-activity-comments", user?.id],
@@ -68,33 +80,30 @@ export const ActivityComments = function ActivityComments() {
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
+    refetchOnWindowFocus: false,
   });
 
-  const { stats, comments } = useMemo(() => {
-    if (!data)
-      return {
-        stats: { total: 0, approved: 0, pending: 0, rejected: 0 },
-        comments: [],
-      };
+  const { comments } = useMemo(() => {
+    if (!data) return { comments: [] };
 
     const pages = data.pages.flatMap((page) => (page ? page.docs : []));
-    return {
-      stats: {
-        total: pages.length,
-        approved: pages.filter((page) => page.status === "approved").length,
-        pending: pages.filter((page) => page.status === "pending").length,
-        rejected: pages.filter((page) => page.status === "rejected").length,
-      },
-      comments: pages,
-    };
+    return { comments: pages };
   }, [data]);
 
   return (
     <SafeHydrate
-      isLoading={isLoadingUser || isLoading}
+      isLoading={isLoadingUser || isLoadingStats || isLoading}
       isLoadingComponent={LoadingActivity}>
       {(() => {
-        if (!user || !data || comments.length === 0) return null;
+        if (
+          !user ||
+          !stats ||
+          !stats.data ||
+          stats.error ||
+          !data ||
+          comments.length === 0
+        )
+          return null;
 
         return (
           <div className="space-y-10">
@@ -114,40 +123,38 @@ export const ActivityComments = function ActivityComments() {
               <StatCard
                 color="blue"
                 label="Total"
-                value={stats.total}
+                value={stats.data.total}
                 icon={MessageSquareIcon}
               />
 
               <StatCard
                 color="green"
                 label="Approved"
-                value={stats.approved}
+                value={stats.data.approved}
                 icon={MessageSquarePlusIcon}
               />
 
               <StatCard
                 color="yellow"
                 label="Pending"
-                value={stats.pending}
+                value={stats.data.pending}
                 icon={MessageSquareDotIcon}
               />
 
               <StatCard
                 color="red"
                 label="Rejected"
-                value={stats.rejected}
+                value={stats.data.rejected}
                 icon={MessageSquareOffIcon}
               />
             </div>
 
             <section
-              className={cn("flex w-full flex-col gap-10", {
+              className={cn("flex w-full flex-col gap-5", {
                 "pointer-events-none opacity-50": isFetching,
               })}>
               {comments.map((comment) => (
-                <div
-                  key={comment.id}
-                  className="border-l border-input/25 py-2.5 pl-5">
+                <div key={comment.id} className="border border-input/25 p-5">
                   <div className="mb-5 flex flex-wrap items-center gap-x-2.5 gap-y-5">
                     <Badge
                       size="sm"

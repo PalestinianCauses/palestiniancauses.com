@@ -1,4 +1,4 @@
-// REVIEWED - 15
+// REVIEWED - 16
 
 import { CollectionConfig } from "payload";
 
@@ -94,7 +94,6 @@ export const Comments: CollectionConfig = {
     {
       access: {
         create: hasPermissionFieldAccess("comments.status", "create"),
-        read: hasPermissionFieldAccess("comments.status", "read"),
         update: hasPermissionFieldAccess("comments.status", "update"),
       },
       admin: { position: "sidebar" },

@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 16
+// REVIEWED - 17
 
 import { httpStatusesMessages, messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -124,4 +124,25 @@ export const getDiaryEntryAuthor = async function getDiaryEntryAuthor(
   );
 
   return response;
+};
+
+export const deleteDiaryEntry = async function deleteDiaryEntry(
+  id: number,
+): Promise<ResponseSafeExecute<string, string>> {
+  const auth = await getAuthentication();
+
+  if (!auth)
+    return { data: null, error: messages.actions.user.unAuthenticated };
+
+  const response = await actionSafeExecute(
+    payload.delete({
+      collection: "diary-entries",
+      id,
+    }),
+    messages.actions.diaryEntry.delete.serverError,
+  );
+
+  if (!response.data || response.error) return response;
+
+  return { data: messages.actions.diaryEntry.delete.success, error: null };
 };
