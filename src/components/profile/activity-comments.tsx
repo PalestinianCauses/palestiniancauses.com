@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
@@ -24,11 +24,11 @@ import { cn } from "@/lib/utils/styles";
 import { CommentItem } from "../comments/item";
 import { SafeHydrate } from "../globals/safe-hydrate";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
-import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
 // eslint-disable-next-line import/no-cycle
-import { LoadingActivity, StatCard } from "./activity";
+import { LoadingActivity } from "./activity";
+import { StatCard, StatusBadge } from "./globals";
 
 export const ActivityComments = function ActivityComments() {
   const { isLoading: isLoadingUser, data: user } = useUser();
@@ -114,7 +114,7 @@ export const ActivityComments = function ActivityComments() {
                 <MessagesSquareIcon className="size-6 stroke-[1.5]" />
                 Comments Activity
               </SubSectionHeading>
-              <Paragraph className="text-sm lg:text-sm">
+              <Paragraph className="text-base lg:text-base">
                 Your comments and their status across our platform
               </Paragraph>
             </div>
@@ -156,36 +156,28 @@ export const ActivityComments = function ActivityComments() {
               {comments.map((comment) => (
                 <div key={comment.id} className="border border-input/25 p-5">
                   <div className="mb-5 flex flex-wrap items-center gap-x-2.5 gap-y-5">
-                    <Badge
-                      size="sm"
-                      className={cn(
-                        "border px-2 py-1 text-xs capitalize ring-0",
-                        {
-                          "border-tertiary-2/10 bg-tertiary-2/10 text-tertiary-2 hover:bg-tertiary-2/10":
-                            comment.status === "approved",
-                          "border-yellow-500/10 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/10":
-                            comment.status === "pending",
-                          "border-secondary/10 bg-secondary/10 text-secondary hover:bg-secondary/10":
-                            comment.status === "rejected",
-                        },
-                      )}>
-                      {comment.status}
-                    </Badge>
+                    <StatusBadge
+                      label={comment.status}
+                      className={cn({
+                        "border-tertiary-2/10 bg-tertiary-2/10 text-tertiary-2 hover:bg-tertiary-2/10":
+                          comment.status === "approved",
+                        "border-yellow-500/10 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/10":
+                          comment.status === "pending",
+                        "border-secondary/10 bg-secondary/10 text-secondary hover:bg-secondary/10":
+                          comment.status === "rejected",
+                      })}
+                    />
 
                     {comment.parent ? (
-                      <Badge
-                        size="sm"
-                        className={cn(
-                          "border border-tertiary/10 bg-tertiary/10 px-2 py-1 text-xs text-tertiary ring-0 hover:bg-tertiary/10",
-                        )}>
-                        A reply to a comment
-                      </Badge>
+                      <StatusBadge
+                        label="A reply to a comment"
+                        className="border-tertiary/10 bg-tertiary/10 text-tertiary hover:bg-tertiary/10"
+                      />
                     ) : null}
 
                     {isObject(comment.on.value) ? (
                       <Button
                         variant="link"
-                        size="sm"
                         className="p-0 text-muted-foreground hover:text-foreground"
                         asChild>
                         <Link

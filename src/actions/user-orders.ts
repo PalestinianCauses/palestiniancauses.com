@@ -1,37 +1,35 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
-import { Order } from "@/payload-types";
 
 import { getAuthentication } from "./auth";
 
-export const getUserOrders = async function getUserOrders(): Promise<
-  ResponseSafeExecute<Order[]>
-> {
+export const userOrdersCancel = async function userOrdersCancel(
+  id: number,
+): Promise<ResponseSafeExecute<string>> {
   const auth = await getAuthentication();
 
-  if (!auth) return { data: [], error: null };
+  if (!auth)
+    return { data: null, error: messages.actions.user.unAuthenticated };
 
   const response = await actionSafeExecute(
-    payload.find({
+    payload.update({
       req: { user: { collection: "users", ...auth } },
       user: auth,
       collection: "orders",
-      where: { user: { equals: auth.id } },
-      sort: "-createdAt",
-      limit: 100,
-      depth: 2,
+      where: { id: { equals: id } },
+      data: { orderStatus: "cancelled" },
       overrideAccess: false,
     }),
-    messages.actions.order.serverError,
+    messages.actions.order.serverErrorCancel,
   );
 
   if (!response.data || response.error) return response;
 
-  return { data: response.data.docs, error: null };
+  return { data: messages.actions.order.successCancel, error: null };
 };

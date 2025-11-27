@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import {
   QueryKey,
@@ -32,11 +32,11 @@ import { DiaryEntry } from "@/payload-types";
 
 import { SafeHydrate } from "../globals/safe-hydrate";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
-import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
 // eslint-disable-next-line import/no-cycle
-import { LoadingActivity, StatCard } from "./activity";
+import { LoadingActivity } from "./activity";
+import { StatCard, StatusBadge } from "./globals";
 
 const DiaryEntryItem = function DiaryEntryItem({
   queryKey,
@@ -48,39 +48,41 @@ const DiaryEntryItem = function DiaryEntryItem({
   const queryClient = useQueryClient();
   const { deleteDiaryEntry } = useDiaryEntry();
 
+  const isAnonymousLabel = diaryEntry.isAnonymous
+    ? "Shared Anonymously"
+    : "Shared Publicly";
+
   return (
     <div className="relative flex flex-col items-start justify-start border border-input/25 p-5">
       <div className="mb-5 flex flex-wrap items-center gap-x-2.5 gap-y-5">
         <div className="mr-2.5 flex items-center gap-2.5">
           <CalendarIcon className="mb-0.5 size-5 stroke-[1.5]" />
-          <p className="text-sm font-medium leading-none text-foreground">
-            {format(diaryEntry.date, "PPP")}
+          <p className="text-base font-medium leading-none text-foreground">
+            Published on {format(diaryEntry.createdAt, "PPP")}
           </p>
         </div>
 
-        <Badge
-          size="sm"
-          className={cn("border px-2 py-1 text-xs capitalize ring-0", {
+        <StatusBadge
+          label={diaryEntry.status}
+          className={cn({
             "border-tertiary-2/10 bg-tertiary-2/10 text-tertiary-2 hover:bg-tertiary-2/10":
               diaryEntry.status === "approved",
             "border-yellow-500/10 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/10":
               diaryEntry.status === "pending",
             "border-secondary/10 bg-secondary/10 text-secondary hover:bg-secondary/10":
               diaryEntry.status === "rejected",
-          })}>
-          {diaryEntry.status}
-        </Badge>
+          })}
+        />
 
-        <Badge
-          size="sm"
-          className={cn("border px-2 py-1 text-xs ring-0", {
+        <StatusBadge
+          label={isAnonymousLabel}
+          className={cn({
             "border-tertiary/10 bg-tertiary/10 text-tertiary hover:bg-tertiary/10":
               !diaryEntry.isAnonymous,
             "border-teal-500/10 bg-teal-500/10 text-teal-500 hover:bg-teal-500/10":
               diaryEntry.isAnonymous,
-          })}>
-          {diaryEntry.isAnonymous ? "Shared Anonymously" : "Shared Publicly"}
-        </Badge>
+          })}
+        />
       </div>
       <SubSectionHeading as="h3" className="mb-10">
         {diaryEntry.title}
@@ -201,7 +203,7 @@ export const ActivityDiaryEntries = function ActivityDiaryEntries() {
                 <PencilLineIcon className="size-6 stroke-[1.5]" />
                 Diary Entries Activity
               </SubSectionHeading>
-              <Paragraph className="text-sm lg:text-sm">
+              <Paragraph className="text-base lg:text-base">
                 Your stories and their status across our platform
               </Paragraph>
             </div>

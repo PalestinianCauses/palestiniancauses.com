@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -31,33 +31,42 @@ export const getUserActivityDiaryEntriesStats =
       await Promise.all([
         actionSafeExecute(
           payload.count({
+            req: { user: { collection: "users", ...user } },
+            user,
             collection: "diary-entries",
             where: {
               author: { equals: user.id },
               status: { equals: "approved" },
             },
+            overrideAccess: false,
           }),
-          messages.actions.comment.serverErrorGet,
+          messages.actions.diaryEntry.serverErrorGet,
         ),
         actionSafeExecute(
           payload.count({
+            req: { user: { collection: "users", ...user } },
+            user,
             collection: "diary-entries",
             where: {
               author: { equals: user.id },
               status: { equals: "pending" },
             },
+            overrideAccess: false,
           }),
-          messages.actions.comment.serverErrorGet,
+          messages.actions.diaryEntry.serverErrorGet,
         ),
         actionSafeExecute(
           payload.count({
+            req: { user: { collection: "users", ...user } },
+            user,
             collection: "diary-entries",
             where: {
               author: { equals: user.id },
               status: { equals: "rejected" },
             },
+            overrideAccess: false,
           }),
-          messages.actions.comment.serverErrorGet,
+          messages.actions.diaryEntry.serverErrorGet,
         ),
       ]);
 
@@ -68,9 +77,8 @@ export const getUserActivityDiaryEntriesStats =
       responseApproved.error ||
       responsePending.error ||
       responseRejected.error
-    ) {
-      return { data: null, error: messages.actions.comment.serverErrorGet };
-    }
+    )
+      return { data: null, error: messages.actions.diaryEntry.serverErrorGet };
 
     return {
       data: {
