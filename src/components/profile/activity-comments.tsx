@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
@@ -17,22 +17,22 @@ import { useMemo } from "react";
 
 import { getCollection } from "@/actions/collection";
 import { getUserActivityCommentsStats } from "@/actions/user-activity-comments";
-import { useUser } from "@/hooks/use-user";
 import { isObject } from "@/lib/types/guards";
 import { cn } from "@/lib/utils/styles";
+import { User } from "@/payload-types";
 
 import { CommentItem } from "../comments/item";
 import { SafeHydrate } from "../globals/safe-hydrate";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
 import { Button } from "../ui/button";
 
-// eslint-disable-next-line import/no-cycle
-import { LoadingActivity } from "./activity";
-import { StatCard, StatusBadge } from "./globals";
+import { LoadingActivity, StatCard, StatusBadge } from "./globals";
 
-export const ActivityComments = function ActivityComments() {
-  const { isLoading: isLoadingUser, data: user } = useUser();
-
+export const ActivityComments = function ActivityComments({
+  user,
+}: {
+  user: User;
+}) {
   const { isLoading: isLoadingStats, data: stats } = useQuery({
     queryKey: ["user-activity-comments-stats", user?.id],
     queryFn: async () => {
@@ -92,7 +92,7 @@ export const ActivityComments = function ActivityComments() {
 
   return (
     <SafeHydrate
-      isLoading={isLoadingUser || isLoadingStats || isLoading}
+      isLoading={isLoadingStats || isLoading}
       isLoadingComponent={LoadingActivity}>
       {(() => {
         if (
@@ -154,7 +154,7 @@ export const ActivityComments = function ActivityComments() {
                 "pointer-events-none opacity-50": isFetching,
               })}>
               {comments.map((comment) => (
-                <div key={comment.id} className="border border-input/25 p-5">
+                <div key={comment.id} className="border border-input/50 p-5">
                   <div className="mb-5 flex flex-wrap items-center gap-x-2.5 gap-y-5">
                     <StatusBadge
                       label={comment.status}

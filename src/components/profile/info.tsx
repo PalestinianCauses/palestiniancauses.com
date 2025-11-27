@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { format } from "date-fns";
 import {
@@ -35,6 +35,8 @@ import { cn } from "@/lib/utils/styles";
 
 import { SuspenseAvatar } from "../globals/suspense-avatar";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
+
+import { StatusBadge } from "./globals";
 
 export const ProfileInfo = function ProfileInfo() {
   const { isLoading, data: user } = useUser();
@@ -104,23 +106,19 @@ export const ProfileInfo = function ProfileInfo() {
               </Link>
             </Button>
           </div>
-          {user.accountVerified ? (
-            <Badge
-              size="sm"
-              className={cn(
-                "border border-tertiary-2/10 bg-tertiary-2/10 px-2 py-1 text-xs text-tertiary-2 ring-0 hover:bg-tertiary-2/10",
-              )}>
-              Account has been verified
-            </Badge>
-          ) : (
-            <Badge
-              size="sm"
-              className={cn(
-                "border border-secondary/10 bg-secondary/10 px-2 py-1 text-xs text-secondary ring-0 hover:bg-secondary/10",
-              )}>
-              Account has not been verified yet
-            </Badge>
-          )}
+          <StatusBadge
+            label={
+              user.accountVerified
+                ? "Account has been verified"
+                : "Account has not been verified yet"
+            }
+            className={cn({
+              "border-tertiary-2/10 bg-tertiary-2/10 text-tertiary-2 hover:bg-tertiary-2/10":
+                user.accountVerified,
+              "border-secondary/10 bg-secondary/10 text-secondary hover:bg-secondary/10":
+                !user.accountVerified,
+            })}
+          />
         </div>
       </div>
 

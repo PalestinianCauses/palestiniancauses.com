@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { format } from "date-fns/format";
@@ -21,10 +21,9 @@ import { toast } from "sonner";
 import { getCollection } from "@/actions/collection";
 import { getUserActivityOrdersStats } from "@/actions/user-activity-orders";
 import { userOrdersCancel } from "@/actions/user-orders";
-import { useUser } from "@/hooks/use-user";
 import { isObject } from "@/lib/types/guards";
 import { cn } from "@/lib/utils/styles";
-import { Order } from "@/payload-types";
+import { Order, User } from "@/payload-types";
 
 import { SafeHydrate } from "../globals/safe-hydrate";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
@@ -37,9 +36,7 @@ import {
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 
-// eslint-disable-next-line import/no-cycle
-import { LoadingActivity } from "./activity";
-import { StatCard, StatusBadge } from "./globals";
+import { LoadingActivity, StatCard, StatusBadge } from "./globals";
 
 const OrderItemType = function OrderItemType({
   orderType,
@@ -85,9 +82,11 @@ const OrderItemStatus = function OrderItemStatus({
   );
 };
 
-export const ActivityOrders = function ActivityOrders() {
-  const { isLoading: isLoadingUser, data: user } = useUser();
-
+export const ActivityOrders = function ActivityOrders({
+  user,
+}: {
+  user: User;
+}) {
   const { isLoading: isLoadingStats, data: stats } = useQuery({
     queryKey: ["user-activity-orders-stats", user?.id],
     queryFn: async () => {
@@ -162,7 +161,7 @@ export const ActivityOrders = function ActivityOrders() {
 
   return (
     <SafeHydrate
-      isLoading={isLoadingUser || isLoadingStats || isLoading}
+      isLoading={isLoadingStats || isLoading}
       isLoadingComponent={LoadingActivity}>
       {(() => {
         if (

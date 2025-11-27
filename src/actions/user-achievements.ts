@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -11,6 +11,7 @@ import { getAuthentication } from "./auth";
 
 export type Achievement = {
   id: string;
+  type: "comment" | "diary" | "order";
   name: string;
   description: string;
   unlocked: boolean;
@@ -75,6 +76,7 @@ export const getUserAchievements = async function getUserAchievements(
   const achievements: Achievement[] = [
     {
       id: "diary-1",
+      type: "diary",
       name: "The First Light",
       description:
         "In the darkness, your voice emerged. The first pixel of truth that pierced through silence, igniting a flame that will never be extinguished.",
@@ -84,6 +86,7 @@ export const getUserAchievements = async function getUserAchievements(
     },
     {
       id: "diary-5",
+      type: "diary",
       name: "Foundation Builder",
       description:
         "Five stories strong, you've laid the first stones. From rubble to foundation, pixel by pixel, you're building something that will stand the test of time.",
@@ -93,6 +96,7 @@ export const getUserAchievements = async function getUserAchievements(
     },
     {
       id: "diary-10",
+      type: "diary",
       name: "Weaver of Truth",
       description:
         "Ten stories woven together, each pixel a thread in the tapestry of Gaza's narrative. You're not just telling stories—you're preserving history itself.",
@@ -102,6 +106,7 @@ export const getUserAchievements = async function getUserAchievements(
     },
     {
       id: "diary-25",
+      type: "diary",
       name: "Architect of Hope",
       description:
         "Twenty-five stories strong, you've become an architect. From the ground up, you're reconstructing truth, building dreams, and creating hope where it was lost.",
@@ -111,6 +116,7 @@ export const getUserAchievements = async function getUserAchievements(
     },
     {
       id: "diary-50",
+      type: "diary",
       name: "Guardian of Stories",
       description:
         "Fifty stories stand as your testament. You've become a guardian, a protector of Gaza's authentic voice. Your words are a shield, your stories a sanctuary for truth.",
@@ -120,6 +126,7 @@ export const getUserAchievements = async function getUserAchievements(
     },
     {
       id: "diary-100",
+      type: "diary",
       name: "Master Story Teller",
       description:
         "One hundred stories—a century of truth. You've mastered the ancient art of story-telling, preserving Gaza's soul for generations to come. Your legacy is eternal.",
@@ -129,6 +136,7 @@ export const getUserAchievements = async function getUserAchievements(
     },
     {
       id: "comment-1",
+      type: "comment",
       name: "First Connection",
       description:
         "The first brick laid, the first bridge built. Your words reached across the divide, creating a connection that proves solidarity knows no boundaries.",
@@ -138,6 +146,7 @@ export const getUserAchievements = async function getUserAchievements(
     },
     {
       id: "comment-5",
+      type: "comment",
       name: "Weaver of Connections",
       description:
         "Five threads woven, five hearts connected. You're creating a web of unity that spans borders, proving that compassion and solidarity can bridge any distance.",
@@ -147,6 +156,7 @@ export const getUserAchievements = async function getUserAchievements(
     },
     {
       id: "comment-10",
+      type: "comment",
       name: "Community Builder",
       description:
         "Ten comments strong, you've become a builder. Every word you share strengthens the foundation of a community built on empathy, understanding, and un-wavering support.",
@@ -156,6 +166,7 @@ export const getUserAchievements = async function getUserAchievements(
     },
     {
       id: "comment-25",
+      type: "comment",
       name: "Pillar of Strength",
       description:
         "Twenty-five pillars of support, each comment a testament to your strength. You stand firm, holding up the community with words that inspire, comfort, and unite.",
@@ -165,6 +176,7 @@ export const getUserAchievements = async function getUserAchievements(
     },
     {
       id: "comment-50",
+      type: "comment",
       name: "Beacon of Hope",
       description:
         "Fifty beacons of light, fifty messages of hope. In the darkest moments, your words shine brightest, guiding others toward solidarity, understanding, and un-wavering support.",
@@ -174,6 +186,7 @@ export const getUserAchievements = async function getUserAchievements(
     },
     {
       id: "comment-100",
+      type: "comment",
       name: "Master Connector",
       description:
         "One hundred connections forged, one hundred bridges built. You've mastered the art of bringing people together, weaving unity through every word, healing hearts with every message.",
@@ -183,6 +196,7 @@ export const getUserAchievements = async function getUserAchievements(
     },
     {
       id: "book-order",
+      type: "order",
       name: "Truth Bearer",
       description:
         "You carry Gaza's truth in your hands. 'A Human But From Gaza' is more than a book—it's a testament, a promise, and a commitment to keeping these stories alive forever.",

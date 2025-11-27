@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import {
   QueryKey,
@@ -26,17 +26,14 @@ import { useMemo } from "react";
 import { getCollection } from "@/actions/collection";
 import { getUserActivityDiaryEntriesStats } from "@/actions/user-activity-diary-entries";
 import { useDiaryEntry } from "@/hooks/use-diary-entry";
-import { useUser } from "@/hooks/use-user";
 import { cn } from "@/lib/utils/styles";
-import { DiaryEntry } from "@/payload-types";
+import { DiaryEntry, User } from "@/payload-types";
 
 import { SafeHydrate } from "../globals/safe-hydrate";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
 import { Button } from "../ui/button";
 
-// eslint-disable-next-line import/no-cycle
-import { LoadingActivity } from "./activity";
-import { StatCard, StatusBadge } from "./globals";
+import { LoadingActivity, StatCard, StatusBadge } from "./globals";
 
 const DiaryEntryItem = function DiaryEntryItem({
   queryKey,
@@ -53,7 +50,7 @@ const DiaryEntryItem = function DiaryEntryItem({
     : "Shared Publicly";
 
   return (
-    <div className="relative flex flex-col items-start justify-start border border-input/25 p-5">
+    <div className="relative flex flex-col items-start justify-start border border-input/50 p-5">
       <div className="mb-5 flex flex-wrap items-center gap-x-2.5 gap-y-5">
         <div className="mr-2.5 flex items-center gap-2.5">
           <CalendarIcon className="mb-0.5 size-5 stroke-[1.5]" />
@@ -119,9 +116,11 @@ const DiaryEntryItem = function DiaryEntryItem({
   );
 };
 
-export const ActivityDiaryEntries = function ActivityDiaryEntries() {
-  const { isLoading: isLoadingUser, data: user } = useUser();
-
+export const ActivityDiaryEntries = function ActivityDiaryEntries({
+  user,
+}: {
+  user: User;
+}) {
   const { isLoading: isLoadingStats, data: stats } = useQuery({
     queryKey: ["user-activity-diary-entries-stats", user?.id],
     queryFn: async () => {
@@ -181,7 +180,7 @@ export const ActivityDiaryEntries = function ActivityDiaryEntries() {
 
   return (
     <SafeHydrate
-      isLoading={isLoadingUser || isLoadingStats || isLoading}
+      isLoading={isLoadingStats || isLoading}
       isLoadingComponent={LoadingActivity}>
       {(() => {
         if (
