@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -11,12 +11,17 @@ import {
   markingNotificationAsRead,
 } from "@/actions/notifications";
 
-export const useNotifications = function useNotifications() {
+export const useNotifications = function useNotifications({
+  userId,
+}: {
+  userId?: number;
+}) {
   const queryClient = useQueryClient();
 
   const query = useQuery({
-    queryKey: ["notifications"],
+    queryKey: ["notifications", userId],
     queryFn: () => getNotifications(),
+    enabled: Boolean(userId),
   });
 
   const markingAsRead = useMutation({

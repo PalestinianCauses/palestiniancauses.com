@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { BarChart3Icon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -42,8 +42,12 @@ const chartConfig = {
   },
 };
 
-export const ProfileStatistics = function ProfileStatistics() {
-  const { isLoading: isStatsLoading, data: stats } = useUserStats();
+export const ProfileStatistics = function ProfileStatistics({
+  userId,
+}: {
+  userId?: number;
+}) {
+  const { isLoading: isStatsLoading, data: stats } = useUserStats({ userId });
 
   const [offsetMonth, setOffsetMonth] = useState(0);
 
@@ -122,11 +126,11 @@ export const ProfileStatistics = function ProfileStatistics() {
     return (
       <Card>
         <CardHeader>
-          <Skeleton className="h-8 w-1/2" />
-          <Skeleton className="h-4 w-3/4" />
+          <Skeleton className="h-8 w-1/2 bg-foreground/5" />
+          <Skeleton className="h-4 w-3/4 bg-foreground/5" />
         </CardHeader>
         <CardContent>
-          <Skeleton className="h-60 w-full" />
+          <Skeleton className="h-60 w-full bg-foreground/5" />
         </CardContent>
       </Card>
     );
@@ -156,7 +160,7 @@ export const ProfileStatistics = function ProfileStatistics() {
               <BarChart3Icon className="size-6 stroke-[1.5]" />
               Activity Statistics
             </SubSectionHeading>
-            <Paragraph className="text-sm lg:text-sm">
+            <Paragraph className="text-base lg:text-base">
               {offsetMonth === 0
                 ? "Your activity over the last 6 months"
                 : `Your activity from ${chartData[0].month} to ${chartData[chartData.length - 1].month}`}
