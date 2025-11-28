@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { format } from "date-fns";
 import {
@@ -150,7 +150,7 @@ export const AchievementCard = function AchievementCard({
 export const ProfileAchievements = function ProfileAchievements() {
   const { isLoading: isUserLoading, data: user } = useUser();
   const { isLoading: isLoadingAchievements, data: achievements } =
-    useUserAchievements();
+    useUserAchievements({ userId: user?.id });
 
   if (isUserLoading || isLoadingAchievements) {
     return (
@@ -194,25 +194,27 @@ export const ProfileAchievements = function ProfileAchievements() {
           excellence together.
         </Paragraph>
       </div>
-      <div className="flex flex-col items-start justify-start gap-10">
-        <SubSectionHeading
-          as="h3"
-          className="flex items-center gap-2.5 text-base uppercase !leading-none tracking-[0.2em] lg:text-base lg:!leading-none xl:text-base xl:!leading-none">
-          Attained
-        </SubSectionHeading>
-        <div className="grid w-full grid-cols-1 gap-x-5 gap-y-10 xl:grid-cols-2">
-          {achievementsGained.map((achievement) => (
-            <AchievementCard key={achievement.id} achievement={achievement} />
-          ))}
+      {achievementsGained.length !== 0 ? (
+        <div className="flex flex-col items-start justify-start gap-10">
+          <SubSectionHeading
+            as="h3"
+            className="flex items-center gap-2.5 text-base uppercase !leading-none tracking-[0.2em] lg:text-base lg:!leading-none xl:text-base xl:!leading-none">
+            Attained
+          </SubSectionHeading>
+          <div className="grid w-full grid-cols-1 gap-x-5 gap-y-10 xl:grid-cols-2">
+            {achievementsGained.map((achievement) => (
+              <AchievementCard key={achievement.id} achievement={achievement} />
+            ))}
+          </div>
         </div>
-      </div>
+      ) : null}
       <div className="flex flex-col items-start justify-start gap-10">
         <SubSectionHeading
           as="h3"
           className="flex items-center gap-2.5 text-base uppercase !leading-none tracking-[0.2em] lg:text-base lg:!leading-none xl:text-base xl:!leading-none">
           Locked
         </SubSectionHeading>
-        <div className="grid w-full grid-cols-1 gap-x-5 gap-y-10 opacity-75 xl:grid-cols-2">
+        <div className="grid w-full grid-cols-1 gap-x-5 gap-y-10 opacity-60 xl:grid-cols-2">
           {achievementsLocked.map((achievement) => (
             <AchievementCard key={achievement.id} achievement={achievement} />
           ))}

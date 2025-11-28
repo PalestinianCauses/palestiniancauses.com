@@ -74,7 +74,7 @@ const RoomDropdownMenuItem = function RoomDropdownMenuItem({
           }}
           avatarFallbackProps={{
             children: room.name.charAt(0).toUpperCase(),
-            className: "bg-background text-xl text-sidebar-primary",
+            className: "text-xl text-sidebar-primary bg-background",
           }}
         />
 
@@ -144,7 +144,7 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                     ? roomActive.name.charAt(0).toUpperCase()
                     : "P",
                   className:
-                    "bg-background text-lg font-normal text-sidebar-primary lg:text-xl xl:text-2xl",
+                    "text-lg font-normal text-sidebar-primary bg-background lg:text-xl xl:text-2xl",
                 }}
               />
 

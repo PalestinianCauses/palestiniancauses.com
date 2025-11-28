@@ -1,48 +1,14 @@
 "use server";
 
-// REVIEWED - 01
-
-import { PaginatedDocs } from "payload";
+// REVIEWED - 03
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
 import { isObject } from "@/lib/types/guards";
-import { Notification } from "@/payload-types";
 
 import { getAuthentication } from "./auth";
-
-export const getNotifications = async function getNotifications(): Promise<
-  ResponseSafeExecute<PaginatedDocs<Notification>>
-> {
-  const auth = await getAuthentication();
-
-  if (!auth)
-    return { data: null, error: messages.actions.user.unAuthenticated };
-
-  const notificationsResponse = await actionSafeExecute(
-    payload.find({
-      req: { user: { collection: "users", ...auth } },
-      user: auth,
-      collection: "notifications",
-      where: { user: { equals: auth.id } },
-      sort: "-createdAt",
-      limit: 50,
-      depth: 0,
-      overrideAccess: false,
-    }),
-    messages.actions.notification.serverError,
-  );
-
-  if (!notificationsResponse.data || notificationsResponse.error)
-    return {
-      data: null,
-      error: notificationsResponse.error,
-    };
-
-  return { data: notificationsResponse.data, error: null };
-};
 
 export const markingNotificationAsRead =
   async function markingNotificationAsRead(
