@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -10,7 +10,7 @@ import { Media } from "@/payload-types";
 
 import { getAuthentication } from "./auth";
 
-export const uploadMedia = async function uploadMedia({
+export const mediaUpload = async function mediaUpload({
   file,
   alt,
 }: {
@@ -50,6 +50,33 @@ export const uploadMedia = async function uploadMedia({
       overrideAccess: false,
     }),
     messages.actions.media.upload.serverError,
+  );
+
+  return response;
+};
+
+export const mediaDelete = async function mediaDelete({
+  id,
+}: {
+  id: number;
+}): Promise<ResponseSafeExecute<Media, string>> {
+  const auth = await getAuthentication();
+
+  if (!auth)
+    return {
+      data: null,
+      error: messages.actions.user.unAuthenticated,
+    };
+
+  const response = await actionSafeExecute(
+    payload.delete({
+      req: { user: { collection: "users", ...auth } },
+      user: auth,
+      collection: "media",
+      id,
+      overrideAccess: false,
+    }),
+    messages.actions.media.upload.serverErrorDelete,
   );
 
   return response;

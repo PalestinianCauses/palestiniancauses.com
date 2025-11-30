@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { PaginatedDocs } from "payload";
 
@@ -146,25 +146,13 @@ export const updateUser = async function updateUser(
     // Don't update email directly - it will be updated after verification
   }
 
-  const dataFiltered: Partial<User> = {};
-
-  if (data.firstName && data.firstName !== auth.firstName)
-    dataFiltered.firstName = data.firstName;
-  if (data.lastName && data.lastName !== auth.lastName)
-    dataFiltered.lastName = data.lastName;
-  if (data.bio && data.bio !== auth.bio) dataFiltered.bio = data.bio;
-  if (data.avatar && data.avatar !== auth.avatar)
-    dataFiltered.avatar = data.avatar;
-  if (data.linksSocial) dataFiltered.linksSocial = data.linksSocial;
-  if (data.privacySettings) dataFiltered.privacySettings = data.privacySettings;
-
   const response = await actionSafeExecute(
     payload.update({
       req: { user: { ...auth, collection: "users" } },
       user: auth,
       collection: "users",
       id: auth.id,
-      data: dataFiltered,
+      data,
       overrideAccess: false,
     }),
     messages.actions.user.updateError,

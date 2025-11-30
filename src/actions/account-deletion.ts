@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -73,16 +73,6 @@ export const deleteUserAccount = async function deleteUserAccount(): Promise<
         req: { user: { ...auth, collection: "users" } },
         user: auth,
         collection: "orders",
-        where: { user: { equals: auth.id } },
-        overrideAccess: false,
-      }),
-      messages.actions.user.delete.serverError,
-    ),
-    actionSafeExecute(
-      payload.delete({
-        req: { user: { ...auth, collection: "users" } },
-        user: auth,
-        collection: "reset-tokens-password",
         where: { user: { equals: auth.id } },
         overrideAccess: false,
       }),

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -230,7 +230,7 @@ export const ProfileSettings = function ProfileSettings() {
   return (
     <div className="space-y-10">
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid h-auto w-full grid-cols-4 gap-2.5 border border-input bg-background">
+        <TabsList className="grid h-auto w-full grid-cols-4 gap-1 border border-input bg-background">
           <TabsTrigger
             value="profile"
             className={cn(
@@ -497,7 +497,7 @@ export const ProfileSettings = function ProfileSettings() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmitPrivacy)}
-              className="space-y-6">
+              className="space-y-5">
               <FormField
                 control={form.control}
                 name="showEmail"
@@ -595,7 +595,7 @@ export const ProfileSettings = function ProfileSettings() {
         </TabsContent>
 
         <TabsContent value="account" className="mt-10 space-y-10">
-          <AccountDeletion />
+          <AccountDeletion user={user} />
         </TabsContent>
       </Tabs>
     </div>
