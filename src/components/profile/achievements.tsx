@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { format } from "date-fns";
 import {
@@ -156,6 +156,7 @@ export const ProfileAchievements = function ProfileAchievements() {
     return (
       <div className="space-y-5">
         <Skeleton className="h-32 w-full bg-foreground/5" />
+        <Skeleton className="h-64 w-full bg-foreground/5" />
         <Skeleton className="h-64 w-full bg-foreground/5" />
       </div>
     );
