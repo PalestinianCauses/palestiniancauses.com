@@ -1,7 +1,7 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { CalendarIcon } from "lucide-react";
-import { ElementType, Fragment, HTMLAttributes } from "react";
+import { ElementType, Fragment, HTMLAttributes, ReactNode } from "react";
 
 import { cn } from "@/lib/utils/styles";
 
@@ -56,13 +56,15 @@ export const DateRange = function DateRange({
 export const InformationBadges = function InformationBadges({
   badges,
   className,
+  itemClassName,
   iconContainerClassName,
   iconClassName,
 }: {
   badges: {
-    label: string;
+    label: string | ReactNode;
     icon: ElementType;
   }[];
+  itemClassName?: string;
   iconContainerClassName?: string;
   iconClassName?: string;
 } & HTMLAttributes<HTMLDivElement>) {
@@ -74,8 +76,11 @@ export const InformationBadges = function InformationBadges({
       )}>
       {badges.map((item) => (
         <div
-          key={item.label}
-          className="grid flex-1 grid-cols-1 content-start items-start gap-2.5 sm:grid-cols-[max-content,_auto] sm:items-center">
+          key={item.label?.toString()}
+          className={cn(
+            "grid flex-1 grid-cols-1 content-start items-start gap-2.5 sm:grid-cols-[max-content,_auto] sm:items-center",
+            itemClassName,
+          )}>
           <div
             className={cn(
               "flex h-8 w-8 items-center justify-center bg-primary-foreground text-foreground ring-1 ring-input",

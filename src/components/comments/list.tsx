@@ -1,11 +1,11 @@
 "use client";
 
-// REVIEWED - 12
+// REVIEWED - 13
 
 import { QueryKey, useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, MessagesSquareIcon } from "lucide-react";
 import { GeneratedTypes } from "payload";
-import { Fragment, useMemo } from "react";
+import { useMemo } from "react";
 
 import { getCollection } from "@/actions/collection";
 import { useHashScroll } from "@/hooks/use-hash-scroll";
@@ -85,38 +85,36 @@ export const CommentList = function CommentList({
     <SafeHydrate
       isLoading={isLoading}
       isLoadingComponent={<Loading className="min-h-80" />}>
-      <Fragment>
-        <section
-          className={cn("flex w-full flex-col gap-10", {
-            "pointer-events-none opacity-50": isFetching,
-          })}>
-          {comments.map((comment) => (
-            <CommentItem
-              key={comment.id}
-              queryKey={queryKey}
-              depth={0}
-              user={user}
-              comment={comment}
-              elementId={elementId}
-              jumpToPlusHighlight={jumpToPlusHighlight}
-            />
-          ))}
-        </section>
+      <section
+        className={cn("flex w-full flex-col gap-10", {
+          "pointer-events-none opacity-50": isFetching,
+        })}>
+        {comments.map((comment) => (
+          <CommentItem
+            key={comment.id}
+            queryKey={queryKey}
+            depth={0}
+            user={user}
+            comment={comment}
+            elementId={elementId}
+            jumpToPlusHighlight={jumpToPlusHighlight}
+          />
+        ))}
+      </section>
 
-        {hasNextPage ? (
-          <div className="mt-12 flex w-full items-center justify-center lg:mt-24 xl:mt-32">
-            <Button
-              variant="link"
-              disabled={isFetchingNextPage}
-              onClick={() => fetchNextPage()}>
-              {isFetchingNextPage
-                ? "Loading more comments..."
-                : "Read more comments"}
-              <ArrowDownIcon />
-            </Button>
-          </div>
-        ) : null}
-      </Fragment>
+      {hasNextPage ? (
+        <div className="mt-12 flex w-full items-center justify-center lg:mt-24 xl:mt-32">
+          <Button
+            variant="link"
+            disabled={isFetchingNextPage}
+            onClick={() => fetchNextPage()}>
+            {isFetchingNextPage
+              ? "Loading more comments..."
+              : "Read more comments"}
+            <ArrowDownIcon />
+          </Button>
+        </div>
+      ) : null}
     </SafeHydrate>
   );
 };

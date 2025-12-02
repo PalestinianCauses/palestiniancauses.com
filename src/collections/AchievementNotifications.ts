@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CollectionConfig } from "payload";
 
@@ -23,10 +23,11 @@ export const AchievementNotifications: CollectionConfig = {
         resource: "achievement-notifications",
         action: "read",
       })({ req }) || isSelf("user")({ req }),
-    update: hasPermissionAccess({
-      resource: "achievement-notifications",
-      action: "update",
-    }),
+    update: ({ req }) =>
+      hasPermissionAccess({
+        resource: "achievement-notifications",
+        action: "update",
+      })({ req }) || isSelf("user")({ req }),
     delete: hasPermissionAccess({
       resource: "achievement-notifications",
       action: "delete",

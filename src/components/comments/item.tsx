@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 12
+// REVIEWED - 13
 
 import {
   QueryKey,
@@ -25,6 +25,7 @@ import { Fragment, MutableRefObject, useMemo, useState } from "react";
 import { getCollection } from "@/actions/collection";
 import { useComment, useCommentRepliesCount } from "@/hooks/use-comment";
 import { hasAnyRole } from "@/lib/permissions";
+import { isObject } from "@/lib/types/guards";
 import { cn } from "@/lib/utils/styles";
 import { Comment, User } from "@/payload-types";
 
@@ -36,19 +37,21 @@ import { CommentVotes } from "./votes";
 
 export type CommentItemProps = {
   isPageComment?: boolean;
+  isActivityComment?: boolean;
   queryKey?: QueryKey;
   depth: number;
   user: User | null | undefined;
   comment: Comment;
-  elementId: MutableRefObject<string | null>;
+  elementId?: MutableRefObject<string | null>;
   // eslint-disable-next-line no-unused-vars
-  jumpToPlusHighlight: (id: string) => void;
+  jumpToPlusHighlight?: (id: string) => void;
 };
 
 TimeAgo.addLocale(en);
 
 export const CommentItem = function CommentItem({
   isPageComment = false,
+  isActivityComment = false,
   queryKey,
   depth,
   user,
@@ -146,7 +149,10 @@ export const CommentItem = function CommentItem({
         style={{ scrollMarginTop: `${5}rem` }}
         className={cn(
           "relative grid w-full grid-cols-[2rem_1fr] grid-rows-[repeat(4,auto)] flex-col content-center items-start justify-start gap-x-2.5 gap-y-5 before:absolute before:-inset-2.5 before:-z-10 before:bg-transparent md:grid-cols-[2.25rem_1fr_auto] md:grid-rows-[2.25rem_1fr_auto]",
-          { highlight: elementId.current === `comment-${comment.id}` },
+          {
+            highlight:
+              elementId && elementId.current === `comment-${comment.id}`,
+          },
         )}>
         <div className="relative col-start-1 row-start-1 h-full w-full">
           {depth > 0 ? (
@@ -335,8 +341,14 @@ export const CommentItem = function CommentItem({
                   className="p-0"
                   onClick={() => {
                     if (comment.parent) {
-                      const commentId = `comment-${typeof comment.parent === "object" ? comment.parent.id : comment.parent}`;
-                      jumpToPlusHighlight(commentId);
+                      if (isActivityComment)
+                        router.push(
+                          `/comment/${isObject(comment.parent) ? comment.parent.id : comment.parent}`,
+                        );
+                      else {
+                        const commentId = `comment-${typeof comment.parent === "object" ? comment.parent.id : comment.parent}`;
+                        if (jumpToPlusHighlight) jumpToPlusHighlight(commentId);
+                      }
                     }
                   }}>
                   {comment.parent.user.firstName}

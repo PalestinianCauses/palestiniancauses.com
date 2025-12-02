@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { AchievementNotifications } from "./AchievementNotifications";
 import { Blog } from "./Blog";
@@ -10,7 +10,6 @@ import { NotificationSubscriptions } from "./NotificationSubscriptions";
 import { Orders } from "./Orders";
 import { Permissions } from "./Permissions";
 import { Products } from "./Products";
-import { ResetTokensPassword } from "./ResetTokensPassword";
 import { Roles } from "./Roles";
 import { Rooms } from "./Rooms";
 import { RoomsContact } from "./RoomsContact";
@@ -30,7 +29,6 @@ export const collections = [
   Orders,
   Permissions,
   Products,
-  ResetTokensPassword,
   Roles,
   Rooms,
   RoomsContact,

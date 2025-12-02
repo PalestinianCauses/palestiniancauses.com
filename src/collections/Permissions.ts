@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 import type { CollectionConfig } from "payload";
 
@@ -29,7 +29,6 @@ export const collectionsPermissionsOptions = [
   { label: "Orders", value: "orders" },
   { label: "Permissions", value: "permissions" },
   { label: "Products", value: "products" },
-  { label: "Reset Tokens Password", value: "reset-tokens-password" },
   { label: "Roles", value: "roles" },
   { label: "Rooms", value: "rooms" },
   { label: "Room Contact", value: "room-contact" },

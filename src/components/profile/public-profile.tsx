@@ -1,14 +1,16 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { format } from "date-fns/format";
 import {
+  ActivityIcon,
   CalendarDaysIcon,
   MailIcon,
   MessagesSquareIcon,
   Package2Icon,
   PencilLineIcon,
+  TrophyIcon,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -171,11 +173,47 @@ export const PublicProfile = function PublicProfile({ user }: { user: User }) {
       <ProfileNavigation
         items={[
           {
+            key: "comments",
+            href: `/user/${user.id}/comments`,
+            label: "Comments",
+            icon: MessagesSquareIcon,
+          },
+          {
             key: "diary-entries",
             href: `/user/${user.id}/diary-entries`,
             label: "Diary Entries",
             icon: PencilLineIcon,
           },
+          ...(user.privacySettings.showOrders
+            ? [
+                {
+                  key: "orders",
+                  href: `/user/${user.id}/orders`,
+                  label: "Orders",
+                  icon: Package2Icon,
+                },
+              ]
+            : []),
+          ...(user.privacySettings.showAchievements
+            ? [
+                {
+                  key: "achievements",
+                  href: `/user/${user.id}/achievements`,
+                  label: "Achievements",
+                  icon: TrophyIcon,
+                },
+              ]
+            : []),
+          ...(user.privacySettings.showActivity
+            ? [
+                {
+                  key: "activity",
+                  href: `/user/${user.id}/activity`,
+                  label: "Activity",
+                  icon: ActivityIcon,
+                },
+              ]
+            : []),
         ]}
       />
     </div>

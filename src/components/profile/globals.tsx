@@ -1,7 +1,8 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { ClassValue } from "clsx";
 import { LucideIcon } from "lucide-react";
+import { ReactNode } from "react";
 
 import { cn } from "@/lib/utils/styles";
 
@@ -90,7 +91,7 @@ export const StatusBadge = function StatusBadge({
   label,
   className,
 }: {
-  label: string;
+  label: string | ReactNode;
   className?: ClassValue;
 }) {
   return (

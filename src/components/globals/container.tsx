@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { forwardRef, HTMLAttributes } from "react";
 
@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils/styles";
 
 export const Container = forwardRef<
   HTMLDivElement,
-  HTMLAttributes<HTMLDivElement> & { as?: "div" | "section" }
+  HTMLAttributes<HTMLDivElement> & { as?: "main" | "section" | "div" }
 >(({ as = "div", className, children, ...props }, ref) => {
   const Component = as === "div" ? "div" : "section";
 
