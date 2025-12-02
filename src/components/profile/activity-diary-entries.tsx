@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import {
   QueryKey,
@@ -128,7 +128,6 @@ export const ActivityDiaryEntries = function ActivityDiaryEntries({
       return response;
     },
     enabled: Boolean(user?.id),
-    refetchOnWindowFocus: false,
   });
 
   const queryKey = useMemo(
@@ -168,7 +167,6 @@ export const ActivityDiaryEntries = function ActivityDiaryEntries({
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
-    refetchOnWindowFocus: false,
   });
 
   const { diaryEntries } = useMemo(() => {

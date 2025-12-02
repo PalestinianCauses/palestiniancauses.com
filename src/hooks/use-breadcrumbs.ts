@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -35,6 +35,15 @@ const segments: Record<string, string> = {
   "humans-but-from-gaza": "Humans But From Gaza",
   "share": "Share",
 
+  // PalestinianCauses User Pages
+  "users": "Users",
+  "user": "User",
+  "profile": "Profile",
+  "profile/activity": "Activity",
+  "profile/achievements": "Achievements",
+  "profile/notifications": "Notifications",
+  "profile/settings": "Settings",
+
   // PalestinianCauses Rooms Features
   "rooms": "Rooms",
 
@@ -56,7 +65,9 @@ const getSegment = (
   index: number,
   arraySegments: string[],
   documentTitle: string,
-): string => {
+): string | null => {
+  if (Number.isInteger(parseInt(segment, 10))) return null;
+
   if (segments[segment]) return segments[segment];
 
   if (/^\d+$/.test(segment)) {
@@ -127,16 +138,19 @@ export const useBreadcrumbs = (): UseBreadcrumbs[] => {
     let href = "";
 
     routesSegments.forEach((segment, index) => {
-      href += `/${segment}`;
+      if (segment === "users" || segment === "user") href = "#";
+      else href += `/${segment}`;
+
       const isRouteLast = index === routesSegments.length - 1;
 
       const label = getSegment(segment, index, routesSegments, documentTitle);
 
-      breadcrumbs.push({
-        href,
-        label: truncateText(label, 32),
-        isPageCurrent: isRouteLast,
-      });
+      if (label)
+        breadcrumbs.push({
+          href,
+          label: truncateText(label, 32),
+          isPageCurrent: isRouteLast,
+        });
     });
 
     return breadcrumbs;

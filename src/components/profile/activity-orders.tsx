@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { format } from "date-fns/format";
@@ -94,7 +94,6 @@ export const ActivityOrders = function ActivityOrders({
       return response;
     },
     enabled: Boolean(user?.id),
-    refetchOnWindowFocus: false,
   });
 
   const queryKey = useMemo(
@@ -134,7 +133,6 @@ export const ActivityOrders = function ActivityOrders({
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
-    refetchOnWindowFocus: false,
   });
 
   const { mutate: orderCancel, isPending: isPendingOrderCancel } = useMutation({

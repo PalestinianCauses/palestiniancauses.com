@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 02
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -132,7 +132,7 @@ export const ProfileNotifications = function ProfileNotifications() {
     fetchNextPage,
     data,
   } = useInfiniteQuery({
-    queryKey: ["notifications", user?.id],
+    queryKey: ["user-notifications", user?.id],
     queryFn: async ({ pageParam = 1 }) => {
       if (!user) return null;
 
@@ -157,7 +157,6 @@ export const ProfileNotifications = function ProfileNotifications() {
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
-    refetchOnWindowFocus: false,
   });
 
   const { notifications } = useMemo(() => {

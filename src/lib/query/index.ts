@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import {
   defaultShouldDehydrateQuery,
@@ -12,7 +12,7 @@ const createQueryClient = function createQueryClient() {
       queries: {
         staleTime: 5 * 60 * 1000,
         gcTime: 10 * 60 * 1000,
-        refetchOnWindowFocus: true,
+        refetchOnWindowFocus: false,
       },
       dehydrate: {
         shouldDehydrateQuery: (query) =>

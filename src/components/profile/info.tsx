@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 04
 
 import { format } from "date-fns";
 import {
@@ -32,11 +32,121 @@ import { useUser } from "@/hooks/use-user";
 import { isObject } from "@/lib/types/guards";
 import { getMediaAltText, getMediaURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
+import { User } from "@/payload-types";
 
 import { SuspenseAvatar } from "../globals/suspense-avatar";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
 
 import { StatusBadge } from "./globals";
+import { ProfileCompletion } from "./profile-completion";
+
+export const ProfileInfoSocial = function ProfileInfoSocial({
+  linksSocial,
+}: {
+  linksSocial: User["linksSocial"];
+}) {
+  return (
+    linksSocial &&
+    (linksSocial.github ||
+      linksSocial.twitter ||
+      linksSocial.instagram ||
+      linksSocial.linkedin ||
+      linksSocial.website) && (
+      <div className="space-y-5">
+        <SubSectionHeading
+          as="h3"
+          className="text-lg font-semibold !leading-none tracking-normal lg:text-lg lg:!leading-none xl:text-lg xl:!leading-none">
+          Social Links
+        </SubSectionHeading>
+        <div className="flex flex-wrap gap-2.5">
+          {linksSocial.github && (
+            <Button variant="outline" className="gap-2.5" asChild>
+              <Link
+                href={`https://github.com/${linksSocial.github}`}
+                target="_blank">
+                <RiGithubFill />
+                GitHub
+              </Link>
+            </Button>
+          )}
+
+          {linksSocial.twitter && (
+            <Button variant="outline" className="gap-2.5" asChild>
+              <Link
+                href={`https://x.com/${linksSocial.twitter}`}
+                target="_blank">
+                <RiTwitterXFill />
+                Twitter
+              </Link>
+            </Button>
+          )}
+
+          {linksSocial.instagram && (
+            <Button variant="outline" className="gap-2.5" asChild>
+              <Link
+                href={`https://instagram.com/${linksSocial.instagram}`}
+                target="_blank">
+                <RiInstagramFill />
+                Instagram
+              </Link>
+            </Button>
+          )}
+
+          {linksSocial.linkedin && (
+            <Button variant="outline" className="gap-2.5" asChild>
+              <Link
+                href={`https://linkedin.com/in/${linksSocial.linkedin}`}
+                target="_blank">
+                <RiLinkedinFill />
+                LinkedIn
+              </Link>
+            </Button>
+          )}
+
+          {linksSocial.website && (
+            <Button variant="outline" className="gap-2.5" asChild>
+              <Link href={linksSocial.website} target="_blank">
+                <RiGlobalFill />
+                Website
+              </Link>
+            </Button>
+          )}
+        </div>
+      </div>
+    )
+  );
+};
+
+export const ProfileInfoRoles = function ProfileInfoRoles({
+  roles,
+}: {
+  roles: User["roles"];
+}) {
+  return (
+    <div className="space-y-5">
+      <SubSectionHeading
+        as="h3"
+        className="text-lg font-semibold !leading-none tracking-normal lg:text-lg lg:!leading-none xl:text-lg xl:!leading-none">
+        Roles and Permissions
+      </SubSectionHeading>
+      <div className="flex flex-wrap gap-2.5">
+        {roles.map((role) =>
+          isObject(role) ? (
+            <Badge
+              key={role.id}
+              size="sm"
+              className={cn(
+                "border-l-2 border-tertiary bg-tertiary/10 text-sm capitalize text-tertiary ring-0 hover:bg-tertiary/10",
+              )}>
+              <UserIcon className="size-4" />
+              {role.name.split("-").join(" ")}
+            </Badge>
+          ) : null,
+        )}
+      </div>
+    </div>
+  );
+};
 
 export const ProfileInfo = function ProfileInfo() {
   const { isLoading, data: user } = useUser();
@@ -70,6 +180,7 @@ export const ProfileInfo = function ProfileInfo() {
 
   return (
     <div className="space-y-10">
+      <ProfileCompletion user={user} />
       <div className="flex flex-col items-start gap-2.5 xs:flex-row xs:items-center xs:gap-5">
         <SuspenseAvatar
           className="h-24 w-24 border border-input"
@@ -94,7 +205,7 @@ export const ProfileInfo = function ProfileInfo() {
           <div className="mb-0.5 flex items-center gap-2.5">
             <SubSectionHeading
               as="h2"
-              className="text-xl !leading-none lg:text-xl lg:!leading-none xl:text-xl xl:!leading-none">
+              className="text-xl font-semibold !leading-none lg:text-xl lg:!leading-none xl:text-xl xl:!leading-none">
               {user.firstName && user.lastName
                 ? `${user.firstName} ${user.lastName}`
                 : user.firstName || "Anonymous User"}
@@ -148,89 +259,9 @@ export const ProfileInfo = function ProfileInfo() {
         </div>
       )}
 
-      {user.linksSocial &&
-        (user.linksSocial.github ||
-          user.linksSocial.twitter ||
-          user.linksSocial.instagram ||
-          user.linksSocial.linkedin ||
-          user.linksSocial.website) && (
-          <div className="space-y-5">
-            <SubSectionHeading
-              as="h3"
-              className="text-lg font-semibold !leading-none tracking-normal lg:text-lg lg:!leading-none xl:text-lg xl:!leading-none">
-              Social Links
-            </SubSectionHeading>
-            <div className="flex flex-wrap gap-2.5">
-              {user.linksSocial.github && (
-                <Button variant="outline" className="gap-2.5" asChild>
-                  <Link href={user.linksSocial.github}>
-                    <RiGithubFill />
-                    GitHub
-                  </Link>
-                </Button>
-              )}
+      <ProfileInfoSocial linksSocial={user.linksSocial} />
 
-              {user.linksSocial.twitter && (
-                <Button variant="outline" className="gap-2.5" asChild>
-                  <Link href={user.linksSocial.twitter}>
-                    <RiTwitterXFill />
-                    Twitter
-                  </Link>
-                </Button>
-              )}
-
-              {user.linksSocial.instagram && (
-                <Button variant="outline" className="gap-2.5" asChild>
-                  <Link href={user.linksSocial.instagram}>
-                    <RiInstagramFill />
-                    Instagram
-                  </Link>
-                </Button>
-              )}
-
-              {user.linksSocial.linkedin && (
-                <Button variant="outline" className="gap-2.5" asChild>
-                  <Link href={user.linksSocial.linkedin}>
-                    <RiLinkedinFill />
-                    LinkedIn
-                  </Link>
-                </Button>
-              )}
-
-              {user.linksSocial.website && (
-                <Button variant="outline" className="gap-2.5" asChild>
-                  <Link href={user.linksSocial.website}>
-                    <RiGlobalFill />
-                    Website
-                  </Link>
-                </Button>
-              )}
-            </div>
-          </div>
-        )}
-
-      <div className="space-y-5">
-        <SubSectionHeading
-          as="h3"
-          className="text-lg font-semibold !leading-none tracking-normal lg:text-lg lg:!leading-none xl:text-lg xl:!leading-none">
-          Roles and Permissions
-        </SubSectionHeading>
-        <div className="flex flex-wrap gap-2.5">
-          {user.roles.map((role) =>
-            isObject(role) ? (
-              <Badge
-                key={role.id}
-                size="sm"
-                className={cn(
-                  "border-l-2 border-tertiary bg-tertiary/10 text-sm capitalize text-tertiary ring-0 hover:bg-tertiary/10",
-                )}>
-                <UserIcon className="size-4" />
-                {role.name.split("-").join(" ")}
-              </Badge>
-            ) : null,
-          )}
-        </div>
-      </div>
+      <ProfileInfoRoles roles={user.roles} />
     </div>
   );
 };

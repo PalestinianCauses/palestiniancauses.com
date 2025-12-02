@@ -1,14 +1,16 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 02
 
 import { useMemo } from "react";
 
-import { useUser } from "./use-user";
+import { User } from "@/payload-types";
 
-export const useProfileCompletion = function useProfileCompletion() {
-  const { data: user } = useUser();
-
+export const useProfileCompletion = function useProfileCompletion({
+  user,
+}: {
+  user: User;
+}) {
   const { completion, suggestions } = useMemo(() => {
     if (!user) return { completion: 0, suggestions: [] };
 
@@ -40,8 +42,7 @@ export const useProfileCompletion = function useProfileCompletion() {
       },
       {
         name: "Email Verified",
-        // eslint-disable-next-line no-underscore-dangle
-        completed: Boolean(user._verified),
+        completed: Boolean(user.accountVerified),
         suggestion:
           "Enhance your account security by verifying your email address.",
         link: "/profile/settings",

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
@@ -40,7 +40,6 @@ export const ActivityComments = function ActivityComments({
       return response;
     },
     enabled: Boolean(user?.id),
-    refetchOnWindowFocus: false,
   });
 
   const queryKey = useMemo(
@@ -80,7 +79,6 @@ export const ActivityComments = function ActivityComments({
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
-    refetchOnWindowFocus: false,
   });
 
   const { comments } = useMemo(() => {

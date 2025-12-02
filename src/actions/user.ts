@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 12
+// REVIEWED - 13
 
 import { PaginatedDocs } from "payload";
 
@@ -16,6 +16,21 @@ import { User } from "@/payload-types";
 import { getAuthentication } from "./auth";
 // eslint-disable-next-line import/no-cycle
 import { requestChangeEmail } from "./email-change";
+
+export const getUser = async function getUser(
+  userId: number,
+): Promise<ResponseSafeExecute<User, string>> {
+  const response = await actionSafeExecute(
+    payload.findByID({
+      collection: "users",
+      id: userId,
+      depth: 1,
+    }),
+    messages.actions.user.serverError,
+  );
+
+  return response;
+};
 
 export const getUserByEmail = async function getUserByEmail(
   email: string,
