@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
@@ -27,7 +27,7 @@ export const CommentsList = function CommentsList({
 }) {
   const { isLoading: isLoadingUser, data: user } = useUser();
 
-  const queryKey = useMemo(() => ["user-activity-comments", userId], [userId]);
+  const queryKey = useMemo(() => ["public-user-comments", userId], [userId]);
 
   const {
     isLoading,
@@ -108,7 +108,7 @@ export const CommentsList = function CommentsList({
             </div>
           ))
         ) : (
-          <div className="mx-auto flex max-w-4xl flex-col items-center justify-center text-center">
+          <div className="mx-auto flex max-w-4xl flex-col items-center justify-center pt-10 text-center">
             <div className="relative mb-6 flex w-max items-end lg:mb-8">
               <MessagesSquareIcon className="relative h-12 w-12 stroke-[1] lg:h-20 lg:w-20" />
             </div>

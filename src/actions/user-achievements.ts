@@ -1,13 +1,15 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { isObject } from "@/lib/types/guards";
+import { User } from "@/payload-types";
 
 import { getAuthentication } from "./auth";
+import { getUser } from "./user";
 
 export type Achievement = {
   id: string;
@@ -23,22 +25,33 @@ export type Achievement = {
 export const getUserAchievements = async function getUserAchievements(
   userId?: number,
 ): Promise<Achievement[]> {
-  let targetUserId: number;
+  let user: User;
 
-  if (userId) targetUserId = userId;
-  else {
+  if (userId) {
+    const userResponse = await getUser(userId);
+    if (!userResponse.data || userResponse.error) return [];
+    if (!userResponse.data.privacySettings.showAchievements) return [];
+    user = userResponse.data;
+  } else {
     const auth = await getAuthentication();
     if (!auth) return [];
-    targetUserId = auth.id;
+    user = auth;
   }
 
   // Only get counts, not full stats to avoid duplicate queries
   const [commentsCount, diaryEntriesCount, ordersCount] = await Promise.all([
     actionSafeExecute(
       payload.count({
+        ...(!userId
+          ? {
+              req: { user: { collection: "users", ...user } },
+              user,
+              overrideAccess: false,
+            }
+          : {}),
         collection: "comments",
         where: {
-          user: { equals: targetUserId },
+          user: { equals: user.id },
           status: { equals: "approved" },
         },
         depth: 0,
@@ -47,9 +60,16 @@ export const getUserAchievements = async function getUserAchievements(
     ),
     actionSafeExecute(
       payload.count({
+        ...(!userId
+          ? {
+              req: { user: { collection: "users", ...user } },
+              user,
+              overrideAccess: false,
+            }
+          : {}),
         collection: "diary-entries",
         where: {
-          author: { equals: targetUserId },
+          author: { equals: user.id },
           status: { equals: "approved" },
           isAnonymous: { equals: false },
         },
@@ -59,8 +79,15 @@ export const getUserAchievements = async function getUserAchievements(
     ),
     actionSafeExecute(
       payload.count({
+        ...(!userId
+          ? {
+              req: { user: { collection: "users", ...user } },
+              user,
+              overrideAccess: false,
+            }
+          : {}),
         collection: "orders",
-        where: { user: { equals: targetUserId } },
+        where: { user: { equals: user.id } },
         depth: 0,
       }),
       messages.http.serverError,
@@ -208,9 +235,16 @@ export const getUserAchievements = async function getUserAchievements(
 
   if (orders !== 0) {
     const userOrders = await payload.find({
+      ...(!userId
+        ? {
+            req: { user: { collection: "users", ...user } },
+            user,
+            overrideAccess: false,
+          }
+        : {}),
       collection: "orders",
       where: {
-        user: { equals: targetUserId },
+        user: { equals: user.id },
         orderType: { equals: "product" },
       },
       depth: 2,

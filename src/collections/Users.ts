@@ -1,4 +1,4 @@
-// REVIEWED - 20
+// REVIEWED - 21
 import type { CollectionConfig } from "payload";
 
 import {
@@ -8,10 +8,7 @@ import {
 } from "@/access/global";
 import { messages } from "@/lib/messages";
 import { hasPermission } from "@/lib/permissions";
-import {
-  createResetPassEmail,
-  createVerificationEmail,
-} from "@/lib/utils/email-templates-auth";
+import { createResetPassEmail } from "@/lib/utils/email-templates-auth";
 import { User } from "@/payload-types";
 
 /*
@@ -46,14 +43,6 @@ export const Users: CollectionConfig = {
   },
   auth: {
     tokenExpiration: 24 * 60 * 60,
-    verify: {
-      generateEmailSubject: () => "Verify Your Email at PalestinianCauses",
-      generateEmailHTML: (args) => {
-        const { token } = args;
-        const verificationURL = `${process.env.NEXT_PUBLIC_APP_URL || "https://palestiniancauses.com"}/verify-email/${token}`;
-        return createVerificationEmail(verificationURL);
-      },
-    },
     forgotPassword: {
       generateEmailSubject: () => "Reset Your Password at PalestinianCauses",
       generateEmailHTML: (args) => {

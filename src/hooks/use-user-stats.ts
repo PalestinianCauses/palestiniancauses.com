@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { useQuery } from "@tanstack/react-query";
 
@@ -17,8 +17,6 @@ export const useUserStats = function useUserStats({
       const response = await getUserStats();
       return response;
     },
-    staleTime: 60 * 60 * 1000, // 60 minutes - stats don't change frequently
-    gcTime: 24 * 60 * 60 * 1000, // 24 hours
   });
 
   return query;
