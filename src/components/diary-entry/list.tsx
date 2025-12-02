@@ -1,4 +1,4 @@
-// REVIEWED - 14
+// REVIEWED - 15
 
 "use client";
 
@@ -102,7 +102,7 @@ export const DiaryEntryListItemBadges = function DiaryEntryListItemBadges({
                 Author in PalestinianCauses
               </Fragment>
             }
-            className="border-teal-500/10 bg-teal-500/10 py-1.5 text-teal-500 hover:bg-teal-500/10"
+            className="border-tertiary-2/10 bg-tertiary-2/10 py-1.5 text-tertiary-2 hover:bg-tertiary-2/10"
           />
         ) : null}
       </div>
