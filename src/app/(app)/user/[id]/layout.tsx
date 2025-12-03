@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -49,7 +49,7 @@ const PublicProfilePage = async function PublicProfilePage({
   if (!userResponse.data || userResponse.error) notFound();
 
   return (
-    <Container as="main" className="section-padding-y-lg max-w-7xl space-y-20">
+    <Container as="main" className="section-padding-y-lg max-w-7xl space-y-10">
       <PublicProfile user={userResponse.data} />
       {children}
     </Container>

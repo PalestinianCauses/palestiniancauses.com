@@ -1,9 +1,8 @@
-// REVIEWED - 15
+// REVIEWED - 16
 
 import { MessageSquareTextIcon } from "lucide-react";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import linesSplit from "split-lines";
+import { ReactNode, Suspense } from "react";
 
 import { getDiaryEntry } from "@/actions/diary-entry";
 import { CreateCommentForm } from "@/components/comments/forms/create";
@@ -58,11 +57,19 @@ export default async function HumanButFromGazaPage(props: {
           <SectionHeading>{diaryEntry.data.title}</SectionHeading>
         </Container>
         <Container className="flex flex-col gap-8 px-0 lg:px-0">
-          {linesSplit(diaryEntry.data.content)
-            .filter(Boolean)
-            .map((text, index) => (
-              /* eslint-disable-next-line react/no-array-index-key */
-              <Paragraph key={index}>{text}</Paragraph>
+          {diaryEntry.data.content
+            .split(/(?:\r?\n){2,}/)
+            .filter((paragraph) => paragraph.trim() !== "")
+            .map((paragraph) => (
+              <Paragraph key={paragraph}>
+                {paragraph
+                  .split(/(?:\r?\n)/)
+                  .reduce<ReactNode[]>((accumulator, line, index) => {
+                    if (index === 0) return [line];
+                    // eslint-disable-next-line react/no-array-index-key
+                    return [...accumulator, <br key={index} />, line];
+                  }, [])}
+              </Paragraph>
             ))}
         </Container>
       </Container>

@@ -1,12 +1,12 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { useQuery } from "@tanstack/react-query";
 
-import { getUserStats } from "@/actions/user-stats";
+import { getUserActivityStats } from "@/actions/user-stats";
 
-export const useUserStats = function useUserStats({
+export const useUserActivityStats = function useUserActivityStats({
   userId,
 }: {
   userId?: number;
@@ -14,7 +14,7 @@ export const useUserStats = function useUserStats({
   const query = useQuery({
     queryKey: ["user-stats", userId],
     queryFn: async () => {
-      const response = await getUserStats();
+      const response = await getUserActivityStats(userId);
       return response;
     },
   });

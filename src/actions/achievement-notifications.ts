@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -56,12 +56,12 @@ export const checkingPlusNotifyingAchievements =
     if (achievementsNew.length !== 0) {
       const now = new Date().toISOString();
 
-      await Promise.all(
+      const responses = await Promise.all(
         achievementsNew.map(async (achievement) => {
           const existing = notificationMap.get(achievement.id);
 
           if (existing) {
-            await actionSafeExecute(
+            return actionSafeExecute(
               payload.update({
                 req: { user: { ...auth, collection: "users" } },
                 user: auth,
@@ -72,25 +72,31 @@ export const checkingPlusNotifyingAchievements =
               }),
               messages.http.serverError,
             );
-          } else {
-            await actionSafeExecute(
-              payload.create({
-                req: { user: { ...auth, collection: "users" } },
-                user: auth,
-                collection: "achievement-notifications",
-                data: {
-                  user: auth.id,
-                  achievement: achievement.id,
-                  notified: true,
-                  notifiedAt: now,
-                },
-                overrideAccess: false,
-              }),
-              messages.http.serverError,
-            );
           }
+
+          return actionSafeExecute(
+            payload.create({
+              req: { user: { ...auth, collection: "users" } },
+              user: auth,
+              collection: "achievement-notifications",
+              data: {
+                user: auth.id,
+                achievement: achievement.id,
+                notified: true,
+                notifiedAt: now,
+              },
+              overrideAccess: false,
+            }),
+            messages.http.serverError,
+          );
         }),
       );
+
+      if (responses.some((r) => !r.data || r.error))
+        return {
+          data: null,
+          error: messages.http.serverError,
+        };
     }
 
     return {

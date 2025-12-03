@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { BarChart3Icon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -23,7 +23,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useUserStats } from "@/hooks/use-user-stats";
+import { useUserActivityStats } from "@/hooks/use-user-stats";
 
 import { Paragraph, SubSectionHeading } from "../globals/typography";
 
@@ -47,7 +47,9 @@ export const ProfileStatistics = function ProfileStatistics({
 }: {
   userId?: number;
 }) {
-  const { isLoading: isStatsLoading, data: stats } = useUserStats({ userId });
+  const { isLoading: isStatsLoading, data: stats } = useUserActivityStats({
+    userId,
+  });
 
   const [offsetMonth, setOffsetMonth] = useState(0);
 

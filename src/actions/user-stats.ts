@@ -1,13 +1,15 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
+import { User } from "@/payload-types";
 
 import { getAuthentication } from "./auth";
+import { getUser } from "./user";
 
 export type UserStats = {
   id: number;
@@ -15,19 +17,28 @@ export type UserStats = {
   createdAt: string;
 };
 
-export const getUserStats = async function getUserStats(): Promise<
-  ResponseSafeExecute<UserStats[]>
-> {
-  const authentication = await getAuthentication();
+export const getUserActivityStats = async function getUserActivityStats(
+  userId?: number,
+): Promise<ResponseSafeExecute<UserStats[]>> {
+  let user: User;
 
-  if (!authentication)
-    return { data: null, error: messages.actions.user.unAuthenticated };
-
-  const user = authentication;
+  if (userId) {
+    const userResponse = await getUser(userId);
+    if (!userResponse.data || userResponse.error)
+      return { data: null, error: messages.actions.user.notFound };
+    if (!userResponse.data.privacySettings.showActivity)
+      return { data: null, error: messages.actions.user.notFound };
+    user = userResponse.data;
+  } else {
+    const authentication = await getAuthentication();
+    if (!authentication)
+      return { data: null, error: messages.actions.user.unAuthenticated };
+    user = authentication;
+  }
 
   const responseComments = await actionSafeExecute(
     payload.find({
-      ...(user
+      ...(!userId
         ? {
             req: { user: { collection: "users", ...user } },
             user,
@@ -45,7 +56,7 @@ export const getUserStats = async function getUserStats(): Promise<
 
   const responseDiaryEntries = await actionSafeExecute(
     payload.find({
-      ...(user
+      ...(!userId
         ? {
             req: { user: { collection: "users", ...user } },
             user,
@@ -64,7 +75,7 @@ export const getUserStats = async function getUserStats(): Promise<
 
   const responseOrders = await actionSafeExecute(
     payload.find({
-      ...(user
+      ...(!userId
         ? {
             req: { user: { collection: "users", ...user } },
             user,
