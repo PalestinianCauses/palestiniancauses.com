@@ -1,10 +1,11 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
+import { messages } from "@/lib/messages";
 import { forgotPassSchema, ForgotPassSchema } from "@/lib/schemas/auth";
 
 export const ForgotPassForm = function ForgotPassForm() {
@@ -30,6 +32,10 @@ export const ForgotPassForm = function ForgotPassForm() {
   });
 
   const handleSubmit = async (data: ForgotPassSchema) => {
+    toast.loading(messages.actions.auth.forgotPassword.pending, {
+      id: "forgot-password",
+    });
+
     forgotPassword.mutate(data, {
       onSuccess: (response) => {
         if (response.data) router.push("/signin");

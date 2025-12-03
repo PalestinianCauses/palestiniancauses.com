@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { createTemplateEmail } from "./email-templates";
 
@@ -6,7 +6,13 @@ export const createResetPassEmail = (resetPassLink: string): string =>
   createTemplateEmail({
     title: "Reset Your Password",
     titleSub: "You requested to reset your password",
-    fields: [{ label: "Reset Link", value: resetPassLink, type: "text" }],
+    fields: [
+      {
+        label: "Click here to reset your password",
+        value: resetPassLink,
+        type: "link",
+      },
+    ],
     footer:
       "This link will expire in 1 hour. In case you didn't request this password reset, please ignore this email.",
   });

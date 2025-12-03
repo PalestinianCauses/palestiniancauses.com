@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 16
+// REVIEWED - 17
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
@@ -30,6 +30,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { useAchievementNotifications } from "@/hooks/use-achievement-notifications";
 import { useActivity } from "@/hooks/use-activity";
 import { getQueryClient } from "@/lib/query";
 
@@ -51,6 +52,9 @@ export const ActivityProvider = function ActivityProvider() {
     staySignedIn,
     signOutDueToInActivity,
   } = useActivity();
+
+  // Check for achievement notifications
+  useAchievementNotifications();
 
   if (isFetching || !user) return null;
 
