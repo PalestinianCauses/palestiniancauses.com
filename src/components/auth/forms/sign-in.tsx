@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 17
+// REVIEWED - 18
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -77,7 +77,7 @@ export const SignInForm = function SignInForm() {
                   <FormLabel>Password</FormLabel>
                   <Button variant="link" className="h-auto p-0" asChild>
                     <Label>
-                      <Link href="/password-forgot">Forgot password?</Link>
+                      <Link href="/forgot-password">Forgot password?</Link>
                     </Label>
                   </Button>
                 </div>
