@@ -1,8 +1,8 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CollectionConfig } from "payload";
 
-import { hasPermissionAccess } from "@/access/global";
+import { hasPermissionAccess, isSelf } from "@/access/global";
 import { hasPermission } from "@/lib/permissions";
 import { User } from "@/payload-types";
 
@@ -18,18 +18,21 @@ export const VerificationTokensEmail: CollectionConfig = {
       resource: "verification-tokens-email",
       action: "create",
     }),
-    read: hasPermissionAccess({
-      resource: "verification-tokens-email",
-      action: "read",
-    }),
-    update: hasPermissionAccess({
-      resource: "verification-tokens-email",
-      action: "update",
-    }),
-    delete: hasPermissionAccess({
-      resource: "verification-tokens-email",
-      action: "delete",
-    }),
+    read: ({ req }) =>
+      hasPermissionAccess({
+        resource: "verification-tokens-email",
+        action: "read",
+      })({ req }) || isSelf("user")({ req }),
+    update: ({ req }) =>
+      hasPermissionAccess({
+        resource: "verification-tokens-email",
+        action: "update",
+      })({ req }) || isSelf("user")({ req }),
+    delete: ({ req }) =>
+      hasPermissionAccess({
+        resource: "verification-tokens-email",
+        action: "delete",
+      })({ req }) || isSelf("user")({ req }),
   },
   admin: {
     hidden: ({ user }) =>
@@ -37,6 +40,9 @@ export const VerificationTokensEmail: CollectionConfig = {
         resource: "verification-tokens-email",
         action: "manage",
       }),
+    group: "Database",
+    defaultColumns: ["id", "user", "used", "expiresAt", "createdAt"],
+    useAsTitle: "id",
   },
   fields: [
     {

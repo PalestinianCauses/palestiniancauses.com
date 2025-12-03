@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
@@ -753,6 +753,38 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     action: "update",
     description: "Update user roles",
   },
+
+  // Verification tokens email management permissions
+  {
+    name: "verification-tokens-email.manage",
+    resource: "verification-tokens-email",
+    action: "manage",
+    description: "Manage verification tokens email in admin dashboard",
+  },
+  {
+    name: "verification-tokens-email.create",
+    resource: "verification-tokens-email",
+    action: "create",
+    description: "Create verification tokens email",
+  },
+  {
+    name: "verification-tokens-email.read",
+    resource: "verification-tokens-email",
+    action: "read",
+    description: "View verification tokens email",
+  },
+  {
+    name: "verification-tokens-email.update",
+    resource: "verification-tokens-email",
+    action: "update",
+    description: "Update verification tokens email",
+  },
+  {
+    name: "verification-tokens-email.delete",
+    resource: "verification-tokens-email",
+    action: "delete",
+    description: "Delete verification tokens email",
+  },
 ];
 
 const permissionsRoles: Record<string, string[]> = {
@@ -875,6 +907,11 @@ const permissionsRoles: Record<string, string[]> = {
     "users.previousRole.update",
     "users.roles.read",
     "users.roles.update",
+    "verification-tokens-email.manage",
+    "verification-tokens-email.create",
+    "verification-tokens-email.read",
+    "verification-tokens-email.update",
+    "verification-tokens-email.delete",
   ],
   "system-user": [
     "achievement-notifications.create",
@@ -918,6 +955,7 @@ const permissionsRoles: Record<string, string[]> = {
     "service-categories.manage",
     "service-categories.create",
     "users.roles.read",
+    "verification-tokens-email.create",
   ],
   "author-user": [
     "achievement-notifications.create",
@@ -934,6 +972,7 @@ const permissionsRoles: Record<string, string[]> = {
     "permissions.read",
     "roles.read",
     "users.roles.read",
+    "verification-tokens-email.create",
   ],
   "website-user": [
     "achievement-notifications.create",
@@ -946,6 +985,7 @@ const permissionsRoles: Record<string, string[]> = {
     "permissions.read",
     "roles.read",
     "users.roles.read",
+    "verification-tokens-email.create",
   ],
 };
 

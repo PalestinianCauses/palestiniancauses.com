@@ -1,8 +1,10 @@
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { CollectionConfig } from "payload";
 
 import { hasPermissionAccess, isSelf } from "@/access/global";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
 import { hasPermission } from "@/lib/permissions";
 import { isDefined, isNumber, isObject, isString } from "@/lib/types/guards";
 import { OptionsOrderTemplateEmail } from "@/lib/utils/email-templates";
@@ -411,19 +413,20 @@ export const Orders: CollectionConfig = {
               };
 
               // Send email notification for this item
-              if (req.payload.sendEmail) {
-                const notificationEmail = createOrderNotificationEmail(
-                  notificationData,
-                  roomOwner,
-                );
+              const notificationEmail = createOrderNotificationEmail(
+                notificationData,
+                roomOwner,
+              );
 
-                if (notificationEmail)
-                  await req.payload.sendEmail({
+              if (notificationEmail)
+                await actionSafeExecute(
+                  req.payload.sendEmail({
                     to: notificationEmail.to,
                     subject: notificationEmail.subject,
                     html: notificationEmail.html,
-                  });
-              }
+                  }),
+                  messages.actions.order.serverError,
+                );
 
               // Generate WhatsApp message for this item
               if (contacts.length !== 0) {

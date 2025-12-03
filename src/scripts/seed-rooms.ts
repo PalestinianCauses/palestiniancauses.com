@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// REVIEWED - 11
+// REVIEWED - 12
 
 import dotenv from "dotenv";
 
@@ -50,8 +50,7 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
 
   about: {
     "headline-sub": AboutHeadlineSub,
-    "headline":
-      "Building Bridges Between the Real World and the Digital World.",
+    "headline": "Building Bridges Between the Real and the Digital Worlds.",
 
     "paragraphs": [
       {

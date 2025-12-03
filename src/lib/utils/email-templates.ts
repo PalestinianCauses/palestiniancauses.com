@@ -18,7 +18,7 @@ export interface OptionsTemplateEmail {
   fields?: Array<{
     label: string;
     value: string | number | null | undefined;
-    type?: "text" | "email" | "phone" | "price" | "message";
+    type?: "link" | "text" | "email" | "phone" | "price" | "message";
   }>;
   footer?: string;
   colorPrimary?: string;
@@ -34,12 +34,14 @@ export const createTemplateEmail = (options: OptionsTemplateEmail): string => {
       let valueFormatted = String(field.value);
 
       // Format based on type
+      if (field.type === "link" && field.value)
+        valueFormatted = `<a href="${field.value}" style="color: #000000; text-decoration: underline;">${field.value}</a>`;
       if (field.type === "email" && field.value)
-        valueFormatted = `<a href="mailto:${field.value}" style="color: #000000; text-decoration: none;">${field.value}</a>`;
+        valueFormatted = `<a href="mailto:${field.value}" style="color: #000000; text-decoration: underline;">${field.value}</a>`;
       else if (field.type === "phone" && field.value)
-        valueFormatted = `<a href="tel:${field.value}" style="color: #000000; text-decoration: none;">${field.value}</a>`;
+        valueFormatted = `<a href="tel:${field.value}" style="color: #000000; text-decoration: underline;">${field.value}</a>`;
       else if (field.type === "price" && field.value)
-        valueFormatted = `$${field.value}`;
+        valueFormatted = field.value.toString();
       else if (field.type === "message" && field.value)
         valueFormatted = field.value.toString().replace(/\n/g, "<br>");
 

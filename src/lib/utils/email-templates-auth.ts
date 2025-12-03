@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { createTemplateEmail } from "./email-templates";
 
@@ -8,7 +8,7 @@ export const createResetPassEmail = (resetPassLink: string): string =>
     titleSub: "You requested to reset your password",
     fields: [
       {
-        label: "Click here to reset your password",
+        label: "Your Reset Password Link",
         value: resetPassLink,
         type: "link",
       },
