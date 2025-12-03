@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { format } from "date-fns/format";
 import {
@@ -34,7 +34,9 @@ export const PublicProfileStats = function PublicProfileStats({
 }: {
   user: User;
 }) {
-  const { isLoading, data: publicUserStats } = usePublicUserStats(user.id);
+  const { isLoading, data: publicUserStats } = usePublicUserStats({
+    userId: user.id,
+  });
 
   if (isLoading)
     return (

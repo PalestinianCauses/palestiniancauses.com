@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { CheckCheckIcon, CircleIcon } from "lucide-react";
 
@@ -59,7 +59,7 @@ export const ProfileCompletion = function ProfileCompletion({
               <li
                 key={suggestion.name}
                 className="flex items-start justify-start gap-2.5">
-                <CircleIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+                <CircleIcon className="mt-1 size-4 shrink-0 text-muted-foreground" />
                 <Paragraph className="text-sm lg:text-sm">
                   {suggestion.suggestion}
                 </Paragraph>

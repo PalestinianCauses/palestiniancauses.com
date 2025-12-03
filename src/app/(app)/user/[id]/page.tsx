@@ -1,10 +1,10 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { notFound } from "next/navigation";
 
 import { RedirectProvider } from "../../providers";
 
-export default async function UserPage({
+export default async function PublicProfilePage({
   params,
 }: {
   params: Promise<{ id: string }>;

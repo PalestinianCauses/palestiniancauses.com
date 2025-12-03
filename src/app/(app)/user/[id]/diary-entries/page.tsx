@@ -1,10 +1,10 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { notFound } from "next/navigation";
 
-import { DiaryEntriesList } from "./_components/list";
+import { PublicProfileDiaryEntriesList } from "./_components/list";
 
-export default async function DiaryEntriesPage({
+export default async function PublicProfileDiaryEntriesPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -15,5 +15,5 @@ export default async function DiaryEntriesPage({
 
   if (!Number.isInteger(userId)) notFound();
 
-  return <DiaryEntriesList userId={userId} />;
+  return <PublicProfileDiaryEntriesList userId={userId} />;
 }

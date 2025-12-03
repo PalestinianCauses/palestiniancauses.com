@@ -1,10 +1,10 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { notFound } from "next/navigation";
 
-import { CommentsList } from "./_components/list";
+import { PublicProfileCommentsList } from "./_components/list";
 
-export default async function CommentsPage({
+export default async function PublicProfileCommentsPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -15,5 +15,5 @@ export default async function CommentsPage({
 
   if (!Number.isInteger(userId)) notFound();
 
-  return <CommentsList userId={userId} />;
+  return <PublicProfileCommentsList userId={userId} />;
 }

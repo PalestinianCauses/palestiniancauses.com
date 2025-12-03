@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
@@ -34,17 +34,17 @@ export const ActivityComments = function ActivityComments({
   user: User;
 }) {
   const { isLoading: isLoadingStats, data: stats } = useQuery({
-    queryKey: ["user-activity-comments-stats", user?.id],
+    queryKey: ["user-activity-comments-stats", user.id],
     queryFn: async () => {
       const response = await getUserActivityCommentsStats();
       return response;
     },
-    enabled: Boolean(user?.id),
+    enabled: Boolean(user.id),
   });
 
   const queryKey = useMemo(
-    () => ["user-activity-comments", user?.id],
-    [user?.id],
+    () => ["user-activity-comments", user.id],
+    [user.id],
   );
 
   const {

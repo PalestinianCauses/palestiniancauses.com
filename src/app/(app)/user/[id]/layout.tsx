@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -35,7 +35,7 @@ export const generateMetadata = async function generateMetadata({
   };
 };
 
-const PublicProfilePage = async function PublicProfilePage({
+const PublicProfileLayout = async function PublicProfileLayout({
   params,
   children,
 }: { params: Promise<{ id: string }> } & PropsWithChildren) {
@@ -56,4 +56,4 @@ const PublicProfilePage = async function PublicProfilePage({
   );
 };
 
-export default PublicProfilePage;
+export default PublicProfileLayout;

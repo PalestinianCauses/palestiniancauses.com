@@ -1,11 +1,12 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { notFound } from "next/navigation";
 
 import { getUser } from "@/actions/user";
-import { ProfileStatistics } from "@/components/profile/statistics";
 
-export default async function AchievementsPage({
+import { PublicProfileStatistics } from "./_components/statistics";
+
+export default async function PublicProfileActivityPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -22,5 +23,5 @@ export default async function AchievementsPage({
 
   if (!userResponse.data.privacySettings.showActivity) notFound();
 
-  return <ProfileStatistics userId={userId} />;
+  return <PublicProfileStatistics userId={userId} />;
 }

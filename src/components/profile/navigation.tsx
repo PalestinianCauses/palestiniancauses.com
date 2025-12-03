@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import {
   ActivityIcon,
@@ -52,7 +52,7 @@ const navigationItems = [
 export const ProfileNavigation = function ProfileNavigation({
   items = navigationItems,
 }: {
-  items: typeof navigationItems;
+  items?: typeof navigationItems;
 }) {
   const pathname = usePathname();
 

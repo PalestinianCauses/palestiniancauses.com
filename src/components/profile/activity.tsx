@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import {
   Card,
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUser } from "@/hooks/use-user";
+import { useUserActivityStats } from "@/hooks/use-user-stats";
 
 import { ActivityComments } from "./activity-comments";
 import { ActivityDiaryEntries } from "./activity-diary-entries";
@@ -18,6 +19,7 @@ import { ProfileStatistics } from "./statistics";
 
 export const ProfileActivity = function ProfileActivity() {
   const { isLoading: isUserLoading, data: user } = useUser();
+  const { isLoading: isStatsLoading, data: stats } = useUserActivityStats({});
 
   if (isUserLoading)
     return (
@@ -44,7 +46,7 @@ export const ProfileActivity = function ProfileActivity() {
 
   return (
     <div className="space-y-20">
-      <ProfileStatistics userId={user.id} />
+      <ProfileStatistics isStatsLoading={isStatsLoading} stats={stats} />
       <ActivityComments user={user} />
       <ActivityDiaryEntries user={user} />
       <ActivityOrders user={user} />

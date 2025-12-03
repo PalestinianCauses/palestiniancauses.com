@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import {
   QueryKey,
@@ -122,17 +122,16 @@ export const ActivityDiaryEntries = function ActivityDiaryEntries({
   user: User;
 }) {
   const { isLoading: isLoadingStats, data: stats } = useQuery({
-    queryKey: ["user-activity-diary-entries-stats", user?.id],
+    queryKey: ["user-activity-diary-entries-stats", user.id],
     queryFn: async () => {
       const response = await getUserActivityDiaryEntriesStats();
       return response;
     },
-    enabled: Boolean(user?.id),
   });
 
   const queryKey = useMemo(
-    () => ["user-activity-diary-entries", user?.id],
-    [user?.id],
+    () => ["user-activity-diary-entries", user.id],
+    [user.id],
   );
 
   const {

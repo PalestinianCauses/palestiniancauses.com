@@ -1,12 +1,13 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { BarChart3Icon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import colors from "tailwindcss/colors";
 
+import { UserStats } from "@/actions/user-stats";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,7 +24,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useUserActivityStats } from "@/hooks/use-user-stats";
+import { ResponseSafeExecute } from "@/lib/types";
 
 import { Paragraph, SubSectionHeading } from "../globals/typography";
 
@@ -43,14 +44,12 @@ const chartConfig = {
 };
 
 export const ProfileStatistics = function ProfileStatistics({
-  userId,
+  isStatsLoading,
+  stats,
 }: {
-  userId?: number;
+  isStatsLoading: boolean;
+  stats: ResponseSafeExecute<UserStats[]> | undefined;
 }) {
-  const { isLoading: isStatsLoading, data: stats } = useUserActivityStats({
-    userId,
-  });
-
   const [offsetMonth, setOffsetMonth] = useState(0);
 
   const chartData = useMemo(() => {

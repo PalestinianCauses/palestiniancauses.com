@@ -1,4 +1,4 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { CollectionConfig } from "payload";
 
@@ -24,7 +24,9 @@ export const Orders: CollectionConfig = {
       hasPermissionAccess({ resource: "orders", action: "read" })({ req }) ||
       isSelf("user")({ req }) ||
       isSelf("roomOwner")({ req }),
-    update: hasPermissionAccess({ resource: "orders", action: "update" }),
+    update: ({ req }) =>
+      hasPermissionAccess({ resource: "orders", action: "update" })({ req }) ||
+      isSelf("user")({ req }),
     delete: hasPermissionAccess({ resource: "orders", action: "delete" }),
   },
   admin: {

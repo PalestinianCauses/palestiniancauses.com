@@ -1,12 +1,12 @@
-// REVIEWED - 01
+// REVIEWED
 
 import { notFound } from "next/navigation";
 
 import { getUser } from "@/actions/user";
 
-import { PublicProfileAchievementsList } from "./_components/list";
+import { OrdersList } from "./_components/list";
 
-export default async function PublicProfileAchievementsPage({
+export default async function PublicProfileOrdersPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -15,13 +15,13 @@ export default async function PublicProfileAchievementsPage({
 
   const userId = parseInt(id, 10);
 
-  if (!Number.isInteger(userId)) notFound();
+  if (Number.isNaN(userId)) notFound();
 
   const userResponse = await getUser(userId);
 
   if (!userResponse.data || userResponse.error) notFound();
 
-  if (!userResponse.data.privacySettings.showAchievements) notFound();
+  if (!userResponse.data.privacySettings.showOrders) notFound();
 
-  return <PublicProfileAchievementsList userId={userId} />;
+  return <OrdersList userId={userId} />;
 }

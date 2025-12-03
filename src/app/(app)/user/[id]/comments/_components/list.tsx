@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
@@ -20,7 +20,7 @@ import { useUser } from "@/hooks/use-user";
 import { isObject } from "@/lib/types/guards";
 import { cn } from "@/lib/utils/styles";
 
-export const CommentsList = function CommentsList({
+export const PublicProfileCommentsList = function PublicProfileCommentsList({
   userId,
 }: {
   userId: number;

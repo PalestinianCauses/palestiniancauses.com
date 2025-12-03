@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { format } from "date-fns";
 import {
@@ -150,24 +150,24 @@ export const AchievementCard = function AchievementCard({
   );
 };
 
+export const ProfileAchievementsLoading = (
+  <div className="space-y-5">
+    <Skeleton className="h-32 w-full bg-foreground/5" />
+    <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2">
+      <Skeleton className="h-64 w-full bg-foreground/5" />
+      <Skeleton className="h-64 w-full bg-foreground/5" />
+      <Skeleton className="h-64 w-full bg-foreground/5" />
+      <Skeleton className="h-64 w-full bg-foreground/5" />
+    </div>
+  </div>
+);
+
 export const ProfileAchievements = function ProfileAchievements() {
   const { isLoading: isUserLoading, data: user } = useUser();
   const { isLoading: isLoadingAchievements, data: achievements } =
     useUserAchievements({ userId: user?.id });
 
-  if (isUserLoading || isLoadingAchievements) {
-    return (
-      <div className="space-y-5">
-        <Skeleton className="h-32 w-full bg-foreground/5" />
-        <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2">
-          <Skeleton className="h-64 w-full bg-foreground/5" />
-          <Skeleton className="h-64 w-full bg-foreground/5" />
-          <Skeleton className="h-64 w-full bg-foreground/5" />
-          <Skeleton className="h-64 w-full bg-foreground/5" />
-        </div>
-      </div>
-    );
-  }
+  if (isUserLoading || isLoadingAchievements) return ProfileAchievementsLoading;
 
   if (!user) {
     return (
