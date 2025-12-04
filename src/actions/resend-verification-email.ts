@@ -1,13 +1,15 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { messages } from "@/lib/messages";
-import { actionSafeExecute } from "@/lib/network";
-import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
 import { createVerificationEmail } from "@/lib/utils/email-templates-auth";
-import { generateToken } from "@/lib/utils/tokens";
+import {
+  createVerificationToken,
+  deleteVerificationToken,
+  sendingVerificationEmail,
+} from "@/lib/utils/email-verification";
 
 import { getAuthentication } from "./auth";
 
@@ -30,54 +32,29 @@ export const resendingVerificationEmail =
         error: messages.actions.auth.verificationEmail.accountVerified,
       };
 
-    // Generate verification token
-    const token = generateToken();
-    const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 24); // Token expires in 24 hours
-
-    // Create verification token in VerificationTokensEmail collection
-    const tokenResponse = await actionSafeExecute(
-      payload.create({
-        req: { user: { ...auth, collection: "users" } },
-        user: auth,
-        collection: "verification-tokens-email",
-        data: {
-          user: auth.id,
-          token,
-          used: false,
-          expiresAt: expiresAt.toISOString(),
-        },
-        overrideAccess: false,
-      }),
-      messages.actions.auth.verificationEmail.serverError,
-    );
+    // Create verification token (no newEmail for initial verification)
+    const tokenResponse = await createVerificationToken({
+      user: auth,
+      newEmail: null,
+      expiresInHours: 24,
+    });
 
     if (!tokenResponse.data || tokenResponse.error)
       return { data: null, error: tokenResponse.error };
 
     // Send verification email
-    const verificationURL = `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/verify-email/${token}`;
+    const verificationURL = `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/verify-email/${tokenResponse.data.token}`;
     const templateEmail = createVerificationEmail(verificationURL);
 
-    const responseEmail = await actionSafeExecute(
-      payload.sendEmail({
-        to: auth.email,
-        subject: "Verify Your Email Address at PalestinianCauses",
-        html: templateEmail,
-      }),
-      messages.actions.auth.verificationEmail.serverError,
-    );
+    const responseEmail = await sendingVerificationEmail({
+      email: auth.email,
+      subject: "Verify Your Email Address at PalestinianCauses",
+      html: templateEmail,
+    });
 
-    // if email sending fails, delete token
     if (!responseEmail.data || responseEmail.error) {
-      await payload.delete({
-        req: { user: { ...auth, collection: "users" } },
-        user: auth,
-        collection: "verification-tokens-email",
-        where: { id: { equals: tokenResponse.data.id } },
-        overrideAccess: false,
-      });
-
+      // if email sending fails, delete token
+      await deleteVerificationToken(auth, tokenResponse.data.id);
       return {
         data: null,
         error:
