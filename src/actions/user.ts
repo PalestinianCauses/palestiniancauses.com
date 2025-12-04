@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 13
+// REVIEWED - 14
 
 import { PaginatedDocs } from "payload";
 
@@ -159,6 +159,7 @@ export const updateUser = async function updateUser(
     if (responseChangeEmail.error) return responseChangeEmail;
 
     // Don't update email directly - it will be updated after verification
+    // pendingEmail is already stored by requestChangeEmail
   }
 
   const response = await actionSafeExecute(
@@ -170,8 +171,71 @@ export const updateUser = async function updateUser(
       data,
       overrideAccess: false,
     }),
-    messages.actions.user.updateError,
+    messages.actions.user.serverErrorUpdate,
   );
 
   return response;
+};
+
+export const updatePassword = async function updatePassword(data: {
+  currentPassword: string;
+  newPassword: string;
+}): Promise<ResponseSafeExecute<string, string>> {
+  const auth = await getAuthentication();
+
+  if (!auth)
+    return {
+      data: null,
+      error: messages.actions.user.unAuthenticated,
+    };
+
+  if (!isResilientPassword(data.newPassword, 8)) {
+    return {
+      data: null,
+      error: messages.actions.auth.signUp.password,
+    };
+  }
+
+  // Verify current password by attempting to sign in
+  const responseSignIn = await actionSafeExecute(
+    payload.login({
+      collection: "users",
+      data: { email: auth.email, password: data.currentPassword },
+    }),
+    messages.actions.user.update.inCorrectCurrentPassword,
+  );
+
+  if (
+    !responseSignIn.data ||
+    responseSignIn.error ||
+    responseSignIn.data.user.id !== auth.id
+  ) {
+    return {
+      data: null,
+      error:
+        responseSignIn.error ||
+        messages.actions.user.update.inCorrectCurrentPassword,
+    };
+  }
+
+  // Update password
+  const response = await actionSafeExecute(
+    payload.update({
+      req: { user: { ...auth, collection: "users" } },
+      user: auth,
+      collection: "users",
+      where: { id: { equals: auth.id } },
+      data: { password: data.newPassword },
+      overrideAccess: false,
+    }),
+    messages.actions.auth.resetPassword.serverError,
+  );
+
+  if (!response.data || response.error)
+    return { data: null, error: response.error };
+
+  return {
+    data: messages.actions.user.update.successPassword,
+    error: null,
+  };
 };

@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { AchievementNotifications } from "./AchievementNotifications";
 import { Blog } from "./Blog";
@@ -17,6 +17,7 @@ import { RoomsPackages } from "./RoomsPackages";
 import { RoomsServices } from "./RoomsServices";
 import { ServiceCategories } from "./ServiceCategories";
 import { Users } from "./Users";
+import { VerificationTokensEmail } from "./VerificationTokensEmail";
 
 export const collections = [
   AchievementNotifications,
@@ -36,4 +37,5 @@ export const collections = [
   RoomsServices,
   ServiceCategories,
   Users,
+  VerificationTokensEmail,
 ];

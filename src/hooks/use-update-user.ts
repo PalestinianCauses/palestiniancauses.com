@@ -1,12 +1,18 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+import { cancelingPendingEmail as actionCancelingPendingEmail } from "@/actions/cancel-pending-email";
+import { requestChangeEmail as actionRequestChangeEmail } from "@/actions/email-change";
 import { mediaDelete, mediaUpload } from "@/actions/media-upload";
-import { updateUser as updateUserAction } from "@/actions/user";
+import { resendingVerificationEmail as actionResendingVerificationEmail } from "@/actions/resend-verification-email";
+import {
+  updatePassword as updatePassAction,
+  updateUser as updateUserAction,
+} from "@/actions/user";
 import { messages } from "@/lib/messages";
 
 export const useUpdateUser = function useUpdateUser() {
@@ -80,9 +86,65 @@ export const useUpdateUser = function useUpdateUser() {
     },
   });
 
+  const updatePassword = useMutation({
+    mutationFn: updatePassAction,
+    onSuccess: (response) => {
+      if (!response.data || response.error) {
+        toast.error(response.error);
+        return;
+      }
+
+      toast.success(response.data);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+
+  const resendingVerificationEmail = useMutation({
+    mutationFn: actionResendingVerificationEmail,
+    onSuccess: (response) => {
+      if (!response.data || response.error) {
+        toast.error(response.error);
+        return;
+      }
+
+      toast.success(response.data);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+
+  const resendingVerificationPendingEmail = useMutation({
+    mutationFn: () => actionRequestChangeEmail(), // No params = resend for existing pending email
+    onSuccess: (response) => {
+      if (!response.data || response.error) {
+        toast.error(response.error);
+        return;
+      }
+
+      toast.success(response.data);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+
+  const cancelingPendingEmail = useMutation({
+    mutationFn: actionCancelingPendingEmail,
+    onSuccess: (response) => {
+      if (!response.data || response.error) {
+        toast.error(response.error);
+        return;
+      }
+
+      toast.success(response.data);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+
   return {
     updateUser,
     updateUserAvatar,
     removeUserAvatar,
+    updatePassword,
+    resendingVerificationEmail,
+    resendingVerificationPendingEmail,
+    cancelingPendingEmail,
   };
 };

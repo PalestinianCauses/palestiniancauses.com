@@ -1,4 +1,4 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
 import type { CollectionConfig } from "payload";
 
@@ -41,6 +41,7 @@ export const collectionsPermissionsOptions = [
   { label: "Users Email", value: "users.email" },
   { label: "Users Previous Role", value: "users.previousRole" },
   { label: "Users Roles", value: "users.roles" },
+  { label: "Verification Tokens Email", value: "verification-tokens-email" },
 ];
 
 export const Permissions: CollectionConfig = {

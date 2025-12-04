@@ -1,4 +1,4 @@
-// REVIEWED - 22
+// REVIEWED - 23
 import type { CollectionConfig } from "payload";
 
 import {
@@ -71,6 +71,13 @@ export const Users: CollectionConfig = {
       type: "checkbox",
       defaultValue: false,
       required: true,
+    },
+    {
+      admin: { position: "sidebar" },
+      label: "Pending Email",
+      name: "pendingEmail",
+      type: "email",
+      required: false,
     },
     {
       label: "First Name",
