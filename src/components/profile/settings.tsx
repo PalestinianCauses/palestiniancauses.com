@@ -1,10 +1,13 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  ClockIcon,
   ImageIcon,
+  KeyIcon,
+  MailIcon,
   Share2Icon,
   ShieldHalfIcon,
   ShieldUserIcon,
@@ -37,7 +40,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useUpdateUser } from "@/hooks/use-update-user";
 import { useUser } from "@/hooks/use-user";
-import { profileSchema, ProfileSchema } from "@/lib/schemas/profile";
+import {
+  profileSchema,
+  ProfileSchema,
+  updatePassSchema,
+  UpdatePassSchema,
+} from "@/lib/schemas/profile";
 import { isObject } from "@/lib/types/guards";
 import { getMediaAltText, getMediaURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
@@ -47,6 +55,7 @@ import { SuspenseAvatar } from "../globals/suspense-avatar";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
 
 import { AccountDeletion } from "./account-deletion";
+import { StatusBadge } from "./globals";
 
 const ProfileAvatar = function ProfileAvatar({ user }: { user: User }) {
   const { updateUserAvatar, removeUserAvatar } = useUpdateUser();
@@ -135,7 +144,13 @@ const ProfileAvatar = function ProfileAvatar({ user }: { user: User }) {
 
 export const ProfileSettings = function ProfileSettings() {
   const { isLoading, data: user } = useUser();
-  const { updateUser } = useUpdateUser();
+  const {
+    updateUser,
+    updatePassword,
+    resendingVerificationEmail,
+    resendingVerificationPendingEmail: resendingPendingEmail,
+    cancelingPendingEmail,
+  } = useUpdateUser();
 
   const form = useForm<ProfileSchema>({
     resolver: zodResolver(profileSchema),
@@ -154,6 +169,16 @@ export const ProfileSettings = function ProfileSettings() {
       showAchievements: user?.privacySettings?.showAchievements ?? true,
       showOrders: user?.privacySettings?.showOrders || false,
     },
+  });
+
+  const passForm = useForm<UpdatePassSchema>({
+    mode: "onBlur",
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+    resolver: zodResolver(updatePassSchema),
   });
 
   useEffect(() => {
@@ -328,6 +353,77 @@ export const ProfileSettings = function ProfileSettings() {
                     <FormControl>
                       <Input type="email" {...field} />
                     </FormControl>
+                    {user.pendingEmail ? (
+                      <div className="flex w-full flex-col items-start justify-start gap-2.5 border border-amber-500/10 bg-amber-500/10 p-5">
+                        <div className="flex items-center justify-start gap-2.5 text-sm font-semibold leading-none text-amber-300">
+                          <ClockIcon className="size-4" />
+                          <span>Email Change Pending Confirmation</span>
+                        </div>
+                        <div className="mb-2.5 max-w-3xl text-sm font-medium leading-relaxed text-amber-100">
+                          A verification link has been sent to{" "}
+                          <span className="underline underline-offset-4">
+                            {user.pendingEmail}
+                          </span>
+                          . Kindly check your inbox to confirm and complete the
+                          email update process. In case you did not initiate
+                          this change, please disregard this notification.
+                        </div>
+                        <div className="flex w-full flex-col items-center justify-start gap-2.5 sm:flex-row">
+                          <Button
+                            type="button"
+                            variant="default"
+                            disabled={resendingPendingEmail.isPending}
+                            onClick={() => resendingPendingEmail.mutate()}
+                            className="w-full bg-amber-300 text-amber-950 hover:bg-amber-500 hover:text-amber-950 sm:w-auto">
+                            <MailIcon />
+                            {resendingPendingEmail.isPending
+                              ? "Resending..."
+                              : "Resend Verification Email"}
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="link"
+                            disabled={cancelingPendingEmail.isPending}
+                            onClick={() => cancelingPendingEmail.mutate()}
+                            className="w-full text-amber-100 hover:text-amber-300 sm:w-auto">
+                            <XIcon />
+                            {cancelingPendingEmail.isPending
+                              ? "Cancelling..."
+                              : "Cancel Email Change"}
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap items-center justify-start gap-2.5">
+                        <StatusBadge
+                          label={
+                            user.accountVerified
+                              ? "Your email has been successfully verified."
+                              : "Your email is not yet verified."
+                          }
+                          className={cn({
+                            "border-green-500/10 bg-green-500/10 text-green-500 hover:bg-green-500/10":
+                              user.accountVerified,
+                            "border-amber-500/10 bg-amber-500/10 text-amber-500 hover:bg-amber-500/10":
+                              !user.accountVerified,
+                          })}
+                        />
+
+                        {!user.accountVerified ? (
+                          <Button
+                            type="button"
+                            variant="link"
+                            disabled={resendingVerificationEmail.isPending}
+                            onClick={() => resendingVerificationEmail.mutate()}>
+                            <MailIcon />
+                            {resendingVerificationEmail.isPending
+                              ? "Sending verification..."
+                              : "Resend verification email"}
+                          </Button>
+                        ) : null}
+                      </div>
+                    )}
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -589,6 +685,85 @@ export const ProfileSettings = function ProfileSettings() {
 
               <Button type="submit" disabled={updateUser.isPending}>
                 {updateUser.isPending ? "Saving..." : "Save Privacy Settings"}
+              </Button>
+            </form>
+          </Form>
+
+          <div className="space-y-0.5 border-t border-input/50 pt-10">
+            <SubSectionHeading
+              as="h3"
+              className="flex items-center gap-2.5 text-xl !leading-none lg:text-xl lg:!leading-none xl:text-xl xl:!leading-none">
+              <KeyIcon className="size-6 stroke-[1.5]" />
+              Change Your Password
+            </SubSectionHeading>
+            <Paragraph className="max-w-5xl text-base lg:text-base">
+              For the security of your account, we recommend updating your
+              password regularly. Please ensure your new password is strong and
+              unique to maintain the highest level of protection for your
+              personal information.
+            </Paragraph>
+          </div>
+
+          <Form {...passForm}>
+            <form
+              onSubmit={passForm.handleSubmit(async (data) => {
+                updatePassword.mutate(
+                  {
+                    currentPassword: data.currentPassword,
+                    newPassword: data.newPassword,
+                  },
+                  {
+                    onSuccess: () => {
+                      passForm.reset();
+                    },
+                  },
+                );
+              })}
+              className="space-y-5">
+              <FormField
+                control={passForm.control}
+                name="currentPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Current Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={passForm.control}
+                name="newPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>New Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={passForm.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm New Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit" disabled={updatePassword.isPending}>
+                {updatePassword.isPending ? "Updating..." : "Update Password"}
               </Button>
             </form>
           </Form>
