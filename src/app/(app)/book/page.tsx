@@ -1,7 +1,8 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+
+import { RedirectProvider } from "../providers";
 
 export const metadata: Metadata = {
   title: "A Human But From Gaza",
@@ -10,5 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default async function BookPage() {
-  redirect("/a-human-but-from-gaza");
+  return <RedirectProvider path="/a-human-but-from-gaza" />;
 }

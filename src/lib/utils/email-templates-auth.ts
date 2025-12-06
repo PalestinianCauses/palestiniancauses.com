@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { createTemplateEmail } from "./email-templates";
 
@@ -23,9 +23,9 @@ export const createVerificationEmail = (verificationLink: string): string =>
     titleSub: "Welcome to PalestinianCauses! Please verify your email",
     fields: [
       {
-        label: "Verification Link",
+        label: "Your Verification Link",
         value: verificationLink,
-        type: "text",
+        type: "link",
       },
     ],
     footer:
@@ -41,14 +41,14 @@ export const createVerificationChangeEmail = (
     titleSub: `You requested to change your email to ${newEmail}`,
     fields: [
       {
-        label: "New Email",
+        label: "Your New Email",
         value: newEmail,
         type: "email",
       },
       {
-        label: "Verification Link",
+        label: "Your Verification Link",
         value: verificationLink,
-        type: "text",
+        type: "link",
       },
     ],
     footer:

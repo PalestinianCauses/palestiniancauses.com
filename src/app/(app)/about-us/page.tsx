@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { Metadata } from "next";
 
@@ -78,8 +78,8 @@ export const metadata: Metadata = {
 
 export default async function AboutPage() {
   return (
-    <main className="relative">
-      <Container className="max-w-7xl pb-12 pt-24 xl:pb-24 xl:pt-32">
+    <main className="section-padding-start-xl relative">
+      <Container className="mb-12 max-w-7xl">
         <SectionHeading>About us.</SectionHeading>
       </Container>
 

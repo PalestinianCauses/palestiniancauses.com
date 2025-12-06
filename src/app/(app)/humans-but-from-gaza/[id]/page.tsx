@@ -1,4 +1,4 @@
-// REVIEWED - 16
+// REVIEWED - 17
 
 import { MessageSquareTextIcon } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -50,7 +50,7 @@ export default async function HumanButFromGazaPage(props: {
     return notFound();
 
   return (
-    <main className="relative pt-24 lg:pt-32 xl:pt-48">
+    <main className="section-padding-start-xl relative">
       <Container as="section" className="max-w-6xl">
         <Container className="mx-0 mb-12 max-w-5xl px-0 lg:px-0">
           <DiaryEntryListItemBadges diaryEntry={diaryEntry.data} />

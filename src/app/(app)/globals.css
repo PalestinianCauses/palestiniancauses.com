@@ -1,4 +1,4 @@
-/* REVIEWED - 17 */
+/* REVIEWED - 18 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -204,8 +204,12 @@
     @apply pt-24 lg:pt-32 xl:pt-48;
   }
 
-  .section-padding-y-lg {
-    @apply py-24 lg:py-32 xl:py-48;
+  .section-padding-start-xl {
+    @apply pt-48 lg:pt-32 xl:pt-48;
+  }
+
+  .section-padding-end-xl {
+    @apply pb-48 lg:pb-32 xl:pb-48;
   }
 
   .section-margin-start {

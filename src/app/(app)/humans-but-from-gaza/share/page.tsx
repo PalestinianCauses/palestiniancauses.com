@@ -1,4 +1,4 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { Metadata } from "next";
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 const SharePage = function SharePage() {
   return (
-    <main className="relative pt-24 lg:pt-32 xl:pt-48">
+    <main className="section-padding-start-xl relative">
       <Container className="mb-8 max-w-7xl xl:mb-12">
         <SectionHeading className="mb-4 !max-w-none lg:mb-8 lg:!max-w-xl xl:!max-w-3xl">
           Share Your Diary With The Truth Museum.

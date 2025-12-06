@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import type { Metadata } from "next";
 
@@ -14,8 +14,12 @@ export const metadata: Metadata = {
 
 const ProfileActivityPage = function ProfileActivityPage() {
   return (
-    <Container as="main" className="section-padding-y-lg max-w-7xl space-y-10">
-      <SectionHeading>Activity</SectionHeading>
+    <Container
+      as="main"
+      className="section-padding-start-xl section-padding-end-xl max-w-7xl space-y-10">
+      <SectionHeading as="h1" className="font-semibold">
+        Activity
+      </SectionHeading>
       <ProfileNavigation />
       <ProfileActivity />
     </Container>

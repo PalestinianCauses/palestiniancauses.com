@@ -1,4 +1,4 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { Suspense } from "react";
 
@@ -71,7 +71,7 @@ const HeaderCover = async function HeaderCover() {
 export const Header = function Header() {
   return (
     <header>
-      <Container className="my-32">
+      <Container className="section-padding-start-xl section-padding-end-xl">
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-center md:items-center">
           <Badge variant="outline" className="mb-4">
             Be Part Of PalestinianCauses&apos; Journey

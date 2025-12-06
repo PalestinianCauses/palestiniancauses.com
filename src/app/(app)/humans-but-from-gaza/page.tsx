@@ -1,4 +1,4 @@
-// REVIEWED - 17
+// REVIEWED - 18
 
 import { Metadata } from "next";
 import Link from "next/link";
@@ -112,7 +112,7 @@ export default async function HumansButFromGazaPage({
   };
 
   return (
-    <main className="relative pt-24 lg:pt-32 xl:pt-48">
+    <main className="section-padding-start-xl relative">
       <Container className="mb-12 max-w-7xl xl:mb-24">
         <SectionHeading className="mb-8 max-w-xl lg:!max-w-3xl">
           The Truth Museum: Diaries from Humans But From Gaza.

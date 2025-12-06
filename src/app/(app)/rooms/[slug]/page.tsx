@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { Metadata } from "next";
 import { Fragment } from "react";
@@ -152,7 +152,7 @@ export default async function RoomPage({
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(dataStructured) }}
       />
-      <main className="py-48 lg:py-32 xl:py-48">
+      <main className="section-padding-start-xl section-padding-end-xl">
         <RoomInteractive
           room={response.data}
           roomOwner={response.data.information.name}

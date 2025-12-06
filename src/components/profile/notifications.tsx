@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -100,7 +100,11 @@ const NotificationItem = function NotificationItem({
           {notification.message}
         </Paragraph>
         <Button variant="link" className="p-0" asChild>
-          <Link href={link}>
+          <Link
+            href={link}
+            onClick={() => {
+              if (!notification.read) markingAsRead.mutate(notification.id);
+            }}>
             <ArrowUpRightIcon />
             View details
           </Link>
