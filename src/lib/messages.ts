@@ -1,4 +1,4 @@
-// REVIEWED - 29
+// REVIEWED - 30
 
 export const messages = {
   http: {
@@ -16,6 +16,12 @@ export const messages = {
     blob: {
       serverError: "Failed to retrieve blobs. Please try again later.",
     },
+    notification: {
+      successRead: "Successfully marked notification as read.",
+      successEveryRead: "Successfully marked every notification as read.",
+      notFound: "Notification not found. Please try again later.",
+      serverError: "Failed to retrieve notification. Please try again later.",
+    },
     notificationSubscription: {
       success: "Successfully subscribed to notifications.",
       successDelete: "Successfully unsubscribed from notifications.",
@@ -32,12 +38,20 @@ export const messages = {
         "Failed to notify subscribers. Please try again later.",
     },
     user: {
+      update: {
+        success: "Successfully updated user account.",
+        successPassword: "Successfully updated user password.",
+        inCorrectCurrentPassword:
+          "Incorrect current password has been entered. Please try again.",
+      },
       unAuthorized: "You are not authorized to perform this action.",
       unAuthenticated:
         "Authentication required. Please sign in to perform this action.",
       notFound: "User not found. Please try again later.",
       serverError:
         "Failed to retrieve authenticated user. Please try again later.",
+      serverErrorUpdate:
+        "Failed to update user account. Please try again later.",
       delete: {
         success: "User account deleted successfully.",
         serverError: "Failed to delete user account. Please try again later.",
@@ -82,6 +96,70 @@ export const messages = {
         expirationTypeError:
           "Failed to verify session expiration. Please sign in again.",
       },
+      forgotPassword: {
+        pending: "Sending password reset email...",
+        success:
+          "In case an account with this email exists, a password reset link has been sent. Please check your inbox or spam/junk folder.",
+        serverError:
+          "Failed to send password reset email. Please try again later.",
+      },
+      resetPassword: {
+        pending: "Resetting password...",
+        success:
+          "Password reset successfully. You can now sign in with your new password.",
+        tokenNotFound:
+          "Password reset token not found. Please request a new one.",
+        tokenExpired:
+          "Password reset token has expired. Please request a new one.",
+        serverError: "Failed to reset password. Please try again later.",
+      },
+      verificationEmail: {
+        success: "Successfully verified email!",
+        successSent: "Successfully sent verification email.",
+        tokenNotFound:
+          "Verification token not found. Please request a new one.",
+        tokenExpired:
+          "Verification token has expired. Please request a new one.",
+        tokenUsed:
+          "Verification token has already been used before. Please request a new one.",
+        accountVerified: "Account is already verified.",
+        serverError: "Failed to verify email. Please try again later.",
+        serverErrorCreate:
+          "Failed to create verification token. Please try again later.",
+        serverErrorPreviousTokenFind:
+          "Failed to retrieve previous verification token. Please try again later.",
+        serverErrorPreviousTokenDelete:
+          "Failed to delete previous verification token. Please try again later.",
+        serverErrorSend:
+          "Failed to send verification token email. Please try again later.",
+        serverErrorDelete:
+          "Failed to delete verification token. Please try again later.",
+      },
+      changeEmail: {
+        success:
+          "Verification token email has been sent to your new email address. Please check your inbox or spam/junk folder.",
+        successCancelingPendingEmail:
+          "Successfully cancelled pending email change",
+        inUseEmail:
+          "Email address is already in use. Please try again with a different email address.",
+        serverError:
+          "Failed to process email change request. Please try again later.",
+        serverErrorCancelingPendingEmail:
+          "Failed to cancel pending email change. Please try again later.",
+        noPendingEmail: "Failed to find pending email. Please try again later.",
+      },
+    },
+    media: {
+      upload: {
+        success: "Successfully uploaded media.",
+        successRemove: "Successfully removed media.",
+        noFile: "No file was provided. Please try again.",
+        serverError: "Failed to upload media. Please try again later.",
+        serverErrorDelete: "Failed to delete media. Please try again later.",
+      },
+    },
+    role: {
+      serverError: "Failed to retrieve roles. Please try again later.",
     },
     product: {
       file: {
@@ -97,17 +175,25 @@ export const messages = {
           "Failed to retrieve product links. Please try again later.",
       },
       notFound: "Product not found. Please try again later.",
+      notAvailableForPurchasing:
+        "Product is not available for purchasing. Please try again with a different product.",
       serverError: "Failed to retrieve product. Please try again later.",
     },
     order: {
       pending: "Creating your order...",
-      success: "Order created successfully! We will contact you soon.",
+      successServiceOrPackage:
+        "Successfully created order! Our room owner who owns this room will contact you soon.",
+      successDelete: "Successfully deleted order.",
+      successCancel: "Successfully cancelled order.",
       serverError: "Failed to create order. Please try again later.",
-      unAuthenticated:
-        "Authentication required to create an order. Please sign in.",
-      inCorrectOrderTypeError:
-        "The order type is in-correct. Please try again.",
-      noOrderItemsError: "No order items found. Please try again.",
+      serverErrorGet: "Failed to retrieve order. Please try again later.",
+      serverErrorUpdate: "Failed to update order. Please try again later.",
+      serverErrorDelete: "Failed to delete order. Please try again later.",
+      serverErrorCancel: "Failed to cancel order. Please try again later.",
+      serverErrorCreateCheckoutSession:
+        "Failed to create order checkout session. Please try again later.",
+      inCorrectOrderTypeError: "Order type is incorrect. Please try again.",
+      noOrderItemsError: "Order items not found. Please try again.",
     },
     collection: {
       serverError: "Failed to retrieve collection. Please try again later.",
@@ -153,6 +239,10 @@ export const messages = {
       author: {
         serverError:
           "Failed to retrieve author information. Please try again later.",
+      },
+      delete: {
+        success: "Successfully deleted diary entry.",
+        serverError: "Failed to delete diary entry. Please try again later.",
       },
     },
     room: {

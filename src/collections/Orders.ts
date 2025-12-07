@@ -1,4 +1,4 @@
-// REVIEWED - 12
+// REVIEWED - 13
 
 import { CollectionConfig } from "payload";
 
@@ -163,7 +163,8 @@ export const Orders: CollectionConfig = {
     {
       admin: {
         condition: (_, dataSibling) =>
-          dataSibling.orderType === "product" && dataSibling.type !== "free",
+          dataSibling.orderType === "product" &&
+          dataSibling.productOrderType !== "free",
 
         position: "sidebar",
       },
@@ -178,6 +179,20 @@ export const Orders: CollectionConfig = {
         { label: "N/A", value: "not-applicable" },
       ],
       defaultValue: "pending",
+      required: false,
+    },
+    {
+      admin: { position: "sidebar" },
+      name: "stripeSessionId",
+      label: "Stripe Session ID",
+      type: "text",
+      required: false,
+    },
+    {
+      admin: { position: "sidebar" },
+      name: "stripePaymentIntentId",
+      label: "Stripe Payment Intent ID",
+      type: "text",
       required: false,
     },
     {

@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -12,12 +12,12 @@ import { getAuthentication } from "./auth";
 
 export const createOrder = async function createOrder(
   data: Omit<Order, "id" | "user" | "total" | "createdAt" | "updatedAt">,
-): Promise<ResponseSafeExecute<string>> {
+): Promise<ResponseSafeExecute<Order, string>> {
   // Get authenticated user (customer) if signed in
   const authentication = await getAuthentication();
 
   if (!authentication || !authentication.id)
-    return { data: null, error: messages.actions.order.unAuthenticated };
+    return { data: null, error: messages.actions.user.unAuthenticated };
 
   // Generate total price
   const pricesTotal = data.items.reduce(
@@ -44,7 +44,31 @@ export const createOrder = async function createOrder(
   // via Orders collection's afterChange hook
 
   return {
-    data: messages.actions.order.success,
+    data: orderResponse.data,
     error: null,
   };
+};
+
+export const deleteOrder = async function deleteOrder(
+  orderId: number,
+): Promise<ResponseSafeExecute<string, string>> {
+  const auth = await getAuthentication();
+
+  if (!auth)
+    return { data: null, error: messages.actions.user.unAuthenticated };
+
+  const response = await actionSafeExecute(
+    payload.delete({
+      req: { user: { collection: "users", ...auth } },
+      user: auth,
+      collection: "orders",
+      where: { id: { equals: orderId } },
+      overrideAccess: false,
+    }),
+    messages.actions.order.serverErrorDelete,
+  );
+
+  if (!response.data || response.error) return response;
+
+  return { data: messages.actions.order.successDelete, error: null };
 };

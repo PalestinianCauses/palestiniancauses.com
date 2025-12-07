@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Where } from "payload";
 
@@ -123,7 +123,7 @@ export const sendingVerificationEmail =
         subject,
         html,
       }),
-      messages.actions.auth.verificationEmail.serverErrorSending,
+      messages.actions.auth.verificationEmail.serverErrorSend,
     );
 
     if (!response.data || response.error)
@@ -131,7 +131,7 @@ export const sendingVerificationEmail =
         data: null,
         error:
           response.error ||
-          messages.actions.auth.verificationEmail.serverErrorSending,
+          messages.actions.auth.verificationEmail.serverErrorSend,
       };
 
     return { data: true, error: null };

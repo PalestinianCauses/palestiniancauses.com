@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -48,7 +48,7 @@ export const markingNotificationAsRead =
     if (notificationUserId !== auth.id)
       return {
         data: null,
-        error: messages.actions.notification.unAuthorized,
+        error: messages.actions.user.unAuthorized,
       };
 
     const updateResponse = await actionSafeExecute(
@@ -81,7 +81,7 @@ export const markingEveryNotificationAsRead =
     if (!auth)
       return {
         data: null,
-        error: messages.actions.notification.unAuthenticated,
+        error: messages.actions.user.unAuthenticated,
       };
 
     const notificationsResponse = await actionSafeExecute(

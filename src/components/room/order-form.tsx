@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -91,7 +91,7 @@ export const OrderForm = function OrderForm({
           if (!response.data || response.error)
             toast.error(response.error || messages.actions.order.serverError);
           else {
-            toast.success(messages.actions.order.success);
+            toast.success(messages.actions.order.successServiceOrPackage);
             form.reset();
             setOpen(false);
           }
