@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -47,6 +47,32 @@ export const createOrder = async function createOrder(
     data: orderResponse.data,
     error: null,
   };
+};
+
+export const updateOrder = async function updateOrder(
+  orderId: number,
+  data: Partial<Order>,
+): Promise<ResponseSafeExecute<Order, string>> {
+  const auth = await getAuthentication();
+
+  if (!auth)
+    return { data: null, error: messages.actions.user.unAuthenticated };
+
+  const response = await actionSafeExecute(
+    payload.update({
+      req: { user: { collection: "users", ...auth } },
+      user: auth,
+      collection: "orders",
+      where: { id: { equals: orderId } },
+      data,
+      overrideAccess: false,
+    }),
+    messages.actions.order.serverErrorUpdate,
+  );
+
+  if (!response.data || response.error) return response;
+
+  return { data: response.data.docs[0], error: null };
 };
 
 export const deleteOrder = async function deleteOrder(
