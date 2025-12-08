@@ -1,4 +1,4 @@
-// REVIEWED - 30
+// REVIEWED - 31
 
 export const messages = {
   http: {
@@ -192,6 +192,10 @@ export const messages = {
       serverErrorCancel: "Failed to cancel order. Please try again later.",
       serverErrorCreateCheckoutSession:
         "Failed to create order checkout session. Please try again later.",
+      serverErrorGetCheckoutSession:
+        "Failed to retrieve order checkout session. Please try again later.",
+      orderNotFound: "Order not found. Please try again later.",
+      paymentNotCompleted: "Payment not completed. Please try again later.",
       inCorrectOrderTypeError: "Order type is incorrect. Please try again.",
       noOrderItemsError: "Order items not found. Please try again.",
     },
