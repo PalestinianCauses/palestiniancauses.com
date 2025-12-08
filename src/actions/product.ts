@@ -1,17 +1,48 @@
 "use server";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { redirect } from "next/navigation";
+import { PaginatedDocs } from "payload";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
 import { isNumber, isObject } from "@/lib/types/guards";
-import { Product } from "@/payload-types";
+import { Product, User } from "@/payload-types";
 
 import { getAuthentication } from "./auth";
+
+export const getProduct = async function getProduct(
+  productSlug: string,
+  user: User,
+): Promise<ResponseSafeExecute<PaginatedDocs<Product>>> {
+  const responseProduct = await actionSafeExecute(
+    payload.find({
+      ...(user
+        ? {
+            req: { user: { collection: "users", ...user } },
+            user,
+            overrideAccess: false,
+          }
+        : {}),
+      collection: "products",
+      where: { slug: { equals: productSlug } },
+      limit: 1,
+      depth: 1,
+    }),
+    messages.actions.product.serverError,
+  );
+
+  if (!responseProduct.data || responseProduct.data.docs.length !== 1)
+    return {
+      data: null,
+      error: messages.actions.product.notFound,
+    };
+
+  return responseProduct;
+};
 
 // public information no need to override access
 export const getProductFreeLinksExternal =
