@@ -1,4 +1,4 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
@@ -980,7 +980,7 @@ const permissionsRoles: Record<string, string[]> = {
     "diary-entries.manage",
     "diary-entries.create",
     "media.create",
-    "notification.create",
+    "notifications.create",
     "orders.create",
     "permissions.read",
     "roles.read",
