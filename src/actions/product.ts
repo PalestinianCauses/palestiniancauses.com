@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { redirect } from "next/navigation";
 import { PaginatedDocs } from "payload";
@@ -16,7 +16,7 @@ import { getAuthentication } from "./auth";
 
 export const getProduct = async function getProduct(
   productSlug: string,
-  user: User,
+  user?: User,
 ): Promise<ResponseSafeExecute<PaginatedDocs<Product>>> {
   const responseProduct = await actionSafeExecute(
     payload.find({

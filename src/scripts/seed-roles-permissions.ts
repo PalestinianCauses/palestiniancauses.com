@@ -1,4 +1,4 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
@@ -943,6 +943,7 @@ const permissionsRoles: Record<string, string[]> = {
     "notifications.create",
     "orders.create",
     "permissions.read",
+    "products.read",
     "roles.read",
     "rooms.manage",
     "rooms.create",
@@ -970,6 +971,7 @@ const permissionsRoles: Record<string, string[]> = {
     "notifications.create",
     "orders.create",
     "permissions.read",
+    "products.read",
     "roles.read",
     "users.roles.read",
     "verification-tokens-email.create",
@@ -983,6 +985,7 @@ const permissionsRoles: Record<string, string[]> = {
     "notifications.create",
     "orders.create",
     "permissions.read",
+    "products.read",
     "roles.read",
     "users.roles.read",
     "verification-tokens-email.create",
