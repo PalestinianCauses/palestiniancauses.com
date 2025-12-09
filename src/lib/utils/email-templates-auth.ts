@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { createTemplateEmail } from "./email-templates";
 
@@ -14,13 +14,13 @@ export const createResetPassEmail = (resetPassLink: string): string =>
       },
     ],
     footer:
-      "This link will expire in 1 hour. In case you didn't request this password reset, please ignore this email.",
+      "This link will expire in 1 hour.<br>IF YOU DID NOT REQUEST THIS PASSWORD RESET, IGNORE THIS EMAIL.",
   });
 
 export const createVerificationEmail = (verificationLink: string): string =>
   createTemplateEmail({
     title: "Verify Your Email Address",
-    titleSub: "Welcome to PalestinianCauses! Please verify your email",
+    titleSub: "Welcome to PalestinianCauses! Please verify your email address",
     fields: [
       {
         label: "Your Verification Link",
@@ -29,7 +29,7 @@ export const createVerificationEmail = (verificationLink: string): string =>
       },
     ],
     footer:
-      "This link will expire in 24 hours. In you didn't create an account, please ignore this email.",
+      "This link will expire in 24 hours.<br>IF YOU DID NOT CREATE AN ACCOUNT, IGNORE THIS EMAIL.",
   });
 
 export const createVerificationChangeEmail = (
@@ -38,10 +38,10 @@ export const createVerificationChangeEmail = (
 ): string =>
   createTemplateEmail({
     title: "Verify Your New Email Address",
-    titleSub: `You requested to change your email to ${newEmail}`,
+    titleSub: `You requested to change your email address to ${newEmail}`,
     fields: [
       {
-        label: "Your New Email",
+        label: "Your New Email Address",
         value: newEmail,
         type: "email",
       },
@@ -52,5 +52,5 @@ export const createVerificationChangeEmail = (
       },
     ],
     footer:
-      "This link will expire in 24 hours. In case you didn't request this change, please contact support immediately.",
+      "This link will expire in 24 hours.<br>IF YOU DID NOT REQUEST THIS EMAIL ADDRESS CHANGE, CONTACT SUPPORT IMMEDIATELY.",
   });

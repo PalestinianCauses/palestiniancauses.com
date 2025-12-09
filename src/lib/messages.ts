@@ -1,4 +1,4 @@
-// REVIEWED - 31
+// REVIEWED - 32
 
 export const messages = {
   http: {
@@ -185,6 +185,7 @@ export const messages = {
         "Successfully created order! Our room owner who owns this room will contact you soon.",
       successDelete: "Successfully deleted order.",
       successCancel: "Successfully cancelled order.",
+      notFound: "Order not found. Please try again later.",
       serverError: "Failed to create order. Please try again later.",
       serverErrorGet: "Failed to retrieve order. Please try again later.",
       serverErrorUpdate: "Failed to update order. Please try again later.",
@@ -197,7 +198,7 @@ export const messages = {
       orderNotFound: "Order not found. Please try again later.",
       paymentNotCompleted: "Payment not completed. Please try again later.",
       inCorrectOrderTypeError: "Order type is incorrect. Please try again.",
-      noOrderItemsError: "Order items not found. Please try again.",
+      noOrderItemsError: "Order items not found. Please try again later.",
     },
     collection: {
       serverError: "Failed to retrieve collection. Please try again later.",
@@ -253,6 +254,13 @@ export const messages = {
       serverError: "Failed to retrieve room. Please try again later.",
       links: {
         serverError: "Failed to retrieve room links. Please try again later.",
+      },
+    },
+    stripe: {
+      webhook: {
+        missingStripeSignature: "Signature not found. Please try again later.",
+        verifyStripeSignature: "Failed to verify signature. Please try again.",
+        missingIDsData: "Required IDs data not found. Please try again later.",
       },
     },
   },
