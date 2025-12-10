@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
@@ -123,7 +123,7 @@ export const createProductStripeCheckoutSession =
         success_url: [
           `${baseURL}/a-human-but-from-gaza/thank-you`,
           ["session_id", "{CHECKOUT_SESSION_ID}"].join("="),
-        ].join("&"),
+        ].join("?"),
         cancel_url: `${baseURL}/a-human-but-from-gaza`,
         customer_email: auth.email,
         metadata: {
