@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { format } from "date-fns";
 import {
@@ -59,7 +59,7 @@ export const ProfileInfoSocial = function ProfileInfoSocial({
           className="text-lg font-semibold !leading-none tracking-normal lg:text-lg lg:!leading-none xl:text-lg xl:!leading-none">
           Social Links
         </SubSectionHeading>
-        <div className="flex flex-wrap gap-2.5">
+        <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
           {linksSocial.github && (
             <Button variant="outline" className="gap-2.5" asChild>
               <Link
@@ -77,7 +77,7 @@ export const ProfileInfoSocial = function ProfileInfoSocial({
                 href={`https://x.com/${linksSocial.twitter}`}
                 target="_blank">
                 <RiTwitterXFill />
-                Twitter
+                Twitter/X
               </Link>
             </Button>
           )}
@@ -186,7 +186,7 @@ export const ProfileInfo = function ProfileInfo() {
     );
 
   const avatarURL = getMediaURL(user.avatar);
-  const avatarAlt = getMediaAltText(user.avatar) || "Profile picture";
+  const avatarAlt = getMediaAltText(user.avatar) || "Profile Picture";
 
   return (
     <div className="space-y-10">
@@ -202,6 +202,7 @@ export const ProfileInfo = function ProfileInfo() {
           avatarImageProps={{
             src: avatarURL || undefined,
             alt: avatarAlt,
+            className: "object-cover object-center",
             onLoad: () => setIsAvatarLoading(false),
             onError: () => setIsAvatarLoading(false),
           }}

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -85,6 +85,7 @@ const ProfileAvatar = function ProfileAvatar({ user }: { user: User }) {
         avatarImageProps={{
           src: avatarURL || undefined,
           alt: avatarAlt,
+          className: "object-cover object-center",
           onLoad: () => setIsAvatarLoading(false),
           onError: () => setIsAvatarLoading(false),
         }}

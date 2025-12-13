@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 "use client";
 
@@ -29,6 +29,7 @@ export const HeaderAvatar = function HeaderAvatar({
         avatarImageProps={{
           src: getMediaSizeURL(photograph, "room-photograph") || undefined,
           alt: getMediaAltText(photograph) || "Room's Photograph",
+          className: "object-cover object-center",
           onLoad: () => setIsLoading(false),
           onError: () => setIsLoading(false),
         }}

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import {
   ArrowLeftFromLineIcon,
@@ -136,7 +136,7 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                   onLoad: () => setIsAvatarLoading(false),
                   onError: () => setIsAvatarLoading(false),
                   className: roomActive
-                    ? undefined
+                    ? "object-cover object-center"
                     : "size-8 object-cover group-data-[collapsible_=_icon]:size-10",
                 }}
                 avatarFallbackProps={{

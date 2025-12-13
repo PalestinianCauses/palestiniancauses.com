@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 04
 
 import { format } from "date-fns/format";
 import {
@@ -102,7 +102,7 @@ export const PublicProfile = function PublicProfile({ user }: { user: User }) {
   const [isAvatarLoading, setIsAvatarLoading] = useState(Boolean(user?.avatar));
 
   const avatarURL = getMediaURL(user.avatar);
-  const avatarAlt = getMediaAltText(user.avatar) || "Profile picture";
+  const avatarAlt = getMediaAltText(user.avatar) || "Profile Picture";
 
   return (
     <div className="space-y-10">
@@ -117,6 +117,7 @@ export const PublicProfile = function PublicProfile({ user }: { user: User }) {
           avatarImageProps={{
             src: avatarURL || undefined,
             alt: avatarAlt,
+            className: "object-cover object-center",
             onLoad: () => setIsAvatarLoading(false),
             onError: () => setIsAvatarLoading(false),
           }}

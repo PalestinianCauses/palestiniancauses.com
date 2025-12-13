@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import {
   ActivityIcon,
@@ -57,7 +57,7 @@ export const ProfileNavigation = function ProfileNavigation({
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-wrap gap-2.5 border-b border-input/50">
+    <nav className="flex flex-col gap-2.5 border-b border-input/50 sm:flex-row sm:flex-wrap">
       {items.map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.href;

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 13
+// REVIEWED - 14
 
 import {
   QueryKey,
@@ -26,11 +26,13 @@ import { getCollection } from "@/actions/collection";
 import { useComment, useCommentRepliesCount } from "@/hooks/use-comment";
 import { hasAnyRole } from "@/lib/permissions";
 import { isObject } from "@/lib/types/guards";
+import { getMediaAltText, getMediaURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
 import { Comment, User } from "@/payload-types";
 
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { SuspenseAvatar } from "../globals/suspense-avatar";
 import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 
 import { ReplyCommentForm } from "./forms/reply";
 import { CommentVotes } from "./votes";
@@ -66,6 +68,8 @@ export const CommentItem = function CommentItem({
 
   const { isLoading: isLoadingRepliesCount, data: repliesCount } =
     useCommentRepliesCount(comment.id);
+
+  const [isAvatarLoading, setIsAvatarLoading] = useState(Boolean(user?.avatar));
 
   const [isReplyFormOpen, setIsReplyFormOpen] = useState(
     repliesCount === 0 && isPageComment,
@@ -159,11 +163,25 @@ export const CommentItem = function CommentItem({
             <div className="absolute -left-4 top-1/2 h-px w-4 -translate-y-1/2 bg-input md:-left-12 md:w-12" />
           ) : null}
 
-          <Avatar className="aspect-square h-auto w-full ring-1 ring-input">
-            <AvatarFallback className="bg-muted/50">
-              {author.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          <SuspenseAvatar
+            className="aspect-square h-auto w-full ring-1 ring-input"
+            isLoading={isAvatarLoading}
+            isLoadingProps={{
+              className: "relative aspect-square w-full",
+              children: <Skeleton className="absolute inset-0 h-full w-full" />,
+            }}
+            avatarImageProps={{
+              src: getMediaURL(user?.avatar) || undefined,
+              alt: getMediaAltText(user?.avatar) || "Comments's User's Avatar",
+              className: "object-cover object-center",
+              onLoad: () => setIsAvatarLoading(false),
+              onError: () => setIsAvatarLoading(false),
+            }}
+            avatarFallbackProps={{
+              children: author.charAt(0).toUpperCase(),
+              className: "text-xl text-foreground bg-background",
+            }}
+          />
         </div>
 
         <div className="col-start-2 row-start-1 flex h-full w-full items-center justify-start">
