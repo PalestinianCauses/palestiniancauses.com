@@ -1,8 +1,10 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import {
+  ActivityIcon,
+  AwardIcon,
   BellIcon,
   ChevronsUpDownIcon,
   LayoutIcon,
@@ -15,6 +17,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,8 +34,10 @@ import {
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/use-auth";
+import { useNotificationsCountUnRead } from "@/hooks/use-unread-notifications-count";
 import { useUser } from "@/hooks/use-user";
 import { hasAnyRole } from "@/lib/permissions";
+import { cn } from "@/lib/utils/styles";
 
 import { SafeHydrate } from "../safe-hydrate";
 
@@ -41,10 +46,12 @@ export const SidebarUser = function SidebarUser() {
   const { isMobile, setOpenMobile } = useSidebar();
   const { signOut } = useAuth();
   const { isLoading, data: user } = useUser();
+  const countUnRead = useNotificationsCountUnRead({ user: user || undefined });
 
   const isAdminOrSystemUser = hasAnyRole(user || null, [
     "admin-user",
     "system-user",
+    "author-user",
   ]);
 
   return (
@@ -106,30 +113,73 @@ export const SidebarUser = function SidebarUser() {
                   <DropdownMenuGroup>
                     {isAdminOrSystemUser ? (
                       <DropdownMenuItem asChild className="gap-2.5 px-2.5">
-                        <Link href="/admin">
+                        <Link
+                          href="/admin"
+                          onClick={() => setOpenMobile(false)}>
                           <LayoutIcon />
                           Admin Dashboard
                         </Link>
                       </DropdownMenuItem>
                     ) : null}
-                    <DropdownMenuItem className="gap-2.5 px-2.5">
-                      <UserIcon />
-                      Profile
+                    <DropdownMenuItem asChild className="gap-2.5 px-2.5">
+                      <Link
+                        href="/profile"
+                        onClick={() => setOpenMobile(false)}>
+                        <UserIcon />
+                        Profile
+                      </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="gap-2.5 px-2.5">
-                      <Settings2Icon />
-                      Account Settings
+                    <DropdownMenuItem asChild className="gap-2.5 px-2.5">
+                      <Link
+                        href="/profile/activity"
+                        onClick={() => setOpenMobile(false)}>
+                        <ActivityIcon />
+                        Activity
+                      </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="gap-2.5 px-2.5">
-                      <BellIcon />
-                      Notifications
+                    <DropdownMenuItem asChild className="gap-2.5 px-2.5">
+                      <Link
+                        href="/profile/achievements"
+                        onClick={() => setOpenMobile(false)}>
+                        <AwardIcon />
+                        Achievements
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="gap-2.5 px-2.5">
+                      <Link
+                        href="/profile/notifications"
+                        onClick={() => setOpenMobile(false)}
+                        className="relative">
+                        <BellIcon />
+                        Notifications
+                        {countUnRead !== 0 && (
+                          <Badge
+                            variant="destructive"
+                            className={cn(
+                              "absolute -top-1.5 right-1.5 flex h-5 min-w-5 items-center justify-center border border-secondary/10 bg-secondary/10 p-1.5 text-sm font-semibold text-secondary",
+                            )}>
+                            {countUnRead > 99 ? "99+" : countUnRead}
+                          </Badge>
+                        )}
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="gap-2.5 px-2.5">
+                      <Link
+                        href="/profile/settings"
+                        onClick={() => setOpenMobile(false)}>
+                        <Settings2Icon />
+                        Account Settings
+                      </Link>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem
                       disabled={signOut.isPending}
-                      onClick={() => signOut.mutate({})}
+                      onClick={() => {
+                        setOpenMobile(false);
+                        signOut.mutate({});
+                      }}
                       className="gap-2.5 px-2.5">
                       <LogOutIcon />
                       {signOut.isPending ? "Signing out..." : "Sign out"}

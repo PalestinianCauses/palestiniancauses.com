@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { format } from "date-fns";
 import {
@@ -51,7 +51,8 @@ export const ProfileInfoSocial = function ProfileInfoSocial({
       linksSocial.twitter ||
       linksSocial.instagram ||
       linksSocial.linkedin ||
-      linksSocial.website) && (
+      linksSocial.website ||
+      linksSocial.room) && (
       <div className="space-y-5">
         <SubSectionHeading
           as="h3"
@@ -111,6 +112,15 @@ export const ProfileInfoSocial = function ProfileInfoSocial({
               </Link>
             </Button>
           )}
+
+          {isObject(linksSocial.room) ? (
+            <Button variant="default" className="gap-2.5" asChild>
+              <Link href={`/rooms/${linksSocial.room.slug}`} target="_blank">
+                <RiGlobalFill />
+                PalestinianCauses Room
+              </Link>
+            </Button>
+          ) : null}
         </div>
       </div>
     )

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -22,7 +22,9 @@ export const useNotifications = function useNotifications({
     onSuccess: (response) => {
       if (!response.data || response.error) toast.error(response.error);
       else
-        queryClient.invalidateQueries({ queryKey: ["notifications", userId] });
+        queryClient.invalidateQueries({
+          queryKey: ["user-notifications", userId],
+        });
     },
   });
 
@@ -31,7 +33,9 @@ export const useNotifications = function useNotifications({
     onSuccess: (response) => {
       if (!response.data || response.error) toast.error(response.error);
       else
-        queryClient.invalidateQueries({ queryKey: ["notifications", userId] });
+        queryClient.invalidateQueries({
+          queryKey: ["user-notifications", userId],
+        });
     },
   });
 

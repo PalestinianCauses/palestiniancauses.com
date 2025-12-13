@@ -1,12 +1,13 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 05
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import {
   ArrowDownIcon,
   ArrowUpRightIcon,
+  AwardIcon,
   BellDotIcon,
   BellOffIcon,
   BellRingIcon,
@@ -17,7 +18,7 @@ import {
   Package2Icon,
   PencilLineIcon,
 } from "lucide-react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
 import { getCollection } from "@/actions/collection";
@@ -47,6 +48,7 @@ const NotificationItem = function NotificationItem({
   userId: number;
   notification: Notification;
 }) {
+  const router = useRouter();
   const { markingAsRead } = useNotifications({ userId });
 
   let link = "#";
@@ -75,9 +77,12 @@ const NotificationItem = function NotificationItem({
         <SubSectionHeading
           as="h3"
           className="flex items-center justify-start gap-2.5 text-lg !leading-none lg:text-lg lg:!leading-none xl:text-lg xl:!leading-none">
-          {(notification.type === "comment" && (
-            <MessagesSquareIcon className="size-6 text-foreground" />
+          {(notification.type === "achievement" && (
+            <AwardIcon className="size-6 text-foreground" />
           )) ||
+            (notification.type === "comment" && (
+              <MessagesSquareIcon className="size-6 text-foreground" />
+            )) ||
             (notification.type === "diary-entry" && (
               <PencilLineIcon className="size-6 text-foreground" />
             )) ||
@@ -99,16 +104,33 @@ const NotificationItem = function NotificationItem({
         <Paragraph className="mb-2.5 max-w-2xl text-base text-foreground/75 lg:text-base">
           {notification.message}
         </Paragraph>
-        <Button variant="link" className="p-0" asChild>
-          <Link
-            href={link}
+        {notification.type !== "achievement" ? (
+          <Button
+            variant="link"
+            className="p-0"
             onClick={() => {
               if (!notification.read) markingAsRead.mutate(notification.id);
+              router.push(link);
             }}>
             <ArrowUpRightIcon />
-            View details
-          </Link>
-        </Button>
+            {markingAsRead.isPending
+              ? "Marking as read. Redirecting..."
+              : "View details"}
+          </Button>
+        ) : (
+          <Button
+            variant="link"
+            className="p-0"
+            onClick={() => {
+              if (!notification.read) markingAsRead.mutate(notification.id);
+              router.push("/profile/achievements");
+            }}>
+            <ArrowUpRightIcon />
+            {markingAsRead.isPending
+              ? "Marking as read. Redirecting..."
+              : "View achievements"}
+          </Button>
+        )}
       </div>
       {!notification.read ? (
         <Button

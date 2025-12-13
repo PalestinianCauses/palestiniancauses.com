@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { format } from "date-fns/format";
@@ -423,7 +423,7 @@ export const ActivityOrders = function ActivityOrders({
               className={cn("flex w-full flex-col gap-5", {
                 "pointer-events-none opacity-50": isFetching,
               })}>
-              <Accordion type="single" collapsible>
+              <Accordion type="single" collapsible className="space-y-5">
                 {orders.map((order) => (
                   <OrderItem key={order.id} order={order} />
                 ))}

@@ -1,6 +1,8 @@
 "use server";
 
-// REVIEWED - 04
+// REVIEWED - 05
+
+import { Where } from "payload";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -104,6 +106,43 @@ export const markingEveryNotificationAsRead =
 
     return {
       data: messages.actions.notification.successEveryRead,
+      error: null,
+    };
+  };
+
+export const getNotificationsCountUnRead =
+  async function getNotificationsCountUnRead(): Promise<
+    ResponseSafeExecute<number>
+  > {
+    const auth = await getAuthentication();
+
+    if (!auth) return { data: 0, error: null };
+
+    const where: Where[] = [
+      { user: { equals: auth.id } },
+      { read: { equals: false } },
+    ];
+
+    const response = await actionSafeExecute(
+      payload.count({
+        req: { user: { ...auth, collection: "users" } },
+        user: auth,
+        collection: "notifications",
+        where: { and: where },
+        depth: 0,
+        overrideAccess: false,
+      }),
+      messages.http.serverError,
+    );
+
+    if (!response.data || response.error)
+      return {
+        data: 0,
+        error: null,
+      };
+
+    return {
+      data: response.data.totalDocs,
       error: null,
     };
   };

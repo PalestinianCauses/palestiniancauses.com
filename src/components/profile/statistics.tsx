@@ -1,9 +1,9 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { BarChart3Icon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import colors from "tailwindcss/colors";
 
@@ -51,11 +51,30 @@ export const ProfileStatistics = function ProfileStatistics({
   stats: ResponseSafeExecute<UserStats[]> | undefined;
 }) {
   const [offsetMonth, setOffsetMonth] = useState(0);
+  const [monthsToShow, setMonthsToShow] = useState(6);
+
+  // Adjust number of months based on screen size
+  useEffect(() => {
+    const updateMonthsToShow = () => {
+      if (window.innerWidth < 640)
+        // Mobile: show 3 months
+        setMonthsToShow(3);
+      else if (window.innerWidth < 1024)
+        // Tablet: show 4 months
+        setMonthsToShow(4);
+      // Desktop: show 6 months
+      else setMonthsToShow(6);
+    };
+
+    updateMonthsToShow();
+    window.addEventListener("resize", updateMonthsToShow);
+    return () => window.removeEventListener("resize", updateMonthsToShow);
+  }, []);
 
   const chartData = useMemo(() => {
     if (isStatsLoading || !stats || !stats.data || stats.error) return null;
 
-    // Group activities by month for 6 months based on offset
+    // Group activities by month based on monthsToShow and offset
     const months: Record<
       string,
       { comments: number; diary: number; orders: number }
@@ -74,7 +93,7 @@ export const ProfileStatistics = function ProfileStatistics({
       currentYear -= 1;
     }
 
-    for (let i = 5; i >= 0; i -= 1) {
+    for (let i = monthsToShow - 1; i >= 0; i -= 1) {
       const indexMonth = currentMonth - i;
       let month = indexMonth;
       let year = currentYear;
@@ -120,7 +139,7 @@ export const ProfileStatistics = function ProfileStatistics({
       diary: months[label].diary,
       orders: months[label].orders,
     }));
-  }, [isStatsLoading, stats, offsetMonth]);
+  }, [isStatsLoading, stats, offsetMonth, monthsToShow]);
 
   // Show skeleton only on initial load (when no data exists yet)
   if (isStatsLoading)
@@ -163,7 +182,7 @@ export const ProfileStatistics = function ProfileStatistics({
             </SubSectionHeading>
             <Paragraph className="text-base lg:text-base">
               {offsetMonth === 0
-                ? "Your activity over the last 6 months"
+                ? `Your activity over the last ${monthsToShow} months`
                 : `Your activity from ${chartData[0].month} to ${chartData[chartData.length - 1].month}`}
             </Paragraph>
           </div>
@@ -172,14 +191,16 @@ export const ProfileStatistics = function ProfileStatistics({
               variant="outline"
               size="icon"
               disabled={isStatsLoading}
-              onClick={() => setOffsetMonth((p) => p + 6)}>
+              onClick={() => setOffsetMonth((p) => p + monthsToShow)}>
               <ChevronLeftIcon />
             </Button>
             <Button
               variant="outline"
               size="icon"
               disabled={isStatsLoading || offsetMonth === 0}
-              onClick={() => setOffsetMonth((p) => Math.max(0, p - 6))}>
+              onClick={() =>
+                setOffsetMonth((p) => Math.max(0, p - monthsToShow))
+              }>
               <ChevronRightIcon />
             </Button>
           </div>

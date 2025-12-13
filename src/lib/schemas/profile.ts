@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { z } from "zod";
 
@@ -22,6 +22,7 @@ export const profileSchema = z.object({
     .url(messages.forms.valid("website URL"))
     .or(z.literal(""))
     .optional(),
+  room: z.number().optional(),
   showEmail: z.boolean(),
   showActivity: z.boolean(),
   showAchievements: z.boolean(),

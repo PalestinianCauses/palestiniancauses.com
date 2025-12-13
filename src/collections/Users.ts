@@ -1,4 +1,4 @@
-// REVIEWED - 23
+// REVIEWED - 24
 import type { CollectionConfig } from "payload";
 
 import {
@@ -138,6 +138,14 @@ export const Users: CollectionConfig = {
           label: "Website",
           name: "website",
           type: "text",
+          required: false,
+        },
+        {
+          label: "Room",
+          name: "room",
+          type: "relationship",
+          relationTo: "rooms",
+          hasMany: false,
           required: false,
         },
       ],

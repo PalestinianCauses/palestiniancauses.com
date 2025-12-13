@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 04
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -40,6 +40,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useUpdateUser } from "@/hooks/use-update-user";
 import { useUser } from "@/hooks/use-user";
+import { hasAnyRole } from "@/lib/permissions";
 import {
   profileSchema,
   ProfileSchema,
@@ -56,6 +57,7 @@ import { Paragraph, SubSectionHeading } from "../globals/typography";
 
 import { AccountDeletion } from "./account-deletion";
 import { StatusBadge } from "./globals";
+import { RoomSelect } from "./settings-room-select";
 
 const ProfileAvatar = function ProfileAvatar({ user }: { user: User }) {
   const { updateUserAvatar, removeUserAvatar } = useUpdateUser();
@@ -184,19 +186,23 @@ export const ProfileSettings = function ProfileSettings() {
   useEffect(() => {
     if (user)
       form.reset({
-        firstName: user?.firstName || "",
-        lastName: user?.lastName || "",
-        email: user?.email || "",
-        bio: user?.bio || "",
-        github: user?.linksSocial?.github || "",
-        instagram: user?.linksSocial?.instagram || "",
-        twitter: user?.linksSocial?.twitter || "",
-        linkedin: user?.linksSocial?.linkedin || "",
-        website: user?.linksSocial?.website || "",
-        showEmail: user?.privacySettings?.showEmail || false,
-        showActivity: user?.privacySettings?.showActivity ?? true,
-        showAchievements: user?.privacySettings?.showAchievements ?? true,
-        showOrders: user?.privacySettings?.showOrders || false,
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        bio: user.bio || "",
+        github: user.linksSocial?.github || "",
+        instagram: user.linksSocial?.instagram || "",
+        twitter: user.linksSocial?.twitter || "",
+        linkedin: user.linksSocial?.linkedin || "",
+        website: user.linksSocial?.website || "",
+        room:
+          (isObject(user.linksSocial?.room)
+            ? user.linksSocial?.room.id
+            : user.linksSocial?.room) || undefined,
+        showEmail: user.privacySettings?.showEmail || false,
+        showActivity: user.privacySettings?.showActivity ?? true,
+        showAchievements: user.privacySettings?.showAchievements ?? true,
+        showOrders: user.privacySettings?.showOrders || false,
       });
   }, [user, form]);
 
@@ -217,6 +223,7 @@ export const ProfileSettings = function ProfileSettings() {
         twitter: data.twitter || "",
         linkedin: data.linkedin || "",
         website: data.website || "",
+        room: data.room || undefined,
       },
     });
   };
@@ -235,6 +242,7 @@ export const ProfileSettings = function ProfileSettings() {
   if (isLoading)
     return (
       <div className="space-y-5">
+        <Skeleton className="h-10 w-full bg-foreground/5" />
         <Skeleton className="h-64 w-full bg-foreground/5" />
       </div>
     );
@@ -568,6 +576,32 @@ export const ProfileSettings = function ProfileSettings() {
                   </FormItem>
                 )}
               />
+
+              {hasAnyRole(user, ["admin-user", "system-user"]) ? (
+                <FormField
+                  control={form.control}
+                  name="room"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Room</FormLabel>
+                      <FormControl>
+                        <RoomSelect
+                          value={field.value?.toString()}
+                          onValueChange={(value) =>
+                            field.onChange(value ? Number(value) : undefined)
+                          }
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Connect your professional room on palestiniancauses.com
+                        to prominently display your specialized services and
+                        expertise to a wider audience.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ) : null}
 
               <Button type="submit" disabled={updateUser.isPending}>
                 {updateUser.isPending ? "Saving..." : "Save Social Links"}

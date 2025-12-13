@@ -1,4 +1,4 @@
-// REVIEWED - 32
+// REVIEWED - 33
 
 export const messages = {
   http: {
@@ -100,6 +100,8 @@ export const messages = {
         pending: "Sending password reset email...",
         success:
           "In case an account with this email exists, a password reset link has been sent. Please check your inbox or spam/junk folder.",
+        notVerified:
+          "Your email address is not verified. Please verify your email address before attempting to reset your password.",
         serverError:
           "Failed to send password reset email. Please try again later.",
       },

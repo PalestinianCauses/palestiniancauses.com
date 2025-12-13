@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -52,7 +52,7 @@ export const checkingPlusNotifyingAchievements =
           !notificationMap.get(achievement.id)?.notified),
     );
 
-    // Update or create notification records for new achievements
+    // Update or create notification records for new achievements and create notifications
     if (achievementsNew.length !== 0) {
       const now = new Date().toISOString();
 
@@ -60,35 +60,60 @@ export const checkingPlusNotifyingAchievements =
         achievementsNew.map(async (achievement) => {
           const existing = notificationMap.get(achievement.id);
 
-          if (existing) {
-            return actionSafeExecute(
-              payload.update({
-                req: { user: { ...auth, collection: "users" } },
-                user: auth,
-                collection: "achievement-notifications",
-                id: existing.id,
-                data: { notified: true, notifiedAt: now },
-                overrideAccess: false,
-              }),
-              messages.http.serverError,
-            );
-          }
+          // Update achievement notification record
+          const notificationAchievementResponse = existing
+            ? await actionSafeExecute(
+                payload.update({
+                  req: { user: { ...auth, collection: "users" } },
+                  user: auth,
+                  collection: "achievement-notifications",
+                  id: existing.id,
+                  data: { notified: true, notifiedAt: now },
+                  overrideAccess: false,
+                }),
+                messages.http.serverError,
+              )
+            : await actionSafeExecute(
+                payload.create({
+                  req: { user: { ...auth, collection: "users" } },
+                  user: auth,
+                  collection: "achievement-notifications",
+                  data: {
+                    user: auth.id,
+                    achievement: achievement.id,
+                    notified: true,
+                    notifiedAt: now,
+                  },
+                  overrideAccess: false,
+                }),
+                messages.http.serverError,
+              );
 
-          return actionSafeExecute(
+          if (
+            !notificationAchievementResponse.data ||
+            notificationAchievementResponse.error
+          )
+            return notificationAchievementResponse;
+
+          // Create notification in notifications collection
+          const notificationResponse = await actionSafeExecute(
             payload.create({
               req: { user: { ...auth, collection: "users" } },
               user: auth,
-              collection: "achievement-notifications",
+              collection: "notifications",
               data: {
                 user: auth.id,
-                achievement: achievement.id,
-                notified: true,
-                notifiedAt: now,
+                type: "achievement",
+                title: "Achievement Attained! 🎉",
+                message: `${achievement.name}: ${achievement.description}`,
+                read: false,
               },
               overrideAccess: false,
             }),
             messages.http.serverError,
           );
+
+          return notificationResponse;
         }),
       );
 

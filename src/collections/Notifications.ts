@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CollectionConfig } from "payload";
 
@@ -58,6 +58,7 @@ export const Notifications: CollectionConfig = {
       label: "Type",
       type: "select",
       options: [
+        { label: "Achievement", value: "achievement" },
         { label: "Blog", value: "blog" },
         { label: "Comment", value: "comment" },
         { label: "Diary Entry", value: "diary-entry" },
