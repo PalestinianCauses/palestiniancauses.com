@@ -1,4 +1,4 @@
-// REVIEWED - 11
+// REVIEWED - 13
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
@@ -35,67 +35,37 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     action: "delete",
     description: "Delete achievement notifications",
   },
-  // Blogs management permissions
+
+  // Blogs Systems management permissions
   {
-    name: "blogs.manage",
-    resource: "blogs",
+    name: "blogs-systems.manage",
+    resource: "blogs-systems",
     action: "manage",
-    description: "Manage blogs in admin dashboard",
+    description: "Manage blogs systems in admin dashboard",
   },
   {
-    name: "blogs.create",
-    resource: "blogs",
+    name: "blogs-systems.create",
+    resource: "blogs-systems",
     action: "create",
-    description: "Create blog posts",
+    description: "Create blogs systems",
   },
   {
-    name: "blogs.read",
-    resource: "blogs",
+    name: "blogs-systems.read",
+    resource: "blogs-systems",
     action: "read",
-    description: "View blog posts",
+    description: "View blogs systems",
   },
   {
-    name: "blogs.update",
-    resource: "blogs",
+    name: "blogs-systems.update",
+    resource: "blogs-systems",
     action: "update",
-    description: "Update blog posts",
+    description: "Update blogs systems",
   },
   {
-    name: "blogs.delete",
-    resource: "blogs",
+    name: "blogs-systems.delete",
+    resource: "blogs-systems",
     action: "delete",
-    description: "Delete blog posts",
-  },
-  {
-    name: "blogs.publish",
-    resource: "blogs",
-    action: "publish",
-    description: "Publish blog posts",
-  },
-  // Blogs field-level permissions
-  {
-    name: "blogs.author.create",
-    resource: "blogs.author",
-    action: "create",
-    description: "Create blog author",
-  },
-  {
-    name: "blogs.author.update",
-    resource: "blogs.author",
-    action: "update",
-    description: "Update blog author",
-  },
-  {
-    name: "blogs.status.create",
-    resource: "blogs.status",
-    action: "create",
-    description: "Create blog status",
-  },
-  {
-    name: "blogs.status.update",
-    resource: "blogs.status",
-    action: "update",
-    description: "Update blog status",
+    description: "Delete blogs systems",
   },
 
   // Comments management permissions
@@ -177,13 +147,13 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     name: "comments.user.create",
     resource: "comments.user",
     action: "create",
-    description: "Create comment author",
+    description: "Create comment user",
   },
   {
     name: "comments.user.update",
     resource: "comments.user",
     action: "update",
-    description: "Update comment author",
+    description: "Update comment user",
   },
 
   // Diary entries management permissions
@@ -401,7 +371,7 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     name: "permissions.create",
     resource: "permissions",
     action: "create",
-    description: "Create new permissions",
+    description: "Create permissions",
   },
   {
     name: "permissions.read",
@@ -465,7 +435,7 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     name: "roles.create",
     resource: "roles",
     action: "create",
-    description: "Create new roles",
+    description: "Create roles",
   },
   {
     name: "roles.read",
@@ -695,7 +665,7 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     name: "users.create",
     resource: "users",
     action: "create",
-    description: "Create new users",
+    description: "Create users",
   },
   {
     name: "users.read",
@@ -717,18 +687,6 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
   },
 
   // Users field-level permissions
-  {
-    name: "users.email.read",
-    resource: "users.email",
-    action: "read",
-    description: "View user email addresses",
-  },
-  {
-    name: "users.email.update",
-    resource: "users.email",
-    action: "update",
-    description: "Update user email addresses",
-  },
   {
     name: "users.previousRole.read",
     resource: "users.previousRole",
@@ -794,16 +752,11 @@ const permissionsRoles: Record<string, string[]> = {
     "achievement-notifications.read",
     "achievement-notifications.update",
     "achievement-notifications.delete",
-    "blogs.manage",
-    "blogs.create",
-    "blogs.read",
-    "blogs.update",
-    "blogs.delete",
-    "blogs.publish",
-    "blogs.author.create",
-    "blogs.author.update",
-    "blogs.status.create",
-    "blogs.status.update",
+    "blogs-systems.manage",
+    "blogs-systems.create",
+    "blogs-systems.read",
+    "blogs-systems.update",
+    "blogs-systems.delete",
     "comments.manage",
     "comments.create",
     "comments.read",
@@ -901,8 +854,6 @@ const permissionsRoles: Record<string, string[]> = {
     "users.read",
     "users.update",
     "users.delete",
-    "users.email.read",
-    "users.email.update",
     "users.previousRole.read",
     "users.previousRole.update",
     "users.roles.read",
@@ -915,16 +866,8 @@ const permissionsRoles: Record<string, string[]> = {
   ],
   "system-user": [
     "achievement-notifications.create",
-    "blogs.manage",
-    "blogs.create",
-    "blogs.read",
-    "blogs.update",
-    "blogs.delete",
-    "blogs.publish",
-    "blogs.author.create",
-    "blogs.author.update",
-    "blogs.status.create",
-    "blogs.status.update",
+    "blogs-systems.manage",
+    "blogs-systems.create",
     "comments.manage",
     "comments.create",
     "comments.read",
@@ -937,6 +880,8 @@ const permissionsRoles: Record<string, string[]> = {
     "diary-entries.delete",
     "diary-entries.publish",
     "diary-entries.author.create",
+    "diary-entries.isAuthentic.read",
+    "diary-entries.isAuthentic.update",
     "diary-entries.status.create",
     "diary-entries.status.update",
     "media.create",
@@ -960,9 +905,6 @@ const permissionsRoles: Record<string, string[]> = {
   ],
   "author-user": [
     "achievement-notifications.create",
-    "blogs.manage",
-    "blogs.create",
-    "blogs.publish",
     "comments.create",
     "diary-entries.manage",
     "diary-entries.create",
@@ -979,7 +921,6 @@ const permissionsRoles: Record<string, string[]> = {
   "website-user": [
     "achievement-notifications.create",
     "comments.create",
-    "diary-entries.manage",
     "diary-entries.create",
     "media.create",
     "notifications.create",

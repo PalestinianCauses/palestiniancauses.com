@@ -1,7 +1,7 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { AchievementNotifications } from "./AchievementNotifications";
-import { Blog } from "./Blog";
+import { BlogsSystems } from "./BlogsSystems";
 import { Comments } from "./Comments";
 import { DiaryEntries } from "./DiaryEntries";
 import { Media } from "./Media";
@@ -21,7 +21,7 @@ import { VerificationTokensEmail } from "./VerificationTokensEmail";
 
 export const collections = [
   AchievementNotifications,
-  Blog,
+  BlogsSystems,
   Comments,
   DiaryEntries,
   Media,

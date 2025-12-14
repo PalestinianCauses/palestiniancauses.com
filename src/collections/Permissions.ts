@@ -1,4 +1,4 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
 import type { CollectionConfig } from "payload";
 
@@ -8,9 +8,7 @@ import { User } from "@/payload-types";
 
 export const collectionsPermissionsOptions = [
   { label: "Achievement Notifications", value: "achievement-notifications" },
-  { label: "Blog", value: "blogs" },
-  { label: "Blog Author", value: "blogs.author" },
-  { label: "Blog Status", value: "blogs.status" },
+  { label: "Blogs Systems", value: "blogs-systems" },
   { label: "Comments", value: "comments" },
   { label: "Comments On", value: "comments.on" },
   { label: "Comments Parent", value: "comments.parent" },
@@ -38,7 +36,6 @@ export const collectionsPermissionsOptions = [
   { label: "Categories System", value: "service-categories.system" },
   { label: "Categories Priority", value: "service-categories.priority" },
   { label: "Users", value: "users" },
-  { label: "Users Email", value: "users.email" },
   { label: "Users Previous Role", value: "users.previousRole" },
   { label: "Users Roles", value: "users.roles" },
   { label: "Verification Tokens Email", value: "verification-tokens-email" },
