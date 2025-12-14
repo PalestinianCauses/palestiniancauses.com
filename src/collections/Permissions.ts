@@ -1,4 +1,4 @@
-// REVIEWED - 11
+// REVIEWED - 12
 
 import type { CollectionConfig } from "payload";
 
@@ -8,7 +8,7 @@ import { User } from "@/payload-types";
 
 export const collectionsPermissionsOptions = [
   { label: "Achievement Notifications", value: "achievement-notifications" },
-  { label: "Blogs Systems", value: "blogs-systems" },
+  { label: "Blogs Rooms", value: "blogs-rooms" },
   { label: "Comments", value: "comments" },
   { label: "Comments On", value: "comments.on" },
   { label: "Comments Parent", value: "comments.parent" },

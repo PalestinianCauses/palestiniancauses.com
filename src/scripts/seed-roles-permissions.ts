@@ -1,4 +1,4 @@
-// REVIEWED - 13
+// REVIEWED - 14
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
@@ -38,32 +38,32 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
 
   // Blogs Systems management permissions
   {
-    name: "blogs-systems.manage",
-    resource: "blogs-systems",
+    name: "blogs-rooms.manage",
+    resource: "blogs-rooms",
     action: "manage",
     description: "Manage blogs systems in admin dashboard",
   },
   {
-    name: "blogs-systems.create",
-    resource: "blogs-systems",
+    name: "blogs-rooms.create",
+    resource: "blogs-rooms",
     action: "create",
     description: "Create blogs systems",
   },
   {
-    name: "blogs-systems.read",
-    resource: "blogs-systems",
+    name: "blogs-rooms.read",
+    resource: "blogs-rooms",
     action: "read",
     description: "View blogs systems",
   },
   {
-    name: "blogs-systems.update",
-    resource: "blogs-systems",
+    name: "blogs-rooms.update",
+    resource: "blogs-rooms",
     action: "update",
     description: "Update blogs systems",
   },
   {
-    name: "blogs-systems.delete",
-    resource: "blogs-systems",
+    name: "blogs-rooms.delete",
+    resource: "blogs-rooms",
     action: "delete",
     description: "Delete blogs systems",
   },
@@ -752,11 +752,11 @@ const permissionsRoles: Record<string, string[]> = {
     "achievement-notifications.read",
     "achievement-notifications.update",
     "achievement-notifications.delete",
-    "blogs-systems.manage",
-    "blogs-systems.create",
-    "blogs-systems.read",
-    "blogs-systems.update",
-    "blogs-systems.delete",
+    "blogs-rooms.manage",
+    "blogs-rooms.create",
+    "blogs-rooms.read",
+    "blogs-rooms.update",
+    "blogs-rooms.delete",
     "comments.manage",
     "comments.create",
     "comments.read",
@@ -866,8 +866,8 @@ const permissionsRoles: Record<string, string[]> = {
   ],
   "system-user": [
     "achievement-notifications.create",
-    "blogs-systems.manage",
-    "blogs-systems.create",
+    "blogs-rooms.manage",
+    "blogs-rooms.create",
     "comments.manage",
     "comments.create",
     "comments.read",
