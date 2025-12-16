@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { PaginatedDocs } from "payload";
 
@@ -43,7 +43,7 @@ export const getBlogRoom = async function getBlogRoom(
     messages.actions.blogRoom.serverErrorGet,
   );
 
-  if (!response.data || response.data.docs.length === 0)
+  if (!response.data || response.error || response.data.docs.length === 0)
     return {
       data: null,
       error: messages.actions.blogRoom.notFound,
