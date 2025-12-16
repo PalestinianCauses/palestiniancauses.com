@@ -1,8 +1,13 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { format } from "date-fns/format";
 import {
   ArrowDownIcon,
@@ -89,6 +94,7 @@ export const OrderItem = function OrderItem({
   isPublicProfile?: boolean;
   order: Order;
 }) {
+  const queryClient = useQueryClient();
   const { mutate: orderCancel, isPending: isPendingOrderCancel } = useMutation({
     mutationFn: async (id: number) => {
       const response = await userOrdersCancel(id);
@@ -101,6 +107,12 @@ export const OrderItem = function OrderItem({
       }
 
       toast.success(response.data);
+      queryClient.invalidateQueries({
+        queryKey: [
+          "user-activity-orders",
+          isObject(order.user) ? order.user.id : order.user,
+        ],
+      });
     },
   });
 
@@ -274,7 +286,9 @@ export const OrderItem = function OrderItem({
               {order.total} USD
             </Paragraph>
           </div>
-          {!isPublicProfile && order.orderStatus === "new" ? (
+          {!isPublicProfile &&
+          order.orderStatus !== "completed" &&
+          order.orderStatus !== "cancelled" ? (
             <Button
               variant="link"
               disabled={isPendingOrderCancel}

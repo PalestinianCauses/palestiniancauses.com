@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Fragment } from "react";
 
@@ -7,7 +7,7 @@ import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
 import { Paragraph, SectionHeading } from "@/components/globals/typography";
 
-export default function BlogsPage() {
+export default function BlogsRoomsPage() {
   return (
     <Fragment>
       <main className="section-padding-start-xl relative">
