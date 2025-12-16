@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 03
 
 import { CollectionConfig } from "payload";
 
@@ -18,15 +18,15 @@ export const BlogsRooms: CollectionConfig = {
     read: ({ req }) =>
       hasPermissionAccess({ resource: "blogs-rooms", action: "read" })({
         req,
-      }) || isSelf("systemOwner")({ req }),
+      }) || isSelf("roomOwner")({ req }),
     update: ({ req }) =>
       hasPermissionAccess({ resource: "blogs-rooms", action: "update" })({
         req,
-      }) || isSelf("systemOwner")({ req }),
+      }) || isSelf("roomOwner")({ req }),
     delete: ({ req }) =>
       hasPermissionAccess({ resource: "blogs-rooms", action: "delete" })({
         req,
-      }) || isSelf("systemOwner")({ req }),
+      }) || isSelf("roomOwner")({ req }),
   },
   admin: {
     hidden: ({ user }) =>
@@ -35,21 +35,22 @@ export const BlogsRooms: CollectionConfig = {
         action: "manage",
       }),
     group: "Blogs Content",
-    defaultColumns: ["id", "systemOwner", "name", "slug", "createdAt"],
+    defaultColumns: ["id", "roomOwner", "name", "slug", "createdAt"],
     useAsTitle: "name",
     preview: (doc) => {
       if (doc.slug)
-        return [process.env.NEXT_PUBLIC_URL! + doc.slug].join("/blogs/");
+        return [process.env.NEXT_PUBLIC_URL!, doc.slug].join("/blogs/");
       return null;
     },
   },
   fields: [
     {
       admin: {
-        description: "The user account that owns and manages this blog system.",
+        hidden: true,
+        description: "The user account that owns and manages this blog room.",
       },
       label: "System Owner",
-      name: "systemOwner",
+      name: "roomOwner",
       type: "relationship",
       relationTo: "users",
       required: true,
@@ -57,11 +58,12 @@ export const BlogsRooms: CollectionConfig = {
     {
       admin: {
         description:
-          "A unique, memorable name for this blog system. This will be displayed prominently and used in the URL.",
+          "A unique, memorable name for this blog room. This will be displayed prominently and used in the URL.",
       },
       label: "Name",
       name: "name",
       type: "text",
+      maxLength: 48,
       required: true,
     },
     {
@@ -92,7 +94,7 @@ export const BlogsRooms: CollectionConfig = {
     {
       admin: {
         description:
-          "A brief description of this blog system, its purpose, and what content it contains.",
+          "A brief description of this blog room, its purpose, and what content it contains.",
       },
       label: "Description",
       name: "description",
@@ -102,8 +104,44 @@ export const BlogsRooms: CollectionConfig = {
     },
     {
       admin: {
+        position: "sidebar",
+        description: "The primary language used in this blog room.",
+      },
+      label: "Language",
+      name: "language",
+      type: "select",
+      options: [
+        { label: "Arabic", value: "arabic" },
+        { label: "English", value: "english" },
+      ],
+      defaultValue: "english",
+      hasMany: false,
+      required: true,
+    },
+    {
+      admin: {
         description:
-          "Users who are authorized to create and manage content in this blog system.",
+          "The color theme for this blog room's visual presentation.",
+        position: "sidebar",
+      },
+      label: "Color",
+      name: "color",
+      type: "select",
+      options: [
+        { label: "Red", value: "red" },
+        { label: "Yellow", value: "yellow" },
+        { label: "Green", value: "green" },
+        { label: "Teal", value: "teal" },
+        { label: "Blue", value: "blue" },
+      ],
+      defaultValue: "blue",
+      hasMany: false,
+      required: true,
+    },
+    {
+      admin: {
+        description:
+          "Users who are authorized to create and manage content in this blog room.",
       },
       label: "Authors",
       name: "authors",
@@ -113,4 +151,17 @@ export const BlogsRooms: CollectionConfig = {
       required: false,
     },
   ],
+  hooks: {
+    beforeChange: [
+      async ({ operation, req, data }) => {
+        if (operation === "create")
+          if (!data.roomOwner)
+            if (req.user)
+              // eslint-disable-next-line no-param-reassign
+              data.roomOwner = req.user.id;
+
+        return data;
+      },
+    ],
+  },
 };
