@@ -1,34 +1,12 @@
 "use server";
 
-// REVIEWED - 01
-
-import { PaginatedDocs } from "payload";
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
 import { BlogsRoom } from "@/payload-types";
-
-export const getBlogRooms = async function getBlogRooms(): Promise<
-  ResponseSafeExecute<PaginatedDocs<BlogsRoom>>
-> {
-  const response = await actionSafeExecute(
-    payload.find({
-      collection: "blogs-rooms",
-      depth: 1,
-    }),
-    messages.actions.blogRoom.serverErrorGet,
-  );
-
-  if (!response.data || response.error)
-    return {
-      data: null,
-      error: messages.actions.blogRoom.serverErrorGet,
-    };
-
-  return response;
-};
 
 export const getBlogRoom = async function getBlogRoom(
   slug: string,
