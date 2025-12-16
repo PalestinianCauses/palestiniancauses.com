@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { CollectionConfig } from "payload";
 
@@ -49,7 +49,7 @@ export const BlogsRooms: CollectionConfig = {
         hidden: true,
         description: "The user account that owns and manages this blog room.",
       },
-      label: "System Owner",
+      label: "Room Owner",
       name: "roomOwner",
       type: "relationship",
       relationTo: "users",

@@ -1,4 +1,4 @@
-// REVIEWED - 14
+// REVIEWED - 15
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
@@ -36,36 +36,132 @@ const permissions: Omit<Permission, "id" | "createdAt" | "updatedAt">[] = [
     description: "Delete achievement notifications",
   },
 
-  // Blogs Systems management permissions
+  // Blogs Rooms management permissions
   {
     name: "blogs-rooms.manage",
     resource: "blogs-rooms",
     action: "manage",
-    description: "Manage blogs systems in admin dashboard",
+    description: "Manage blogs rooms in admin dashboard",
   },
   {
     name: "blogs-rooms.create",
     resource: "blogs-rooms",
     action: "create",
-    description: "Create blogs systems",
+    description: "Create blogs rooms",
   },
   {
     name: "blogs-rooms.read",
     resource: "blogs-rooms",
     action: "read",
-    description: "View blogs systems",
+    description: "View blogs rooms",
   },
   {
     name: "blogs-rooms.update",
     resource: "blogs-rooms",
     action: "update",
-    description: "Update blogs systems",
+    description: "Update blogs rooms",
   },
   {
     name: "blogs-rooms.delete",
     resource: "blogs-rooms",
     action: "delete",
-    description: "Delete blogs systems",
+    description: "Delete blogs rooms",
+  },
+
+  // Blogs Categories management permissions
+  {
+    name: "blogs-categories.manage",
+    resource: "blogs-categories",
+    action: "manage",
+    description: "Manage blogs categories in admin dashboard",
+  },
+  {
+    name: "blogs-categories.create",
+    resource: "blogs-categories",
+    action: "create",
+    description: "Create blogs categories",
+  },
+  {
+    name: "blogs-categories.read",
+    resource: "blogs-categories",
+    action: "read",
+    description: "View blogs categories",
+  },
+  {
+    name: "blogs-categories.update",
+    resource: "blogs-categories",
+    action: "update",
+    description: "Update blogs categories",
+  },
+  {
+    name: "blogs-categories.delete",
+    resource: "blogs-categories",
+    action: "delete",
+    description: "Delete blogs categories",
+  },
+
+  // Blogs Posts management permissions
+  {
+    name: "blogs-posts.manage",
+    resource: "blogs-posts",
+    action: "manage",
+    description: "Manage blogs posts in admin dashboard",
+  },
+  {
+    name: "blogs-posts.create",
+    resource: "blogs-posts",
+    action: "create",
+    description: "Create blogs posts",
+  },
+  {
+    name: "blogs-posts.read",
+    resource: "blogs-posts",
+    action: "read",
+    description: "View blogs posts",
+  },
+  {
+    name: "blogs-posts.update",
+    resource: "blogs-posts",
+    action: "update",
+    description: "Update blogs posts",
+  },
+  {
+    name: "blogs-posts.delete",
+    resource: "blogs-posts",
+    action: "delete",
+    description: "Delete blogs posts",
+  },
+  {
+    name: "blogs-posts.publish",
+    resource: "blogs-posts",
+    action: "publish",
+    description: "Publish blogs posts",
+  },
+
+  // Blogs Posts field-level permissions
+  {
+    name: "blogs-posts.authors.create",
+    resource: "blogs-posts.authors",
+    action: "create",
+    description: "Create blogs posts authors",
+  },
+  {
+    name: "blogs-posts.authors.update",
+    resource: "blogs-posts.authors",
+    action: "update",
+    description: "Update blogs posts authors",
+  },
+  {
+    name: "blogs-posts.status.create",
+    resource: "blogs-posts.status",
+    action: "create",
+    description: "Create blogs posts status",
+  },
+  {
+    name: "blogs-posts.status.update",
+    resource: "blogs-posts.status",
+    action: "update",
+    description: "Update blogs posts status",
   },
 
   // Comments management permissions
@@ -752,6 +848,21 @@ const permissionsRoles: Record<string, string[]> = {
     "achievement-notifications.read",
     "achievement-notifications.update",
     "achievement-notifications.delete",
+    "blogs-categories.manage",
+    "blogs-categories.create",
+    "blogs-categories.read",
+    "blogs-categories.update",
+    "blogs-categories.delete",
+    "blogs-posts.manage",
+    "blogs-posts.create",
+    "blogs-posts.read",
+    "blogs-posts.update",
+    "blogs-posts.delete",
+    "blogs-posts.publish",
+    "blogs-posts.authors.create",
+    "blogs-posts.authors.update",
+    "blogs-posts.status.create",
+    "blogs-posts.status.update",
     "blogs-rooms.manage",
     "blogs-rooms.create",
     "blogs-rooms.read",
@@ -866,6 +977,13 @@ const permissionsRoles: Record<string, string[]> = {
   ],
   "system-user": [
     "achievement-notifications.create",
+    "blogs-categories.manage",
+    "blogs-categories.create",
+    "blogs-posts.manage",
+    "blogs-posts.create",
+    "blogs-posts.publish",
+    "blogs-posts.status.create",
+    "blogs-posts.status.update",
     "blogs-rooms.manage",
     "blogs-rooms.create",
     "comments.manage",
@@ -905,6 +1023,9 @@ const permissionsRoles: Record<string, string[]> = {
   ],
   "author-user": [
     "achievement-notifications.create",
+    "blog-posts.manage",
+    "blogs-posts.create",
+    "blogs-posts.publish",
     "comments.create",
     "diary-entries.manage",
     "diary-entries.create",
