@@ -1,4 +1,4 @@
-// REVIEWED - 19
+// REVIEWED - 20
 
 import { CollectionConfig } from "payload";
 
@@ -14,8 +14,6 @@ import { DiaryEntry, User } from "@/payload-types";
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
   access: {
-    admin: ({ req }) =>
-      hasPermission(req.user, { resource: "diary-entries", action: "manage" }),
     create: hasPermissionAccess({
       resource: "diary-entries",
       action: "create",
@@ -120,11 +118,12 @@ export const DiaryEntries: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [
-      async ({ req, data }) => {
-        if (!data.author)
-          if (req.user)
-            // eslint-disable-next-line no-param-reassign
-            data.author = req.user.id;
+      async ({ operation, req, data }) => {
+        if (operation === "create")
+          if (!data.author)
+            if (req.user)
+              // eslint-disable-next-line no-param-reassign
+              data.author = req.user.id;
 
         if (
           hasPermission(req.user, {

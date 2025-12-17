@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CollectionConfig } from "payload";
 
@@ -9,11 +9,6 @@ import { User } from "@/payload-types";
 export const BlogsCategories: CollectionConfig = {
   slug: "blogs-categories",
   access: {
-    admin: ({ req }) =>
-      hasPermission(req.user, {
-        resource: "blogs-categories",
-        action: "manage",
-      }),
     create: hasPermissionAccess({
       resource: "blogs-categories",
       action: "create",

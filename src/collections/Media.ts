@@ -1,4 +1,4 @@
-// REVIEWED - 09
+// REVIEWED - 10
 import type { CollectionConfig } from "payload";
 
 import { hasPermissionAccess } from "@/access/global";
@@ -8,8 +8,6 @@ import { User } from "@/payload-types";
 export const Media: CollectionConfig = {
   slug: "media",
   access: {
-    admin: ({ req }) =>
-      hasPermission(req.user, { resource: "media", action: "manage" }),
     create: hasPermissionAccess({ resource: "media", action: "create" }),
     read: hasPermissionAccess({ resource: "media", action: "read" }),
     update: hasPermissionAccess({ resource: "media", action: "update" }),

@@ -1,4 +1,4 @@
-// REVIEWED - 13
+// REVIEWED - 14
 
 import type { CollectionConfig } from "payload";
 
@@ -48,8 +48,6 @@ export const collectionsPermissionsOptions = [
 export const Permissions: CollectionConfig = {
   slug: "permissions",
   access: {
-    admin: ({ req }) =>
-      hasPermission(req.user, { resource: "permissions", action: "manage" }),
     create: hasPermissionAccess({ resource: "permissions", action: "create" }),
     read: hasPermissionAccess({ resource: "permissions", action: "read" }),
     update: hasPermissionAccess({ resource: "permissions", action: "update" }),

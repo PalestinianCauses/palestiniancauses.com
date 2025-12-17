@@ -1,4 +1,4 @@
-// REVIEWED - 30
+// REVIEWED - 31
 
 import { CollectionConfig } from "payload";
 
@@ -24,8 +24,6 @@ export const PackagesHeadlineSub = "Curated Packages for Common Needs";
 export const Rooms: CollectionConfig = {
   slug: "rooms",
   access: {
-    admin: ({ req }) =>
-      hasPermission(req.user, { resource: "rooms", action: "manage" }),
     create: async ({ req }) => {
       if (
         hasPermissionAccess({ resource: "rooms", action: "create" })({ req })

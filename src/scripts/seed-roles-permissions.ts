@@ -1,4 +1,4 @@
-// REVIEWED - 15
+// REVIEWED - 16
 
 import { payload } from "@/lib/payload";
 import { Permission, Role } from "@/payload-types";
@@ -980,8 +980,9 @@ const permissionsRoles: Record<string, string[]> = {
     "blogs-categories.manage",
     "blogs-categories.create",
     "blogs-posts.manage",
-    "blogs-posts.create",
     "blogs-posts.publish",
+    "blogs-posts.authors.create",
+    "blogs-posts.authors.update",
     "blogs-posts.status.create",
     "blogs-posts.status.update",
     "blogs-rooms.manage",
@@ -1023,8 +1024,7 @@ const permissionsRoles: Record<string, string[]> = {
   ],
   "author-user": [
     "achievement-notifications.create",
-    "blog-posts.manage",
-    "blogs-posts.create",
+    "blogs-posts.manage",
     "blogs-posts.publish",
     "comments.create",
     "diary-entries.manage",

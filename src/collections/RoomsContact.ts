@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { CollectionConfig } from "payload";
 
@@ -9,8 +9,6 @@ import { User } from "@/payload-types";
 export const RoomsContact: CollectionConfig = {
   slug: "rooms-contact",
   access: {
-    admin: ({ req }) =>
-      hasPermission(req.user, { resource: "room-contact", action: "manage" }),
     create: hasPermissionAccess({
       resource: "room-contact",
       action: "create",

@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CollectionConfig } from "payload";
 
@@ -9,11 +9,6 @@ import { User } from "@/payload-types";
 export const AchievementNotifications: CollectionConfig = {
   slug: "achievement-notifications",
   access: {
-    admin: ({ req }) =>
-      hasPermission(req.user, {
-        resource: "achievement-notifications",
-        action: "manage",
-      }),
     create: hasPermissionAccess({
       resource: "achievement-notifications",
       action: "create",

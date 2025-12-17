@@ -1,211 +1,87 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { CollectionConfig, PayloadRequest } from "payload";
 
-import { hasPermissionFieldAccess } from "@/access/global";
+import {
+  hasPermissionAccess,
+  hasPermissionFieldAccess,
+  isSelf,
+} from "@/access/global";
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { hasPermission } from "@/lib/permissions";
-import { isNumber, isObject, isString } from "@/lib/types/guards";
-import { BlogsPost, User } from "@/payload-types";
+import { isDefined, isNumber, isObject } from "@/lib/types/guards";
+import { BlogsPost, BlogsRoom, User } from "@/payload-types";
 
 // Helper: Check if user is owner of any blog room
-const isAnyBlogRoomOwner = async (req: PayloadRequest): Promise<boolean> => {
-  if (!req.user?.id) return false;
+const isAnyBlogRoomOwner = async (
+  req: PayloadRequest,
+  blogRooms: BlogsRoom[],
+): Promise<boolean> => {
+  const { user } = req;
+  if (!isDefined(user)) return false;
 
-  const rooms = await actionSafeExecute(
-    req.payload.find({
-      collection: "blogs-rooms",
-      where: { roomOwner: { equals: req.user.id } },
-      limit: 1,
-      depth: 0,
-    }),
-    messages.http.serverError,
+  return blogRooms.some((room) =>
+    isNumber(room.roomOwner)
+      ? room.roomOwner === user.id
+      : room.roomOwner.id === user.id,
   );
-
-  if (!rooms.data || rooms.error || rooms.data.docs.length === 0) return false;
-
-  return true;
 };
 
 // Helper: Check if user is author in any blog room
-const isAnyBlogRoomAuthor = async (req: PayloadRequest): Promise<boolean> => {
-  if (!req.user?.id) return false;
-
-  const rooms = await actionSafeExecute(
-    req.payload.find({
-      collection: "blogs-rooms",
-      where: { authors: { equals: req.user.id } },
-      limit: 1,
-      depth: 0,
-    }),
-    messages.http.serverError,
-  );
-
-  if (!rooms.data || rooms.error || rooms.data.docs.length === 0) return false;
-
-  return true;
-};
-
-// Helper: Get blog room ID from post (handles both ID and populated object)
-const getBlogRoomId = (post: BlogsPost | Partial<BlogsPost>): number | null => {
-  if (!post.blogRoom) return null;
-
-  return isNumber(post.blogRoom) ? post.blogRoom : post.blogRoom.id;
-};
-
-// Helper: Check if user is owner of a specific blog room
-const isBlogRoomOwner = async (
+const isAnyBlogRoomAuthor = async (
   req: PayloadRequest,
-  roomId: number,
+  blogRooms: BlogsRoom[],
 ): Promise<boolean> => {
-  if (!req.user?.id) return false;
+  const { user } = req;
+  if (!isDefined(user)) return false;
 
-  const room = await actionSafeExecute(
-    req.payload.findByID({
-      collection: "blogs-rooms",
-      id: roomId,
-      depth: 0,
-    }),
-    messages.http.serverError,
+  return blogRooms.some((room) =>
+    isDefined(room.authors)
+      ? room.authors.some((author) =>
+          isNumber(author) ? author === user.id : author.id === user.id,
+        )
+      : false,
   );
-
-  if (!room.data || room.error) return false;
-
-  const owner = isNumber(room.data.roomOwner)
-    ? room.data.roomOwner
-    : room.data.roomOwner.id;
-
-  return owner === req.user.id;
 };
-
-// Access control: Admin
-const accessAdmin = ({ req }: { req: PayloadRequest }) =>
-  hasPermission(req.user, { resource: "blogs-posts", action: "manage" });
 
 const accessCreate = async ({ req }: { req: PayloadRequest }) => {
   if (hasPermission(req.user, { resource: "blogs-posts", action: "create" }))
     return true;
 
-  const isOwner = await isAnyBlogRoomOwner(req);
-  const isAuthor = await isAnyBlogRoomAuthor(req);
+  const blogRooms = await actionSafeExecute(
+    req.payload.find({
+      collection: "blogs-rooms",
+      depth: 1,
+    }),
+    messages.http.serverError,
+  );
+
+  if (!blogRooms.data || blogRooms.error || blogRooms.data.docs.length === 0)
+    return false;
+
+  const isOwner = await isAnyBlogRoomOwner(req, blogRooms.data.docs);
+  const isAuthor = await isAnyBlogRoomAuthor(req, blogRooms.data.docs);
+
   return isOwner || isAuthor;
-};
-
-// Helper: Check if user is in authors array
-const isBlogPostAuthor = (post: BlogsPost, userId: number): boolean => {
-  // Check authors array
-  if (post.authors && post.authors.length !== 0)
-    return post.authors.some((author) => {
-      const authorId = isNumber(author) ? author : author.id;
-      return authorId === userId;
-    });
-
-  return false;
-};
-
-// Access control: Read
-const accessRead = async ({
-  req,
-  id,
-}: {
-  req: PayloadRequest;
-  id?: string | number;
-}) => {
-  if (hasPermission(req.user, { resource: "blogs-posts", action: "read" }))
-    return true;
-
-  if (!req.user?.id || !id) return false;
-
-  const post = await actionSafeExecute(
-    req.payload.findByID({
-      collection: "blogs-posts",
-      id: isString(id) ? parseInt(id, 10) : id,
-      depth: 1,
-    }),
-    messages.http.serverError,
-  );
-
-  if (!post.data || post.error) return false;
-
-  if (isBlogPostAuthor(post.data, req.user.id)) return true;
-
-  const roomId = getBlogRoomId(post.data);
-  if (!roomId) return false;
-
-  return isBlogRoomOwner(req, roomId);
-};
-
-// Access control: Update
-const accessUpdate = async ({
-  req,
-  id,
-}: {
-  req: PayloadRequest;
-  id?: string | number;
-}) => {
-  if (hasPermission(req.user, { resource: "blogs-posts", action: "update" }))
-    return true;
-
-  if (!req.user?.id || !id) return false;
-
-  const post = await actionSafeExecute(
-    req.payload.findByID({
-      collection: "blogs-posts",
-      id: isString(id) ? parseInt(id, 10) : id,
-      depth: 1,
-    }),
-    messages.http.serverError,
-  );
-
-  if (!post.data || post.error) return false;
-
-  if (isBlogPostAuthor(post.data, req.user.id)) return true;
-
-  const roomId = getBlogRoomId(post.data);
-  if (!roomId) return false;
-
-  return isBlogRoomOwner(req, roomId);
-};
-
-// Access control: Delete
-const accessDelete = async ({
-  req,
-  id,
-}: {
-  req: PayloadRequest;
-  id?: string | number;
-}) => {
-  if (hasPermission(req.user, { resource: "blogs-posts", action: "delete" }))
-    return true;
-
-  if (!req.user?.id || !id) return false;
-
-  const post = await actionSafeExecute(
-    req.payload.findByID({
-      collection: "blogs-posts",
-      id: isString(id) ? parseInt(id, 10) : id,
-      depth: 1,
-    }),
-    messages.http.serverError,
-  );
-
-  if (!post.data || post.error) return false;
-
-  const roomId = getBlogRoomId(post.data);
-  if (!roomId) return false;
-
-  return isBlogRoomOwner(req, roomId);
 };
 
 export const BlogsPosts: CollectionConfig = {
   slug: "blogs-posts",
   access: {
-    admin: accessAdmin,
     create: accessCreate,
-    read: accessRead,
-    update: accessUpdate,
-    delete: accessDelete,
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "blogs-posts", action: "read" })({
+        req,
+      }) || isSelf("authors")({ req }),
+    update: ({ req }) =>
+      hasPermissionAccess({ resource: "blogs-posts", action: "update" })({
+        req,
+      }) || isSelf("authors")({ req }),
+    delete: ({ req }) =>
+      hasPermissionAccess({ resource: "blogs-posts", action: "delete" })({
+        req,
+      }) || isSelf("authors")({ req }),
   },
   admin: {
     hidden: ({ user }) =>
@@ -485,24 +361,47 @@ export const BlogsPosts: CollectionConfig = {
   hooks: {
     beforeChange: [
       async ({ req, data, operation }) => {
-        // Automatically add creator to authors array on create
-        if (operation === "create" && req.user?.id) {
-          const userId = req.user.id;
-          const authors = (data.authors || []) as BlogsPost["authors"];
+        const post = data as BlogsPost;
 
-          // Convert authors to array of IDs if needed
-          const authorIds = authors.map((author) =>
-            isNumber(author) ? author : author.id,
-          );
+        // Automatically add creator and blog room owner to authors array on create
+        if (req.user)
+          if (operation === "create") {
+            const userId = req.user.id;
 
-          // Ensure creator is in authors array
-          if (!authorIds.includes(userId))
+            const authors = post.authors || [];
+
+            // Convert authors to array of IDs if needed
+            const authorIds = authors.map((author) =>
+              isNumber(author) ? author : author.id,
+            );
+
+            // Get blog room owner if blogRoom is set
+            const responseBlogRoom = await actionSafeExecute(
+              req.payload.findByID({
+                collection: "blogs-rooms",
+                id: isNumber(post.blogRoom) ? post.blogRoom : post.blogRoom.id,
+                depth: 0,
+              }),
+              messages.http.serverError,
+            );
+
+            let roomOwnerId: number | null = null;
+
+            if (responseBlogRoom.data)
+              roomOwnerId = isNumber(responseBlogRoom.data.roomOwner)
+                ? responseBlogRoom.data.roomOwner
+                : responseBlogRoom.data.roomOwner.id;
+
+            // Ensure creator is in authors array
+            if (!authorIds.includes(userId)) authorIds.push(userId);
+
+            // Ensure blog room owner is in authors array
+            if (roomOwnerId)
+              if (!authorIds.includes(roomOwnerId)) authorIds.push(roomOwnerId);
+
             // eslint-disable-next-line no-param-reassign
-            data.authors = [...authorIds, userId];
-          // Ensure authors is set (even if empty, add creator)
-          // eslint-disable-next-line no-param-reassign
-          else data.authors = authorIds.length !== 0 ? authorIds : [userId];
-        }
+            post.authors = authorIds;
+          }
 
         if (
           hasPermission(req.user, {
@@ -511,7 +410,7 @@ export const BlogsPosts: CollectionConfig = {
           })
         )
           // eslint-disable-next-line no-param-reassign
-          data.status = "published";
+          post.status = "published";
 
         return data;
       },

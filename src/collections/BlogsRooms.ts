@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { CollectionConfig } from "payload";
 
@@ -9,8 +9,6 @@ import { User } from "@/payload-types";
 export const BlogsRooms: CollectionConfig = {
   slug: "blogs-rooms",
   access: {
-    admin: ({ req }) =>
-      hasPermission(req.user, { resource: "blogs-rooms", action: "manage" }),
     create: hasPermissionAccess({
       resource: "blogs-rooms",
       action: "create",
@@ -18,7 +16,12 @@ export const BlogsRooms: CollectionConfig = {
     read: ({ req }) =>
       hasPermissionAccess({ resource: "blogs-rooms", action: "read" })({
         req,
-      }) || isSelf("roomOwner")({ req }),
+      }) || {
+        or: [
+          { roomOwner: { equals: req.user?.id } },
+          { authors: { equals: req.user?.id } },
+        ],
+      },
     update: ({ req }) =>
       hasPermissionAccess({ resource: "blogs-rooms", action: "update" })({
         req,

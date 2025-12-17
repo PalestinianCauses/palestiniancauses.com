@@ -1,4 +1,4 @@
-// REVIEWED - 24
+// REVIEWED - 25
 import type { CollectionConfig } from "payload";
 
 import {
@@ -18,8 +18,6 @@ when managing access collections we care about accessing content when users are 
 export const Users: CollectionConfig = {
   slug: "users",
   access: {
-    admin: ({ req }) =>
-      hasPermission(req.user, { resource: "users", action: "manage" }),
     create: hasPermissionAccess({ resource: "users", action: "create" }),
     read: ({ req }) =>
       hasPermissionAccess({ resource: "users", action: "read" })({ req }) ||
@@ -187,7 +185,6 @@ export const Users: CollectionConfig = {
     },
     {
       access: {
-        create: hasPermissionFieldAccess("users.previousRole", "create"),
         read: hasPermissionFieldAccess("users.previousRole", "read"),
         update: hasPermissionFieldAccess("users.previousRole", "update"),
       },
@@ -201,7 +198,6 @@ export const Users: CollectionConfig = {
     },
     {
       access: {
-        create: hasPermissionFieldAccess("users.roles", "create"),
         read: hasPermissionFieldAccess("users.roles", "read"),
         update: hasPermissionFieldAccess("users.roles", "update"),
       },

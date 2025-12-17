@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CollectionConfig } from "payload";
 
@@ -9,11 +9,6 @@ import { User } from "@/payload-types";
 export const VerificationTokensEmail: CollectionConfig = {
   slug: "verification-tokens-email",
   access: {
-    admin: ({ req }) =>
-      hasPermission(req.user, {
-        resource: "verification-tokens-email",
-        action: "manage",
-      }),
     create: hasPermissionAccess({
       resource: "verification-tokens-email",
       action: "create",
