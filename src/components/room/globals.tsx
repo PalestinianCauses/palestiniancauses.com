@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { CalendarIcon } from "lucide-react";
 import { ElementType, Fragment, HTMLAttributes, ReactNode } from "react";
@@ -92,7 +92,7 @@ export const InformationBadges = function InformationBadges({
           </div>
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger className="w-full min-w-0 cursor-default overflow-hidden text-left">
+              <TooltipTrigger className="w-full min-w-0 cursor-default overflow-hidden text-start">
                 <SubSectionHeading
                   as="h5"
                   small

@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 import {
   ArrowRightIcon,
   AtSignIcon,
@@ -105,7 +105,8 @@ export const Experience = function Experience({
   };
 }) {
   const experiencePhotograph = getMediaURL(experience.photograph);
-  const experienceAltPhotograph = getMediaAltText(experience.photograph);
+  const experienceAltPhotograph =
+    getMediaAltText(experience.photograph) || "Room Experience's Photograph";
 
   return (
     <Container
@@ -134,9 +135,7 @@ export const Experience = function Experience({
                     <Skeleton className="aspect-square w-full lg:aspect-[2/3]" />
                   }
                   src={experiencePhotograph}
-                  alt={
-                    experienceAltPhotograph || "Room Experience's Photograph"
-                  }
+                  alt={experienceAltPhotograph}
                   fill
                   className="!static aspect-auto !h-auto object-cover transition-transform duration-500 group-hover:scale-105"
                 />

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 14
+// REVIEWED - 15
 
 import {
   QueryKey,
@@ -164,7 +164,7 @@ export const CommentItem = function CommentItem({
           ) : null}
 
           <SuspenseAvatar
-            className="aspect-square h-auto w-full ring-1 ring-input"
+            className="aspect-square h-auto w-full border border-input"
             isLoading={isAvatarLoading}
             isLoadingProps={{
               className: "relative aspect-square w-full",

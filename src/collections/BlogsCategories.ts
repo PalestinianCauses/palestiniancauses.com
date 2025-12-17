@@ -1,10 +1,13 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CollectionConfig } from "payload";
 
-import { hasPermissionAccess } from "@/access/global";
+import { hasPermissionAccess, isSelf } from "@/access/global";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
 import { hasPermission } from "@/lib/permissions";
-import { User } from "@/payload-types";
+import { isNumber } from "@/lib/types/guards";
+import { BlogsCategory, User } from "@/payload-types";
 
 export const BlogsCategories: CollectionConfig = {
   slug: "blogs-categories",
@@ -13,15 +16,20 @@ export const BlogsCategories: CollectionConfig = {
       resource: "blogs-categories",
       action: "create",
     }),
-    read: hasPermissionAccess({ resource: "blogs-categories", action: "read" }),
-    update: hasPermissionAccess({
-      resource: "blogs-categories",
-      action: "update",
-    }),
-    delete: hasPermissionAccess({
-      resource: "blogs-categories",
-      action: "delete",
-    }),
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "blogs-categories", action: "read" })({
+        req,
+      }) || isSelf("roomOwner")({ req }),
+    update: ({ req }) =>
+      hasPermissionAccess({
+        resource: "blogs-categories",
+        action: "update",
+      })({ req }) || isSelf("roomOwner")({ req }),
+    delete: ({ req }) =>
+      hasPermissionAccess({
+        resource: "blogs-categories",
+        action: "delete",
+      })({ req }) || isSelf("roomOwner")({ req }),
   },
   admin: {
     hidden: ({ user }) =>
@@ -30,7 +38,7 @@ export const BlogsCategories: CollectionConfig = {
         action: "manage",
       }),
     group: "Blogs Content",
-    defaultColumns: ["id", "name", "slug", "room", "createdAt"],
+    defaultColumns: ["id", "name", "slug", "room", "roomOwner", "createdAt"],
     useAsTitle: "name",
   },
   fields: [
@@ -46,6 +54,20 @@ export const BlogsCategories: CollectionConfig = {
       hasMany: false,
       required: true,
       index: true,
+    },
+    {
+      admin: {
+        readOnly: true,
+        position: "sidebar",
+        description:
+          "The owner of the blog room this category belongs to. Automatically populated from the blog room.",
+      },
+      label: "Blog Room Owner",
+      name: "roomOwner",
+      type: "relationship",
+      relationTo: "users",
+      hasMany: false,
+      required: false,
     },
     {
       admin: {
@@ -120,4 +142,37 @@ export const BlogsCategories: CollectionConfig = {
       required: false,
     },
   ],
+  hooks: {
+    beforeChange: [
+      async ({ operation, req, data }) => {
+        const category = data as BlogsCategory;
+        // Automatically populate roomOwner from blog room on create
+        if (operation === "create") {
+          const roomId = isNumber(category.room)
+            ? category.room
+            : category.room.id;
+
+          const responseBlogRoom = await actionSafeExecute(
+            req.payload.findByID({
+              collection: "blogs-rooms",
+              id: roomId,
+              depth: 0,
+            }),
+            messages.http.serverError,
+          );
+
+          if (responseBlogRoom.data) {
+            const roomOwnerId = isNumber(responseBlogRoom.data.roomOwner)
+              ? responseBlogRoom.data.roomOwner
+              : responseBlogRoom.data.roomOwner.id;
+
+            // eslint-disable-next-line no-param-reassign
+            category.roomOwner = roomOwnerId;
+          }
+        }
+
+        return category;
+      },
+    ],
+  },
 };

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import {
   ArrowLeftFromLineIcon,
@@ -103,16 +103,12 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
               disabled={isRoomListLoading}
               className={cn(
                 "h-auto data-[state_=_open]:bg-sidebar-accent data-[state_=_open]:text-sidebar-accent-foreground group-data-[collapsible_=_icon]:!size-[calc(var(--sidebar-width-icon)_-_1rem)]",
-                {
-                  "disabled:opacity-100": isRoomListLoading,
-                },
+                { "disabled:opacity-100": isRoomListLoading },
               )}>
               <SuspenseAvatar
                 className={cn(
                   "flex aspect-square size-12 items-center border border-input bg-sidebar text-sidebar-primary-foreground group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)]",
-                  {
-                    "justify-center": !isRoomListLoading,
-                  },
+                  { "justify-center": !isRoomListLoading },
                 )}
                 isLoading={isRoomListLoading || isAvatarLoading}
                 isLoadingProps={{

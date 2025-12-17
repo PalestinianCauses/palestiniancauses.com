@@ -1,4 +1,4 @@
-// REVIEWED - 33
+// REVIEWED - 34
 
 export const messages = {
   http: {
@@ -251,6 +251,19 @@ export const messages = {
         success: "Successfully deleted diary entry.",
         serverError: "Failed to delete diary entry. Please try again later.",
       },
+    },
+    blogRoom: {
+      notFound: "Blog room not found. Please try again later.",
+      serverErrorGet: "Failed to retrieve blog room. Please try again later.",
+    },
+    blogCategory: {
+      notFound: "Blog category not found. Please try again later.",
+      serverErrorGet:
+        "Failed to retrieve blog category. Please try again later.",
+    },
+    blogPost: {
+      notFound: "Blog post not found. Please try again later.",
+      serverErrorGet: "Failed to retrieve blog post. Please try again later.",
     },
     room: {
       serverError: "Failed to retrieve room. Please try again later.",

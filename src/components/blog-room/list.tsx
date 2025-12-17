@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, ArrowUpRightIcon, BookAlertIcon } from "lucide-react";
@@ -93,7 +93,7 @@ export const BlogRoomList = function BlogRoomList() {
   return (
     <div className="space-y-10">
       <section
-        className={cn("grid grid-cols-1 gap-10 lg:grid-cols-2", {
+        className={cn("grid grid-cols-1 gap-10", {
           "pointer-events-none opacity-50": isFetching,
         })}>
         {rooms.map((room) => (

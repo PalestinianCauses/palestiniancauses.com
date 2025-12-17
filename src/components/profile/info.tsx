@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { format } from "date-fns";
 import {
@@ -145,9 +145,16 @@ export const ProfileInfoRoles = function ProfileInfoRoles({
             <Badge
               key={role.id}
               size="sm"
-              className={cn(
-                "border-l-2 border-tertiary bg-tertiary/10 text-sm capitalize text-tertiary ring-0 hover:bg-tertiary/10",
-              )}>
+              className={cn("border-l-2 text-sm capitalize ring-0", {
+                "border-blue-500 bg-blue-500/10 text-blue-500 hover:bg-blue-500/10":
+                  role.name === "admin-user",
+                "border-teal-500 bg-teal-500/10 text-teal-500 hover:bg-teal-500/10":
+                  role.name === "system-user",
+                "border-green-500 bg-green-500/10 text-green-500 hover:bg-green-500/10":
+                  role.name === "author-user",
+                "border-yellow-500 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/10":
+                  role.name === "website-user",
+              })}>
               <UserIcon className="size-4" />
               {role.name.split("-").join(" ")}
             </Badge>
