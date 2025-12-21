@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CollectionConfig, PayloadRequest } from "payload";
 
@@ -342,20 +342,6 @@ export const BlogsPosts: CollectionConfig = {
       name: "tags",
       type: "text",
       required: false,
-    },
-    {
-      admin: {
-        description:
-          "The language this post is written in. Should match one of the blog room's languages.",
-      },
-      label: "Language",
-      name: "language",
-      type: "select",
-      options: [
-        { label: "Arabic", value: "arabic" },
-        { label: "English", value: "english" },
-      ],
-      required: true,
     },
   ],
   hooks: {

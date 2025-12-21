@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import {
   ExternalLinkIcon,
@@ -28,11 +28,11 @@ export const BlogRoomHeaderIcon = function BlogRoomHeaderIcon({
   return (
     <div
       className={cn("flex h-10 w-10 items-center justify-center border", {
-        "border-red-500/10 bg-red-500/10": color === "red",
-        "bg-yellow-500": color === "yellow",
-        "bg-green-500": color === "green",
-        "bg-teal-500": color === "teal",
-        "bg-blue-500": color === "blue",
+        "border-red-500/20 bg-red-500/20": color === "red",
+        "border-yellow-500/20 bg-yellow-500/20": color === "yellow",
+        "border-green-500/20 bg-green-500/20": color === "green",
+        "border-teal-500/20 bg-teal-500/20": color === "teal",
+        "border-blue-500/20 bg-blue-500/20": color === "blue",
       })}>
       <Icon className="stroke[1.5] size-5 shrink-0" />
     </div>
@@ -72,6 +72,7 @@ export const BlogRoomHeader = function BlogRoomHeader({
                 variant="link"
                 className="p-0 !font-[Gilroy] text-foreground"
                 style={{ fontSize: "inherit" }}
+                dir="ltr"
                 asChild>
                 <Link href={`/user/${room.roomOwner.id}`}>
                   <ExternalLinkIcon />
@@ -92,22 +93,19 @@ export const BlogRoomHeader = function BlogRoomHeader({
             </div>
             <div
               dir="ltr"
-              className="flex w-full flex-col items-start justify-start gap-0.5">
+              className="flex w-full flex-col items-start justify-start gap-2.5">
               {authors.map((author) => (
-                <Paragraph
+                <Button
                   key={author.id}
-                  className="text-base font-medium text-foreground lg:text-lg">
-                  <Button
-                    variant="link"
-                    className="p-0 !font-[Gilroy] text-foreground"
-                    style={{ fontSize: "inherit" }}
-                    asChild>
-                    <Link href={`/user/${author.id}`}>
-                      <ExternalLinkIcon />
-                      {author.firstName}
-                    </Link>
-                  </Button>
-                </Paragraph>
+                  variant="link"
+                  className="p-0 !font-[Gilroy] text-base font-medium leading-none text-foreground lg:text-lg"
+                  dir="ltr"
+                  asChild>
+                  <Link href={`/user/${author.id}`}>
+                    <ExternalLinkIcon />
+                    {author.firstName}
+                  </Link>
+                </Button>
               ))}
             </div>
           </div>
