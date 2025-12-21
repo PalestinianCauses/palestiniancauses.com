@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 import { HTMLAttributes } from "react";
 
 import { cn } from "@/lib/utils/styles";
@@ -67,6 +67,7 @@ export const SectionHeading = function SectionHeading({
   as = "h1",
   className,
   children,
+  ...props
 }: {
   as?: "h1" | "h2" | "h3" | "h4" | "p";
 } & HTMLAttributes<HTMLHeadingElement>) {
@@ -82,7 +83,8 @@ export const SectionHeading = function SectionHeading({
       className={cn(
         "max-w-3xl text-4xl font-medium !leading-tight tracking-tight text-foreground lg:max-w-4xl lg:text-5xl lg:!leading-[1.2] xl:max-w-5xl xl:text-6xl xl:!leading-[1.1]",
         className,
-      )}>
+      )}
+      {...props}>
       {children}
     </Component>
   );
@@ -124,6 +126,7 @@ export const Paragraph = function Paragraph({
   small = false,
   className,
   children,
+  ...props
 }: {
   small?: boolean;
 } & HTMLAttributes<HTMLParagraphElement>) {
@@ -135,7 +138,8 @@ export const Paragraph = function Paragraph({
         "font-normal !leading-relaxed text-muted-foreground",
         small ? "text-lg xl:text-xl" : "text-xl lg:text-2xl",
         className,
-      )}>
+      )}
+      {...props}>
       {children}
     </Component>
   );

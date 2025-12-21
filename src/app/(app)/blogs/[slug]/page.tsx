@@ -1,9 +1,10 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Metadata } from "next";
 import { Fragment } from "react";
 
 import { getBlogRoom } from "@/actions/blog-room";
+import { BlogPostList } from "@/components/blog-post/list";
 import { BlogRoomHeader } from "@/components/blog-room/header";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
@@ -70,10 +71,20 @@ export default async function BlogRoomPage({
   return (
     <Fragment>
       <main
-        className="section-padding-start-xl section-padding-end-xl"
-        style={{ direction: room.language === "arabic" ? "rtl" : "ltr" }}>
-        <Container className="max-w-7xl">
+        className="section-padding-start-xl section-padding-end-xl [&_*]:font-[inherit]"
+        style={{
+          direction: room.language === "arabic" ? "rtl" : "ltr",
+          fontFamily: room.language === "arabic" ? "ShamelSansOne" : "Gilroy",
+        }}>
+        <Container className="mb-10 max-w-7xl">
           <BlogRoomHeader room={room} />
+        </Container>
+        <Container className="max-w-7xl">
+          <BlogPostList
+            blogRoomId={room.id}
+            language={room.language}
+            color={room.color}
+          />
         </Container>
       </main>
       <Footer />

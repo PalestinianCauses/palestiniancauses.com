@@ -1,4 +1,4 @@
-/* REVIEWED - 18 */
+/* REVIEWED - 19 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -202,6 +202,10 @@
 
   .section-padding-start-lg {
     @apply pt-24 lg:pt-32 xl:pt-48;
+  }
+
+  .section-padding-end-lg {
+    @apply pb-24 lg:pb-32 xl:pb-48;
   }
 
   .section-padding-start-xl {

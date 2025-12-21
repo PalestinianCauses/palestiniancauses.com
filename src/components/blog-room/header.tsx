@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import {
   ExternalLinkIcon,
@@ -44,24 +44,17 @@ export const BlogRoomHeader = function BlogRoomHeader({
 }: {
   room: BlogsRoom;
 }) {
-  const fontFamily = room.language === "arabic" ? "ShamelSansOne" : "Gilroy";
-
   const authors =
     room.authors?.filter((author): author is User => isObject(author)) || [];
 
   return (
     <header className="flex flex-col items-center justify-center">
       <BlogRoomHeaderAvatar room={room} />
-      <SectionHeading
-        as="h1"
-        className="mb-10 text-center"
-        style={{ fontFamily }}>
+      <SectionHeading as="h1" className="mb-10 text-center">
         {room.name}
       </SectionHeading>
       <div className="grid grid-cols-1 items-start gap-5 sm:grid-cols-2 lg:flex lg:flex-row lg:justify-center lg:gap-20">
-        <div
-          className="flex items-center justify-start gap-2.5 [&_*]:font-[inherit]"
-          style={{ fontFamily }}>
+        <div className="flex items-center justify-start gap-2.5 [&_*]:font-[inherit]">
           <BlogRoomHeaderIcon color={room.color} Icon={GlobeIcon} />
           <Paragraph className="text-base font-medium text-foreground lg:text-lg">
             {room.language === "arabic"
@@ -73,9 +66,7 @@ export const BlogRoomHeader = function BlogRoomHeader({
         {isObject(room.roomOwner) ? (
           <div className="flex items-center justify-start gap-2.5 [&_*]:font-[inherit]">
             <BlogRoomHeaderIcon color={room.color} Icon={UserIcon} />
-            <Paragraph
-              className="text-base font-medium text-foreground lg:text-lg"
-              style={{ fontFamily }}>
+            <Paragraph className="text-base font-medium text-foreground lg:text-lg">
               {room.language === "arabic" ? "مالك المدونة" : "Owned by"}{" "}
               <Button
                 variant="link"
@@ -95,9 +86,7 @@ export const BlogRoomHeader = function BlogRoomHeader({
           <div className="flex flex-col items-start justify-start gap-2.5">
             <div className="flex items-center justify-start gap-2.5 [&_*]:font-[inherit]">
               <BlogRoomHeaderIcon color={room.color} Icon={UserPenIcon} />
-              <Paragraph
-                className="text-base font-medium text-foreground lg:text-lg"
-                style={{ fontFamily }}>
+              <Paragraph className="text-base font-medium text-foreground lg:text-lg">
                 {room.language === "arabic" ? "مؤلفو المدونة" : "Blog Authors"}{" "}
               </Paragraph>
             </div>
@@ -107,8 +96,7 @@ export const BlogRoomHeader = function BlogRoomHeader({
               {authors.map((author) => (
                 <Paragraph
                   key={author.id}
-                  className="text-base font-medium text-foreground lg:text-lg"
-                  style={{ fontFamily }}>
+                  className="text-base font-medium text-foreground lg:text-lg">
                   <Button
                     variant="link"
                     className="p-0 !font-[Gilroy] text-foreground"

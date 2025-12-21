@@ -1,8 +1,9 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { ArrowUpRightIcon, GlobeIcon, UserIcon } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 import { isObject } from "@/lib/types/guards";
@@ -91,11 +92,13 @@ export const BlogRoomListItem = function BlogRoomListItem({
           {room.name}
         </SectionHeading>
         <Paragraph className="mb-10 line-clamp-4">{room.description}</Paragraph>
-        <Button>
-          <ArrowUpRightIcon />
-          {room.language === "arabic"
-            ? "إستكشف وإستعرض المزيد"
-            : "Discover and explore more"}
+        <Button asChild>
+          <Link href={`/blogs/${room.slug}`}>
+            <ArrowUpRightIcon />
+            {room.language === "arabic"
+              ? "إستكشف وإستعرض المزيد"
+              : "Discover and explore more"}
+          </Link>
         </Button>
       </div>
     </div>
