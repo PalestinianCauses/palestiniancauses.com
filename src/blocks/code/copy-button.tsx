@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { CopyCheckIcon, CopyIcon } from "lucide-react";
 import { useState } from "react";
@@ -29,19 +29,28 @@ export const CopyButton = function CopyButton({
   };
 
   return (
-    <div className="flex w-full flex-wrap items-center justify-between py-2.5 font-mono">
-      <Paragraph className="text-sm lg:text-sm">{file}</Paragraph>
+    <div
+      className="flex w-full flex-wrap items-center justify-between gap-2.5 px-2.5 !font-mono"
+      style={{ direction: "ltr" }}>
+      <div className="flex items-center justify-start gap-2.5">
+        <div className="mb-0.5 flex items-center justify-start gap-1.5">
+          <div className="size-3.5 rounded-full bg-muted/50" />
+          <div className="size-3.5 rounded-full bg-muted/50" />
+          <div className="size-3.5 rounded-full bg-muted/50" />
+        </div>
+        <Paragraph className="!m-0 text-xs lg:text-xs">{file}</Paragraph>
+      </div>
       <Button
         variant="ghost"
         size="sm"
-        className={cn({ "cursor-not-allowed": copied })}
+        className={cn("!m-0", { "cursor-not-allowed": copied })}
         disabled={copied}
         onClick={async () => {
           await navigator.clipboard.writeText(code);
           updateCopyStatus();
         }}>
-        {copied ? "Copied!" : language}
         {copied ? <CopyCheckIcon /> : <CopyIcon />}
+        {copied ? "Copied!" : language}
       </Button>
     </div>
   );

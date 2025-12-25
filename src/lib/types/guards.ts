@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { Permission } from "@/payload-types";
 
@@ -116,7 +116,7 @@ export const isNumber = function isNumber(value: unknown): value is number {
 
 // Objects
 export const isObject = function isObject(value: unknown): value is object {
-  return isDefined(value) && typeof value === "object";
+  return isDefined(value) && typeof value === "object" && !Array.isArray(value);
 };
 
 // Permissions

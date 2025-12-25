@@ -1,4 +1,5 @@
-// REVIEWED - 06
+// REVIEWED - 07
+import tailwindcssTypography from "@tailwindcss/typography";
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 import colors from "tailwindcss/colors";
@@ -93,6 +94,7 @@ export default {
     },
   },
   plugins: [
+    tailwindcssTypography,
     tailwindcssAnimate,
     plugin(({ addBase }) => {
       addBase({

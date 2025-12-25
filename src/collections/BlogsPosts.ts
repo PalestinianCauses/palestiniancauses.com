@@ -1,5 +1,6 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
+import { BlocksFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
 import { CollectionConfig, PayloadRequest } from "payload";
 
 import {
@@ -7,6 +8,7 @@ import {
   hasPermissionFieldAccess,
   isSelf,
 } from "@/access/global";
+import { Code } from "@/blocks/code/config";
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { hasPermission } from "@/lib/permissions";
@@ -182,6 +184,14 @@ export const BlogsPosts: CollectionConfig = {
       label: "Content",
       name: "content",
       type: "richText",
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures,
+          BlocksFeature({
+            blocks: [Code],
+          }),
+        ],
+      }),
       required: true,
     },
     {
