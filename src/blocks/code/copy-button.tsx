@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { CopyCheckIcon, CopyIcon } from "lucide-react";
 import { useState } from "react";
@@ -34,9 +34,9 @@ export const CopyButton = function CopyButton({
       style={{ direction: "ltr" }}>
       <div className="flex items-center justify-start gap-2.5">
         <div className="mb-0.5 flex items-center justify-start gap-1.5">
-          <div className="size-3.5 rounded-full bg-muted/50" />
-          <div className="size-3.5 rounded-full bg-muted/50" />
-          <div className="size-3.5 rounded-full bg-muted/50" />
+          <div className="size-3.5 rounded-full bg-gradient-to-br from-muted-foreground/20 to-muted/10" />
+          <div className="size-3.5 rounded-full bg-gradient-to-br from-muted-foreground/20 to-muted/10" />
+          <div className="size-3.5 rounded-full bg-gradient-to-br from-muted-foreground/20 to-muted/10" />
         </div>
         <Paragraph className="!m-0 text-xs lg:text-xs">{file}</Paragraph>
       </div>
