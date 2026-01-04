@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import {
   DefaultNodeTypes,
@@ -58,7 +58,7 @@ export const RichText = function RichText({
   return (
     <article
       className={cn(
-        "my-prose prose prose-zinc dark:prose-invert lg:prose-lg xl:prose-xl",
+        "my-prose prose prose-zinc mx-auto dark:prose-invert lg:prose-lg xl:prose-xl",
         "prose-headings:font-medium",
         "prose-strong:font-medium",
         "[&_span[style_*=_'text-decoration:_underline']]:underline-offset-2",

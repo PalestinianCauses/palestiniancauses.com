@@ -1,4 +1,4 @@
-// REVIEWED - 10
+// REVIEWED - 11
 import type { CollectionConfig } from "payload";
 
 import { hasPermissionAccess } from "@/access/global";
@@ -27,12 +27,27 @@ export const Media: CollectionConfig = {
     staticDir: "./media",
     imageSizes: [
       {
-        name: "room-photograph",
+        name: "user-avatar",
         width: 360,
         height: 360,
         position: "center",
+        withoutEnlargement: false,
+      },
+      {
+        name: "blog-post-image",
+        width: 1200,
+        height: 630,
+        position: "center",
+        withoutEnlargement: false,
       },
     ],
+    resizeOptions: {
+      width: 480,
+      height: 480,
+      fit: "inside",
+      position: "center",
+      withoutEnlargement: false,
+    },
   },
   fields: [
     {

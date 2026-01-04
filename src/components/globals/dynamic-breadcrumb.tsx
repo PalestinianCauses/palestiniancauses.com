@@ -1,9 +1,9 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import Link from "next/link";
-import { Fragment, HTMLAttributes } from "react";
+import { Fragment, HTMLAttributes, useEffect, useState } from "react";
 
 import { useBreadcrumbs } from "@/hooks/use-breadcrumbs";
 
@@ -25,6 +25,11 @@ const DynamicBreadcrumb = function DynamicBreadcrumb({
   itemsMaximum?: number;
 } & HTMLAttributes<HTMLElement>) {
   const breadcrumbs = useBreadcrumbs();
+  const [baseURL, setBaseURL] = useState("https://palestiniancauses.com");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") setBaseURL(window.location.origin);
+  }, []);
 
   const breadcrumbsFiltered = isHomePageDisplayed
     ? breadcrumbs
@@ -39,25 +44,47 @@ const DynamicBreadcrumb = function DynamicBreadcrumb({
   if (breadcrumbsLimited.length === 1 && breadcrumbsLimited[0].href === "/")
     return null;
 
+  // Generate BreadcrumbList structured data
+  const listSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbsLimited.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.label,
+      "item": `${baseURL}${item.href}`,
+    })),
+  };
+
   return (
-    <Breadcrumb className={className}>
-      <BreadcrumbList>
-        {breadcrumbsLimited.map((item, index) => (
-          <Fragment key={item.href}>
-            <BreadcrumbItem>
-              {item.isPageCurrent ? (
-                <BreadcrumbPage>{item.label}</BreadcrumbPage>
-              ) : (
-                <BreadcrumbLink asChild>
-                  <Link href={item.href}>{item.label}</Link>
-                </BreadcrumbLink>
-              )}
-            </BreadcrumbItem>
-            {index < breadcrumbsLimited.length - 1 && <BreadcrumbSeparator />}
-          </Fragment>
-        ))}
-      </BreadcrumbList>
-    </Breadcrumb>
+    <Fragment>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(listSchema),
+        }}
+      />
+
+      <Breadcrumb className={className}>
+        <BreadcrumbList>
+          {breadcrumbsLimited.map((item, index) => (
+            <Fragment key={item.href}>
+              <BreadcrumbItem>
+                {item.isPageCurrent ? (
+                  <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink asChild>
+                    <Link href={item.href}>{item.label}</Link>
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+              {index < breadcrumbsLimited.length - 1 && <BreadcrumbSeparator />}
+            </Fragment>
+          ))}
+        </BreadcrumbList>
+      </Breadcrumb>
+    </Fragment>
   );
 };
 

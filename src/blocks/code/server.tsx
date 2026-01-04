@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { toJsxRuntime } from "hast-util-to-jsx-runtime";
 import { Fragment, HTMLAttributes } from "react";
@@ -37,13 +37,21 @@ const PreComponent = async function PreComponent({
       pre: ({ className, style, children, ...propsPre }) => (
         <pre
           className={cn(
-            "no-scrollbar !m-0 overflow-x-auto !rounded-none border border-muted/50 !bg-background !p-5 !font-mono !text-base !leading-snug md:text-wrap lg:!text-lg lg:!leading-snug xl:!text-lg xl:!leading-snug",
+            "no-scrollbar !m-0 overflow-x-auto !rounded-none border border-muted/50 !bg-background !p-5 !font-mono !text-sm !leading-normal md:text-wrap lg:!text-sm lg:!leading-normal xl:!text-sm xl:!leading-normal",
             className,
           )}
           style={{ ...style, direction: "ltr" }}
           {...propsPre}>
           {children}
         </pre>
+      ),
+      code: ({ className, style, children, ...propsCode }) => (
+        <code
+          className={cn("!border-none !bg-transparent !p-0", className)}
+          style={{ ...style, fontSize: "inherit !important" }}
+          {...propsCode}>
+          {children}
+        </code>
       ),
     },
   });

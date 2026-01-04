@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /test-results/
+Disallow: /playwright-report/
+
+Sitemap: https://palestiniancauses.com/sitemap.xml
+

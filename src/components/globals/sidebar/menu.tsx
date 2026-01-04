@@ -1,12 +1,13 @@
 "use client";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import {
   ArrowRightLeftIcon,
   BookCheckIcon,
   BookCopyIcon,
   BookOpenIcon,
+  BookTextIcon,
   BrainIcon,
   BriefcaseBusinessIcon,
   BriefcaseIcon,
@@ -169,6 +170,11 @@ export const SidebarMainMenu = function SidebarMainMenu() {
                 icon: UserPenIcon,
                 href: "/about-us",
                 label: "About Us",
+              },
+              {
+                icon: BookTextIcon,
+                href: "/blogs",
+                label: "The Riwaq",
               },
               {
                 icon: HeartHandshakeIcon,

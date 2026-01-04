@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 18
+// REVIEWED - 19
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -46,7 +46,9 @@ export const SignInForm = function SignInForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col items-stretch justify-center">
+        className="flex flex-col items-stretch justify-center"
+        aria-label="Sign in form"
+        noValidate>
         <div className="mb-4">
           <FormField
             control={form.control}
@@ -54,11 +56,13 @@ export const SignInForm = function SignInForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
-                <FormControl>
+                <FormControl required>
                   <Input
                     {...field}
+                    type="email"
                     disabled={signIn.isPending}
                     autoComplete="email"
+                    aria-required="true"
                     data-testid="email-input"
                   />
                 </FormControl>
@@ -81,12 +85,13 @@ export const SignInForm = function SignInForm() {
                     </Label>
                   </Button>
                 </div>
-                <FormControl>
+                <FormControl required>
                   <Input
                     {...field}
                     type="password"
                     disabled={signIn.isPending}
                     autoComplete="current-password"
+                    aria-required="true"
                     data-testid="password-input"
                   />
                 </FormControl>
@@ -100,8 +105,10 @@ export const SignInForm = function SignInForm() {
             type="submit"
             disabled={signIn.isPending}
             data-testid="signin-button"
-            className="mb-6">
-            Sign in
+            className="mb-6"
+            aria-busy={signIn.isPending}
+            aria-label={signIn.isPending ? "Signing in..." : "Sign in"}>
+            {signIn.isPending ? "Signing in..." : "Sign in"}
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             Not a family member yet?{" "}

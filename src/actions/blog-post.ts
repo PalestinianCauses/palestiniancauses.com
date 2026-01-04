@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -16,7 +16,7 @@ export const getBlogPost = async function getBlogPost(
       collection: "blogs-posts",
       where: { slug: { equals: slug }, status: { equals: "published" } },
       limit: 1,
-      depth: 1,
+      depth: 2,
     }),
     messages.actions.blogPost.serverErrorGet,
   );

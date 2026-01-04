@@ -1,4 +1,4 @@
-// REVIEWED - 32
+// REVIEWED - 33
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Analytics } from "@vercel/analytics/next";
@@ -7,6 +7,7 @@ import type { Metadata, Viewport } from "next";
 import { PropsWithChildren } from "react";
 import colors from "tailwindcss/colors";
 
+import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
@@ -90,8 +91,13 @@ export const metadata: Metadata = {
   formatDetection: { telephone: true },
 
   openGraph: {
+    type: "website",
+    locale: "en_US",
     siteName: "PalestinianCauses Digital Agency",
     url: "https://palestiniancauses.com",
+    title: "PalestinianCauses Digital Agency",
+    description:
+      "A world-class digital services agency powered by Gazan talent, PalestinianCauses specializes in Branded Web Applications, Strategic Content Creation, Expert Translation Services, and Comprehensive Digital Marketing Solutions.",
     images: [
       {
         url: "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXfJafovpKAixQkOwjFU9IWn4ZtucV2dL16J7T",
@@ -105,10 +111,15 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     site: "@palestiniancauses",
+    creator: "@palestiniancauses",
+    title: "PalestinianCauses Digital Agency",
+    description:
+      "A world-class digital services agency powered by Gazan talent, PalestinianCauses specializes in Branded Web Applications, Strategic Content Creation, Expert Translation Services, and Comprehensive Digital Marketing Solutions.",
     images: [
       "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXfJafovpKAixQkOwjFU9IWn4ZtucV2dL16J7T",
     ],
   },
+  alternates: { canonical: "https://palestiniancauses.com" },
 };
 
 export const viewport: Viewport = {
@@ -119,6 +130,42 @@ export const viewport: Viewport = {
 };
 
 const RootLayout = function RootLayout({ children }: PropsWithChildren) {
+  const siteURL =
+    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PalestinianCauses Digital Agency",
+    "url": siteURL,
+    "logo": `${siteURL}/logo-primary.png`,
+    "description":
+      "A world-class digital services agency powered by Gazan talent, PalestinianCauses specializes in Branded Web Applications, Strategic Content Creation, Expert Translation Services, and Comprehensive Digital Marketing Solutions.",
+    "sameAs": ["https://www.instagram.com/palestiniancauses/"],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Service",
+    },
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PalestinianCauses Digital Agency",
+    "url": siteURL,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": [
+          `${siteURL}/blogs`,
+          [`title`, `{search_term_string}`].join("="),
+        ].join("?"),
+      },
+      "query-input": ["required name", "search_term_string"].join("="),
+    },
+  };
+
   return (
     <html lang="en" className="dark">
       <head>
@@ -134,8 +181,30 @@ const RootLayout = function RootLayout({ children }: PropsWithChildren) {
           sizes="512x512"
           href="/manifest-512x512.png"
         />
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
+
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteSchema),
+          }}
+        />
       </head>
       <body>
+        <Button variant="default" size="lg" asChild>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:left-5 focus:top-5 focus:z-[100]">
+            Skip to main content
+          </a>
+        </Button>
         <QueryProvider>
           <SidebarMainProvider>{children}</SidebarMainProvider>
           <ActivityProvider />

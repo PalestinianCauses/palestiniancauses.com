@@ -1,4 +1,4 @@
-// REVIEWED - 14
+// REVIEWED - 15
 import { Metadata } from "next";
 
 import { Loading } from "@/components/globals/loading";
@@ -8,6 +8,11 @@ import { RedirectProvider } from "./providers";
 
 export const metadata: Metadata = {
   title: "Home",
+  description:
+    "PalestinianCauses Digital Agency - A world-class digital services agency powered by Gazan talent, delivering outstanding, globally competitive digital solutions.",
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com",
+  },
 };
 
 const HomePage = function HomePage() {

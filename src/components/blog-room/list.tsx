@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, ArrowUpRightIcon, BookAlertIcon } from "lucide-react";
@@ -44,7 +44,7 @@ export const BlogRoomList = function BlogRoomList() {
       const response = await getCollection({
         collection: "blogs-rooms",
         filters: { page: pageParam, limit: 10 },
-        depth: 1,
+        depth: 2,
       });
 
       if (!response.data || response.data.docs.length === 0 || response.error)

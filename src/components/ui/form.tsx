@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
@@ -112,8 +112,8 @@ FormLabel.displayName = "FormLabel";
 
 const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
-  React.ComponentPropsWithoutRef<typeof Slot>
->(({ ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof Slot> & { required?: boolean }
+>(({ required, ...props }, ref) => {
   const { formItemId, formDescriptionId, formMessageId, error } =
     useFormField();
 
@@ -121,11 +121,15 @@ const FormControl = React.forwardRef<
     <Slot
       id={formItemId}
       ref={ref}
-      aria-invalid={!!error}
+      aria-required={required}
+      aria-invalid={Boolean(error)}
       aria-describedby={
+        // eslint-disable-next-line no-nested-ternary
         !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
+          ? formDescriptionId
+            ? `${formDescriptionId}`
+            : undefined
+          : `${formDescriptionId || ""} ${formMessageId}`.trim() || undefined
       }
       {...props}
     />

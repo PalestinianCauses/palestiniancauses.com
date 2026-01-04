@@ -1,8 +1,8 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PropsWithChildren } from "react";
+import { Fragment, PropsWithChildren } from "react";
 
 import { getUser } from "@/actions/user";
 import { Container } from "@/components/globals/container";
@@ -28,9 +28,31 @@ export const generateMetadata = async function generateMetadata({
       title: "User Not Found",
     };
 
+  const siteURL =
+    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+  const profileURL = `${siteURL}/user/${userId}`;
+
+  const userName =
+    userResponse.data.firstName && userResponse.data.lastName
+      ? `${userResponse.data.firstName} ${userResponse.data.lastName}`
+      : userResponse.data.firstName || "Anonymous User";
+
   return {
-    title: `${userResponse.data.firstName || "Anonymous User"}'s Profile`,
-    description: `Discover more about ${userResponse.data.firstName || "this user"}—explore their contributions, achievements, and journey within the PalestinianCauses community.`,
+    title: `${userName}'s Profile`,
+    description: `Discover more about ${userName}—explore their contributions, achievements, and journey within the PalestinianCauses community.`,
+    openGraph: {
+      type: "profile",
+      siteName: "PalestinianCauses Digital Agency",
+      url: profileURL,
+      title: `${userName}'s Profile | PalestinianCauses Digital Agency`,
+      description: `Discover more about ${userName}—explore their contributions, achievements, and journey within the PalestinianCauses community.`,
+    },
+    twitter: {
+      card: "summary",
+      title: `${userName}'s Profile | PalestinianCauses Digital Agency`,
+      description: `Discover more about ${userName}—explore their contributions, achievements, and journey.`,
+    },
+    alternates: { canonical: profileURL },
     robots: { index: true, follow: true },
   };
 };
@@ -48,13 +70,41 @@ const PublicProfileLayout = async function PublicProfileLayout({
 
   if (!userResponse.data || userResponse.error) notFound();
 
+  const siteURL =
+    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+  const profileURL = `${siteURL}/user/${userId}`;
+
+  const userName =
+    userResponse.data.firstName && userResponse.data.lastName
+      ? `${userResponse.data.firstName} ${userResponse.data.lastName}`
+      : userResponse.data.firstName || "Anonymous User";
+
+  const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": userName,
+    "url": profileURL,
+    "email": userResponse.data.email,
+  };
+
   return (
-    <Container
-      as="main"
-      className="section-padding-start-xl section-padding-end-xl max-w-7xl space-y-10">
-      <PublicProfile user={userResponse.data} />
-      {children}
-    </Container>
+    <Fragment>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(personSchema),
+        }}
+      />
+
+      <Container
+        as="main"
+        id="main-content"
+        className="section-padding-start-xl section-padding-end-xl max-w-7xl space-y-10">
+        <PublicProfile user={userResponse.data} />
+        {children}
+      </Container>
+    </Fragment>
   );
 };
 

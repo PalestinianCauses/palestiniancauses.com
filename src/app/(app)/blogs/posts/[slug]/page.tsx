@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { format } from "date-fns";
 import { ar, enUS } from "date-fns/locale";
@@ -284,7 +284,7 @@ export default async function BlogPostPage({
                       className="flex w-full items-center justify-start gap-2.5">
                       <UserAvatar
                         user={user}
-                        className="h-10 w-10"
+                        className="w-10"
                         fallbackClassName="!font-[Gilroy]"
                       />
 

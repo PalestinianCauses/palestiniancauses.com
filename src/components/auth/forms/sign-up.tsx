@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 14
+// REVIEWED - 15
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -48,7 +48,9 @@ export const SignUpForm = function SignUpForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col items-stretch justify-center">
+        className="flex flex-col items-stretch justify-center"
+        aria-label="Sign up form"
+        noValidate>
         <div className="mb-4 grid w-full grid-cols-2 items-start gap-4">
           <FormField
             control={form.control}
@@ -56,10 +58,11 @@ export const SignUpForm = function SignUpForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>First name</FormLabel>
-                <FormControl>
+                <FormControl required>
                   <Input
                     {...field}
                     disabled={signUp.isPending}
+                    aria-required="true"
                     data-testid="first-name-input"
                   />
                 </FormControl>
@@ -73,10 +76,11 @@ export const SignUpForm = function SignUpForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Last name</FormLabel>
-                <FormControl>
+                <FormControl required>
                   <Input
                     {...field}
                     disabled={signUp.isPending}
+                    aria-required="true"
                     data-testid="last-name-input"
                   />
                 </FormControl>
@@ -92,11 +96,13 @@ export const SignUpForm = function SignUpForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
-                <FormControl>
+                <FormControl required>
                   <Input
                     {...field}
+                    type="email"
                     disabled={signUp.isPending}
                     autoComplete="email"
+                    aria-required="true"
                     data-testid="email-input"
                   />
                 </FormControl>
@@ -112,12 +118,13 @@ export const SignUpForm = function SignUpForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>
-                <FormControl>
+                <FormControl required>
                   <Input
                     {...field}
                     type="password"
                     disabled={signUp.isPending}
                     autoComplete="new-password"
+                    aria-required="true"
                     data-testid="password-input"
                   />
                 </FormControl>
@@ -131,8 +138,10 @@ export const SignUpForm = function SignUpForm() {
             type="submit"
             disabled={signUp.isPending}
             data-testid="signup-button"
-            className="mb-6">
-            Sign up
+            className="mb-6"
+            aria-busy={signUp.isPending}
+            aria-label={signUp.isPending ? "Signing up..." : "Sign up"}>
+            {signUp.isPending ? "Signing up..." : "Sign up"}
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             A family member already?{" "}

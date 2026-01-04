@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { Metadata } from "next";
 import { Fragment } from "react";
@@ -50,9 +50,9 @@ export async function generateMetadata({
     title: `${name} | ${title}`,
     description: description || undefined,
     openGraph: {
-      url: roomURL,
-      siteName: "PalestinianCauses Digital Agency",
       type: "profile",
+      siteName: "PalestinianCauses Digital Agency",
+      url: roomURL,
       title: `${name} | ${title}`,
       description: description || undefined,
       images: photograph
@@ -72,6 +72,7 @@ export async function generateMetadata({
       description: description || undefined,
       images: photograph ? [photograph] : [],
     },
+    alternates: { canonical: roomURL },
   };
 }
 
@@ -152,7 +153,10 @@ export default async function RoomPage({
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(dataStructured) }}
       />
-      <main className="section-padding-start-xl section-padding-end-xl">
+
+      <main
+        id="main-content"
+        className="section-padding-start-xl section-padding-end-xl">
         <RoomInteractive
           room={response.data}
           roomOwner={response.data.information.name}

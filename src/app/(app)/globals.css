@@ -1,4 +1,4 @@
-/* REVIEWED - 19 */
+/* REVIEWED - 20 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -141,6 +141,10 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  .ltr {
+    direction: ltr;
   }
 
   .highlight {

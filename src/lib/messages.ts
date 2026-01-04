@@ -1,4 +1,4 @@
-// REVIEWED - 34
+// REVIEWED - 35
 
 export const messages = {
   http: {
@@ -304,6 +304,11 @@ export const messages = {
       pending: "Copying address to clipboard...",
       success: "Address copied to clipboard.",
       error: "Failed to copy address to clipboard.",
+    },
+  },
+  code: {
+    copy: {
+      success: "Code has been copied to clipboard!",
     },
   },
 };

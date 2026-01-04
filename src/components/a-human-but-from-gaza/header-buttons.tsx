@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { ArrowRightIcon, HeartIcon, Loader2Icon } from "lucide-react";
 import Link from "next/link";
@@ -42,25 +42,29 @@ export const HeaderButtons = function HeaderButtons() {
           size="lg"
           disabled={isPending}
           className="w-full"
-          onClick={doSecureCopy}>
+          onClick={doSecureCopy}
+          aria-busy={isPending}
+          aria-label={
+            isPending ? "Processing your order..." : "Secure Your Copy for $18"
+          }>
           {isPending ? (
             <Fragment>
-              <Loader2Icon className="size-5 animate-spin" />
+              <Loader2Icon className="size-5 animate-spin" aria-hidden="true" />
               Please wait while we process your order...
             </Fragment>
           ) : (
             <Fragment>
               Secure Your Copy – $18
-              <ArrowRightIcon />
+              <ArrowRightIcon aria-hidden="true" />
             </Fragment>
           )}
         </Button>
       </div>
       <div className="w-full">
         <Button variant="outline" size="lg" className="w-full" asChild>
-          <Link href={navigation[3].href}>
+          <Link href={navigation[3].href} aria-label="Support Gazans">
             Support Gazans
-            <HeartIcon />
+            <HeartIcon aria-hidden="true" />
           </Link>
         </Button>
       </div>

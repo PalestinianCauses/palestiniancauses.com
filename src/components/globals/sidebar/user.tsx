@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import {
   ActivityIcon,
@@ -48,7 +48,7 @@ export const SidebarUser = function SidebarUser() {
   const { isLoading, data: user } = useUser();
   const countUnRead = useNotificationsCountUnRead({ user: user || undefined });
 
-  const isAdminOrSystemUser = hasAnyRole(user || null, [
+  const canAccessAdminDashboard = hasAnyRole(user || null, [
     "admin-user",
     "system-user",
     "author-user",
@@ -111,7 +111,7 @@ export const SidebarUser = function SidebarUser() {
                   side={isMobile ? "bottom" : "right"}
                   sideOffset={2}>
                   <DropdownMenuGroup>
-                    {isAdminOrSystemUser ? (
+                    {canAccessAdminDashboard ? (
                       <DropdownMenuItem asChild className="gap-2.5 px-2.5">
                         <Link
                           href="/admin"

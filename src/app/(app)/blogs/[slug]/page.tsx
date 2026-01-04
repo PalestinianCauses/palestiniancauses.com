@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { Metadata } from "next";
 import { Fragment } from "react";
@@ -39,9 +39,10 @@ export async function generateMetadata({
     title: `${room.name} by ${ownerName} | The Riwaq`,
     description: room.description || undefined,
     openGraph: {
-      url: roomURL,
-      siteName: "PalestinianCauses Digital Agency",
       type: "website",
+      locale: room.language === "arabic" ? "ar" : "en",
+      siteName: "PalestinianCauses Digital Agency",
+      url: roomURL,
       title: `${room.name} by ${ownerName} | The Riwaq`,
       description: room.description || undefined,
       images: [],
@@ -51,6 +52,7 @@ export async function generateMetadata({
       title: `${room.name} by ${ownerName} | The Riwaq`,
       description: room.description || undefined,
     },
+    alternates: { canonical: roomURL },
   };
 }
 
@@ -67,10 +69,52 @@ export default async function BlogRoomPage({
     return <RedirectProvider path="/blogs" />;
 
   const room = response.data;
+  const siteURL =
+    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+  const roomURL = `${siteURL}/blogs/${room.slug}`;
+
+  const roomOwner = isObject(room.roomOwner) ? room.roomOwner : null;
+  const authors = room.authors
+    ? room.authors.filter((author) => isObject(author))
+    : [];
+
+  // Structured Data (JSON-LD) for Blog
+  const dataStructured = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": room.name,
+    "description": room.description || undefined,
+    "url": roomURL,
+    "inLanguage": room.language === "arabic" ? "ar" : "en",
+    "publisher": {
+      "@type": "Organization",
+      "name": "PalestinianCauses Digital Agency",
+      "url": siteURL,
+    },
+    "author": roomOwner
+      ? {
+          "@type": "Person",
+          "name": roomOwner.firstName || "Anonymous",
+          "url": `${siteURL}/user/${roomOwner.id}`,
+        }
+      : undefined,
+    "contributor": authors.map((author) => ({
+      "@type": "Person",
+      "name": author.firstName || "Anonymous",
+      "url": `${siteURL}/user/${author.id}`,
+    })),
+  };
 
   return (
     <Fragment>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(dataStructured) }}
+      />
+
       <main
+        id="main-content"
         className="section-padding-start-xl section-padding-end-xl [&_*]:font-[inherit]"
         style={{
           direction: room.language === "arabic" ? "rtl" : "ltr",
@@ -80,11 +124,13 @@ export default async function BlogRoomPage({
           <BlogRoomHeader room={room} />
         </Container>
         <Container className="max-w-7xl">
-          <BlogPostList
-            blogRoomId={room.id}
-            language={room.language}
-            color={room.color}
-          />
+          <section aria-label="Blog Posts">
+            <BlogPostList
+              blogRoomId={room.id}
+              language={room.language}
+              color={room.color}
+            />
+          </section>
         </Container>
       </main>
       <Footer />
