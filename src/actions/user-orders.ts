@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -19,7 +19,7 @@ export const userOrdersCancel = async function userOrdersCancel(
 
   const response = await actionSafeExecute(
     payload.update({
-      req: { user: { collection: "users", ...auth } },
+      req: { user: auth },
       user: auth,
       collection: "orders",
       where: { id: { equals: id } },

@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -31,7 +31,7 @@ export const getUserActivityDiaryEntriesStats =
       await Promise.all([
         actionSafeExecute(
           payload.count({
-            req: { user: { collection: "users", ...user } },
+            req: { user },
             user,
             collection: "diary-entries",
             where: {
@@ -44,7 +44,7 @@ export const getUserActivityDiaryEntriesStats =
         ),
         actionSafeExecute(
           payload.count({
-            req: { user: { collection: "users", ...user } },
+            req: { user },
             user,
             collection: "diary-entries",
             where: {
@@ -57,7 +57,7 @@ export const getUserActivityDiaryEntriesStats =
         ),
         actionSafeExecute(
           payload.count({
-            req: { user: { collection: "users", ...user } },
+            req: { user },
             user,
             collection: "diary-entries",
             where: {

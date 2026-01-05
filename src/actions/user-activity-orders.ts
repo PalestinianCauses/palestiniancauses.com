@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -31,7 +31,7 @@ export const getUserActivityOrdersStats =
 
     const responseOrders = await actionSafeExecute(
       payload.find({
-        req: { user: { collection: "users", ...user } },
+        req: { user },
         user,
         collection: "orders",
         where: { user: { equals: user.id } },

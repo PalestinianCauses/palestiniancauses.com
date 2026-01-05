@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { format } from "date-fns/format";
 import {
@@ -12,18 +12,16 @@ import {
   PencilLineIcon,
   TrophyIcon,
 } from "lucide-react";
-import { useState } from "react";
 
 import { usePublicUserStats } from "@/hooks/use-public-user-stats";
-import { getMediaAltText, getMediaURL } from "@/lib/utils/media";
 import { User } from "@/payload-types";
 
-import { SuspenseAvatar } from "../globals/suspense-avatar";
 import {
   Paragraph,
   SectionHeading,
   SubSectionHeading,
 } from "../globals/typography";
+import { UserAvatar } from "../globals/user-avatar";
 import { Skeleton } from "../ui/skeleton";
 
 import { ProfileInfoRoles, ProfileInfoSocial } from "./info";
@@ -99,33 +97,14 @@ export const PublicProfileStats = function PublicProfileStats({
 };
 
 export const PublicProfile = function PublicProfile({ user }: { user: User }) {
-  const [isAvatarLoading, setIsAvatarLoading] = useState(Boolean(user?.avatar));
-
-  const avatarURL = getMediaURL(user.avatar);
-  const avatarAlt = getMediaAltText(user.avatar) || "Profile Picture";
-
   return (
     <div className="space-y-10">
       <div className="flex flex-col items-start gap-5 sm:flex-row">
-        <SuspenseAvatar
-          className="h-24 w-24 border border-input"
-          isLoading={isAvatarLoading}
-          isLoadingProps={{
-            className: "relative aspect-square w-full",
-            children: <Skeleton className="absolute inset-0 h-full w-full" />,
-          }}
-          avatarImageProps={{
-            src: avatarURL || undefined,
-            alt: avatarAlt,
-            className: "object-cover object-center",
-            onLoad: () => setIsAvatarLoading(false),
-            onError: () => setIsAvatarLoading(false),
-          }}
-          avatarFallbackProps={{
-            children: user.firstName ? user.firstName.charAt(0) : "A",
-            className:
-              "text-3xl lg:text-4xl xl:text-5xl text-sidebar-primary bg-background",
-          }}
+        <UserAvatar
+          user={user}
+          size="user-avatar"
+          className="w-24"
+          fallbackClassName="text-3xl font-light md:text-5xl"
         />
         <div className="flex-1">
           <div className="mb-5 flex items-center gap-2.5">

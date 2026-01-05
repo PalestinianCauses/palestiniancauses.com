@@ -1,4 +1,4 @@
-// REVIEWED - 15
+// REVIEWED - 16
 
 "use client";
 
@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   ArrowUpRightIcon,
   Calendar1Icon,
+  ExternalLinkIcon,
   PencilOffIcon,
   UserIcon,
   VerifiedIcon,
@@ -79,11 +80,14 @@ export const DiaryEntryListItemBadges = function DiaryEntryListItemBadges({
             {
               icon: UserIcon,
               label: (
-                <Link href={author ? `/user/${author.id}/diary-entries` : "#"}>
+                <Link
+                  href={author ? `/user/${author.id}/diary-entries` : "#"}
+                  className="flex items-center justify-start gap-2.5">
                   By{" "}
                   {diaryEntry.isAnonymous
                     ? "Anonymous"
                     : author?.firstName || "Anonymous"}
+                  <ExternalLinkIcon className="size-4" />
                 </Link>
               ),
             },

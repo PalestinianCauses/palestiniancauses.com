@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CollectionConfig } from "payload";
 
@@ -9,11 +9,6 @@ import { User } from "@/payload-types";
 export const Notifications: CollectionConfig = {
   slug: "notifications",
   access: {
-    admin: ({ req }) =>
-      hasPermission(req.user, {
-        resource: "notifications",
-        action: "manage",
-      }),
     create: hasPermissionAccess({
       resource: "notifications",
       action: "create",
@@ -72,7 +67,7 @@ export const Notifications: CollectionConfig = {
       name: "resource",
       label: "Resource",
       type: "relationship",
-      relationTo: ["blogs", "comments", "diary-entries", "orders"],
+      relationTo: ["comments", "diary-entries", "orders"],
       required: false,
     },
     {

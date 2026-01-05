@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -23,7 +23,7 @@ export const createComment = async function createComment(
 
   const response = await actionSafeExecute(
     payload.create({
-      req: { user: { collection: "users", ...auth } },
+      req: { user: auth },
       user: auth,
       collection: "comments",
       data,
@@ -111,7 +111,7 @@ export const deleteComment = async function deleteComment(
 
   const response = await actionSafeExecute(
     payload.delete({
-      req: { user: { collection: "users", ...auth } },
+      req: { user: auth },
       user: auth,
       collection: "comments",
       id,

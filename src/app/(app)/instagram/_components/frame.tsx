@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 import { toJpeg, toPng } from "html-to-image";
 import {
   forwardRef,
@@ -12,12 +12,9 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/styles";
 
 // eslint-disable-next-line import/no-cycle
-import {
-  Dimensions,
-  dimensionsClasses,
-  themeClasses,
-  ThemeColors,
-} from "../page";
+import { Dimensions, ThemeColors } from "../page";
+
+import { themeClasses } from "./psc-logo";
 
 export type ImageFrame = {
   id: string;
@@ -28,6 +25,18 @@ export type ImageFrame = {
 export type ImageFrameRenderProps = {
   frames: ImageFrame[];
   text?: string;
+};
+
+// eslint-disable-next-line no-unused-vars
+export const dimensionsClasses: { [K in Dimensions]: string } = {
+  "open-graph": "w-[75rem] h-[39.375rem]",
+  "github": "w-[80rem] aspect-[2/1]",
+  "1:1": "w-[67.5rem] aspect-square",
+  "1:1.414": "w-[67.5rem] aspect-[1/1.414]",
+  "1.6:1": "w-[67.5rem] aspect-[1.6/1]",
+  "4:5": "w-[67.5rem] aspect-[4/5]",
+  "16:9": "w-[67.5rem] aspect-[16/9]",
+  "9:16": "w-[67.5rem] aspect-[9/16]",
 };
 
 export const ImageFrameRender = function ImageFrameRender({

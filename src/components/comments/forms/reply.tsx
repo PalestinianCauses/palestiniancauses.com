@@ -1,13 +1,13 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/globals/user-avatar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -90,11 +90,7 @@ export const ReplyCommentForm = function ReplyCommentForm({
 
   return (
     <div className="flex w-full flex-col items-start gap-5 md:flex-row">
-      <Avatar className="h-8 w-8 ring-1 ring-input md:h-9 md:w-9">
-        <AvatarFallback className="bg-muted/50">
-          {user.firstName ? user.firstName.charAt(0).toUpperCase() : "A"}
-        </AvatarFallback>
-      </Avatar>
+      <UserAvatar user={user} size="user-avatar" className="w-8" />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}

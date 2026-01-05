@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 import { SafeHydrate } from "@/components/globals/safe-hydrate";
 import { Paragraph } from "@/components/globals/typography";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/globals/user-avatar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -107,13 +107,9 @@ export const CreateCommentForm = function CreateCommentForm({
             </div>
           ) : null}
           <div className="flex flex-col items-start gap-5 md:flex-row">
-            <Avatar className="h-11 w-11 ring-1 ring-input md:h-12 md:w-12">
-              <AvatarFallback className="bg-muted/50 text-xl">
-                {user && user.firstName
-                  ? user.firstName.charAt(0).toUpperCase()
-                  : "A"}
-              </AvatarFallback>
-            </Avatar>
+            {user ? (
+              <UserAvatar user={user} size="user-avatar" className="w-16" />
+            ) : null}
             <FormField
               control={form.control}
               name="content"

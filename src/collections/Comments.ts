@@ -1,4 +1,4 @@
-// REVIEWED - 16
+// REVIEWED - 17
 
 import { CollectionConfig } from "payload";
 
@@ -14,8 +14,6 @@ import { Comment, User } from "@/payload-types";
 export const Comments: CollectionConfig = {
   slug: "comments",
   access: {
-    admin: ({ req }) =>
-      hasPermission(req.user, { resource: "comments", action: "manage" }),
     create: hasPermissionAccess({ resource: "comments", action: "create" }),
     read: ({ req }) =>
       hasPermissionAccess({ resource: "comments", action: "read" })({ req }) ||
@@ -47,7 +45,7 @@ export const Comments: CollectionConfig = {
       label: "Commented On",
       name: "on",
       type: "relationship",
-      relationTo: ["diary-entries", "blogs"],
+      relationTo: ["diary-entries"],
       hasMany: false,
       required: true,
       index: true,
@@ -146,11 +144,12 @@ export const Comments: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [
-      ({ req, data }) => {
-        if (!data.user)
-          if (req.user)
-            // eslint-disable-next-line no-param-reassign
-            data.user = req.user.id;
+      ({ operation, req, data }) => {
+        if (operation === "create")
+          if (!data.user)
+            if (req.user)
+              // eslint-disable-next-line no-param-reassign
+              data.user = req.user.id;
 
         return data;
       },

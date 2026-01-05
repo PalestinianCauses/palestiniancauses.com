@@ -1,4 +1,4 @@
-// REVIEWED - 11
+// REVIEWED - 12
 import type { CollectionConfig } from "payload";
 
 import { hasPermissionAccess } from "@/access/global";
@@ -30,6 +30,13 @@ export const Media: CollectionConfig = {
         name: "user-avatar",
         width: 360,
         height: 360,
+        position: "center",
+        withoutEnlargement: false,
+      },
+      {
+        name: "room-photograph",
+        width: 960,
+        height: 1280,
         position: "center",
         withoutEnlargement: false,
       },

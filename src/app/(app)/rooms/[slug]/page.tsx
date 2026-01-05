@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { Metadata } from "next";
 import { Fragment } from "react";
@@ -162,6 +162,7 @@ export default async function RoomPage({
           roomOwner={response.data.information.name}
         />
         <Header
+          user={response.data.user}
           name={response.data.information.name}
           title={response.data.information.title}
           headline={response.data.information.headline}

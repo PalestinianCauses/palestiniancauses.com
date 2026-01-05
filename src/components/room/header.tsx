@@ -1,10 +1,10 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils/styles";
-import { Room } from "@/payload-types";
+import { Room, User } from "@/payload-types";
 
 import { Container } from "../globals/container";
 import { SectionTitle } from "../globals/typography";
@@ -19,12 +19,13 @@ import {
 import { HeaderAvatar } from "./header-avatar";
 
 type Information = Pick<Room, "information">;
-export type HeaderProps = Pick<
+export type HeaderProps = { user: number | User } & Pick<
   Information["information"],
   "name" | "title" | "headline" | "status" | "photograph"
 >;
 
 export const Header = function Header({
+  user,
   name,
   title,
   headline,
@@ -39,7 +40,7 @@ export const Header = function Header({
       <div className="relative mb-16 flex flex-col md:items-center">
         <TooltipProvider>
           <Tooltip open>
-            <HeaderAvatar name={name} photograph={photograph} />
+            <HeaderAvatar user={user} photograph={photograph} />
             <TooltipContent
               side="top"
               align="start"

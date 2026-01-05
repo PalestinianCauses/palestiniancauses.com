@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -30,7 +30,7 @@ export const createOrder = async function createOrder(
   // Create order
   const orderResponse = await actionSafeExecute(
     payload.create({
-      req: { user: { collection: "users", ...authentication } },
+      req: { user: authentication },
       user: authentication,
       collection: "orders",
       data: { ...data, user: authentication.id, total: pricesTotal },
@@ -61,7 +61,7 @@ export const getOrder = async function getOrder(
 
   const response = await actionSafeExecute(
     payload.findByID({
-      req: { user: { collection: "users", ...auth } },
+      req: { user: auth },
       user: auth,
       collection: "orders",
       id: orderId,
@@ -87,7 +87,7 @@ export const updateOrder = async function updateOrder(
 
   const response = await actionSafeExecute(
     payload.update({
-      req: { user: { collection: "users", ...auth } },
+      req: { user: auth },
       user: auth,
       collection: "orders",
       where: { id: { equals: orderId } },
@@ -112,7 +112,7 @@ export const deleteOrder = async function deleteOrder(
 
   const response = await actionSafeExecute(
     payload.delete({
-      req: { user: { collection: "users", ...auth } },
+      req: { user: auth },
       user: auth,
       collection: "orders",
       where: { id: { equals: orderId } },

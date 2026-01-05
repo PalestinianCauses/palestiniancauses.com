@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -36,58 +36,59 @@ export const getUserActivityStats = async function getUserActivityStats(
     user = authentication;
   }
 
-  const responseComments = await actionSafeExecute(
-    payload.find({
-      ...(!userId
-        ? {
-            req: { user: { collection: "users", ...user } },
-            user,
-            overrideAccess: false,
-          }
-        : {}),
-      collection: "comments",
-      where: { user: { equals: user.id } },
-      select: { id: true, createdAt: true },
-    }),
-    messages.actions.comment.serverErrorGet,
-  );
+  const [responseComments, responseDiaryEntries, responseOrders] =
+    await Promise.all([
+      actionSafeExecute(
+        payload.find({
+          ...(!userId
+            ? {
+                req: { user: { collection: "users", ...user } },
+                user,
+                overrideAccess: false,
+              }
+            : {}),
+          collection: "comments",
+          where: { user: { equals: user.id } },
+          select: { id: true, createdAt: true },
+        }),
+        messages.actions.comment.serverErrorGet,
+      ),
+      actionSafeExecute(
+        payload.find({
+          ...(!userId
+            ? {
+                req: { user: { collection: "users", ...user } },
+                user,
+                overrideAccess: false,
+              }
+            : {}),
+          collection: "diary-entries",
+          where: { author: { equals: user.id } },
+          select: { id: true, createdAt: true },
+        }),
+        messages.actions.diaryEntry.serverErrorGet,
+      ),
+      actionSafeExecute(
+        payload.find({
+          ...(!userId
+            ? {
+                req: { user: { collection: "users", ...user } },
+                user,
+                overrideAccess: false,
+              }
+            : {}),
+          collection: "orders",
+          where: { user: { equals: user.id } },
+          select: { id: true, createdAt: true },
+        }),
+        messages.actions.order.serverErrorGet,
+      ),
+    ]);
 
   if (!responseComments.data || responseComments.error) return responseComments;
 
-  const responseDiaryEntries = await actionSafeExecute(
-    payload.find({
-      ...(!userId
-        ? {
-            req: { user: { collection: "users", ...user } },
-            user,
-            overrideAccess: false,
-          }
-        : {}),
-      collection: "diary-entries",
-      where: { author: { equals: user.id } },
-      select: { id: true, createdAt: true },
-    }),
-    messages.actions.diaryEntry.serverErrorGet,
-  );
-
   if (!responseDiaryEntries.data || responseDiaryEntries.error)
     return responseDiaryEntries;
-
-  const responseOrders = await actionSafeExecute(
-    payload.find({
-      ...(!userId
-        ? {
-            req: { user: { collection: "users", ...user } },
-            user,
-            overrideAccess: false,
-          }
-        : {}),
-      collection: "orders",
-      where: { user: { equals: user.id } },
-      select: { id: true, createdAt: true },
-    }),
-    messages.actions.order.serverErrorGet,
-  );
 
   if (!responseOrders.data || responseOrders.error) return responseOrders;
 

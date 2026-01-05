@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -14,7 +14,7 @@ import {
   UserIcon,
   XIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -48,12 +48,11 @@ import {
   UpdatePassSchema,
 } from "@/lib/schemas/profile";
 import { isObject } from "@/lib/types/guards";
-import { getMediaAltText, getMediaURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
 import { User } from "@/payload-types";
 
-import { SuspenseAvatar } from "../globals/suspense-avatar";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
+import { UserAvatar } from "../globals/user-avatar";
 
 import { AccountDeletion } from "./account-deletion";
 import { StatusBadge } from "./globals";
@@ -61,8 +60,6 @@ import { RoomSelect } from "./settings-room-select";
 
 const ProfileAvatar = function ProfileAvatar({ user }: { user: User }) {
   const { updateUserAvatar, removeUserAvatar } = useUpdateUser();
-  const [isAvatarLoading, setIsAvatarLoading] = useState(Boolean(user?.avatar));
-
   const doAvatarChange = async (file: File) => {
     updateUserAvatar.mutate({
       file,
@@ -70,30 +67,13 @@ const ProfileAvatar = function ProfileAvatar({ user }: { user: User }) {
     });
   };
 
-  const avatarURL = getMediaURL(user.avatar);
-  const avatarAlt = getMediaAltText(user.avatar) || "Profile Picture";
-
   return (
     <div className="flex items-center justify-start gap-5">
-      <SuspenseAvatar
-        className="h-24 w-24 border border-input"
-        isLoading={isAvatarLoading}
-        isLoadingProps={{
-          className: "relative aspect-square w-full",
-          children: <Skeleton className="absolute inset-0 h-full w-full" />,
-        }}
-        avatarImageProps={{
-          src: avatarURL || undefined,
-          alt: avatarAlt,
-          className: "object-cover object-center",
-          onLoad: () => setIsAvatarLoading(false),
-          onError: () => setIsAvatarLoading(false),
-        }}
-        avatarFallbackProps={{
-          children: user.firstName ? user.firstName.charAt(0) : "A",
-          className:
-            "text-3xl lg:text-4xl xl:text-5xl text-sidebar-primary bg-background",
-        }}
+      <UserAvatar
+        user={user}
+        size="user-avatar"
+        className="w-24"
+        fallbackClassName="text-3xl font-light md:text-5xl"
       />
 
       <div className="flex flex-col gap-2.5">

@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { redirect } from "next/navigation";
 import { PaginatedDocs } from "payload";
@@ -98,7 +98,7 @@ export const getProductFreeLinksExternal =
     if (!hasOrder) {
       const responseOrder = await actionSafeExecute(
         payload.create({
-          req: { user: { collection: "users", ...auth } },
+          req: { user: auth },
           user: auth,
           collection: "orders",
           data: {

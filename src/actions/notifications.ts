@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { Where } from "payload";
 
@@ -26,7 +26,7 @@ export const markingNotificationAsRead =
 
     const notificationResponse = await actionSafeExecute(
       payload.findByID({
-        req: { user: { collection: "users", ...auth } },
+        req: { user: auth },
         user: auth,
         collection: "notifications",
         id,
@@ -55,7 +55,7 @@ export const markingNotificationAsRead =
 
     const updateResponse = await actionSafeExecute(
       payload.update({
-        req: { user: { collection: "users", ...auth } },
+        req: { user: auth },
         user: auth,
         collection: "notifications",
         id,
@@ -88,7 +88,7 @@ export const markingEveryNotificationAsRead =
 
     const notificationsResponse = await actionSafeExecute(
       payload.update({
-        req: { user: { collection: "users", ...auth } },
+        req: { user: auth },
         user: auth,
         collection: "notifications",
         where: { user: { equals: auth.id }, read: { equals: false } },

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -164,7 +164,7 @@ export const ProfileNotifications = function ProfileNotifications() {
 
       const response = await getCollection({
         collection: "notifications",
-        req: { user: { collection: "users", ...user } },
+        req: { user },
         user,
         filters: {
           page: pageParam,

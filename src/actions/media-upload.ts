@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -37,7 +37,7 @@ export const mediaUpload = async function mediaUpload({
 
   const response = await actionSafeExecute(
     payload.create({
-      req: { user: { collection: "users", ...auth } },
+      req: { user: auth },
       user: auth,
       collection: "media",
       data: { alt: alt || file.name },
@@ -70,7 +70,7 @@ export const mediaDelete = async function mediaDelete({
 
   const response = await actionSafeExecute(
     payload.delete({
-      req: { user: { collection: "users", ...auth } },
+      req: { user: auth },
       user: auth,
       collection: "media",
       id,

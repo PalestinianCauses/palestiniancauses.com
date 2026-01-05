@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -31,7 +31,7 @@ export const getUserActivityCommentsStats =
       await Promise.all([
         actionSafeExecute(
           payload.count({
-            req: { user: { collection: "users", ...user } },
+            req: { user },
             user,
             collection: "comments",
             where: {
@@ -44,7 +44,7 @@ export const getUserActivityCommentsStats =
         ),
         actionSafeExecute(
           payload.count({
-            req: { user: { collection: "users", ...user } },
+            req: { user },
             user,
             collection: "comments",
             where: { user: { equals: user.id }, status: { equals: "pending" } },
@@ -54,7 +54,7 @@ export const getUserActivityCommentsStats =
         ),
         actionSafeExecute(
           payload.count({
-            req: { user: { collection: "users", ...user } },
+            req: { user },
             user,
             collection: "comments",
             where: {

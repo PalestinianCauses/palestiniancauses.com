@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import {
   DefaultNodeTypes,
@@ -41,6 +41,8 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
         </Link>
       </Button>
     ),
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   blocks: { code: ({ node }) => <CodeBlock {...node.fields} /> },
 });
 

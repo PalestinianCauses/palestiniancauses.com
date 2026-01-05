@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 29
+// REVIEWED - 30
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -59,59 +59,7 @@ export type Dimensions =
   | "16:9"
   | "9:16";
 
-export const themeClasses: {
-  [K in ThemeColors]: { [K in Properties]: string };
-} = {
-  "primary": {
-    bg: "bg-primary",
-    text: "text-primary-foreground",
-    fill: "fill-primary",
-    stroke: "stroke-primary",
-  },
-  "primary-foreground": {
-    bg: "bg-primary-foreground",
-    text: "text-primary",
-    fill: "fill-primary-foreground",
-    stroke: "stroke-primary-foreground",
-  },
-  "secondary": {
-    bg: "bg-secondary",
-    text: "text-secondary-foreground",
-    fill: "fill-secondary",
-    stroke: "stroke-secondary",
-  },
-  "tertiary": {
-    bg: "bg-tertiary",
-    text: "text-tertiary-foreground",
-    fill: "fill-tertiary",
-    stroke: "stroke-tertiary",
-  },
-  "tertiary-2": {
-    bg: "bg-tertiary-2",
-    text: "text-tertiary-2-foreground",
-    fill: "fill-tertiary-2",
-    stroke: "stroke-tertiary-2",
-  },
-  "transparent": {
-    bg: "bg-transparent",
-    text: "text-transparent",
-    fill: "fill-transparent",
-    stroke: "stroke-transparent",
-  },
-};
-
-export const dimensionsClasses: { [K in Dimensions]: string } = {
-  "open-graph": "w-[75rem] h-[39.375rem]",
-  "github": "w-[80rem] aspect-[2/1]",
-  "1:1": "w-[67.5rem] aspect-square",
-  "1:1.414": "w-[67.5rem] aspect-[1/1.414]",
-  "1.6:1": "w-[67.5rem] aspect-[1.6/1]",
-  "4:5": "w-[67.5rem] aspect-[4/5]",
-  "16:9": "w-[67.5rem] aspect-[16/9]",
-  "9:16": "w-[67.5rem] aspect-[9/16]",
-};
-
-export const ShawqiPlusMahaCalligraphy = function ShawqiPlusMahaCalligraphy() {
+const ShawqiPlusMahaCalligraphy = function ShawqiPlusMahaCalligraphy() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -544,67 +492,66 @@ const InstagramStudioPage = function InstagramStudioPage() {
         </FrameContent>
       </Frame>
       <DiaryEntryTemplate
-        id="diary-entry-08"
-        color="primary"
-        author="Basmala"
+        id="diary-entry-09"
+        color="primary-foreground"
+        author="Nagham"
         badge="The Truth Museum: Humans But From Gaza"
         title={
           <Fragment>
-            A{" "}
-            <FrameHighlight className="section-heading-highlight-primary mb-2.5">
-              Dead One
+            <FrameHighlight className="section-heading-highlight-primary-foreground mb-2.5">
+              Heartbeat
             </FrameHighlight>{" "}
-            Taking Shape in the Faces of the{" "}
-            <FrameHighlight className="section-heading-highlight-primary mb-2.5">
-              Living.
+            Beneath the{" "}
+            <FrameHighlight className="section-heading-highlight-primary-foreground mb-2.5">
+              Rubble.
             </FrameHighlight>
           </Fragment>
         }
         paragraph={
           <Fragment>
             <FrameParagraph>
-              At the beginning of this war, I was texting and calling my
-              friend—Shahed,{" "}
-              <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-                but I received no answer.
+              Outside the rubble, there are faces waiting. A mother stares at
+              the{" "}
+              <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+                wreckage with teary eyes,
               </FrameParagraphHighlight>{" "}
-              At that time the phone connection was really poor. It was hard to
-              deliver or receive the two-words message{" "}
-              <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-                &ldquo;We survived,&ldquo;
+              clinging to a thread of hope—praying she might hear a cry from
+              you, any sign you&apos;re still alive. A father stands silently,{" "}
+              <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+                barely holding himself together,
               </FrameParagraphHighlight>{" "}
-              whether from my family or my friends.
+              staring at the ruins as if his gaze alone could lift them.
+              Siblings and friends hold their breath with every stone lifted,
+              caught between{" "}
+              <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+                the fear that you might be gone...
+              </FrameParagraphHighlight>{" "}
+              and the desperate hope that rescuers will pull you out alive.
             </FrameParagraph>
             <FrameParagraph>
-              Every now and then, I tried to call my friend Shahed whenever I
-              remembered her, in the morning or at night, and when the
-              connection was possible, but the answer was the same—there was no
-              reply. I recall once withdrawing from the gathering of my
-              uncle&apos;s family, who had taken refuge in my home at that time,{" "}
-              <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-                hoping to hear or see any news about
+              But time is heavy… and the minutes pass like knives. Perhaps they
+              will reach you in time; perhaps they will pull out{" "}
+              <FrameParagraphHighlight className="bg-primary text-primary-foreground">
+                your body without a breath left.
               </FrameParagraphHighlight>{" "}
-              <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-                Shahed,
-              </FrameParagraphHighlight>{" "}
-              but after the same reply, a terrible thought haunted me—that she
-              passed away. I put down the phone and left my place...
+              In either case, the agony is the same: you are there, and they are
+              here...
             </FrameParagraph>
           </Fragment>
         }
         closure={
           <Fragment>
-            trying to{" "}
-            <FrameHighlight className="section-heading-highlight-primary">
-              escape
+            and{" "}
+            <FrameHighlight className="section-heading-highlight-primary-foreground">
+              hope
             </FrameHighlight>{" "}
-            the thought of this{" "}
-            <FrameHighlight className="section-heading-highlight-primary">
-              probability.
+            between you may die in any{" "}
+            <FrameHighlight className="section-heading-highlight-primary-foreground">
+              moment.
             </FrameHighlight>
           </Fragment>
         }
-        link="palestiniancauses.com/humans-but-from-gaza/30"
+        link="palestiniancauses.com/humans-but-from-gaza/28"
       />
       <ImageFrameRender frames={profileImagesFrames} />
       <ImageFrameRender frames={hoodiesFrames} />

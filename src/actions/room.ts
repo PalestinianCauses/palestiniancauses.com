@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { PaginatedDocs } from "payload";
 
@@ -16,23 +16,15 @@ import { getAuthentication } from "./auth";
 export const getRoomList = async function getRoomList(): Promise<
   ResponseSafeExecute<PaginatedDocs<Room>, string>
 > {
-  const authentication = await getAuthentication();
-
   const response = await actionSafeExecute(
     payload.find({
-      req: {
-        ...(authentication
-          ? { user: { ...authentication, collection: "users" } }
-          : {}),
-      },
-      ...(authentication ? { user: authentication } : {}),
-
       collection: "rooms",
       page: 1,
       limit: 5,
-      depth: 1,
+      depth: 2,
       select: {
         id: true,
+        user: true,
         name: true,
         slug: true,
         information: { photograph: true },
@@ -44,8 +36,6 @@ export const getRoomList = async function getRoomList(): Promise<
           equals: "published",
         },
       },
-
-      ...(authentication ? { overrideAccess: false } : {}),
     }),
     messages.actions.room.serverError,
   );
