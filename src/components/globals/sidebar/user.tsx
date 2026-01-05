@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import {
   ActivityIcon,
@@ -16,7 +16,6 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -40,6 +39,7 @@ import { hasAnyRole } from "@/lib/permissions";
 import { cn } from "@/lib/utils/styles";
 
 import { SafeHydrate } from "../safe-hydrate";
+import { UserAvatar } from "../user-avatar";
 
 export const SidebarUser = function SidebarUser() {
   const pathname = usePathname();
@@ -89,11 +89,11 @@ export const SidebarUser = function SidebarUser() {
                   <SidebarMenuButton
                     size="lg"
                     className="h-auto data-[state_=_open]:bg-sidebar-accent data-[state_=_open]:text-sidebar-accent-foreground group-data-[collapsible_=_icon]:!size-[calc(var(--sidebar-width-icon)_-_1.5rem)]">
-                    <Avatar className="flex aspect-square size-10 items-center justify-center border border-input bg-sidebar text-sidebar-primary-foreground group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1.5rem)]">
-                      <AvatarFallback className="bg-muted/50 text-lg text-sidebar-primary">
-                        {user.firstName ? user.firstName.charAt(0) : "A"}
-                      </AvatarFallback>
-                    </Avatar>
+                    <UserAvatar
+                      user={user}
+                      size="user-avatar"
+                      className="flex aspect-square size-10 items-center justify-start border border-input bg-sidebar text-sidebar-primary-foreground group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1.5rem)]"
+                    />
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold text-sidebar-primary">
                         {user.firstName || "Anonymous"}

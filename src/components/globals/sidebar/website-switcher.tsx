@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import {
   ArrowLeftFromLineIcon,
@@ -26,11 +26,13 @@ import {
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRoom } from "@/hooks/use-room";
+import { isObject } from "@/lib/types/guards";
 import { getMediaAltText, getMediaSizeURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
 import { Room } from "@/payload-types";
 
 import { SuspenseAvatar } from "../suspense-avatar";
+import { UserAvatar } from "../user-avatar";
 
 const RoomDropdownMenuItem = function RoomDropdownMenuItem({
   room,
@@ -40,10 +42,6 @@ const RoomDropdownMenuItem = function RoomDropdownMenuItem({
   const { setOpenMobile } = useSidebar();
 
   const { roomActive } = useRoom();
-
-  const [isAvatarLoading, setIsAvatarLoading] = useState(
-    Boolean(room.information.photograph),
-  );
 
   return (
     <DropdownMenuItem
@@ -55,28 +53,13 @@ const RoomDropdownMenuItem = function RoomDropdownMenuItem({
         className={cn({
           "bg-sidebar-accent": roomActive ? roomActive.id === room.id : false,
         })}>
-        <SuspenseAvatar
-          className="border border-input"
-          isLoading={isAvatarLoading}
-          isLoadingProps={{
-            className: "relative aspect-square w-full",
-            children: <Skeleton className="absolute inset-0 h-full w-full" />,
-          }}
-          avatarImageProps={{
-            src:
-              getMediaSizeURL(room.information.photograph, "room-photograph") ||
-              undefined,
-            alt:
-              getMediaAltText(room.information.photograph) ||
-              "Room's Photograph",
-            onLoad: () => setIsAvatarLoading(false),
-            onError: () => setIsAvatarLoading(false),
-          }}
-          avatarFallbackProps={{
-            children: room.name.charAt(0).toUpperCase(),
-            className: "text-xl text-sidebar-primary bg-background",
-          }}
-        />
+        {isObject(room.user) ? (
+          <UserAvatar
+            user={{ ...room.user, avatar: room.information.photograph }}
+            size="user-avatar"
+            className="w-8"
+          />
+        ) : null}
 
         <p className="truncate font-medium text-sidebar-primary">{room.name}</p>
       </Link>
@@ -113,7 +96,7 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                 isLoading={isRoomListLoading || isAvatarLoading}
                 isLoadingProps={{
                   className:
-                    "relative size-12 aspect-square group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)]",
+                    "relative aspect-square size-12 group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)]",
                   children: (
                     <Skeleton className="absolute inset-0 h-full w-full" />
                   ),
@@ -139,8 +122,7 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
                   children: roomActive
                     ? roomActive.name.charAt(0).toUpperCase()
                     : "P",
-                  className:
-                    "text-lg font-normal text-sidebar-primary bg-background lg:text-xl xl:text-2xl",
+                  className: "text-xl text-foreground bg-background",
                 }}
               />
 

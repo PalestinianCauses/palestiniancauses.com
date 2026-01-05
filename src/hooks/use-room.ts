@@ -1,8 +1,8 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -16,7 +16,7 @@ export const useRoom = function useRoom() {
   const isRoom = pathname.includes("rooms");
   const roomSlug = pathname.split("/")[2];
 
-  const { isLoading: isRoomListLoading, data: roomList } = useQuery({
+  const { isLoading: isRoomListLoading, data: roomList } = useSuspenseQuery({
     queryKey: ["room-list"],
     queryFn: async () => {
       const response = await getRoomList();

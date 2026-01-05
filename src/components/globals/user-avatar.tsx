@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { HTMLAttributes, useState } from "react";
 
@@ -41,7 +41,10 @@ export const UserAvatar = function UserAvatar({
       )}
       isLoading={isAvatarLoading}
       isLoadingProps={{
-        className: cn("relative aspect-square w-full", isLoadingClassName),
+        className: cn(
+          "relative aspect-square h-[inherit] w-[inherit]",
+          isLoadingClassName,
+        ),
         children: <Skeleton className="absolute inset-0 h-full w-full" />,
       }}
       avatarImageProps={{
