@@ -1,4 +1,4 @@
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { CollectionConfig } from "payload";
 
@@ -81,7 +81,7 @@ export const Products: CollectionConfig = {
           name: "file",
           label: "File",
           type: "upload",
-          relationTo: "media",
+          relationTo: "media-private",
           required: true,
         },
       ],

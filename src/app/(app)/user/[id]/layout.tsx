@@ -1,12 +1,12 @@
-// REVIEWED - 04
+// REVIEWED - 06
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Fragment, PropsWithChildren } from "react";
 
-import { getUser } from "@/actions/user";
 import { Container } from "@/components/globals/container";
-import { PublicProfile } from "@/components/profile/public-profile";
+import { Footer } from "@/components/globals/footer";
+import { getUser } from "@/lib/server/user";
 
 export const generateMetadata = async function generateMetadata({
   params,
@@ -101,9 +101,9 @@ const PublicProfileLayout = async function PublicProfileLayout({
         as="main"
         id="main-content"
         className="section-padding-start-xl section-padding-end-xl max-w-7xl space-y-10">
-        <PublicProfile user={userResponse.data} />
         {children}
       </Container>
+      <Footer />
     </Fragment>
   );
 };

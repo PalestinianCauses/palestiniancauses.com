@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { HTMLAttributes, useState } from "react";
 
@@ -10,7 +10,7 @@ import {
   getMediaURL,
 } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
-import { Media, User } from "@/payload-types";
+import { MediaPublic, User } from "@/payload-types";
 
 import { Skeleton } from "../ui/skeleton";
 
@@ -25,7 +25,7 @@ export const UserAvatar = function UserAvatar({
   fallbackClassName,
 }: {
   user: User;
-  size?: keyof NonNullable<Media["sizes"]>;
+  size?: keyof NonNullable<MediaPublic["sizes"]>;
   className?: HTMLAttributes<HTMLElement>["className"];
   isLoadingClassName?: HTMLAttributes<HTMLElement>["className"];
   imageClassName?: HTMLAttributes<HTMLElement>["className"];
@@ -36,7 +36,7 @@ export const UserAvatar = function UserAvatar({
   return (
     <SuspenseAvatar
       className={cn(
-        "aspect-square h-auto w-full border border-input",
+        "aspect-square h-auto w-full justify-start border border-input",
         className,
       )}
       isLoading={isAvatarLoading}

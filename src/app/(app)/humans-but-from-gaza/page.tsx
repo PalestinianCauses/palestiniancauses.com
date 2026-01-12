@@ -1,4 +1,4 @@
-// REVIEWED - 19
+// REVIEWED - 20
 
 import { Metadata } from "next";
 import Link from "next/link";
@@ -175,7 +175,11 @@ export default async function HumansButFromGazaPage({
         </Container>
         <Container className="mb-12 flex max-w-7xl flex-col-reverse justify-between gap-5 sm:flex-row sm:items-end xl:mb-24">
           <div className="flex max-w-3xl flex-1 flex-col justify-stretch gap-5 sm:flex-row [&_#filter-control-sort]:min-w-48 [&_#filter-control-title]:w-full">
-            <FilterControls filterConfigs={filterConfigs} debounceTime={500} />
+            <FilterControls
+              filterConfigs={filterConfigs}
+              limitDefault={100}
+              debounceTime={500}
+            />
           </div>
           <div className="hidden sm:block">
             <Button variant="default" asChild>

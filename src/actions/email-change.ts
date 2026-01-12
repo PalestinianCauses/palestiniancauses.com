@@ -1,10 +1,14 @@
 "use server";
 
-// REVIEWED - 02
+// REVIEWED - 04
+
+import { revalidatePath } from "next/cache";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { getAuthentication } from "@/lib/server/auth";
+import { getUserByEmail } from "@/lib/server/user";
 import { ResponseSafeExecute } from "@/lib/types";
 import { createVerificationChangeEmail } from "@/lib/utils/email-templates-auth";
 import {
@@ -12,10 +16,6 @@ import {
   deleteVerificationToken,
   sendingVerificationEmail,
 } from "@/lib/utils/email-verification";
-
-import { getAuthentication } from "./auth";
-// eslint-disable-next-line import/no-cycle
-import { getUserByEmail } from "./user";
 
 export const requestChangeEmail = async function requestChangeEmail(data?: {
   newEmail?: string;
@@ -62,7 +62,7 @@ export const requestChangeEmail = async function requestChangeEmail(data?: {
         error: existingUser.error,
       };
 
-    if (existingUser.data.docs.length !== 0)
+    if (existingUser.data)
       return {
         data: null,
         error: messages.actions.auth.changeEmail.inUseEmail,
@@ -155,6 +155,8 @@ export const requestChangeEmail = async function requestChangeEmail(data?: {
         responseEmail.error || messages.actions.auth.changeEmail.serverError,
     };
   }
+
+  revalidatePath("/profile");
 
   return {
     data: messages.actions.auth.changeEmail.success,

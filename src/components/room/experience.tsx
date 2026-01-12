@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 import {
   ArrowRightIcon,
   AtSignIcon,
@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-import { getMediaAltText, getMediaURL } from "@/lib/utils/media";
+import { getMediaAltText, getMediaSizeURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
 import { Room } from "@/payload-types";
 
@@ -104,7 +104,11 @@ export const Experience = function Experience({
     list: NonNullable<Room["experience"]["list"]>;
   };
 }) {
-  const experiencePhotograph = getMediaURL(experience.photograph);
+  const experiencePhotograph = getMediaSizeURL(
+    experience.photograph,
+    "room-photograph",
+  );
+
   const experienceAltPhotograph =
     getMediaAltText(experience.photograph) || "Room Experience's Photograph";
 
@@ -129,15 +133,13 @@ export const Experience = function Experience({
           </Button>
           <div>
             {experiencePhotograph ? (
-              <div className="group relative mx-auto max-w-xl overflow-hidden border border-input bg-background">
+              <div className="group relative mx-auto aspect-[1280/1920] max-w-xl overflow-hidden border border-input bg-background">
                 <SuspenseImage
-                  isLoadingElement={
-                    <Skeleton className="aspect-square w-full lg:aspect-[2/3]" />
-                  }
+                  isLoadingElement={<Skeleton className="h-full w-full" />}
                   src={experiencePhotograph}
                   alt={experienceAltPhotograph}
                   fill
-                  className="!static aspect-auto !h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="!static object-cover transition-transform duration-500 group-hover:scale-105"
                 />
 
                 <div className="absolute left-0 top-0 h-8 w-8 border-l border-t border-foreground" />

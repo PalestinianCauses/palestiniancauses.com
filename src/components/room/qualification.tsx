@@ -1,13 +1,18 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { AtSignIcon, AwardIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
 
-import { getMediaURL } from "@/lib/utils/media";
+import {
+  getMediaAltText,
+  getMediaSizeURL,
+  getMediaURL,
+} from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
 import { Room } from "@/payload-types";
 
 import { Container } from "../globals/container";
+import { SuspenseImage } from "../globals/suspense-image";
 import { SectionHeading, SectionHeadingBadge } from "../globals/typography";
 import { Button } from "../ui/button";
 import {
@@ -17,6 +22,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
+import { Skeleton } from "../ui/skeleton";
 
 import { DateRange, InformationBadges } from "./globals";
 
@@ -92,6 +98,15 @@ export const Qualification = function Qualification({
     list: NonNullable<Room["qualification"]["list"]>;
   };
 }) {
+  const qualificationPhotograph = getMediaSizeURL(
+    qualification.photograph,
+    "room-photograph",
+  );
+
+  const experienceAltPhotograph =
+    getMediaAltText(qualification.photograph) ||
+    "Room Qualification's Photograph";
+
   return (
     <Container
       as="section"
@@ -104,20 +119,39 @@ export const Qualification = function Qualification({
         {qualification.headline}
       </SectionHeading>
       <Carousel>
-        <CarouselContent className="mb-12 h-full items-stretch lg:mb-24">
-          {qualification.list.map((item) => (
-            <QualificationCard key={item.id} qualification={item} />
-          ))}
-        </CarouselContent>
-        <div className="flex w-full items-center justify-start gap-5">
-          <CarouselPrevious
-            className="static h-16 w-16 translate-x-0 translate-y-0 rounded-none"
-            iconClassName="!h-8 !w-8 stroke-1"
-          />
-          <CarouselNext
-            className="static h-16 w-16 translate-x-0 translate-y-0 rounded-none"
-            iconClassName="!h-8 !w-8 stroke-1"
-          />
+        <div className="flex flex-col gap-10 xl:flex-row">
+          <div className="w-full xl:max-w-2xl xl:flex-1">
+            <CarouselContent className="mb-12 h-full items-stretch lg:mb-24">
+              {qualification.list.map((item) => (
+                <QualificationCard key={item.id} qualification={item} />
+              ))}
+            </CarouselContent>
+            <div className="flex w-full items-center justify-start gap-5">
+              <CarouselPrevious
+                className="static h-16 w-16 translate-x-0 translate-y-0 rounded-none"
+                iconClassName="!h-8 !w-8 stroke-1"
+              />
+              <CarouselNext
+                className="static h-16 w-16 translate-x-0 translate-y-0 rounded-none"
+                iconClassName="!h-8 !w-8 stroke-1"
+              />
+            </div>
+          </div>
+
+          {qualificationPhotograph ? (
+            <div className="group relative mx-auto aspect-[1280/1920] w-full max-w-xl overflow-hidden border border-input bg-background xl:flex-1">
+              <SuspenseImage
+                isLoadingElement={<Skeleton className="h-full w-full" />}
+                src={qualificationPhotograph}
+                alt={experienceAltPhotograph}
+                fill
+                className="!static object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+
+              <div className="absolute right-0 top-0 h-8 w-8 border-r border-t border-foreground" />
+              <div className="absolute bottom-0 left-0 h-8 w-8 border-b border-l border-foreground" />
+            </div>
+          ) : null}
         </div>
       </Carousel>
     </Container>

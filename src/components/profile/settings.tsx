@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -14,16 +14,9 @@ import {
   UserIcon,
   XIcon,
 } from "lucide-react";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -34,13 +27,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useUpdateUser } from "@/hooks/use-update-user";
-import { useUser } from "@/hooks/use-user";
-import { hasAnyRole } from "@/lib/permissions";
 import {
   profileSchema,
   ProfileSchema,
@@ -56,14 +46,13 @@ import { UserAvatar } from "../globals/user-avatar";
 
 import { AccountDeletion } from "./account-deletion";
 import { StatusBadge } from "./globals";
-import { RoomSelect } from "./settings-room-select";
 
 const ProfileAvatar = function ProfileAvatar({ user }: { user: User }) {
   const { updateUserAvatar, removeUserAvatar } = useUpdateUser();
   const doAvatarChange = async (file: File) => {
     updateUserAvatar.mutate({
       file,
-      alt: `Avatar for ${user?.firstName || "User"}`,
+      alt: `Avatar for ${user.firstName || "User"}`,
     });
   };
 
@@ -125,8 +114,11 @@ const ProfileAvatar = function ProfileAvatar({ user }: { user: User }) {
   );
 };
 
-export const ProfileSettings = function ProfileSettings() {
-  const { isLoading, data: user } = useUser();
+export const ProfileSettings = function ProfileSettings({
+  user,
+}: {
+  user: User;
+}) {
   const {
     updateUser,
     updatePassword,
@@ -138,19 +130,19 @@ export const ProfileSettings = function ProfileSettings() {
   const form = useForm<ProfileSchema>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
-      email: user?.email || "",
-      bio: user?.bio || "",
-      github: user?.linksSocial?.github || "",
-      instagram: user?.linksSocial?.instagram || "",
-      twitter: user?.linksSocial?.twitter || "",
-      linkedin: user?.linksSocial?.linkedin || "",
-      website: user?.linksSocial?.website || "",
-      showEmail: user?.privacySettings?.showEmail || false,
-      showActivity: user?.privacySettings?.showActivity ?? true,
-      showAchievements: user?.privacySettings?.showAchievements ?? true,
-      showOrders: user?.privacySettings?.showOrders || false,
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
+      email: user.email || "",
+      bio: user.bio || "",
+      github: user.linksSocial?.github || "",
+      instagram: user.linksSocial?.instagram || "",
+      twitter: user.linksSocial?.twitter || "",
+      linkedin: user.linksSocial?.linkedin || "",
+      website: user.linksSocial?.website || "",
+      showEmail: user.privacySettings?.showEmail || false,
+      showActivity: user.privacySettings?.showActivity ?? true,
+      showAchievements: user.privacySettings?.showAchievements ?? true,
+      showOrders: user.privacySettings?.showOrders || false,
     },
   });
 
@@ -163,29 +155,6 @@ export const ProfileSettings = function ProfileSettings() {
     },
     resolver: zodResolver(updatePassSchema),
   });
-
-  useEffect(() => {
-    if (user)
-      form.reset({
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        email: user.email || "",
-        bio: user.bio || "",
-        github: user.linksSocial?.github || "",
-        instagram: user.linksSocial?.instagram || "",
-        twitter: user.linksSocial?.twitter || "",
-        linkedin: user.linksSocial?.linkedin || "",
-        website: user.linksSocial?.website || "",
-        room:
-          (isObject(user.linksSocial?.room)
-            ? user.linksSocial?.room.id
-            : user.linksSocial?.room) || undefined,
-        showEmail: user.privacySettings?.showEmail || false,
-        showActivity: user.privacySettings?.showActivity ?? true,
-        showAchievements: user.privacySettings?.showAchievements ?? true,
-        showOrders: user.privacySettings?.showOrders || false,
-      });
-  }, [user, form]);
 
   const onSubmitInfo = async (data: ProfileSchema) => {
     updateUser.mutate({
@@ -204,7 +173,6 @@ export const ProfileSettings = function ProfileSettings() {
         twitter: data.twitter || "",
         linkedin: data.linkedin || "",
         website: data.website || "",
-        room: data.room || undefined,
       },
     });
   };
@@ -219,27 +187,6 @@ export const ProfileSettings = function ProfileSettings() {
       },
     });
   };
-
-  if (isLoading)
-    return (
-      <div className="space-y-5">
-        <Skeleton className="h-10 w-full bg-foreground/5" />
-        <Skeleton className="h-64 w-full bg-foreground/5" />
-      </div>
-    );
-
-  if (!user)
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Access Restricted</CardTitle>
-          <CardDescription>
-            You must be signed in to access and personalize your account
-            settings. Please log in to continue managing your profile.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    );
 
   return (
     <div className="space-y-10">
@@ -557,32 +504,6 @@ export const ProfileSettings = function ProfileSettings() {
                   </FormItem>
                 )}
               />
-
-              {hasAnyRole(user, ["admin-user", "system-user"]) ? (
-                <FormField
-                  control={form.control}
-                  name="room"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Room</FormLabel>
-                      <FormControl>
-                        <RoomSelect
-                          value={field.value?.toString()}
-                          onValueChange={(value) =>
-                            field.onChange(value ? Number(value) : undefined)
-                          }
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Connect your professional room on palestiniancauses.com
-                        to prominently display your specialized services and
-                        expertise to a wider audience.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ) : null}
 
               <Button type="submit" disabled={updateUser.isPending}>
                 {updateUser.isPending ? "Saving..." : "Save Social Links"}

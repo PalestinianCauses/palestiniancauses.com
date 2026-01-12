@@ -1,59 +1,21 @@
 "use server";
 
-// REVIEWED - 14
+// REVIEWED - 16
 
-import { PaginatedDocs } from "payload";
+import { revalidatePath } from "next/cache";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { SignUpSchema } from "@/lib/schemas/auth";
+import { getAuthentication } from "@/lib/server/auth";
 import { ResponseSafeExecute } from "@/lib/types";
 import { isResponseErrorHasDataPlusErrors } from "@/lib/types/guards";
 import { isResilientPassword } from "@/lib/utils/passwords";
 import { User } from "@/payload-types";
 
-import { getAuthentication } from "./auth";
 // eslint-disable-next-line import/no-cycle
 import { requestChangeEmail } from "./email-change";
-
-export const getUser = async function getUser(
-  userId: number,
-): Promise<ResponseSafeExecute<User, string>> {
-  const response = await actionSafeExecute(
-    payload.findByID({
-      collection: "users",
-      id: userId,
-      depth: 1,
-    }),
-    messages.actions.user.serverError,
-  );
-
-  return response;
-};
-
-export const getUserByEmail = async function getUserByEmail(
-  email: string,
-): Promise<ResponseSafeExecute<PaginatedDocs<User>, string>> {
-  const authentication = await getAuthentication();
-
-  const response = await actionSafeExecute(
-    payload.find({
-      ...(authentication
-        ? {
-            req: { user: { ...authentication, collection: "users" } },
-            user: authentication,
-            overrideAccess: false,
-          }
-        : {}),
-      collection: "users",
-      where: { email: { equals: email } },
-    }),
-    messages.actions.user.serverError,
-  );
-
-  return response;
-};
 
 export const createUser = async function createUser(
   data: SignUpSchema,
@@ -151,16 +113,19 @@ export const updateUser = async function updateUser(
     };
 
   // Email change requires verification - handled separately
-  if (data.email && data.email !== auth.email) {
+  const isEmailChange = data.email && data.email !== auth.email;
+
+  if (isEmailChange) {
     const responseChangeEmail = await requestChangeEmail({
       newEmail: data.email,
     });
 
     if (responseChangeEmail.error) return responseChangeEmail;
-
-    // Don't update email directly - it will be updated after verification
-    // pendingEmail is already stored by requestChangeEmail
   }
+
+  // Remove email from data - it should only be updated after verification
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+  const { email: _, ...dataWithoutEmail } = data;
 
   const response = await actionSafeExecute(
     payload.update({
@@ -168,11 +133,13 @@ export const updateUser = async function updateUser(
       user: auth,
       collection: "users",
       id: auth.id,
-      data,
+      data: dataWithoutEmail,
       overrideAccess: false,
     }),
     messages.actions.user.serverErrorUpdate,
   );
+
+  revalidatePath("/profile");
 
   return response;
 };
@@ -233,6 +200,8 @@ export const updatePassword = async function updatePassword(data: {
 
   if (!response.data || response.error)
     return { data: null, error: response.error };
+
+  // revalidatePath("/profile");
 
   return {
     data: messages.actions.user.update.successPassword,

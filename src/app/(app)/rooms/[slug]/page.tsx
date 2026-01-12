@@ -1,9 +1,8 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { Metadata } from "next";
 import { Fragment } from "react";
 
-import { getRoom } from "@/actions/room";
 import { Container } from "@/components/globals/container";
 import { Paragraph } from "@/components/globals/typography";
 import { About } from "@/components/room/about";
@@ -16,10 +15,32 @@ import { Qualification } from "@/components/room/qualification";
 import { RoomInteractive } from "@/components/room/room-interactive";
 import { Services } from "@/components/room/service";
 import { Skills } from "@/components/room/skills";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
 import { isNumber, isObject } from "@/lib/types/guards";
 import { getMediaURL } from "@/lib/utils/media";
 
 import { RedirectProvider } from "../../providers";
+
+// eslint-disable-next-line func-style
+export async function generateStaticParams() {
+  const response = await actionSafeExecute(
+    payload.find({
+      collection: "rooms",
+      where: { status: { equals: "published" } },
+      depth: 0,
+    }),
+    messages.actions.room.serverError,
+  );
+
+  if (!response.data || response.error || response.data.docs.length !== 0)
+    return [];
+
+  return response.data.docs.map((room) => ({
+    slug: room.slug,
+  }));
+}
 
 // eslint-disable-next-line func-style
 export async function generateMetadata({
@@ -29,14 +50,19 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   // eslint-disable-next-line prefer-destructuring
   const slug = (await params).slug;
-  const response = await getRoom(slug);
+  const response = await actionSafeExecute(
+    payload.find({
+      collection: "rooms",
+      where: { slug: { equals: slug }, status: { equals: "published" } },
+      depth: 2,
+    }),
+    messages.actions.room.serverError,
+  );
 
-  if (!response.data || response.error)
-    return {
-      title: "Room Not Found",
-    };
+  if (!response.data || response.error || response.data.docs.length !== 1)
+    return { title: "Room Not Found" };
 
-  const room = response.data;
+  const room = response.data.docs[0];
   const { name, title } = room.information;
   const description =
     room.about.paragraphs.length !== 0 && room.about.paragraphs[0].paragraph;
@@ -83,18 +109,31 @@ export default async function RoomPage({
 }) {
   // eslint-disable-next-line prefer-destructuring
   const slug = (await params).slug;
-  const response = await getRoom(slug);
+  const response = await actionSafeExecute(
+    payload.find({
+      collection: "rooms",
+      where: { slug: { equals: slug }, status: { equals: "published" } },
+      depth: 2,
+    }),
+    messages.actions.room.serverError,
+  );
+
+  if (!response.data || response.error || response.data.docs.length !== 1)
+    return {
+      title: "Room Not Found",
+    };
 
   if (!response.data || response.error) return <RedirectProvider path="/" />;
 
-  const educationList = response.data.education.list;
-  const experienceList = response.data.experience.list;
-  const qualificationList = response.data.qualification.list;
-  const skillsList = response.data.skills.list;
-  const servicesList = response.data.services?.list;
-  const packagesList = response.data.packages?.list;
+  const room = response.data.docs[0];
 
-  const room = response.data;
+  const educationList = room.education.list;
+  const experienceList = room.experience.list;
+  const qualificationList = room.qualification.list;
+  const skillsList = room.skills.list;
+  const servicesList = room.services?.list;
+  const packagesList = room.packages?.list;
+
   const { name, title } = room.information;
 
   const siteURL =
@@ -157,25 +196,22 @@ export default async function RoomPage({
       <main
         id="main-content"
         className="section-padding-start-xl section-padding-end-xl">
-        <RoomInteractive
-          room={response.data}
-          roomOwner={response.data.information.name}
-        />
+        <RoomInteractive room={room} roomOwner={room.information.name} />
         <Header
-          user={response.data.user}
-          name={response.data.information.name}
-          title={response.data.information.title}
-          headline={response.data.information.headline}
-          status={response.data.information.status}
-          photograph={response.data.information.photograph}
+          user={room.user}
+          name={room.information.name}
+          title={room.information.title}
+          headline={room.information.headline}
+          status={room.information.status}
+          photograph={room.information.photograph}
         />
 
-        <About about={response.data.about} />
+        <About about={room.about} />
 
         {educationList && educationList.length !== 0 ? (
           <Education
             education={{
-              ...response.data.education,
+              ...room.education,
               list: educationList,
             }}
           />
@@ -184,7 +220,7 @@ export default async function RoomPage({
         {experienceList && experienceList.length !== 0 ? (
           <Experience
             experience={{
-              ...response.data.experience,
+              ...room.experience,
               list: experienceList,
             }}
           />
@@ -193,7 +229,7 @@ export default async function RoomPage({
         {qualificationList && qualificationList.length !== 0 ? (
           <Qualification
             qualification={{
-              ...response.data.qualification,
+              ...room.qualification,
               list: qualificationList,
             }}
           />
@@ -202,42 +238,34 @@ export default async function RoomPage({
         {skillsList && skillsList.length !== 0 ? (
           <Skills
             skills={{
-              ...response.data.skills,
+              ...room.skills,
               list: skillsList,
             }}
           />
         ) : null}
 
-        {response.data.services && servicesList && servicesList.length !== 0 ? (
+        {room.services && servicesList && servicesList.length !== 0 ? (
           <Services
             services={{
-              ...response.data.services,
+              ...room.services,
               list: servicesList,
             }}
-            roomOwner={
-              typeof response.data.user === "number"
-                ? response.data.user
-                : response.data.user.id
-            }
+            roomOwner={typeof room.user === "number" ? room.user : room.user.id}
           />
         ) : null}
 
-        {response.data.packages && packagesList && packagesList.length !== 0 ? (
+        {room.packages && packagesList && packagesList.length !== 0 ? (
           <Packages
             packages={{
-              ...response.data.packages,
+              ...room.packages,
               list: packagesList,
             }}
-            roomOwner={
-              typeof response.data.user === "number"
-                ? response.data.user
-                : response.data.user.id
-            }
+            roomOwner={typeof room.user === "number" ? room.user : room.user.id}
           />
         ) : null}
 
-        {response.data.contact && response.data.contact.length !== 0 ? (
-          <Contact contact={response.data.contact} />
+        {room.contact && room.contact.length !== 0 ? (
+          <Contact contact={room.contact} />
         ) : null}
 
         <footer>
@@ -245,7 +273,7 @@ export default async function RoomPage({
             <Paragraph className="text-center text-sm lg:text-lg">
               &copy; {new Date().getFullYear()}{" "}
               <span className="font-medium text-foreground">
-                {response.data.information.name}
+                {room.information.name}
               </span>
               . All Rights Reserved. <br /> A Room within{" "}
               <span className="font-medium text-foreground">

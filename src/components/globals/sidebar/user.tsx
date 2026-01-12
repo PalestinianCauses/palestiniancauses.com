@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import {
   ActivityIcon,
@@ -70,7 +70,11 @@ export const SidebarUser = function SidebarUser() {
                   isActive={pathname.startsWith("/signin")}
                   onClick={() => setOpenMobile(false)}
                   className="relative overflow-visible text-muted-foreground hover:bg-sidebar hover:text-sidebar-primary active:bg-sidebar active:font-medium active:text-sidebar-primary data-[active_=_true]:bg-sidebar data-[active_=_true]:text-sidebar-primary data-[active_=_true]:after:absolute data-[active_=_true]:after:-left-2 data-[active_=_true]:after:top-0 data-[active_=_true]:after:h-full data-[active_=_true]:after:w-px data-[active_=_true]:after:bg-sidebar-primary group-data-[collapsible_=_icon]:!size-[calc(var(--sidebar-width-icon)_-_2rem)] group-data-[collapsible_=_icon]:!p-0 group-data-[collapsible_=_icon]:data-[active_=_true]:after:-left-4">
-                  <Link href="/signin">
+                  <Link
+                    href={[
+                      "/signin",
+                      `redirect=${encodeURIComponent(pathname)}`,
+                    ].join("?")}>
                     <div className="flex aspect-square size-5 items-center justify-center group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_2rem)]">
                       <LogInIcon className="!size-5 stroke-[1.5]" />
                     </div>
@@ -131,7 +135,7 @@ export const SidebarUser = function SidebarUser() {
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className="gap-2.5 px-2.5">
                       <Link
-                        href="/profile/activity"
+                        href={["/profile/", "tab=activity"].join("?")}
                         onClick={() => setOpenMobile(false)}>
                         <ActivityIcon />
                         Activity
@@ -139,7 +143,7 @@ export const SidebarUser = function SidebarUser() {
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className="gap-2.5 px-2.5">
                       <Link
-                        href="/profile/achievements"
+                        href={["/profile/", "tab=achievements"].join("?")}
                         onClick={() => setOpenMobile(false)}>
                         <AwardIcon />
                         Achievements
@@ -147,7 +151,7 @@ export const SidebarUser = function SidebarUser() {
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className="gap-2.5 px-2.5">
                       <Link
-                        href="/profile/notifications"
+                        href={["/profile/", "tab=notifications"].join("?")}
                         onClick={() => setOpenMobile(false)}
                         className="relative">
                         <BellIcon />
@@ -165,7 +169,7 @@ export const SidebarUser = function SidebarUser() {
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className="gap-2.5 px-2.5">
                       <Link
-                        href="/profile/settings"
+                        href={["/profile/", "tab=settings"].join("?")}
                         onClick={() => setOpenMobile(false)}>
                         <Settings2Icon />
                         Account Settings

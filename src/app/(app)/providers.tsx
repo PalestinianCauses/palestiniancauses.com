@@ -4,6 +4,7 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
+import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -70,13 +71,15 @@ export const ActivityProvider = function ActivityProvider() {
 
 export const RedirectProvider = function RedirectProvider({
   path,
+  messageToast,
   children,
-}: { path: string } & PropsWithChildren) {
+}: { path: string; messageToast?: string } & PropsWithChildren) {
   const router = useRouter();
 
   useEffect(() => {
+    if (messageToast) toast.error(messageToast);
     router.push(path);
-  }, [router, path]);
+  }, [router, path, messageToast]);
 
   return children;
 };

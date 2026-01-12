@@ -1,4 +1,4 @@
-// REVIEWED - 20
+// REVIEWED - 21
 
 import { CollectionConfig } from "payload";
 
@@ -179,6 +179,33 @@ export const DiaryEntries: CollectionConfig = {
           previousDocument.status !== "approved"
         )
           await createNotificationPromise;
+      },
+    ],
+    beforeDelete: [
+      async ({ id, req }) => {
+        // Cascade delete: remove all comments on this diary entry
+        // Only delete top-level comments (no parent) - their replies are handled by Comments hook
+        const comments = await req.payload.find({
+          collection: "comments",
+          where: {
+            and: [
+              { on: { equals: { relationTo: "diary-entries", value: id } } },
+              { parent: { exists: false } },
+            ],
+          },
+          limit: 0,
+        });
+
+        // Delete one by one to ensure Comments beforeDelete hook runs for each
+        // This triggers cascade delete for replies
+        await Promise.all(
+          comments.docs.map((comment) =>
+            req.payload.delete({
+              collection: "comments",
+              id: comment.id,
+            }),
+          ),
+        );
       },
     ],
   },

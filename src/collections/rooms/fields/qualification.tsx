@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { Field } from "payload";
 
@@ -51,7 +51,7 @@ export const QualificationField: Field = {
       label: "Qualification Photograph",
       name: "photograph",
       type: "upload",
-      relationTo: "media",
+      relationTo: "media-public",
       hasMany: false,
       required: false,
     },
@@ -168,7 +168,7 @@ export const QualificationField: Field = {
           label: "Certificate Document",
           name: "certificate",
           type: "upload",
-          relationTo: "media",
+          relationTo: "media-public",
           hasMany: false,
           required: true,
         },

@@ -1,11 +1,9 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { GeneratedTypes } from "payload";
 
-import { messages } from "@/lib/messages";
-import { actionSafeExecute } from "@/lib/network";
-import { payload } from "@/lib/payload";
+import { getPublicCollection } from "@/lib/api/public";
 import { getQueryClient } from "@/lib/query";
 import { FiltersOptions } from "@/lib/types";
 import { Comment } from "@/payload-types";
@@ -54,18 +52,21 @@ export const CommentPreFetch = async function CommentPreFetch({
   await queryClient.prefetchInfiniteQuery({
     queryKey,
     queryFn: async ({ pageParam = filters.page }) => {
-      const response = await actionSafeExecute(
-        payload.find({
-          collection: "comments",
-          page: pageParam,
-          limit: filters.limit,
-          sort: filters.sort,
-          where: filters.fields,
-        }),
-        messages.actions.comment.serverErrorGet,
-      );
+      const response = await getPublicCollection<"comments">({
+        collection: "comments",
+        page: pageParam,
+        limit: filters.limit,
+        // eslint-disable-next-line no-nested-ternary
+        sort: filters.sort
+          ? Array.isArray(filters.sort)
+            ? filters.sort.join(",")
+            : filters.sort
+          : undefined,
+        where: filters.fields,
+        depth: 2,
+      });
 
-      if (!response.data || response.data.docs.length === 0 || response.error)
+      if (!response.data || response.error || response.data.docs.length === 0)
         return null;
 
       return response.data;
@@ -75,11 +76,7 @@ export const CommentPreFetch = async function CommentPreFetch({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <CommentList
-        queryKey={queryKey}
-        filters={filters}
-        fieldsSearch={fieldsSearch}
-      />
+      <CommentList queryKey={queryKey} filters={filters} />
     </HydrationBoundary>
   );
 };

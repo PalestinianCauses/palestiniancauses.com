@@ -1,8 +1,11 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 03
+
+import { revalidatePath } from "next/cache";
 
 import { messages } from "@/lib/messages";
+import { getAuthentication } from "@/lib/server/auth";
 import { ResponseSafeExecute } from "@/lib/types";
 import { createVerificationEmail } from "@/lib/utils/email-templates-auth";
 import {
@@ -10,8 +13,6 @@ import {
   deleteVerificationToken,
   sendingVerificationEmail,
 } from "@/lib/utils/email-verification";
-
-import { getAuthentication } from "./auth";
 
 export const resendingVerificationEmail =
   async function resendingVerificationEmail(): Promise<
@@ -62,6 +63,8 @@ export const resendingVerificationEmail =
           messages.actions.auth.verificationEmail.serverError,
       };
     }
+
+    revalidatePath("/profile");
 
     return {
       data: messages.actions.auth.verificationEmail.successSent,

@@ -1,9 +1,9 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Metadata } from "next";
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 
-import { BlogRoomList } from "@/components/blog-room/list";
+import { BlogRoomList, BlogRoomListLoading } from "@/components/blog-room/list";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
 import { Paragraph, SectionHeading } from "@/components/globals/typography";
@@ -76,9 +76,11 @@ export default function BlogsRoomsPage() {
           </header>
         </Container>
         <Container className="mb-12 max-w-7xl xl:mb-24">
-          <section aria-label="Blog rooms">
-            <BlogRoomList />
-          </section>
+          <div aria-label="Blog rooms">
+            <Suspense fallback={<BlogRoomListLoading />}>
+              <BlogRoomList />
+            </Suspense>
+          </div>
         </Container>
       </main>
       <Footer />

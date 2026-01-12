@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import {
   ArrowRightIcon,
@@ -9,7 +9,7 @@ import {
 import Link from "next/link";
 import { ElementType, Fragment, HTMLAttributes, useId } from "react";
 
-import { getMediaAltText, getMediaURL } from "@/lib/utils/media";
+import { getMediaAltText, getMediaSizeURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
 import { Room } from "@/payload-types";
 
@@ -197,8 +197,9 @@ export const About = function About({
     },
   ];
 
-  const aboutPhotograph = getMediaURL(photograph);
-  const aboutAltPhotograph = getMediaAltText(photograph);
+  const aboutPhotograph = getMediaSizeURL(photograph, "room-photograph");
+  const aboutAltPhotograph =
+    getMediaAltText(photograph) || "Room About's Photograph";
 
   return (
     <Fragment>
@@ -239,13 +240,11 @@ export const About = function About({
             ) : (
               <div className="order-1 xl:order-2">
                 <div className="group relative h-full">
-                  <div className="relative mx-auto h-full max-w-xl overflow-hidden border border-input bg-background">
+                  <div className="relative mx-auto aspect-[1280/1920] max-w-xl overflow-hidden border border-input bg-background">
                     <SuspenseImage
-                      isLoadingElement={
-                        <Skeleton className="aspect-square w-full lg:aspect-auto lg:h-full" />
-                      }
+                      isLoadingElement={<Skeleton className="h-full w-full" />}
                       src={aboutPhotograph}
-                      alt={aboutAltPhotograph || "Room About's Photograph"}
+                      alt={aboutAltPhotograph}
                       fill
                       className="!static object-cover transition-transform duration-500 group-hover:scale-105"
                     />

@@ -1,14 +1,13 @@
 "use server";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { getAuthentication } from "@/lib/server/auth";
+import { getUserAchievements } from "@/lib/server/user-achievements";
 import { ResponseSafeExecute } from "@/lib/types";
-
-import { getAuthentication } from "./auth";
-import { getUserAchievements } from "./user-achievements";
 
 export const checkingPlusNotifyingAchievements =
   async function checkingPlusNotifyingAchievements(): Promise<
@@ -21,7 +20,7 @@ export const checkingPlusNotifyingAchievements =
     if (!auth) return { data: [], error: null };
 
     // Get user achievements
-    const achievements = await getUserAchievements();
+    const { achievementsGained } = await getUserAchievements(false, auth);
 
     // Get all existing notification records for this user
     const notificationsExisting = await actionSafeExecute(
@@ -45,7 +44,7 @@ export const checkingPlusNotifyingAchievements =
     );
 
     // Find newly unlocked achievements that haven't been notified yet
-    const achievementsNew = achievements.filter(
+    const achievementsNew = achievementsGained.filter(
       (achievement) =>
         achievement.unlocked &&
         (!notificationMap.has(achievement.id) ||

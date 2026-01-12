@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { BlocksFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
 import { CollectionConfig, PayloadRequest } from "payload";
@@ -202,7 +202,7 @@ export const BlogsPosts: CollectionConfig = {
       label: "Featured Image",
       name: "imageFeatured",
       type: "upload",
-      relationTo: "media",
+      relationTo: "media-public",
       required: false,
     },
     {

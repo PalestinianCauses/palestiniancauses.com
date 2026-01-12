@@ -1,16 +1,13 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 08
 
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns/format";
 import {
-  ArrowDownIcon,
+  ArrowRightIcon,
+  DownloadIcon,
+  ExternalLinkIcon,
   Package2Icon,
   PackageCheckIcon,
   PackageIcon,
@@ -20,17 +17,20 @@ import {
   PackageXIcon,
   XIcon,
 } from "lucide-react";
-import { useMemo } from "react";
+import Link from "next/link";
+import { Fragment } from "react";
 import { toast } from "sonner";
 
-import { getCollection } from "@/actions/collection";
-import { getUserActivityOrdersStats } from "@/actions/user-activity-orders";
-import { userOrdersCancel } from "@/actions/user-orders";
-import { isObject } from "@/lib/types/guards";
+import {
+  userOrdersCancel,
+  userOrdersGetCheckoutURL,
+} from "@/actions/user-orders";
+import { messages } from "@/lib/messages";
+import { isObject, isString } from "@/lib/types/guards";
+import { createProductDownloadingURLs } from "@/lib/utils/product-download-urls";
 import { cn } from "@/lib/utils/styles";
-import { Order, User } from "@/payload-types";
+import { Order } from "@/payload-types";
 
-import { SafeHydrate } from "../globals/safe-hydrate";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
 import {
   Accordion,
@@ -41,7 +41,7 @@ import {
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 
-import { LoadingActivity, StatCard, StatusBadge } from "./globals";
+import { StatCard, StatusBadge } from "./globals";
 
 const OrderItemType = function OrderItemType({
   orderType,
@@ -94,7 +94,6 @@ export const OrderItem = function OrderItem({
   isPublicProfile?: boolean;
   order: Order;
 }) {
-  const queryClient = useQueryClient();
   const { mutate: orderCancel, isPending: isPendingOrderCancel } = useMutation({
     mutationFn: async (id: number) => {
       const response = await userOrdersCancel(id);
@@ -107,14 +106,33 @@ export const OrderItem = function OrderItem({
       }
 
       toast.success(response.data);
-      queryClient.invalidateQueries({
-        queryKey: [
-          "user-activity-orders",
-          isObject(order.user) ? order.user.id : order.user,
-        ],
-      });
     },
   });
+
+  const { mutate: getCheckoutURL, isPending: isPendingCheckout } = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await userOrdersGetCheckoutURL(id);
+      return response;
+    },
+    onSuccess: (response) => {
+      if (!response.data || response.error) {
+        toast.error(
+          response.error ||
+            messages.actions.order.serverErrorGetCheckoutSession,
+        );
+
+        return;
+      }
+
+      window.location.href = response.data;
+    },
+  });
+
+  const isInProgressProductOrder =
+    !isPublicProfile &&
+    order.orderType === "product" &&
+    order.orderStatus === "in-progress" &&
+    order.productOrderStatus === "pending";
 
   return (
     <AccordionItem
@@ -246,34 +264,74 @@ export const OrderItem = function OrderItem({
             <Separator className="hidden w-full flex-1 bg-input/50 sm:block" />
           </div>
           <div className="mb-5 flex w-full flex-col gap-2.5">
-            {order.items.map((orderItem) => (
-              <div
-                key={orderItem.id}
-                className="flex w-full flex-col items-start justify-start gap-2.5 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex w-full flex-col items-start justify-start gap-x-5 gap-y-2.5 sm:w-max sm:flex-row sm:items-center">
-                  <SubSectionHeading
-                    as="h5"
-                    className="flex w-full items-center justify-between gap-2.5 text-base tracking-normal text-foreground sm:w-max sm:justify-start lg:text-base xl:text-base">
-                    <span className="block max-w-60 truncate sm:max-w-80 md:max-w-sm">
-                      {(isObject(orderItem.product) &&
-                        orderItem.product.title) ||
-                        (isObject(orderItem.service) &&
-                          orderItem.service.name) ||
-                        (isObject(orderItem.package) &&
-                          orderItem.package.name)}{" "}
-                    </span>
-                    <div className="flex items-center justify-start gap-2.5">
-                      <XIcon className="size-4 text-muted-foreground" />
-                      {orderItem.quantity}
+            {order.items.map((orderItem) => {
+              const isCompletePlusPaid =
+                order.orderStatus === "completed" &&
+                order.productOrderStatus === "paid" &&
+                orderItem.itemType === "product";
+
+              const downloadingURLs =
+                isCompletePlusPaid && isObject(orderItem.product)
+                  ? createProductDownloadingURLs(orderItem.product)
+                  : [];
+
+              return (
+                <div key={orderItem.id} className="flex w-full flex-col gap-5">
+                  <div className="flex w-full flex-col items-start justify-start gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex w-full flex-col items-start justify-start gap-x-5 gap-y-2.5 sm:w-max sm:flex-row sm:items-center">
+                      <SubSectionHeading
+                        as="h5"
+                        className="flex w-full items-center justify-between gap-2.5 text-base tracking-normal text-foreground sm:w-max sm:justify-start lg:text-base xl:text-base">
+                        <span className="block max-w-60 truncate sm:max-w-80 md:max-w-sm">
+                          {(isObject(orderItem.product) &&
+                            orderItem.product.title) ||
+                            (isObject(orderItem.service) &&
+                              orderItem.service.name) ||
+                            (isObject(orderItem.package) &&
+                              orderItem.package.name)}{" "}
+                        </span>
+                        <div className="flex items-center justify-start gap-2.5">
+                          <XIcon className="size-4 text-muted-foreground" />
+                          {orderItem.quantity}
+                        </div>
+                      </SubSectionHeading>
+                      <OrderItemType orderType={orderItem.itemType} />
                     </div>
-                  </SubSectionHeading>
-                  <OrderItemType orderType={orderItem.itemType} />
+                    <Paragraph className="text-mono text-base font-semibold text-foreground lg:text-base">
+                      {orderItem.price} USD
+                    </Paragraph>
+                  </div>
+                  {downloadingURLs.length !== 0 ? (
+                    <div className="space-y-2.5 p-0">
+                      {downloadingURLs.map((link, index) => (
+                        <Button
+                          key={link.url || index}
+                          variant="outline"
+                          size="lg"
+                          className="w-full justify-start px-5"
+                          asChild>
+                          <Link
+                            href={link.url}
+                            target="_blank"
+                            rel="noreferrer noopener">
+                            <ExternalLinkIcon />
+                            <span className="mr-auto truncate">
+                              {link.title}
+                              {link.isFile && link.fileSize ? (
+                                <span className="ml-2.5 font-mono text-sm leading-none text-muted-foreground">
+                                  ({Math.round(link.fileSize / 1024 / 1024)} MB)
+                                </span>
+                              ) : null}
+                            </span>
+                            <DownloadIcon className="!size-5" />
+                          </Link>
+                        </Button>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
-                <Paragraph className="text-mono text-base font-semibold text-foreground lg:text-base">
-                  {orderItem.price} USD
-                </Paragraph>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="flex w-full flex-row items-center justify-between gap-5">
             <SubSectionHeading
@@ -286,17 +344,34 @@ export const OrderItem = function OrderItem({
               {order.total} USD
             </Paragraph>
           </div>
-          {!isPublicProfile &&
-          order.orderStatus !== "completed" &&
-          order.orderStatus !== "cancelled" ? (
-            <Button
-              variant="link"
-              disabled={isPendingOrderCancel}
-              onClick={() => orderCancel(order.id)}
-              className="my-5 mb-0 w-max p-0 text-muted-foreground hover:text-foreground">
-              <XIcon />
-              {isPendingOrderCancel ? "Cancelling..." : "Cancel Order"}
-            </Button>
+          {isInProgressProductOrder ? (
+            <div className="my-5 mb-0 flex flex-col items-start justify-start gap-5 sm:flex-row sm:items-center">
+              {isString(order.stripeSessionId) ? (
+                <Button
+                  variant="default"
+                  disabled={isPendingCheckout || isPendingOrderCancel}
+                  onClick={() => getCheckoutURL(order.id)}
+                  className="w-max">
+                  {isPendingCheckout ? (
+                    "Preparing your checkout—please hold on..."
+                  ) : (
+                    <Fragment>
+                      Continue to Checkout
+                      <ArrowRightIcon className="size-4" />
+                    </Fragment>
+                  )}
+                </Button>
+              ) : null}
+
+              <Button
+                variant="link"
+                disabled={isPendingOrderCancel || isPendingCheckout}
+                onClick={() => orderCancel(order.id)}
+                className="w-max p-0 text-muted-foreground hover:text-foreground">
+                <XIcon />
+                {isPendingOrderCancel ? "Cancelling..." : "Cancel Order"}
+              </Button>
+            </div>
           ) : null}
         </div>
       </AccordionContent>
@@ -305,161 +380,84 @@ export const OrderItem = function OrderItem({
 };
 
 export const ActivityOrders = function ActivityOrders({
-  user,
+  orders,
 }: {
-  user: User;
+  orders: Order[];
 }) {
-  const { isLoading: isLoadingStats, data: stats } = useQuery({
-    queryKey: ["user-activity-orders-stats", user.id],
-    queryFn: async () => {
-      const response = await getUserActivityOrdersStats();
-      return response;
-    },
-  });
-
-  const queryKey = useMemo(() => ["user-activity-orders", user.id], [user.id]);
-
-  const {
-    isLoading,
-    isFetching,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-    data,
-  } = useInfiniteQuery({
-    queryKey,
-    queryFn: async ({ pageParam = 1 }) => {
-      if (!user) return null;
-
-      const response = await getCollection({
-        collection: "orders",
-        req: { user: { collection: "users", ...user } },
-        user,
-        filters: {
-          page: pageParam,
-          limit: 2,
-          fields: { user: { equals: user.id } },
-        },
-        depth: 4,
-      });
-
-      if (!response.data || response.data.docs.length === 0 || response.error)
-        return null;
-
-      return response.data;
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) =>
-      lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
-  });
-
-  const { orders } = useMemo(() => {
-    if (!data) return { orders: [] };
-
-    const pages = data.pages.flatMap((page) => (page ? page.docs : []));
-    return { orders: pages };
-  }, [data]);
-
+  const total = orders.length;
+  const news = orders.filter((order) => order.orderStatus === "new").length;
+  const completed = orders.filter(
+    (order) => order.orderStatus === "completed",
+  ).length;
+  const inProgress = orders.filter(
+    (order) => order.orderStatus === "in-progress",
+  ).length;
+  const cancelled = orders.filter(
+    (order) => order.orderStatus === "cancelled",
+  ).length;
+  const notApplicable = orders.filter(
+    (order) => order.orderStatus === "not-applicable",
+  ).length;
   return (
-    <SafeHydrate
-      isLoading={isLoadingStats || isLoading}
-      isLoadingComponent={LoadingActivity}>
-      {(() => {
-        if (
-          !user ||
-          !stats ||
-          !stats.data ||
-          stats.error ||
-          !data ||
-          orders.length === 0
-        )
-          return null;
+    <div className="space-y-10">
+      <div className="space-y-0.5">
+        <SubSectionHeading
+          as="h2"
+          className="flex items-center gap-2.5 text-xl !leading-none lg:text-xl lg:!leading-none xl:text-xl xl:!leading-none">
+          <Package2Icon className="size-6 stroke-[1.5]" />
+          Orders Activity
+        </SubSectionHeading>
+        <Paragraph className="text-base lg:text-base">
+          Your orders and their status across our platform
+        </Paragraph>
+      </div>
 
-        return (
-          <div className="space-y-10">
-            <div className="space-y-0.5">
-              <SubSectionHeading
-                as="h2"
-                className="flex items-center gap-2.5 text-xl !leading-none lg:text-xl lg:!leading-none xl:text-xl xl:!leading-none">
-                <Package2Icon className="size-6 stroke-[1.5]" />
-                Orders Activity
-              </SubSectionHeading>
-              <Paragraph className="text-base lg:text-base">
-                Your orders and their status across our platform
-              </Paragraph>
-            </div>
+      <div className="!mb-20 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <StatCard color="blue" label="Total" value={total} icon={PackageIcon} />
 
-            <div className="!mb-20 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
-              <StatCard
-                color="blue"
-                label="Total"
-                value={stats.data.total}
-                icon={PackageIcon}
-              />
+        <StatCard
+          color="teal"
+          label="New"
+          value={news}
+          icon={PackagePlusIcon}
+        />
 
-              <StatCard
-                color="teal"
-                label="New"
-                value={stats.data.new}
-                icon={PackagePlusIcon}
-              />
+        <StatCard
+          color="green"
+          label="Completed"
+          value={completed}
+          icon={PackageCheckIcon}
+        />
 
-              <StatCard
-                color="green"
-                label="Completed"
-                value={stats.data.completed}
-                icon={PackageCheckIcon}
-              />
+        <StatCard
+          color="yellow"
+          label="In Progress"
+          value={inProgress}
+          icon={PackageSearchIcon}
+        />
 
-              <StatCard
-                color="yellow"
-                label="In Progress"
-                value={stats.data.inProgress}
-                icon={PackageSearchIcon}
-              />
+        <StatCard
+          color="red"
+          label="Cancelled"
+          value={cancelled}
+          icon={PackageXIcon}
+        />
 
-              <StatCard
-                color="red"
-                label="Cancelled"
-                value={stats.data.cancelled}
-                icon={PackageXIcon}
-              />
+        <StatCard
+          color="primary"
+          label="N/A"
+          value={notApplicable}
+          icon={PackageMinusIcon}
+        />
+      </div>
 
-              <StatCard
-                color="primary"
-                label="N/A"
-                value={stats.data.notApplicable}
-                icon={PackageMinusIcon}
-              />
-            </div>
-
-            <section
-              className={cn("flex w-full flex-col gap-5", {
-                "pointer-events-none opacity-50": isFetching,
-              })}>
-              <Accordion type="single" collapsible className="space-y-5">
-                {orders.map((order) => (
-                  <OrderItem key={order.id} order={order} />
-                ))}
-              </Accordion>
-            </section>
-
-            {hasNextPage ? (
-              <div className="flex w-full items-center justify-center">
-                <Button
-                  variant="link"
-                  disabled={isFetchingNextPage}
-                  onClick={() => fetchNextPage()}>
-                  {isFetchingNextPage
-                    ? "Loading more orders..."
-                    : "Load more orders"}
-                  <ArrowDownIcon />
-                </Button>
-              </div>
-            ) : null}
-          </div>
-        );
-      })()}
-    </SafeHydrate>
+      <section className={cn("flex w-full flex-col gap-5", {})}>
+        <Accordion type="single" collapsible className="space-y-5">
+          {orders.map((order) => (
+            <OrderItem key={order.id} order={order} />
+          ))}
+        </Accordion>
+      </section>
+    </div>
   );
 };

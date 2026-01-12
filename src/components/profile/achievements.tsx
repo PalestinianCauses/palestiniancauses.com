@@ -1,6 +1,4 @@
-"use client";
-
-// REVIEWED - 04
+// REVIEWED - 06
 
 import { format } from "date-fns";
 import {
@@ -21,17 +19,11 @@ import {
   WifiPenIcon,
 } from "lucide-react";
 
-import { Achievement } from "@/actions/user-achievements";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useUser } from "@/hooks/use-user";
-import { useUserAchievements } from "@/hooks/use-user-achievements";
+import { Achievement } from "@/lib/achievements";
+import { getUserAchievements } from "@/lib/server/user-achievements";
 import { cn } from "@/lib/utils/styles";
+import { User } from "@/payload-types";
 
 import { Paragraph, SubSectionHeading } from "../globals/typography";
 import { Progress } from "../ui/progress";
@@ -162,46 +154,37 @@ export const ProfileAchievementsLoading = (
   </div>
 );
 
-export const ProfileAchievements = function ProfileAchievements() {
-  const { isLoading: isUserLoading, data: user } = useUser();
-  const { isLoading: isLoadingAchievements, data: achievements } =
-    useUserAchievements({ userId: user?.id });
-
-  if (isUserLoading || isLoadingAchievements) return ProfileAchievementsLoading;
-
-  if (!user) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Authentication Required</CardTitle>
-          <CardDescription>
-            Kindly sign in to access and celebrate your personal achievements.
-            We look forward to recognizing your milestones.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    );
-  }
-
-  const achievementsGained = achievements?.filter((a) => a.unlocked) || [];
-  const achievementsLocked = achievements?.filter((a) => !a.unlocked) || [];
+export const ProfileAchievements = async function ProfileAchievements({
+  isPublicProfile = false,
+  user,
+}: {
+  isPublicProfile?: boolean;
+  user: User;
+}) {
+  const { achievementsGained, achievementsLocked } = await getUserAchievements(
+    isPublicProfile,
+    user,
+  );
 
   return (
     <div className="space-y-10">
-      <div className="space-y-0.5">
-        <SubSectionHeading
-          as="h2"
-          className="flex items-center gap-2.5 text-xl !leading-none lg:text-xl lg:!leading-none xl:text-xl xl:!leading-none">
-          <TrophyIcon className="size-6 stroke-[1.5]" />
-          Achievements
-        </SubSectionHeading>
-        <Paragraph className="max-w-2xl text-base lg:text-base">
-          You have attained {achievementsGained.length} out of{" "}
-          {achievements?.length || 0} achievements. Each milestone is a
-          testament to your dedication and progress—let us continue striving for
-          excellence together.
-        </Paragraph>
-      </div>
+      {!isPublicProfile ? (
+        <div className="space-y-0.5">
+          <SubSectionHeading
+            as="h2"
+            className="flex items-center gap-2.5 text-xl !leading-none lg:text-xl lg:!leading-none xl:text-xl xl:!leading-none">
+            <TrophyIcon className="size-6 stroke-[1.5]" />
+            Achievements
+          </SubSectionHeading>
+          <Paragraph className="max-w-2xl text-base lg:text-base">
+            You have attained {achievementsGained.length} out of{" "}
+            {[...achievementsGained, ...achievementsLocked]?.length || 0}{" "}
+            achievements. Each milestone is a testament to your dedication and
+            progress—let us continue striving for excellence together.
+          </Paragraph>
+        </div>
+      ) : null}
+
       {achievementsGained.length !== 0 ? (
         <div className="flex flex-col items-start justify-start gap-10">
           <SubSectionHeading
@@ -216,6 +199,7 @@ export const ProfileAchievements = function ProfileAchievements() {
           </div>
         </div>
       ) : null}
+
       <div className="flex flex-col items-start justify-start gap-10">
         <SubSectionHeading
           as="h3"

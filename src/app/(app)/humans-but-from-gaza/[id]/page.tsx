@@ -1,13 +1,15 @@
-// REVIEWED - 17
+// REVIEWED - 18
 
 import { MessageSquareTextIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import { ReactNode, Suspense } from "react";
 
-import { getDiaryEntry } from "@/actions/diary-entry";
 import { CreateCommentForm } from "@/components/comments/forms/create";
 import { CommentPreFetch } from "@/components/comments/pre-fetch";
-import { DiaryEntryListItemBadges } from "@/components/diary-entry/list";
+import {
+  DiaryEntryBadgesListItemLoading,
+  DiaryEntryListItemBadges,
+} from "@/components/diary-entry/list";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
 import { Loading } from "@/components/globals/loading";
@@ -17,14 +19,24 @@ import {
   SubSectionHeading,
 } from "@/components/globals/typography";
 import { Separator } from "@/components/ui/separator";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
 
 /* eslint-disable-next-line func-style  */
-export async function generateMetadata({
-  params,
-}: {
+export async function generateMetadata(props: {
   params: Promise<{ id: string }>;
 }) {
-  const diaryEntry = await getDiaryEntry(parseInt((await params).id, 10));
+  // eslint-disable-next-line react/destructuring-assignment
+  const params = await props.params;
+  const diaryEntry = await actionSafeExecute(
+    payload.findByID({
+      collection: "diary-entries",
+      id: parseInt(params.id, 10),
+      depth: 0,
+    }),
+    messages.actions.diaryEntry.serverErrorGet,
+  );
 
   if (!diaryEntry.data || diaryEntry.error)
     return { title: "Diary Entry Not Found" };
@@ -40,7 +52,14 @@ export default async function HumanButFromGazaPage(props: {
   /* eslint-disable react/destructuring-assignment */
   const params = await props.params;
 
-  const diaryEntry = await getDiaryEntry(parseInt(params.id, 10));
+  const diaryEntry = await actionSafeExecute(
+    payload.findByID({
+      collection: "diary-entries",
+      id: parseInt(params.id, 10),
+      depth: 0,
+    }),
+    messages.actions.diaryEntry.serverErrorGet,
+  );
 
   if (
     !diaryEntry.data ||
@@ -53,21 +72,24 @@ export default async function HumanButFromGazaPage(props: {
     <main className="section-padding-start-xl relative">
       <Container as="section" className="max-w-6xl">
         <Container className="mx-0 mb-12 max-w-5xl px-0 lg:px-0">
-          <DiaryEntryListItemBadges diaryEntry={diaryEntry.data} />
+          <Suspense fallback={DiaryEntryBadgesListItemLoading}>
+            <DiaryEntryListItemBadges diaryEntry={diaryEntry.data} />
+          </Suspense>
           <SectionHeading>{diaryEntry.data.title}</SectionHeading>
         </Container>
         <Container className="flex flex-col gap-8 px-0 lg:px-0">
           {diaryEntry.data.content
             .split(/(?:\r?\n){2,}/)
             .filter((paragraph) => paragraph.trim() !== "")
-            .map((paragraph) => (
-              <Paragraph key={paragraph}>
+            .map((paragraph, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <Paragraph key={`${paragraph}-${index}`}>
                 {paragraph
                   .split(/(?:\r?\n)/)
-                  .reduce<ReactNode[]>((accumulator, line, index) => {
-                    if (index === 0) return [line];
+                  .reduce<ReactNode[]>((accumulator, line, lineIndex) => {
+                    if (lineIndex === 0) return [line];
                     // eslint-disable-next-line react/no-array-index-key
-                    return [...accumulator, <br key={index} />, line];
+                    return [...accumulator, <br key={lineIndex} />, line];
                   }, [])}
               </Paragraph>
             ))}

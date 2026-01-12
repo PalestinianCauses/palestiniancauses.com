@@ -1,14 +1,13 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { getUser } from "@/lib/server/user";
 import { ResponseSafeExecute } from "@/lib/types";
 import { isObject } from "@/lib/types/guards";
-
-import { getUser } from "./user";
 
 export const verifyEmail = async function verifyEmail(
   token: string,

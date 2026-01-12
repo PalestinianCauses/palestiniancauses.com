@@ -1,16 +1,18 @@
 "use server";
 
-// REVIEWED - 18
+// REVIEWED - 20
+
+import { revalidatePath } from "next/cache";
 
 import { httpStatusesMessages, messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { hasPermission } from "@/lib/permissions";
+import { getAuthentication } from "@/lib/server/auth";
 import { ErrorPayload, ResponseSafeExecute } from "@/lib/types";
 import { isResponseError } from "@/lib/types/guards";
-import { DiaryEntry, User } from "@/payload-types";
+import { DiaryEntry } from "@/payload-types";
 
-import { getAuthentication } from "./auth";
 import { notifySubscribers } from "./notification-subscription";
 
 export const createDiaryEntry = async function createDiaryEntry(
@@ -30,7 +32,7 @@ export const createDiaryEntry = async function createDiaryEntry(
 
   const response = await actionSafeExecute<DiaryEntry, ErrorPayload>(
     payload.create({
-      req: { user: auth },
+      req: { user: { ...auth, collection: "users" } },
       user: auth,
       collection: "diary-entries",
       data: {
@@ -89,43 +91,6 @@ export const createDiaryEntry = async function createDiaryEntry(
   };
 };
 
-// public information no need to override access
-export const getDiaryEntry = async function getDiaryEntry(
-  id: number,
-): Promise<ResponseSafeExecute<DiaryEntry>> {
-  const response = await actionSafeExecute(
-    payload.findByID({
-      collection: "diary-entries",
-      id,
-      depth: 0,
-    }),
-    messages.actions.diaryEntry.serverErrorGet,
-  );
-
-  if (response.data && response.data.status !== "approved")
-    return {
-      data: null,
-      error: messages.actions.diaryEntry.notFound,
-    };
-
-  return response;
-};
-
-// public information no need to override access
-export const getDiaryEntryAuthor = async function getDiaryEntryAuthor(
-  id: number,
-): Promise<ResponseSafeExecute<User>> {
-  const response = await actionSafeExecute(
-    payload.findByID({
-      collection: "users",
-      id,
-    }),
-    messages.actions.diaryEntry.author.serverError,
-  );
-
-  return response;
-};
-
 export const deleteDiaryEntry = async function deleteDiaryEntry(
   id: number,
 ): Promise<ResponseSafeExecute<string, string>> {
@@ -143,6 +108,10 @@ export const deleteDiaryEntry = async function deleteDiaryEntry(
   );
 
   if (!response.data || response.error) return response;
+
+  // Comments are automatically deleted via collection beforeDelete hook
+
+  revalidatePath("/profile");
 
   return { data: messages.actions.diaryEntry.delete.success, error: null };
 };

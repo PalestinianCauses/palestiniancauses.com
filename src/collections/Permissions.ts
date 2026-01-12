@@ -1,4 +1,4 @@
-// REVIEWED - 14
+// REVIEWED - 15
 
 import type { CollectionConfig } from "payload";
 
@@ -22,7 +22,8 @@ export const collectionsPermissionsOptions = [
   { label: "Diary Entries Author", value: "diary-entries.author" },
   { label: "Diary Entries Is Authentic", value: "diary-entries.isAuthentic" },
   { label: "Diary Entries Status", value: "diary-entries.status" },
-  { label: "Media", value: "media" },
+  { label: "Media Private", value: "media-private" },
+  { label: "Media Public", value: "media-public" },
   { label: "Notifications", value: "notifications" },
   {
     label: "Notification Subscriptions",

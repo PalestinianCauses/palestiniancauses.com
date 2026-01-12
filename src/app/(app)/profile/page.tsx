@@ -1,28 +1,57 @@
-// REVIEWED - 01
+// REVIEWED - 03
 
 import type { Metadata } from "next";
+import { Fragment, Suspense } from "react";
 
-import { Container } from "@/components/globals/container";
-import { SectionHeading } from "@/components/globals/typography";
+import {
+  ProfileAchievements,
+  ProfileAchievementsLoading,
+} from "@/components/profile/achievements";
+import { ProfileActivity } from "@/components/profile/activity";
+import { LoadingActivity } from "@/components/profile/globals";
 import { ProfileInfo } from "@/components/profile/info";
-import { ProfileNavigation } from "@/components/profile/navigation";
+import { ProfileNotifications } from "@/components/profile/notifications";
+import { ProfileSettings } from "@/components/profile/settings";
+import { TabsContent } from "@/components/ui/tabs";
+import { getAuthentication } from "@/lib/server/auth";
+
+import { RedirectProvider } from "../providers";
 
 export const metadata: Metadata = {
   title: "Profile",
   robots: { index: false, follow: false },
 };
 
-const ProfilePage = function ProfilePage() {
+const ProfilePage = async function ProfilePage() {
+  const user = await getAuthentication();
+
+  if (!user)
+    return (
+      <RedirectProvider path={["/signin", "redirect=profile"].join("?")} />
+    );
+
   return (
-    <Container
-      as="main"
-      className="section-padding-start-xl section-padding-end-xl max-w-7xl space-y-10">
-      <SectionHeading as="h1" className="font-semibold">
-        Profile
-      </SectionHeading>
-      <ProfileNavigation />
-      <ProfileInfo />
-    </Container>
+    <Fragment>
+      <TabsContent value="info">
+        <ProfileInfo user={user} />
+      </TabsContent>
+      <TabsContent value="activity">
+        <Suspense fallback={LoadingActivity}>
+          <ProfileActivity user={user} />
+        </Suspense>
+      </TabsContent>
+      <TabsContent value="achievements">
+        <Suspense fallback={ProfileAchievementsLoading}>
+          <ProfileAchievements user={user} />
+        </Suspense>
+      </TabsContent>
+      <TabsContent value="notifications">
+        <ProfileNotifications user={user} />
+      </TabsContent>
+      <TabsContent value="settings">
+        <ProfileSettings user={user} />
+      </TabsContent>
+    </Fragment>
   );
 };
 

@@ -1,10 +1,13 @@
-// REVIEWED - 05
+// REVIEWED - 07
 
+import { PayloadSDK } from "@payloadcms/sdk";
 import {
   defaultShouldDehydrateQuery,
   isServer,
   QueryClient,
 } from "@tanstack/react-query";
+
+import { Config } from "@/payload-types";
 
 const createQueryClient = function createQueryClient() {
   const queryClient = new QueryClient({
@@ -12,8 +15,6 @@ const createQueryClient = function createQueryClient() {
       queries: {
         staleTime: 30 * 60 * 1000,
         gcTime: 30 * 60 * 1000,
-        refetchOnMount: false,
-        refetchOnWindowFocus: false,
       },
       dehydrate: {
         shouldDehydrateQuery: (query) =>
@@ -35,3 +36,8 @@ export const getQueryClient = function getQueryClient() {
   if (!browserQueryClient) browserQueryClient = createQueryClient();
   return browserQueryClient;
 };
+
+export const sdk = new PayloadSDK<Config>({
+  // eslint-disable-next-line prefer-template
+  baseURL: process.env.NEXT_PUBLIC_URL! + "/api",
+});

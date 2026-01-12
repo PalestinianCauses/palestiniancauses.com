@@ -1,12 +1,12 @@
-// REVIEWED - 09
+// REVIEWED - 10
 /* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
 /* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
 import { RootPage, generatePageMetadata } from "@payloadcms/next/views";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { getAuthentication } from "@/actions/auth";
 import { hasAnyRole } from "@/lib/permissions";
+import { getAuthentication } from "@/lib/server/auth";
 import config from "@payload-config";
 
 import { importMap } from "../importMap";

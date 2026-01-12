@@ -1,8 +1,5 @@
-// REVIEWED - 16
+// REVIEWED - 18
 
-"use client";
-
-import { useQuery } from "@tanstack/react-query";
 import {
   ArrowUpRightIcon,
   Calendar1Icon,
@@ -13,17 +10,19 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { PaginatedDocs } from "payload";
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 import linesSplit from "split-lines";
 
-import { getDiaryEntryAuthor } from "@/actions/diary-entry";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
 import { hasAnyRole } from "@/lib/permissions";
 import { FiltersOptions } from "@/lib/types";
+import { isNumber } from "@/lib/types/guards";
 import { cn } from "@/lib/utils/styles";
-import { DiaryEntry } from "@/payload-types";
+import { DiaryEntry, User } from "@/payload-types";
 
 import { Container } from "../globals/container";
-import { SafeHydrate } from "../globals/safe-hydrate";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
 import { StatusBadge } from "../profile/globals";
 import { InformationBadges } from "../room/globals";
@@ -31,7 +30,7 @@ import { Button } from "../ui/button";
 
 import { DiaryEntryBadgesLoading } from "./diary-entry-badges";
 
-const DiaryEntryBadgesListItemLoading = (
+export const DiaryEntryBadgesListItemLoading = (
   <div className="mb-4">
     <DiaryEntryBadgesLoading />
   </div>
@@ -46,31 +45,29 @@ const formatDate = (string: string) => {
   });
 };
 
-export const DiaryEntryListItemBadges = function DiaryEntryListItemBadges({
-  diaryEntry,
-}: {
-  diaryEntry: DiaryEntry;
-}) {
-  const { isLoading, data: author } = useQuery({
-    queryKey: ["diary-entry-author", diaryEntry.id],
-    queryFn: async () => {
-      const response = await getDiaryEntryAuthor(
-        typeof diaryEntry.author === "object"
-          ? diaryEntry.author.id
-          : diaryEntry.author,
+export const DiaryEntryListItemBadges =
+  async function DiaryEntryListItemBadges({
+    diaryEntry,
+  }: {
+    diaryEntry: DiaryEntry;
+  }) {
+    let author: User | null = null;
+
+    if (!diaryEntry.isAnonymous) {
+      const response = await actionSafeExecute(
+        payload.findByID({
+          collection: "users",
+          id: isNumber(diaryEntry.author)
+            ? diaryEntry.author
+            : diaryEntry.author.id,
+        }),
+        messages.actions.diaryEntry.author.serverError,
       );
 
-      if (!response.data || response.error) return null;
+      author = response.data;
+    }
 
-      return response.data;
-    },
-    enabled: !diaryEntry.isAnonymous,
-  });
-
-  return (
-    <SafeHydrate
-      isLoading={isLoading}
-      isLoadingComponent={DiaryEntryBadgesListItemLoading}>
+    return (
       <div className="mb-5 flex flex-wrap items-center justify-start gap-x-2.5 gap-y-5">
         <InformationBadges
           className="mb-0 w-max"
@@ -81,13 +78,19 @@ export const DiaryEntryListItemBadges = function DiaryEntryListItemBadges({
               icon: UserIcon,
               label: (
                 <Link
-                  href={author ? `/user/${author.id}/diary-entries` : "#"}
+                  href={
+                    author
+                      ? [`/user/${author.id}/`, "tab=diary-entries"].join("?")
+                      : "#"
+                  }
                   className="flex items-center justify-start gap-2.5">
                   By{" "}
                   {diaryEntry.isAnonymous
                     ? "Anonymous"
                     : author?.firstName || "Anonymous"}
-                  <ExternalLinkIcon className="size-4" />
+                  {!diaryEntry.isAnonymous ? (
+                    <ExternalLinkIcon className="size-4" />
+                  ) : null}
                 </Link>
               ),
             },
@@ -110,9 +113,8 @@ export const DiaryEntryListItemBadges = function DiaryEntryListItemBadges({
           />
         ) : null}
       </div>
-    </SafeHydrate>
-  );
-};
+    );
+  };
 
 export const DiaryEntryListItem = function DiaryEntryListItem({
   diaryEntry,
@@ -121,7 +123,9 @@ export const DiaryEntryListItem = function DiaryEntryListItem({
 }) {
   return (
     <div className="relative">
-      <DiaryEntryListItemBadges diaryEntry={diaryEntry} />
+      <Suspense fallback={DiaryEntryBadgesListItemLoading}>
+        <DiaryEntryListItemBadges diaryEntry={diaryEntry} />
+      </Suspense>
       <SubSectionHeading as="h3" className="mb-3">
         {diaryEntry.title}
       </SubSectionHeading>

@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { Where } from "payload";
 import {
@@ -20,27 +20,6 @@ configVapid(
   process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
   process.env.VAPID_PRIVATE_KEY!,
 );
-
-export const getNotificationSubscription =
-  async function getNotificationSubscription(
-    subscription: Pick<NotificationSubscription, "endpoint">,
-  ): Promise<ResponseSafeExecute<NotificationSubscription>> {
-    const response = await actionSafeExecute(
-      payload.find({
-        collection: "notification-subscriptions",
-        where: { endpoint: { equals: subscription.endpoint } },
-      }),
-      messages.actions.notificationSubscription.serverErrorGet,
-    );
-
-    if (!response.data || response.data.docs.length !== 1 || response.error)
-      return {
-        data: null,
-        error: messages.actions.notificationSubscription.notFound,
-      };
-
-    return { data: response.data.docs[0], error: null };
-  };
 
 export const subscribeToNotifications = async function subscribeToNotifications(
   subscription: Omit<

@@ -1,17 +1,16 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 01
 
 import Stripe from "stripe";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
+import { getOrder } from "@/lib/server/order";
 import { ResponseSafeExecute } from "@/lib/types";
 import { isString } from "@/lib/types/guards";
 import { stripe } from "@/lib/utils/stripe";
 import { Order } from "@/payload-types";
-
-import { getOrder } from "./order";
 
 export const getStripeCheckoutSession = async function getStripeCheckoutSession(
   sessionId: string,
@@ -44,7 +43,7 @@ export const getStripeCheckoutSession = async function getStripeCheckoutSession(
       error: messages.actions.order.orderNotFound,
     };
 
-  const orderResponse = await getOrder(Number(orderId));
+  const orderResponse = await getOrder(parseInt(orderId, 10));
 
   if (!orderResponse.data || orderResponse.error) return orderResponse;
 

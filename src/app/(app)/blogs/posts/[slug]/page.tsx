@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { format } from "date-fns";
 import { ar, enUS } from "date-fns/locale";
@@ -12,7 +12,6 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { ElementType, Fragment, ReactNode } from "react";
 
-import { getBlogPost } from "@/actions/blog-post";
 import {
   BlogPostCategories,
   BlogPostImageFeatured,
@@ -24,6 +23,9 @@ import { Paragraph, SectionHeading } from "@/components/globals/typography";
 import { UserAvatar } from "@/components/globals/user-avatar";
 import { StatusBadge } from "@/components/profile/globals";
 import { InformationBadges } from "@/components/room/globals";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
 import { isObject } from "@/lib/types/guards";
 import { getMediaURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
@@ -59,11 +61,20 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   // eslint-disable-next-line prefer-destructuring
   const slug = (await params).slug;
-  const response = await getBlogPost(slug);
+  const response = await actionSafeExecute(
+    payload.find({
+      collection: "blogs-posts",
+      where: { slug: { equals: slug }, status: { equals: "published" } },
+      limit: 1,
+      depth: 2,
+    }),
+    messages.actions.blogPost.serverErrorGet,
+  );
 
-  if (!response.data || response.error) return { title: "Blog Post Not Found" };
+  if (!response.data || response.error || response.data.docs.length === 0)
+    return { title: "Blog Post Not Found" };
 
-  const post = response.data;
+  const post = response.data.docs[0];
   const imageFeatured = getMediaURL(post.imageFeatured);
 
   const siteURL =
@@ -108,12 +119,20 @@ export default async function BlogPostPage({
 }) {
   // eslint-disable-next-line prefer-destructuring
   const slug = (await params).slug;
-  const response = await getBlogPost(slug);
+  const response = await actionSafeExecute(
+    payload.find({
+      collection: "blogs-posts",
+      where: { slug: { equals: slug }, status: { equals: "published" } },
+      limit: 1,
+      depth: 2,
+    }),
+    messages.actions.blogPost.serverErrorGet,
+  );
 
-  if (!response.data || response.error)
+  if (!response.data || response.error || response.data.docs.length === 0)
     return <RedirectProvider path="/blogs" />;
 
-  const post = response.data;
+  const post = response.data.docs[0];
   const blogRoom = isObject(post.blogRoom) ? post.blogRoom : null;
   const blogRoomLanguage: BlogsRoom["language"] =
     blogRoom?.language || "english";

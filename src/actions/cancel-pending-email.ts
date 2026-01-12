@@ -1,13 +1,14 @@
 "use server";
 
-// REVIEWED
+// REVIEWED - 02
+
+import { revalidatePath } from "next/cache";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { getAuthentication } from "@/lib/server/auth";
 import { ResponseSafeExecute } from "@/lib/types";
-
-import { getAuthentication } from "./auth";
 
 export const cancelingPendingEmail =
   async function cancelingPendingEmail(): Promise<
@@ -85,6 +86,8 @@ export const cancelingPendingEmail =
         if (r.error) console.error(r.error);
       });
     }
+
+    revalidatePath("/profile");
 
     return {
       data: messages.actions.auth.changeEmail.successCancelingPendingEmail,

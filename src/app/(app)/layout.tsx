@@ -1,4 +1,4 @@
-// REVIEWED - 34
+// REVIEWED - 35
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Analytics } from "@vercel/analytics/next";
@@ -8,21 +8,15 @@ import { PropsWithChildren, Suspense } from "react";
 import colors from "tailwindcss/colors";
 
 import { DynamicBreadcrumb } from "@/components/globals/dynamic-breadcrumb";
-import { Loading } from "@/components/globals/loading";
 import { SafeHydrate } from "@/components/globals/safe-hydrate";
 import { SidebarLoading } from "@/components/globals/sidebar/loading";
-import { SidebarMainMenu } from "@/components/globals/sidebar/menu";
 import { SidebarContentPreFetch } from "@/components/globals/sidebar/pre-fetch-provider";
 import { SidebarUser } from "@/components/globals/sidebar/user";
-import { WebsiteSwitcher } from "@/components/globals/sidebar/website-switcher";
-import { UserPreFetch } from "@/components/globals/user-pre-fetch-provider";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
-  SidebarContent,
   SidebarFooter,
-  SidebarHeader,
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
@@ -221,44 +215,33 @@ const RootLayout = function RootLayout({ children }: PropsWithChildren) {
           </a>
         </Button>
         <QueryProvider>
-          <Suspense fallback={<Loading />}>
-            <UserPreFetch>
-              <SafeHydrate>
-                <SidebarProvider defaultOpen>
-                  <Sidebar collapsible="icon">
-                    <Suspense fallback={<SidebarLoading />}>
-                      <SidebarContentPreFetch>
-                        <SidebarHeader>
-                          <WebsiteSwitcher />
-                        </SidebarHeader>
-                        <SidebarContent>
-                          <SidebarMainMenu />
-                        </SidebarContent>
-                      </SidebarContentPreFetch>
-                    </Suspense>
-                    <SidebarFooter>
-                      <SidebarUser />
-                    </SidebarFooter>
-                  </Sidebar>
-                  <SidebarInset className="w-full max-w-full">
-                    <header className="fixed left-0 right-0 top-0 z-40 flex shrink-0 items-center justify-start bg-background py-4 transition-all duration-100 ease-in-out">
-                      <div className="flex flex-col items-start justify-start gap-4 px-5 lg:px-7 xs:flex-row xs:items-center">
-                        <SidebarTrigger />
-                        <Separator
-                          orientation="vertical"
-                          className="hidden data-[orientation_=_vertical]:h-5 xs:block"
-                        />
-                        <DynamicBreadcrumb />
-                      </div>
-                    </header>
-                    {children}
-                  </SidebarInset>
-                </SidebarProvider>
-              </SafeHydrate>
-              <ActivityProvider />
-              <ReactQueryDevtools />
-            </UserPreFetch>
-          </Suspense>
+          <SafeHydrate>
+            <SidebarProvider defaultOpen>
+              <Sidebar collapsible="icon">
+                <Suspense fallback={<SidebarLoading />}>
+                  <SidebarContentPreFetch />
+                </Suspense>
+                <SidebarFooter>
+                  <SidebarUser />
+                </SidebarFooter>
+              </Sidebar>
+              <SidebarInset className="w-full max-w-full">
+                <header className="fixed left-0 right-0 top-0 z-40 flex shrink-0 items-center justify-start bg-background py-4 transition-all duration-100 ease-in-out">
+                  <div className="flex flex-col items-start justify-start gap-4 px-5 lg:px-7 xs:flex-row xs:items-center">
+                    <SidebarTrigger />
+                    <Separator
+                      orientation="vertical"
+                      className="hidden data-[orientation_=_vertical]:h-5 xs:block"
+                    />
+                    <DynamicBreadcrumb />
+                  </div>
+                </header>
+                {children}
+              </SidebarInset>
+            </SidebarProvider>
+          </SafeHydrate>
+          <ActivityProvider />
+          <ReactQueryDevtools />
         </QueryProvider>
         <Toaster theme="dark" richColors />
         <Analytics />

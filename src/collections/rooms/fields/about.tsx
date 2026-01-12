@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { Field } from "payload";
 
@@ -61,7 +61,7 @@ export const AboutField: Field = {
       label: "Personal Photograph",
       name: "photograph",
       type: "upload",
-      relationTo: "media",
+      relationTo: "media-public",
       hasMany: false,
       required: false,
     },

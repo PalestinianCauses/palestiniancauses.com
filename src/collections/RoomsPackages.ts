@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { CollectionConfig } from "payload";
 
@@ -223,7 +223,7 @@ export const RoomsPackages: CollectionConfig = {
               label: "Package Image",
               name: "image",
               type: "upload",
-              relationTo: "media",
+              relationTo: "media-public",
               required: false,
             },
           ],

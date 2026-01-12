@@ -1,16 +1,9 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 06
 
-import {
-  QueryKey,
-  useInfiniteQuery,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
 import { format } from "date-fns";
 import {
-  ArrowDownIcon,
   ArrowUpRightIcon,
   CalendarIcon,
   FileClockIcon,
@@ -21,28 +14,21 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import Link from "next/link";
-import { useMemo } from "react";
 
-import { getCollection } from "@/actions/collection";
-import { getUserActivityDiaryEntriesStats } from "@/actions/user-activity-diary-entries";
 import { useDiaryEntry } from "@/hooks/use-diary-entry";
 import { cn } from "@/lib/utils/styles";
-import { DiaryEntry, User } from "@/payload-types";
+import { DiaryEntry } from "@/payload-types";
 
-import { SafeHydrate } from "../globals/safe-hydrate";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
 import { Button } from "../ui/button";
 
-import { LoadingActivity, StatCard, StatusBadge } from "./globals";
+import { StatCard, StatusBadge } from "./globals";
 
 const DiaryEntryItem = function DiaryEntryItem({
-  queryKey,
   diaryEntry,
 }: {
-  queryKey: QueryKey;
   diaryEntry: DiaryEntry;
 }) {
-  const queryClient = useQueryClient();
   const { deleteDiaryEntry } = useDiaryEntry();
 
   const isAnonymousLabel = diaryEntry.isAnonymous
@@ -89,16 +75,7 @@ const DiaryEntryItem = function DiaryEntryItem({
           variant="link"
           className="p-0 text-muted-foreground hover:text-foreground"
           disabled={deleteDiaryEntry.isPending}
-          onClick={() =>
-            deleteDiaryEntry.mutate(diaryEntry.id, {
-              onSuccess: () => {
-                queryClient.invalidateQueries({
-                  queryKey,
-                  exact: true,
-                });
-              },
-            })
-          }>
+          onClick={() => deleteDiaryEntry.mutate(diaryEntry.id, {})}>
           <Trash2Icon />
           {deleteDiaryEntry.isPending ? "Deleting..." : "Delete"}
         </Button>
@@ -117,152 +94,70 @@ const DiaryEntryItem = function DiaryEntryItem({
 };
 
 export const ActivityDiaryEntries = function ActivityDiaryEntries({
-  user,
+  diaryEntries,
 }: {
-  user: User;
+  diaryEntries: DiaryEntry[];
 }) {
-  const { isLoading: isLoadingStats, data: stats } = useQuery({
-    queryKey: ["user-activity-diary-entries-stats", user.id],
-    queryFn: async () => {
-      const response = await getUserActivityDiaryEntriesStats();
-      return response;
-    },
-  });
-
-  const queryKey = useMemo(
-    () => ["user-activity-diary-entries", user.id],
-    [user.id],
-  );
-
-  const {
-    isLoading,
-    isFetching,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-    data,
-  } = useInfiniteQuery({
-    queryKey,
-    queryFn: async ({ pageParam = 1 }) => {
-      if (!user) return null;
-
-      const response = await getCollection({
-        collection: "diary-entries",
-        req: { user: { collection: "users", ...user } },
-        user,
-        filters: {
-          page: pageParam,
-          limit: 4,
-          fields: { author: { equals: user.id } },
-        },
-        depth: 2,
-      });
-
-      if (!response.data || response.data.docs.length === 0 || response.error)
-        return null;
-
-      return response.data;
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) =>
-      lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
-  });
-
-  const { diaryEntries } = useMemo(() => {
-    if (!data) return { diaryEntries: [] };
-
-    const pages = data.pages.flatMap((page) => (page ? page.docs : []));
-    return { diaryEntries: pages };
-  }, [data]);
+  const total = diaryEntries.length;
+  const approved = diaryEntries.filter(
+    (diaryEntry) => diaryEntry.status === "approved",
+  ).length;
+  const pending = diaryEntries.filter(
+    (diaryEntry) => diaryEntry.status === "pending",
+  ).length;
+  const rejected = diaryEntries.filter(
+    (diaryEntry) => diaryEntry.status === "rejected",
+  ).length;
 
   return (
-    <SafeHydrate
-      isLoading={isLoadingStats || isLoading}
-      isLoadingComponent={LoadingActivity}>
-      {(() => {
-        if (
-          !user ||
-          !stats ||
-          !stats.data ||
-          stats.error ||
-          !data ||
-          diaryEntries.length === 0
-        )
-          return null;
+    <div className="space-y-10">
+      <div className="space-y-0.5">
+        <SubSectionHeading
+          as="h2"
+          className="flex items-center gap-2.5 text-xl !leading-none lg:text-xl lg:!leading-none xl:text-xl xl:!leading-none">
+          <PencilLineIcon className="size-6 stroke-[1.5]" />
+          Diary Entries Activity
+        </SubSectionHeading>
+        <Paragraph className="text-base lg:text-base">
+          Your stories and their status across our platform
+        </Paragraph>
+      </div>
 
-        return (
-          <div className="space-y-10">
-            <div className="space-y-0.5">
-              <SubSectionHeading
-                as="h2"
-                className="flex items-center gap-2.5 text-xl !leading-none lg:text-xl lg:!leading-none xl:text-xl xl:!leading-none">
-                <PencilLineIcon className="size-6 stroke-[1.5]" />
-                Diary Entries Activity
-              </SubSectionHeading>
-              <Paragraph className="text-base lg:text-base">
-                Your stories and their status across our platform
-              </Paragraph>
-            </div>
+      <div className="!mb-20 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          color="blue"
+          label="Total"
+          value={total}
+          icon={FileTextIcon}
+        />
 
-            <div className="!mb-20 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
-              <StatCard
-                color="blue"
-                label="Total"
-                value={stats.data.total}
-                icon={FileTextIcon}
-              />
+        <StatCard
+          color="green"
+          label="Approved"
+          value={approved}
+          icon={FilePlusIcon}
+        />
 
-              <StatCard
-                color="green"
-                label="Approved"
-                value={stats.data.approved}
-                icon={FilePlusIcon}
-              />
+        <StatCard
+          color="yellow"
+          label="Pending"
+          value={pending}
+          icon={FileClockIcon}
+        />
 
-              <StatCard
-                color="yellow"
-                label="Pending"
-                value={stats.data.pending}
-                icon={FileClockIcon}
-              />
+        <StatCard
+          color="red"
+          label="Rejected"
+          value={rejected}
+          icon={FileX2Icon}
+        />
+      </div>
 
-              <StatCard
-                color="red"
-                label="Rejected"
-                value={stats.data.rejected}
-                icon={FileX2Icon}
-              />
-            </div>
-
-            <section
-              className={cn("grid grid-cols-1 gap-5 lg:grid-cols-2", {
-                "pointer-events-none opacity-50": isFetching,
-              })}>
-              {diaryEntries.map((diaryEntry) => (
-                <DiaryEntryItem
-                  key={diaryEntry.id}
-                  queryKey={queryKey}
-                  diaryEntry={diaryEntry}
-                />
-              ))}
-            </section>
-
-            {hasNextPage ? (
-              <div className="flex w-full items-center justify-center">
-                <Button
-                  variant="link"
-                  disabled={isFetchingNextPage}
-                  onClick={() => fetchNextPage()}>
-                  {isFetchingNextPage
-                    ? "Loading more diary entries..."
-                    : "Read more diary entries"}
-                  <ArrowDownIcon />
-                </Button>
-              </div>
-            ) : null}
-          </div>
-        );
-      })()}
-    </SafeHydrate>
+      <section className={cn("grid grid-cols-1 gap-5 lg:grid-cols-2", {})}>
+        {diaryEntries.map((diaryEntry) => (
+          <DiaryEntryItem key={diaryEntry.id} diaryEntry={diaryEntry} />
+        ))}
+      </section>
+    </div>
   );
 };

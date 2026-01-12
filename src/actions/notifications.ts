@@ -1,16 +1,13 @@
 "use server";
 
-// REVIEWED - 06
-
-import { Where } from "payload";
+// REVIEWED - 07
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { getAuthentication } from "@/lib/server/auth";
 import { ResponseSafeExecute } from "@/lib/types";
 import { isObject } from "@/lib/types/guards";
-
-import { getAuthentication } from "./auth";
 
 export const markingNotificationAsRead =
   async function markingNotificationAsRead(
@@ -26,7 +23,7 @@ export const markingNotificationAsRead =
 
     const notificationResponse = await actionSafeExecute(
       payload.findByID({
-        req: { user: auth },
+        req: { user: { ...auth, collection: "users" } },
         user: auth,
         collection: "notifications",
         id,
@@ -55,7 +52,7 @@ export const markingNotificationAsRead =
 
     const updateResponse = await actionSafeExecute(
       payload.update({
-        req: { user: auth },
+        req: { user: { ...auth, collection: "users" } },
         user: auth,
         collection: "notifications",
         id,
@@ -88,7 +85,7 @@ export const markingEveryNotificationAsRead =
 
     const notificationsResponse = await actionSafeExecute(
       payload.update({
-        req: { user: auth },
+        req: { user: { ...auth, collection: "users" } },
         user: auth,
         collection: "notifications",
         where: { user: { equals: auth.id }, read: { equals: false } },
@@ -106,43 +103,6 @@ export const markingEveryNotificationAsRead =
 
     return {
       data: messages.actions.notification.successEveryRead,
-      error: null,
-    };
-  };
-
-export const getNotificationsCountUnRead =
-  async function getNotificationsCountUnRead(): Promise<
-    ResponseSafeExecute<number>
-  > {
-    const auth = await getAuthentication();
-
-    if (!auth) return { data: 0, error: null };
-
-    const where: Where[] = [
-      { user: { equals: auth.id } },
-      { read: { equals: false } },
-    ];
-
-    const response = await actionSafeExecute(
-      payload.count({
-        req: { user: { ...auth, collection: "users" } },
-        user: auth,
-        collection: "notifications",
-        where: { and: where },
-        depth: 0,
-        overrideAccess: false,
-      }),
-      messages.http.serverError,
-    );
-
-    if (!response.data || response.error)
-      return {
-        data: 0,
-        error: null,
-      };
-
-    return {
-      data: response.data.totalDocs,
       error: null,
     };
   };

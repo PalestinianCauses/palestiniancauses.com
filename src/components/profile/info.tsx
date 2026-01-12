@@ -1,6 +1,4 @@
-"use client";
-
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { format } from "date-fns";
 import {
@@ -20,14 +18,6 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useUser } from "@/hooks/use-user";
 import { isObject } from "@/lib/types/guards";
 import { cn } from "@/lib/utils/styles";
 import { User } from "@/payload-types";
@@ -49,8 +39,7 @@ export const ProfileInfoSocial = function ProfileInfoSocial({
       linksSocial.twitter ||
       linksSocial.instagram ||
       linksSocial.linkedin ||
-      linksSocial.website ||
-      linksSocial.room) && (
+      linksSocial.website) && (
       <div className="space-y-5">
         <SubSectionHeading
           as="h3"
@@ -110,15 +99,6 @@ export const ProfileInfoSocial = function ProfileInfoSocial({
               </Link>
             </Button>
           )}
-
-          {isObject(linksSocial.room) ? (
-            <Button variant="default" className="gap-2.5" asChild>
-              <Link href={`/rooms/${linksSocial.room.slug}`} target="_blank">
-                <RiGlobalFill />
-                PalestinianCauses Room
-              </Link>
-            </Button>
-          ) : null}
         </div>
       </div>
     )
@@ -163,31 +143,7 @@ export const ProfileInfoRoles = function ProfileInfoRoles({
   );
 };
 
-export const ProfileInfo = function ProfileInfo() {
-  const { isLoading, data: user } = useUser();
-
-  if (isLoading) {
-    return (
-      <div className="space-y-5">
-        <Skeleton className="h-32 w-full bg-foreground/5" />
-        <Skeleton className="h-64 w-full bg-foreground/5" />
-      </div>
-    );
-  }
-
-  if (!user)
-    return (
-      <Card className="border-input">
-        <CardHeader>
-          <CardTitle>Authentication Required</CardTitle>
-          <CardDescription>
-            Kindly sign in to access and explore your personal profile details.
-            We look forward to welcoming you.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    );
-
+export const ProfileInfo = function ProfileInfo({ user }: { user: User }) {
   return (
     <div className="space-y-10">
       <ProfileCompletion user={user} />

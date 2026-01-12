@@ -1,15 +1,13 @@
-"use client";
+// REVIEWED - 03
 
-// REVIEWED - 02
-
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { ArrowDownIcon, ArrowUpRightIcon, BookAlertIcon } from "lucide-react";
+import { ArrowUpRightIcon, BookAlertIcon } from "lucide-react";
 import Link from "next/link";
-import { useMemo } from "react";
 
-import { getCollection } from "@/actions/collection";
 import { Paragraph, SubSectionHeading } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
 import { cn } from "@/lib/utils/styles";
 
 import { BlogRoomListItem } from "./item";
@@ -28,45 +26,18 @@ export const BlogRoomListLoading = function BlogRoomListLoading() {
   );
 };
 
-export const BlogRoomList = function BlogRoomList() {
-  const queryKey = useMemo(() => ["blog-rooms"], []);
+export const BlogRoomList = async function BlogRoomList() {
+  const response = await actionSafeExecute(
+    payload.find({
+      collection: "blogs-rooms",
+      page: 1,
+      limit: 10,
+      depth: 2,
+    }),
+    messages.actions.blogRoom.serverErrorGet,
+  );
 
-  const {
-    isLoading,
-    isFetching,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-    data,
-  } = useInfiniteQuery({
-    queryKey,
-    queryFn: async ({ pageParam = 1 }) => {
-      const response = await getCollection({
-        collection: "blogs-rooms",
-        filters: { page: pageParam, limit: 10 },
-        depth: 2,
-      });
-
-      if (!response.data || response.data.docs.length === 0 || response.error)
-        return null;
-
-      return response.data;
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) =>
-      lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
-  });
-
-  const { rooms } = useMemo(() => {
-    if (!data) return { rooms: [] };
-
-    const pages = data.pages.flatMap((page) => (page ? page.docs : []));
-    return { rooms: pages };
-  }, [data]);
-
-  if (isLoading) return <BlogRoomListLoading />;
-
-  if (rooms.length === 0)
+  if (!response.data || response.error || response.data.docs.length === 0)
     return (
       <div className="mx-auto flex max-w-4xl flex-col items-center justify-center pt-10 text-center">
         <div className="relative mb-6 flex w-max items-end lg:mb-8">
@@ -92,28 +63,11 @@ export const BlogRoomList = function BlogRoomList() {
 
   return (
     <div className="space-y-10">
-      <section
-        className={cn("grid grid-cols-1 gap-10", {
-          "pointer-events-none opacity-50": isFetching,
-        })}>
-        {rooms.map((room) => (
+      <section className={cn("grid grid-cols-1 gap-10")}>
+        {response.data.docs.map((room) => (
           <BlogRoomListItem key={room.id} room={room} />
         ))}
       </section>
-
-      {hasNextPage ? (
-        <div className="flex w-full items-center justify-center">
-          <Button
-            variant="link"
-            disabled={isFetchingNextPage}
-            onClick={() => fetchNextPage()}>
-            {isFetchingNextPage
-              ? "Loading more rooms..."
-              : "Discover more rooms"}
-            <ArrowDownIcon />
-          </Button>
-        </div>
-      ) : null}
     </div>
   );
 };

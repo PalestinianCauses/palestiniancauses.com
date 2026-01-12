@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { Field } from "payload";
 
@@ -51,7 +51,7 @@ export const ExperienceField: Field = {
       label: "Experience Photograph",
       name: "photograph",
       type: "upload",
-      relationTo: "media",
+      relationTo: "media-public",
       hasMany: false,
       required: false,
     },

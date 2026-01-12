@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { CollectionConfig } from "payload";
 
@@ -124,7 +124,7 @@ export const BlogsCategories: CollectionConfig = {
       label: "Image",
       name: "image",
       type: "upload",
-      relationTo: "media",
+      relationTo: "media-public",
       hasMany: false,
       required: false,
     },

@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 02
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -9,6 +9,7 @@ import { payload } from "@/lib/payload";
 import { ResponseSafeExecute } from "@/lib/types";
 import { isNumber, isObject, isString } from "@/lib/types/guards";
 import { createProductDownloadingURLsEmail } from "@/lib/utils/email-templates-product";
+import { createProductDownloadingURLs } from "@/lib/utils/product-download-urls";
 import { stripe } from "@/lib/utils/stripe";
 
 export const POST = async function POST(
@@ -18,14 +19,10 @@ export const POST = async function POST(
   const headersList = await headers();
   const signature = headersList.get("stripe-signature");
 
-  if (!signature)
-    return NextResponse.json(
-      {
-        data: null,
-        error: messages.actions.stripe.webhook.missingStripeSignature,
-      },
-      { status: 400 },
-    );
+  if (!signature) {
+    const message = messages.actions.stripe.webhook.missingStripeSignature;
+    return NextResponse.json({ data: null, error: message }, { status: 400 });
+  }
 
   let event: Stripe.Event;
 
@@ -36,13 +33,8 @@ export const POST = async function POST(
       process.env.STRIPE_WEBHOOK_SECRET!,
     );
   } catch {
-    return NextResponse.json(
-      {
-        data: null,
-        error: messages.actions.stripe.webhook.verifyStripeSignature,
-      },
-      { status: 400 },
-    );
+    const message = messages.actions.stripe.webhook.verifyStripeSignature;
+    return NextResponse.json({ data: null, error: message }, { status: 400 });
   }
 
   if (event.type === "checkout.session.completed") {
@@ -51,11 +43,16 @@ export const POST = async function POST(
     const productId = session.metadata?.productId;
     const orderId = session.metadata?.orderId;
 
-    if (!userId || !productId || !orderId)
-      return NextResponse.json(
-        { data: null, error: messages.actions.stripe.webhook.missingIDsData },
-        { status: 400 },
-      );
+    if (!userId || !productId || !orderId) {
+      const message = messages.actions.stripe.webhook.missingIDsData;
+      return NextResponse.json({ data: null, error: message }, { status: 400 });
+    }
+
+    // Only process if payment is actually completed
+    if (session.payment_status !== "paid") {
+      const data = { received: true };
+      return NextResponse.json({ data, error: null }, { status: 200 });
+    }
 
     const orderResponse = await actionSafeExecute(
       payload.findByID({
@@ -88,11 +85,10 @@ export const POST = async function POST(
 
     const productData = isObject(product) ? product : null;
 
-    if (!productData || !productData.links || productData.links.length === 0)
-      return NextResponse.json(
-        { data: null, error: messages.actions.product.external.notFound },
-        { status: 404 },
-      );
+    if (!productData) {
+      const message = messages.actions.product.notFound;
+      return NextResponse.json({ data: null, error: message }, { status: 404 });
+    }
 
     const userResponse = await actionSafeExecute(
       payload.findByID({
@@ -104,10 +100,8 @@ export const POST = async function POST(
     );
 
     if (!userResponse.data || userResponse.error) {
-      return NextResponse.json(
-        { data: null, error: userResponse.error },
-        { status: 404 },
-      );
+      const message = userResponse.error;
+      return NextResponse.json({ data: null, error: message }, { status: 404 });
     }
 
     const user = userResponse.data;
@@ -127,18 +121,76 @@ export const POST = async function POST(
       messages.actions.order.serverErrorUpdate,
     );
 
-    if (!updateOrderResponse.data || updateOrderResponse.error)
-      return NextResponse.json(
-        { data: null, error: updateOrderResponse.error },
-        { status: 500 },
+    if (!updateOrderResponse.data || updateOrderResponse.error) {
+      const message = updateOrderResponse.error;
+      return NextResponse.json({ data: null, error: message }, { status: 500 });
+    }
+
+    if (
+      productData.type === "file" &&
+      productData.files &&
+      productData.files.length !== 0
+    ) {
+      const promises = await Promise.all(
+        productData.files.map(async (fileItem) => {
+          const fileId = isNumber(fileItem.file)
+            ? fileItem.file
+            : fileItem.file.id;
+
+          if (!fileId)
+            return {
+              data: null,
+              error: messages.actions.product.file.notFound,
+            };
+
+          const mediaResponse = await actionSafeExecute(
+            payload.findByID({
+              collection: "media-private",
+              id: fileId,
+              depth: 0,
+            }),
+            messages.actions.product.file.notFound,
+          );
+
+          if (!mediaResponse.data || mediaResponse.error) return mediaResponse;
+
+          const usersCurrent = mediaResponse.data.users || [];
+
+          const userIds = usersCurrent.map((u) => (isNumber(u) ? u : u.id));
+
+          if (!userIds.includes(user.id))
+            return actionSafeExecute(
+              payload.update({
+                collection: "media-private",
+                id: fileId,
+                data: {
+                  users: [...userIds, user.id],
+                },
+              }),
+              messages.actions.product.file.notFound,
+            );
+
+          return { data: mediaResponse.data, error: null };
+        }),
       );
 
-    const downloadingURLs = productData.links.map((link) => ({
-      title: link.title,
-      url: link.url,
-      isFile: link.isFile || false,
-      fileSize: link.fileSize || null,
-    }));
+      if (promises.some((promise) => promise.error)) {
+        const response = {
+          data: null,
+          error: messages.actions.product.file.notFound,
+        };
+
+        return NextResponse.json(response, { status: 500 });
+      }
+    }
+
+    const downloadingURLs = createProductDownloadingURLs(productData);
+
+    if (downloadingURLs.length === 0)
+      return NextResponse.json(
+        { data: null, error: messages.actions.product.file.notFound },
+        { status: 404 },
+      );
 
     const templateEmail = createProductDownloadingURLsEmail(
       productData.title,
@@ -154,18 +206,35 @@ export const POST = async function POST(
       messages.actions.order.serverError,
     );
 
-    if (!responseEmail.data || responseEmail.error)
-      return NextResponse.json(
-        {
-          data: null,
-          error: responseEmail.error || messages.actions.order.serverError,
-        },
-        { status: 500 },
+    if (!responseEmail.data || responseEmail.error) {
+      const message = responseEmail.error || messages.actions.order.serverError;
+      return NextResponse.json({ data: null, error: message }, { status: 500 });
+    }
+  }
+
+  // Handle cancelled checkout sessions
+  if (
+    event.type === "checkout.session.async_payment_failed" ||
+    event.type === "checkout.session.expired"
+  ) {
+    const session = event.data.object;
+    const orderId = session.metadata?.orderId;
+
+    if (orderId)
+      // Mark order as cancelled if payment failed or session expired
+      await actionSafeExecute(
+        payload.update({
+          collection: "orders",
+          id: parseInt(orderId, 10),
+          data: {
+            orderStatus: "cancelled",
+            productOrderStatus: "failed",
+          },
+        }),
+        messages.actions.order.serverErrorUpdate,
       );
   }
 
-  return NextResponse.json(
-    { data: { received: true }, error: null },
-    { status: 200 },
-  );
+  const data = { received: true };
+  return NextResponse.json({ data, error: null }, { status: 200 });
 };

@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { NextRequest, NextResponse } from "next/server";
 
@@ -28,7 +28,7 @@ export const middleware = async function middleware({
     PATHS_AUTHENTICATION.some((path) => pathname.startsWith(path)) &&
     isAuthenticated
   ) {
-    let redirectTo = new URL("/", RequestURL);
+    let redirectTo = new URL("/a-human-but-from-gaza", RequestURL);
     const redirect = NextURL.searchParams.get("redirect");
 
     if (redirect) redirectTo = new URL(redirect, RequestURL);

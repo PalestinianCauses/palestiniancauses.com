@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 08
+// REVIEWED - 09
 
 import {
   ArrowRightLeftIcon,
@@ -39,10 +39,10 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSkeleton,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useRoom } from "@/hooks/use-room";
+import { Room } from "@/payload-types";
 
 const policies = [
   {
@@ -134,8 +134,12 @@ const SidebarMenuMainItem = function SidebarMenuMainItem({
   );
 };
 
-export const SidebarMainMenu = function SidebarMainMenu() {
-  const { isRoom, isRoomListLoading, roomActive } = useRoom();
+export const SidebarMainMenu = function SidebarMainMenu({
+  roomList,
+}: {
+  roomList: Room[];
+}) {
+  const { isRoom, roomActive } = useRoom(roomList);
   const [activeItemHash, setActiveItemHash] = useState<string | null>(null);
 
   useEffect(() => {
@@ -188,61 +192,28 @@ export const SidebarMainMenu = function SidebarMainMenu() {
 
   return (
     <Fragment>
-      {isRoomListLoading ? (
-        <Fragment>
-          <SidebarGroup>
-            <SidebarMenu className="gap-1.5">
-              {[...Array(5)].map((_, index) => (
-                <SidebarMenuSkeleton
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={index}
-                  showSkeletonIcon
-                  skeletonIconClassName="size-6 aspect-square group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1.75rem)]"
-                  skeletonClassName="h-5"
-                  className="h-full px-1.5 py-0.5 group-data-[collapsible_=_icon]:!py-0"
-                />
-              ))}
-            </SidebarMenu>
-          </SidebarGroup>
-          <SidebarGroup>
-            <SidebarMenu className="gap-1.5">
-              {[...Array(5)].map((_, index) => (
-                <SidebarMenuSkeleton
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={index}
-                  showSkeletonIcon
-                  skeletonIconClassName="size-6 aspect-square group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1.75rem)]"
-                  skeletonClassName="h-5"
-                  className="h-full px-1.5 py-0.5 group-data-[collapsible_=_icon]:!py-0"
-                />
-              ))}
-            </SidebarMenu>
-          </SidebarGroup>
-        </Fragment>
-      ) : (
-        menus.map((menu) => (
-          <SidebarGroup key={menu.label}>
-            <SidebarGroupLabel>{menu.label}</SidebarGroupLabel>
-            <SidebarMenu className="gap-1.5">
-              {menu.links.map((link) => (
-                <SidebarMenuMainItem
-                  key={link.href}
-                  isRoom={isRoom}
-                  item={{
-                    ...link,
-                    icon:
-                      "icon" in link
-                        ? link.icon
-                        : icons[link.label.toLowerCase()] || FileTextIcon,
-                  }}
-                  activeItemHash={isRoom ? activeItemHash : undefined}
-                  setActiveItemHash={isRoom ? setActiveItemHash : undefined}
-                />
-              ))}
-            </SidebarMenu>
-          </SidebarGroup>
-        ))
-      )}
+      {menus.map((menu) => (
+        <SidebarGroup key={menu.label}>
+          <SidebarGroupLabel>{menu.label}</SidebarGroupLabel>
+          <SidebarMenu className="gap-1.5">
+            {menu.links.map((link) => (
+              <SidebarMenuMainItem
+                key={link.href}
+                isRoom={isRoom}
+                item={{
+                  ...link,
+                  icon:
+                    "icon" in link
+                      ? link.icon
+                      : icons[link.label.toLowerCase()] || FileTextIcon,
+                }}
+                activeItemHash={isRoom ? activeItemHash : undefined}
+                setActiveItemHash={isRoom ? setActiveItemHash : undefined}
+              />
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      ))}
       <div />
     </Fragment>
   );

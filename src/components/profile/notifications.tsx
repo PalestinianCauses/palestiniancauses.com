@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -21,15 +21,15 @@ import {
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 
-import { getCollection } from "@/actions/collection";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNotifications } from "@/hooks/use-notifications";
-import { useUser } from "@/hooks/use-user";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { sdk } from "@/lib/query";
 import { isObject } from "@/lib/types/guards";
 import { cn } from "@/lib/utils/styles";
-import { Notification } from "@/payload-types";
+import { Notification, User } from "@/payload-types";
 
-import { SafeHydrate } from "../globals/safe-hydrate";
 import { Paragraph, SubSectionHeading } from "../globals/typography";
 import { Button } from "../ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -68,7 +68,6 @@ const NotificationItem = function NotificationItem({
       className={cn(
         "flex flex-col items-start justify-start gap-5 border-l-2 p-5 transition-all duration-100 ease-in-out hover:bg-muted/50 sm:flex-row sm:items-center",
         {
-          "opacity-75": markingAsRead.isPending,
           "border-l-input": notification.read,
           "border-l-foreground": !notification.read,
         },
@@ -108,27 +107,19 @@ const NotificationItem = function NotificationItem({
           <Button
             variant="link"
             className="p-0"
-            onClick={() => {
-              if (!notification.read) markingAsRead.mutate(notification.id);
-              router.push(link);
-            }}>
+            onClick={() => router.push(link)}>
             <ArrowUpRightIcon />
-            {markingAsRead.isPending
-              ? "Marking as read. Redirecting..."
-              : "View details"}
+            View details
           </Button>
         ) : (
           <Button
             variant="link"
             className="p-0"
-            onClick={() => {
-              if (!notification.read) markingAsRead.mutate(notification.id);
-              router.push("/profile/achievements");
-            }}>
+            onClick={() =>
+              router.push(["/profile", "tab=achievements"].join("?"))
+            }>
             <ArrowUpRightIcon />
-            {markingAsRead.isPending
-              ? "Marking as read. Redirecting..."
-              : "View achievements"}
+            View achievements
           </Button>
         )}
       </div>
@@ -136,7 +127,6 @@ const NotificationItem = function NotificationItem({
         <Button
           variant="outline"
           size="icon"
-          disabled={markingAsRead.isPending}
           onClick={() => markingAsRead.mutate(notification.id)}>
           <MailCheckIcon />
         </Button>
@@ -145,45 +135,51 @@ const NotificationItem = function NotificationItem({
   );
 };
 
-export const ProfileNotifications = function ProfileNotifications() {
-  const { isLoading: isUserLoading, data: user } = useUser();
+const NotificationsLoading = function NotificationsLoading() {
+  return (
+    <div className="space-y-5">
+      {Array.from({ length: 10 }).map((_, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Skeleton key={index} className="h-32 w-full bg-foreground/5" />
+      ))}
+    </div>
+  );
+};
 
+export const ProfileNotifications = function ProfileNotifications({
+  user,
+}: {
+  user: User;
+}) {
   const { markingEveryAsRead } = useNotifications({ userId: user?.id });
 
-  const {
-    isLoading,
-    isFetching,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-    data,
-  } = useInfiniteQuery({
-    queryKey: ["user-notifications", user?.id],
-    queryFn: async ({ pageParam = 1 }) => {
-      if (!user) return null;
+  const { isLoading, isFetchingNextPage, hasNextPage, fetchNextPage, data } =
+    useInfiniteQuery({
+      queryKey: ["user-notifications", user?.id],
+      queryFn: async ({ pageParam = 1 }) => {
+        if (!user) return null;
 
-      const response = await getCollection({
-        collection: "notifications",
-        req: { user },
-        user,
-        filters: {
-          page: pageParam,
-          limit: 25,
-          sort: "-createdAt",
-          fields: { user: { equals: user.id } },
-        },
-        depth: 2,
-      });
+        const response = await actionSafeExecute(
+          sdk.find({
+            collection: "notifications",
+            page: pageParam,
+            limit: 25,
+            sort: "-createdAt",
+            where: { user: { equals: user.id } },
+            depth: 1,
+          }),
+          messages.actions.notification.serverError,
+        );
 
-      if (!response.data || response.data.docs.length === 0 || response.error)
-        return null;
+        if (!response.data || response.data.docs.length === 0 || response.error)
+          return null;
 
-      return response.data;
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) =>
-      lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
-  });
+        return response.data;
+      },
+      initialPageParam: 1,
+      getNextPageParam: (lastPage) =>
+        lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
+    });
 
   const { notifications } = useMemo(() => {
     if (!data) return { notifications: [] };
@@ -192,99 +188,82 @@ export const ProfileNotifications = function ProfileNotifications() {
     return { notifications: pages };
   }, [data]);
 
+  if (isLoading) return <NotificationsLoading />;
+
+  if (!user) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>User Authentication Required</CardTitle>
+          <CardDescription>
+            Kindly sign in to securely access your notifications. We look
+            forward to keeping you informed.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
   return (
-    <SafeHydrate
-      isLoading={isUserLoading || isLoading}
-      isLoadingComponent={
-        <div className="space-y-5">
-          {Array.from({ length: 10 }).map((_, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <Skeleton key={index} className="h-32 w-full bg-foreground/5" />
-          ))}
+    <div className="space-y-10">
+      <div className="flex flex-wrap items-center justify-between gap-5">
+        <div className="space-y-0.5">
+          <SubSectionHeading
+            as="h2"
+            className="flex items-center gap-2.5 text-xl !leading-none lg:text-xl lg:!leading-none xl:text-xl xl:!leading-none">
+            <BellRingIcon className="size-6 stroke-[1.5]" />
+            Notifications
+          </SubSectionHeading>
+          <Paragraph className="max-w-2xl text-base lg:text-base">
+            Stay informed and engaged—review your latest notifications at your
+            convenience.
+          </Paragraph>
         </div>
-      }>
-      {(() => {
-        if (!user) {
-          return (
-            <Card>
-              <CardHeader>
-                <CardTitle>User Authentication Required</CardTitle>
-                <CardDescription>
-                  Kindly sign in to securely access your notifications. We look
-                  forward to keeping you informed.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          );
-        }
-
-        return (
-          <div className="space-y-10">
-            <div className="flex flex-wrap items-center justify-between gap-5">
-              <div className="space-y-0.5">
-                <SubSectionHeading
-                  as="h2"
-                  className="flex items-center gap-2.5 text-xl !leading-none lg:text-xl lg:!leading-none xl:text-xl xl:!leading-none">
-                  <BellRingIcon className="size-6 stroke-[1.5]" />
-                  Notifications
-                </SubSectionHeading>
-                <Paragraph className="max-w-2xl text-base lg:text-base">
-                  Stay informed and engaged—review your latest notifications at
-                  your convenience.
-                </Paragraph>
-              </div>
-              <Button
-                variant="outline"
-                disabled={markingEveryAsRead.isPending}
-                onClick={() => markingEveryAsRead.mutate()}>
-                <BellDotIcon />
-                {markingEveryAsRead.isPending
-                  ? "Marking as read..."
-                  : "Mark all notifications as read"}
-              </Button>
-            </div>
-            <section
-              className={cn("flex w-full flex-col gap-5", {
-                "pointer-events-none opacity-50":
-                  isFetching || markingEveryAsRead.isPending,
-              })}>
-              {notifications.length !== 0 ? (
-                notifications.map((notification) => (
-                  <NotificationItem
-                    key={notification.id}
-                    userId={user.id}
-                    notification={notification}
-                  />
-                ))
-              ) : (
-                <div className="flex flex-col items-center justify-center gap-10 py-20">
-                  <BellOffIcon className="size-20 stroke-[1.5]" />
-                  <SubSectionHeading
-                    as="h3"
-                    className="flex max-w-2xl items-center gap-2.5 text-center text-xl tracking-normal lg:max-w-2xl lg:text-xl xl:max-w-2xl xl:text-xl">
-                    No notifications are currently available at this time. We
-                    will promptly inform you as soon as new updates arise.
-                  </SubSectionHeading>
-                </div>
-              )}
-            </section>
-
-            {hasNextPage ? (
-              <div className="flex w-full items-center justify-center">
-                <Button
-                  variant="link"
-                  disabled={isFetchingNextPage}
-                  onClick={() => fetchNextPage()}>
-                  {isFetchingNextPage
-                    ? "Loading more notifications..."
-                    : "Read more notifications"}
-                  <ArrowDownIcon />
-                </Button>
-              </div>
-            ) : null}
+        <Button
+          variant="outline"
+          disabled={markingEveryAsRead.isPending}
+          onClick={() => markingEveryAsRead.mutate()}>
+          <BellDotIcon />
+          {markingEveryAsRead.isPending
+            ? "Marking as read..."
+            : "Mark all notifications as read"}
+        </Button>
+      </div>
+      <section className={cn("flex w-full flex-col gap-5", {})}>
+        {notifications.length !== 0 ? (
+          notifications.map((notification) => (
+            <NotificationItem
+              key={notification.id}
+              userId={user.id}
+              notification={notification}
+            />
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-10 py-20">
+            <BellOffIcon className="size-20 stroke-[1.5]" />
+            <SubSectionHeading
+              as="h3"
+              className="flex max-w-2xl items-center gap-2.5 text-center text-xl tracking-normal lg:max-w-2xl lg:text-xl xl:max-w-2xl xl:text-xl">
+              No notifications are currently available at this time. We will
+              promptly inform you as soon as new updates arise.
+            </SubSectionHeading>
           </div>
-        );
-      })()}
-    </SafeHydrate>
+        )}
+      </section>
+
+      {hasNextPage ? (
+        <div className="flex w-full items-center justify-center">
+          <Button
+            variant="link"
+            disabled={isFetchingNextPage}
+            onClick={() => fetchNextPage()}>
+            {isFetchingNextPage
+              ? "Loading more notifications..."
+              : "Read more notifications"}
+            <ArrowDownIcon />
+          </Button>
+        </div>
+      ) : null}
+    </div>
   );
 };

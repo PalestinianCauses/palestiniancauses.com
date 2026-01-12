@@ -1,20 +1,19 @@
 "use server";
 
-// REVIEWED - 01
+// REVIEWED - 05
 
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
+import { getAuthentication } from "@/lib/server/auth";
+import { getProduct } from "@/lib/server/product";
 import { ResponseSafeExecute } from "@/lib/types";
-import { isNumber, isObject } from "@/lib/types/guards";
 import { stripe } from "@/lib/utils/stripe";
 
-import { getAuthentication } from "./auth";
-import { getCollection } from "./collection";
 import { createOrder, deleteOrder, updateOrder } from "./order";
-import { getProduct } from "./product";
 
 export const createProductStripeCheckoutSession =
   async function createProductStripeCheckoutSession(
@@ -32,7 +31,7 @@ export const createProductStripeCheckoutSession =
 
     if (!productResponse.data || productResponse.error) return productResponse;
 
-    const product = productResponse.data.docs[0];
+    const product = productResponse.data;
 
     if (product.price <= 0)
       return {
@@ -40,36 +39,71 @@ export const createProductStripeCheckoutSession =
         error: messages.actions.product.notAvailableForPurchasing,
       };
 
-    const existingOrderResponse = await getCollection({
-      req: { user: { ...auth, collection: "users" } },
-      user: auth,
-      collection: "orders",
-      filters: {
-        fields: {
-          and: [
-            { user: { equals: auth.id } },
-            { orderType: { equals: "product" } },
-            { productOrderStatus: { equals: "paid" } },
+    const existingOrderResponse = await actionSafeExecute(
+      payload.find({
+        req: { user: { ...auth, collection: "users" } },
+        user: auth,
+        collection: "orders",
+        where: {
+          "user": { equals: auth.id },
+          "orderType": { equals: "product" },
+          "items.itemType": { equals: "product" },
+          "items.product.slug": { equals: product.slug },
+          "or": [
+            {
+              and: [
+                { orderStatus: { equals: "completed" } },
+                { productOrderStatus: { equals: "paid" } },
+              ],
+            },
+            {
+              and: [
+                { orderStatus: { equals: "in-progress" } },
+                { productOrderStatus: { equals: "pending" } },
+              ],
+            },
           ],
         },
-      },
-      depth: 2,
-    });
+        depth: 2,
+      }),
+      messages.actions.order.serverErrorGet,
+    );
 
     if (
       existingOrderResponse.data &&
-      existingOrderResponse.data.docs.length !== 0
+      existingOrderResponse.data.docs.length === 1
     ) {
-      const hasOrder = existingOrderResponse.data.docs.some((order) =>
-        order.items.some(
-          (item) =>
-            item.itemType === "product" &&
-            ((isNumber(item.product) && item.product === product.id) ||
-              (isObject(item.product) && item.product.id === product.id)),
-        ),
-      );
+      const existingOrder = existingOrderResponse.data.docs[0];
 
-      if (hasOrder) redirect("/a-human-but-from-gaza/thank-you");
+      if (
+        existingOrder.orderStatus === "completed" &&
+        existingOrder.productOrderStatus === "paid"
+      )
+        redirect("/a-human-but-from-gaza/thank-you");
+
+      if (
+        existingOrder.orderStatus === "in-progress" &&
+        existingOrder.productOrderStatus === "pending" &&
+        existingOrder.stripeSessionId
+      ) {
+        const sessionResponse = await actionSafeExecute(
+          stripe.checkout.sessions.retrieve(existingOrder.stripeSessionId),
+          messages.actions.order.serverErrorGetCheckoutSession,
+        );
+
+        if (
+          sessionResponse.data &&
+          sessionResponse.data.status === "open" &&
+          sessionResponse.data.payment_status !== "paid" &&
+          sessionResponse.data.url &&
+          !sessionResponse.error
+        ) {
+          return {
+            data: sessionResponse.data.url,
+            error: null,
+          };
+        }
+      }
     }
 
     // Create order record (pending payment)
@@ -124,7 +158,7 @@ export const createProductStripeCheckoutSession =
           `${baseURL}/a-human-but-from-gaza/thank-you`,
           ["session_id", "{CHECKOUT_SESSION_ID}"].join("="),
         ].join("?"),
-        cancel_url: `${baseURL}/a-human-but-from-gaza`,
+        cancel_url: `${baseURL}/a-human-but-from-gaza/cancel`,
         customer_email: auth.email,
         metadata: {
           productSlug: product.slug,

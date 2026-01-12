@@ -1,12 +1,15 @@
-// REVIEWED
+// REVIEWED - 04
 
-import { ArrowUpRightIcon, DownloadIcon, PackageCheckIcon } from "lucide-react";
+import {
+  ArrowUpRightIcon,
+  DownloadIcon,
+  ExternalLinkIcon,
+  PackageCheckIcon,
+} from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { Fragment } from "react";
 
-import { getAuthentication } from "@/actions/auth";
-import { getUserProductOrder } from "@/actions/order";
 import { getStripeCheckoutSession } from "@/actions/stripe-get-checkout-session";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
@@ -20,7 +23,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { messages } from "@/lib/messages";
+import { getUserProductOrder } from "@/lib/server/order";
 import { isObject } from "@/lib/types/guards";
+import { createProductDownloadingURLs } from "@/lib/utils/product-download-urls";
 import { Order, Product } from "@/payload-types";
 
 import { RedirectProvider } from "../../providers";
@@ -37,10 +43,6 @@ export default async function ThankYouPage({
   const paramsSearch = await searchParams;
   const sessionId = paramsSearch.session_id;
 
-  const user = await getAuthentication();
-
-  if (!user) return <RedirectProvider path="/a-human-but-from-gaza" />;
-
   let order: Order | null = null;
   let product: number | Product | null = null;
 
@@ -50,9 +52,26 @@ export default async function ThankYouPage({
     if (responseSession.data) {
       order = responseSession.data.order;
 
+      if (
+        order.orderStatus !== "completed" ||
+        order.productOrderStatus !== "paid"
+      )
+        return (
+          <RedirectProvider
+            path="/a-human-but-from-gaza"
+            messageToast={messages.actions.order.paymentNotCompleted}
+          />
+        );
+
       if (responseSession.data.order.items[0].product)
         product = responseSession.data.order.items[0].product;
-    } else return <RedirectProvider path="/404" />;
+    } else
+      return (
+        <RedirectProvider
+          path="/a-human-but-from-gaza"
+          messageToast={responseSession.error}
+        />
+      );
   }
 
   if (!sessionId || !order || !product) {
@@ -63,10 +82,18 @@ export default async function ThankYouPage({
     if (responseUserProductOrder.data) {
       order = responseUserProductOrder.data.order;
       product = responseUserProductOrder.data.product;
-    } else return <RedirectProvider path="/404" />;
+    } else
+      return (
+        <RedirectProvider
+          path="/a-human-but-from-gaza"
+          messageToast={responseUserProductOrder.error}
+        />
+      );
   }
 
-  const downloadingURLs = (isObject(product) && product.links) || [];
+  const downloadingURLs = isObject(product)
+    ? createProductDownloadingURLs(product)
+    : [];
 
   if (downloadingURLs.length === 0) return <RedirectProvider path="/404" />;
 
@@ -85,9 +112,9 @@ export default async function ThankYouPage({
             <Paragraph className="text-base lg:text-base">
               Your payment was processed successfully. To make things seamless,
               we&apos;ve delivered your download links to{" "}
-              {user.email ? (
+              {isObject(order.user) && order.user.email ? (
                 <span className="font-semibold text-foreground">
-                  {user.email}
+                  {order.user.email}
                 </span>
               ) : (
                 "your email address"
@@ -108,19 +135,23 @@ export default async function ThankYouPage({
                 </CardDescription>
               </CardHeader>
               <div className="space-y-2.5 p-5 pt-0">
-                {downloadingURLs.map((link) => (
+                {downloadingURLs.map((link, index) => (
                   <Button
-                    key={link.id || link.url}
+                    key={link.url || index}
                     variant="outline"
                     size="lg"
-                    className="w-full justify-between"
+                    className="w-full justify-start px-5"
                     asChild>
-                    <Link href={link.url} download={link.url}>
-                      <span className="truncate">
+                    <Link
+                      href={link.url}
+                      target="_blank"
+                      rel="noreferrer noopener">
+                      <ExternalLinkIcon />
+                      <span className="mr-auto truncate">
                         {link.title}
                         {link.isFile && link.fileSize ? (
                           <span className="ml-2.5 font-mono text-sm leading-none text-muted-foreground">
-                            ({Math.round(link.fileSize)} MB)
+                            ({Math.round(link.fileSize / 1024 / 1024)} MB)
                           </span>
                         ) : null}
                       </span>

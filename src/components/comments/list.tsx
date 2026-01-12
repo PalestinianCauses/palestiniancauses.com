@@ -1,15 +1,13 @@
 "use client";
 
-// REVIEWED - 13
+// REVIEWED - 16
 
 import { QueryKey, useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, MessagesSquareIcon } from "lucide-react";
-import { GeneratedTypes } from "payload";
 import { useMemo } from "react";
 
-import { getCollection } from "@/actions/collection";
 import { useHashScroll } from "@/hooks/use-hash-scroll";
-import { useUser } from "@/hooks/use-user";
+import { getPublicCollection } from "@/lib/api/public";
 import { FiltersOptions } from "@/lib/types";
 import { cn } from "@/lib/utils/styles";
 
@@ -24,27 +22,31 @@ import { CommentItem } from "./item";
 export const CommentList = function CommentList({
   queryKey,
   filters,
-  fieldsSearch,
 }: {
   queryKey: QueryKey;
   filters: FiltersOptions;
-  fieldsSearch: (keyof GeneratedTypes["collections"]["comments"])[];
 }) {
-  const { isLoading, data: user } = useUser();
   const { elementId, jumpToPlusHighlight } = useHashScroll();
 
   const { isFetching, isFetchingNextPage, hasNextPage, fetchNextPage, data } =
     useSuspenseInfiniteQuery({
       queryKey,
       queryFn: async ({ pageParam = filters.page }) => {
-        const response = await getCollection({
+        const response = await getPublicCollection<"comments">({
           collection: "comments",
-          filters: { ...filters, page: pageParam },
-          fieldsSearch,
-          depth: 4,
+          page: pageParam,
+          limit: filters.limit,
+          // eslint-disable-next-line no-nested-ternary
+          sort: filters.sort
+            ? Array.isArray(filters.sort)
+              ? filters.sort.join(",")
+              : filters.sort
+            : "-createdAt",
+          where: filters.fields,
+          depth: 2,
         });
 
-        if (!response.data || response.data.docs.length === 0 || response.error)
+        if (!response.data || response.error || response.data.docs.length === 0)
           return null;
 
         return response.data;
@@ -82,19 +84,13 @@ export const CommentList = function CommentList({
     );
 
   return (
-    <SafeHydrate
-      isLoading={isLoading}
-      isLoadingComponent={<Loading className="min-h-80" />}>
-      <section
-        className={cn("flex w-full flex-col gap-10", {
-          "pointer-events-none opacity-50": isFetching,
-        })}>
+    <SafeHydrate isLoadingComponent={<Loading className="min-h-80" />}>
+      <section className={cn("flex w-full flex-col gap-10", {})}>
         {comments.map((comment) => (
           <CommentItem
             key={comment.id}
             queryKey={queryKey}
             depth={0}
-            user={user}
             comment={comment}
             elementId={elementId}
             jumpToPlusHighlight={jumpToPlusHighlight}

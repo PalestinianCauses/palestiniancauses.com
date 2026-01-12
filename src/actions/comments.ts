@@ -1,14 +1,15 @@
 "use server";
 
-// REVIEWED - 12
+// REVIEWED - 15
+
+import { revalidatePath } from "next/cache";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { getAuthentication } from "@/lib/server/auth";
 import { ResponseSafeExecute } from "@/lib/types";
 import { Comment } from "@/payload-types";
-
-import { getAuthentication } from "./auth";
 
 export const createComment = async function createComment(
   data: Omit<Comment, "id" | "createdAt" | "updatedAt">,
@@ -23,7 +24,7 @@ export const createComment = async function createComment(
 
   const response = await actionSafeExecute(
     payload.create({
-      req: { user: auth },
+      req: { user: { ...auth, collection: "users" } },
       user: auth,
       collection: "comments",
       data,
@@ -34,54 +35,13 @@ export const createComment = async function createComment(
 
   if (!response.data || response.error) return response;
 
+  revalidatePath("/profile");
+
   return { data: messages.actions.comment.successCreate, error: null };
-};
-
-// public information no need to override access
-export const getCommentRepliesCount = async function getCommentRepliesCount(
-  id: number,
-): Promise<number> {
-  const response = await actionSafeExecute(
-    payload.count({
-      collection: "comments",
-      where: { parent: { equals: id } },
-    }),
-    messages.actions.comment.replies.serverErrorCount,
-  );
-
-  if (!response.data || response.error) return 0;
-
-  return response.data.totalDocs || 0;
-};
-
-// public information no need to override access
-export const getComment = async function getComment(
-  id: number,
-): Promise<ResponseSafeExecute<Comment & { repliesCount: number }>> {
-  const response = await actionSafeExecute(
-    payload.findByID({
-      collection: "comments",
-      id,
-      depth: 2,
-    }),
-    messages.actions.comment.serverErrorGet,
-  );
-
-  if (!response.data || response.error) return response;
-
-  if (response.data.status !== "approved")
-    return {
-      data: null,
-      error: messages.actions.comment.notFound,
-    };
-
-  const repliesCount = await getCommentRepliesCount(id);
-  return { data: { ...response.data, repliesCount }, error: null };
 };
 
 export const deleteComment = async function deleteComment(
   id: number,
-  repliesIds?: number[],
 ): Promise<ResponseSafeExecute<string, string>> {
   const auth = await getAuthentication();
 
@@ -91,9 +51,16 @@ export const deleteComment = async function deleteComment(
       error: messages.actions.comment.deleteUnAuthenticated,
     };
 
-  const comment = await getComment(id);
+  const comment = await actionSafeExecute(
+    payload.findByID({
+      collection: "comments",
+      id,
+      depth: 1,
+    }),
+    messages.actions.comment.serverErrorGet,
+  );
 
-  if (!comment.data || comment.error)
+  if (!comment.data || comment.error || comment.data.status !== "approved")
     return {
       data: null,
       error: messages.actions.comment.notFound,
@@ -111,7 +78,7 @@ export const deleteComment = async function deleteComment(
 
   const response = await actionSafeExecute(
     payload.delete({
-      req: { user: auth },
+      req: { user: { ...auth, collection: "users" } },
       user: auth,
       collection: "comments",
       id,
@@ -122,26 +89,19 @@ export const deleteComment = async function deleteComment(
 
   if (!response.data || response.error) return response;
 
-  if (repliesIds) {
-    const deletePromises = repliesIds.map(async (replyId) => {
-      const repliesResponse = await actionSafeExecute(
-        payload.delete({
-          collection: "comments",
-          id: replyId,
-        }),
-        messages.actions.comment.serverErrorDelete,
-      );
+  // Replies are automatically deleted via collection `beforeDelete` hook
 
-      if (!repliesResponse.data || repliesResponse.error)
-        console.error(
-          "Error in `deleteCommentReplies` in `comments.ts` while trying to delete comment replies",
-          id,
-          response,
-        );
-    });
+  // Revalidate profile page for activity comments
+  revalidatePath("/profile");
 
-    await Promise.all(deletePromises);
-  }
+  // Revalidate public profile pages where this comment might appear
+  // Get comment's user to revalidate their profile page
+  const userCommentId =
+    typeof comment.data.user === "object"
+      ? comment.data.user.id
+      : comment.data.user;
+
+  if (userCommentId) revalidatePath(`/user/${userCommentId}`);
 
   return { data: messages.actions.comment.successDelete, error: null };
 };
@@ -164,9 +124,16 @@ export const voteOnComment = async function voteOnComment({
       error: messages.actions.comment.votes.unAuthenticated,
     };
 
-  const comment = await getComment(id);
+  const comment = await actionSafeExecute(
+    payload.findByID({
+      collection: "comments",
+      id,
+      depth: 1,
+    }),
+    messages.actions.comment.serverErrorGet,
+  );
 
-  if (!comment.data || comment.error)
+  if (!comment.data || comment.error || comment.data.status !== "approved")
     return { data: null, error: messages.actions.comment.notFound };
 
   const votes = comment.data.votes || [];

@@ -1,4 +1,4 @@
-// REVIEWED - 14
+// REVIEWED - 15
 
 import { CollectionConfig } from "payload";
 
@@ -273,10 +273,15 @@ export const Orders: CollectionConfig = {
         if (operation !== "create") return;
 
         try {
+          if (doc.orderType === "product") return;
+
           // Get room owner
+          // eslint-disable-next-line no-nested-ternary
           const roomOwnerId = isNumber(doc.roomOwner)
             ? doc.roomOwner
-            : doc.roomOwner.id;
+            : isObject(doc.roomOwner)
+              ? doc.roomOwner.id
+              : null;
 
           if (!roomOwnerId) return;
 
@@ -285,6 +290,8 @@ export const Orders: CollectionConfig = {
             id: roomOwnerId,
             depth: 1,
           });
+
+          if (!roomOwner) return;
 
           // Get room owner's contacts
           const roomResponse = await req.payload.find({

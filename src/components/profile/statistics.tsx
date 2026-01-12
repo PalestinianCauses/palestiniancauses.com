@@ -1,21 +1,14 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { BarChart3Icon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import colors from "tailwindcss/colors";
 
-import { UserStats } from "@/actions/user-stats";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartLegend,
@@ -23,8 +16,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ResponseSafeExecute } from "@/lib/types";
 
 import { Paragraph, SubSectionHeading } from "../globals/typography";
 
@@ -44,11 +35,15 @@ const chartConfig = {
 };
 
 export const ProfileStatistics = function ProfileStatistics({
-  isStatsLoading,
+  isPublicProfile = false,
   stats,
 }: {
-  isStatsLoading: boolean;
-  stats: ResponseSafeExecute<UserStats[]> | undefined;
+  isPublicProfile?: boolean;
+  stats: {
+    id: number;
+    type: "comment" | "diary-entry" | "order";
+    createdAt: string;
+  }[];
 }) {
   const [offsetMonth, setOffsetMonth] = useState(0);
   const [monthsToShow, setMonthsToShow] = useState(6);
@@ -72,8 +67,6 @@ export const ProfileStatistics = function ProfileStatistics({
   }, []);
 
   const chartData = useMemo(() => {
-    if (isStatsLoading || !stats || !stats.data || stats.error) return null;
-
     // Group activities by month based on monthsToShow and offset
     const months: Record<
       string,
@@ -119,7 +112,7 @@ export const ProfileStatistics = function ProfileStatistics({
     }
 
     // Count diary comments, diary entries, and orders by month from `activityRecent`
-    stats.data.forEach((stat) => {
+    stats.forEach((stat) => {
       const date = new Date(stat.createdAt);
       const monthKey = date.toLocaleDateString("en-US", {
         month: "short",
@@ -139,35 +132,7 @@ export const ProfileStatistics = function ProfileStatistics({
       diary: months[label].diary,
       orders: months[label].orders,
     }));
-  }, [isStatsLoading, stats, offsetMonth, monthsToShow]);
-
-  // Show skeleton only on initial load (when no data exists yet)
-  if (isStatsLoading)
-    return (
-      <Card>
-        <CardHeader>
-          <Skeleton className="h-8 w-1/2 bg-foreground/5" />
-          <Skeleton className="h-4 w-3/4 bg-foreground/5" />
-        </CardHeader>
-        <CardContent>
-          <Skeleton className="h-60 w-full bg-foreground/5" />
-        </CardContent>
-      </Card>
-    );
-
-  if (!stats || !stats.data || !chartData)
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Activity Statistics Overview</CardTitle>
-          <CardDescription>
-            At this time, there is no statistical activity data available for
-            your profile. Please continue engaging with our platform—your future
-            activities will be reflected here in a comprehensive summary.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    );
+  }, [stats, offsetMonth, monthsToShow]);
 
   return (
     <Card>
@@ -180,24 +145,25 @@ export const ProfileStatistics = function ProfileStatistics({
               <BarChart3Icon className="size-6 stroke-[1.5]" />
               Activity Statistics
             </SubSectionHeading>
-            <Paragraph className="text-base lg:text-base">
-              {offsetMonth === 0
-                ? `Your activity over the last ${monthsToShow} months`
-                : `Your activity from ${chartData[0].month} to ${chartData[chartData.length - 1].month}`}
-            </Paragraph>
+            {!isPublicProfile ? (
+              <Paragraph className="text-base lg:text-base">
+                {offsetMonth === 0
+                  ? `Your activity over the last ${monthsToShow} months`
+                  : `Your activity from ${chartData[0].month} to ${chartData[chartData.length - 1].month}`}
+              </Paragraph>
+            ) : null}
           </div>
           <div className="flex items-center gap-2.5">
             <Button
               variant="outline"
               size="icon"
-              disabled={isStatsLoading}
               onClick={() => setOffsetMonth((p) => p + monthsToShow)}>
               <ChevronLeftIcon />
             </Button>
             <Button
               variant="outline"
               size="icon"
-              disabled={isStatsLoading || offsetMonth === 0}
+              disabled={offsetMonth === 0}
               onClick={() =>
                 setOffsetMonth((p) => Math.max(0, p - monthsToShow))
               }>

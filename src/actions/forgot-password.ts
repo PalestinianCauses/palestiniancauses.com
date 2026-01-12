@@ -1,13 +1,12 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { getUserByEmail } from "@/lib/server/user";
 import { ResponseSafeExecute } from "@/lib/types";
-
-import { getUserByEmail } from "./user";
 
 export const forgotPassword = async function forgotPassword(data: {
   email: string;
@@ -15,18 +14,14 @@ export const forgotPassword = async function forgotPassword(data: {
   // Check if user exists and is verified
   const userResponse = await getUserByEmail(data.email);
 
-  if (
-    !userResponse.data ||
-    userResponse.error ||
-    userResponse.data.docs.length === 0
-  )
+  if (!userResponse.data || userResponse.error)
     // Return success message even if user doesn't exist (security best practice)
     return {
       data: messages.actions.auth.forgotPassword.success,
       error: null,
     };
 
-  const user = userResponse.data.docs[0];
+  const user = userResponse.data;
 
   // Check if account is verified
   if (!user.accountVerified)

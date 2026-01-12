@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { format } from "date-fns";
 import { ar, enUS } from "date-fns/locale";
@@ -159,7 +159,15 @@ export const BlogPostListItem = function BlogPostListItem({
 
       <div className="flex flex-1 flex-col items-start justify-start gap-5">
         <InformationBadges
-          badges={[{ icon: CalendarIcon, label: datePublished }]}
+          badges={[
+            {
+              icon: CalendarIcon,
+              label:
+                language === "arabic"
+                  ? datePublished.replaceAll(",", "،")
+                  : datePublished,
+            },
+          ]}
           aria-label="Publication date"
           className="mb-0"
         />

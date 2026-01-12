@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 09
+// REVIEWED - 11
 
 import {
   ArrowLeftFromLineIcon,
@@ -36,12 +36,14 @@ import { UserAvatar } from "../user-avatar";
 
 const RoomDropdownMenuItem = function RoomDropdownMenuItem({
   room,
+  roomList,
 }: {
   room: Room;
+  roomList: Room[];
 }) {
   const { setOpenMobile } = useSidebar();
 
-  const { roomActive } = useRoom();
+  const { roomActive } = useRoom(roomList);
 
   return (
     <DropdownMenuItem
@@ -67,10 +69,14 @@ const RoomDropdownMenuItem = function RoomDropdownMenuItem({
   );
 };
 
-export const WebsiteSwitcher = function WebsiteSwitcher() {
+export const WebsiteSwitcher = function WebsiteSwitcher({
+  roomList,
+}: {
+  roomList: Room[];
+}) {
   const { isMobile, setOpenMobile } = useSidebar();
 
-  const { isRoomListLoading, roomList, roomActive } = useRoom();
+  const { roomActive } = useRoom(roomList);
 
   const [isAvatarLoading, setIsAvatarLoading] = useState(
     Boolean(roomActive ? roomActive.information.photograph : false),
@@ -83,17 +89,15 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              disabled={isRoomListLoading}
               className={cn(
                 "h-auto data-[state_=_open]:bg-sidebar-accent data-[state_=_open]:text-sidebar-accent-foreground group-data-[collapsible_=_icon]:!size-[calc(var(--sidebar-width-icon)_-_1rem)]",
-                { "disabled:opacity-100": isRoomListLoading },
               )}>
               <SuspenseAvatar
                 className={cn(
-                  "flex aspect-square size-12 items-center border border-input bg-sidebar text-sidebar-primary-foreground group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)]",
-                  { "justify-center": !isRoomListLoading },
+                  "flex aspect-square size-12 items-center justify-start border border-input bg-sidebar text-sidebar-primary-foreground group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)]",
+                  { "justify-center": !isAvatarLoading && !roomActive },
                 )}
-                isLoading={isRoomListLoading || isAvatarLoading}
+                isLoading={isAvatarLoading}
                 isLoadingProps={{
                   className:
                     "relative aspect-square size-12 group-data-[collapsible_=_icon]:size-[calc(var(--sidebar-width-icon)_-_1rem)]",
@@ -127,21 +131,12 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
               />
 
               <div className="grid flex-1 text-left text-sm leading-tight">
-                {isRoomListLoading ? (
-                  <Fragment>
-                    <Skeleton className="mb-1.5 h-5 w-full" />
-                    <Skeleton className="h-4 w-3/5" />
-                  </Fragment>
-                ) : (
-                  <Fragment>
-                    <span className="truncate font-semibold text-sidebar-primary">
-                      {roomActive ? roomActive.name : "PalestinianCauses"}
-                    </span>
-                    <span className="truncate text-xs text-muted-foreground">
-                      {roomActive ? "Room" : "Website"}
-                    </span>
-                  </Fragment>
-                )}
+                <span className="truncate font-semibold text-sidebar-primary">
+                  {roomActive ? roomActive.name : "PalestinianCauses"}
+                </span>
+                <span className="truncate text-xs text-muted-foreground">
+                  {roomActive ? "Room" : "Website"}
+                </span>
               </div>
               <ChevronsUpDownIcon className="ml-auto text-muted-foreground" />
             </SidebarMenuButton>
@@ -151,16 +146,17 @@ export const WebsiteSwitcher = function WebsiteSwitcher() {
             align="start"
             side={isMobile ? "bottom" : "right"}
             sideOffset={2}>
-            {/* eslint-disable-next-line no-nested-ternary */}
-            {isRoomListLoading ? (
-              <Skeleton className="mb-1 h-10 w-full" />
-            ) : roomList ? (
+            {roomList.length !== 0 ? (
               <Fragment>
                 <DropdownMenuLabel className="px-2.5 text-xs text-muted-foreground">
                   Rooms
                 </DropdownMenuLabel>
-                {roomList.docs.map((room) => (
-                  <RoomDropdownMenuItem key={room.id} room={room} />
+                {roomList.map((room) => (
+                  <RoomDropdownMenuItem
+                    key={room.id}
+                    room={room}
+                    roomList={roomList}
+                  />
                 ))}
                 <DropdownMenuSeparator />
               </Fragment>

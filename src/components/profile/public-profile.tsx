@@ -1,19 +1,18 @@
-"use client";
-
-// REVIEWED - 05
+// REVIEWED - 07
 
 import { format } from "date-fns/format";
 import {
-  ActivityIcon,
   CalendarDaysIcon,
   MailIcon,
   MessagesSquareIcon,
   Package2Icon,
   PencilLineIcon,
-  TrophyIcon,
 } from "lucide-react";
+import { Suspense } from "react";
 
-import { usePublicUserStats } from "@/hooks/use-public-user-stats";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
 import { User } from "@/payload-types";
 
 import {
@@ -27,35 +26,50 @@ import { Skeleton } from "../ui/skeleton";
 import { ProfileInfoRoles, ProfileInfoSocial } from "./info";
 import { ProfileNavigation } from "./navigation";
 
-export const PublicProfileStats = function PublicProfileStats({
+export const PublicProfileStats = async function PublicProfileStats({
   user,
 }: {
   user: User;
 }) {
-  const { isLoading, data: publicUserStats } = usePublicUserStats({
-    userId: user.id,
-  });
-
-  if (isLoading)
-    return (
-      <div className="flex flex-row flex-wrap items-start justify-start gap-2.5">
-        <div className="flex flex-col items-start justify-start gap-2.5">
-          <Skeleton className="h-5 w-32 max-w-sm bg-foreground/5" />
-          <Skeleton className="h-5 w-32 max-w-sm bg-foreground/5" />
-        </div>
-        <div className="flex flex-col items-start justify-start gap-2.5">
-          <Skeleton className="h-5 w-32 max-w-sm bg-foreground/5" />
-          <Skeleton className="h-5 w-32 max-w-sm bg-foreground/5" />
-        </div>
-        <div className="flex flex-col items-start justify-start gap-2.5">
-          <Skeleton className="h-5 w-32 max-w-sm bg-foreground/5" />
-          <Skeleton className="h-5 w-32 max-w-sm bg-foreground/5" />
-        </div>
-      </div>
-    );
-
-  if (!publicUserStats || !publicUserStats.data || publicUserStats.error)
-    return null;
+  const [commentsCount, diaryEntriesCount, ordersCount] = await Promise.all([
+    actionSafeExecute(
+      payload.count({
+        collection: "comments",
+        where: { user: { equals: user.id }, status: { equals: "approved" } },
+      }),
+      messages.actions.comment.serverErrorGet,
+    ),
+    actionSafeExecute(
+      payload.count({
+        collection: "diary-entries",
+        where: {
+          author: { equals: user.id },
+          status: { equals: "approved" },
+          isAnonymous: { equals: false },
+        },
+      }),
+      messages.actions.diaryEntry.serverErrorGet,
+    ),
+    actionSafeExecute(
+      payload.count({
+        collection: "orders",
+        where: {
+          user: { equals: user.id },
+          and: [
+            { orderStatus: { not_equals: "in-progress" } },
+            { orderStatus: { not_equals: "cancelled" } },
+            {
+              or: [
+                { productOrderType: { equals: "paid" } },
+                { productOrderType: { equals: "not-applicable" } },
+              ],
+            },
+          ],
+        },
+      }),
+      messages.actions.order.serverErrorGet,
+    ),
+  ]);
 
   return (
     <div className="flex flex-row flex-wrap items-start justify-start gap-x-10 gap-y-5">
@@ -67,7 +81,7 @@ export const PublicProfileStats = function PublicProfileStats({
           Comments
         </SubSectionHeading>
         <Paragraph className="border-l-2 border-input px-5 py-0.5 pr-0 text-xl font-semibold !leading-none text-foreground lg:text-xl">
-          {publicUserStats.data.comments}
+          {commentsCount.data?.totalDocs || 0}
         </Paragraph>
       </div>
       <div className="flex flex-col items-start justify-start gap-2.5">
@@ -78,7 +92,7 @@ export const PublicProfileStats = function PublicProfileStats({
           Diary Entries
         </SubSectionHeading>
         <Paragraph className="border-l-2 border-input px-5 py-0.5 pr-0 text-xl font-semibold !leading-none text-foreground lg:text-xl">
-          {publicUserStats.data.diaryEntries}
+          {diaryEntriesCount.data?.totalDocs || 0}
         </Paragraph>
       </div>
       <div className="flex flex-col items-start justify-start gap-2.5">
@@ -89,12 +103,26 @@ export const PublicProfileStats = function PublicProfileStats({
           Orders
         </SubSectionHeading>
         <Paragraph className="border-l-2 border-input px-5 py-0.5 pr-0 text-xl font-semibold !leading-none text-foreground lg:text-xl">
-          {publicUserStats.data.orders}
+          {ordersCount.data?.totalDocs || 0}
         </Paragraph>
       </div>
     </div>
   );
 };
+
+const getNavigationItems = (user: User) => [
+  { key: "comments", label: "Comments" },
+  { key: "diary-entries", label: "Diary Entries" },
+  ...(user.privacySettings.showOrders
+    ? [{ key: "orders", label: "Orders" }]
+    : []),
+  ...(user.privacySettings.showAchievements
+    ? [{ key: "achievements", label: "Achievements" }]
+    : []),
+  ...(user.privacySettings.showActivity
+    ? [{ key: "activity", label: "Activity" }]
+    : []),
+];
 
 export const PublicProfile = function PublicProfile({ user }: { user: User }) {
   return (
@@ -116,7 +144,25 @@ export const PublicProfile = function PublicProfile({ user }: { user: User }) {
                 : user.firstName || "Anonymous User"}
             </SectionHeading>
           </div>
-          <PublicProfileStats user={user} />
+          <Suspense
+            fallback={
+              <div className="flex flex-row flex-wrap items-start justify-start gap-2.5">
+                <div className="flex flex-col items-start justify-start gap-2.5">
+                  <Skeleton className="h-5 w-32 max-w-sm bg-foreground/5" />
+                  <Skeleton className="h-5 w-32 max-w-sm bg-foreground/5" />
+                </div>
+                <div className="flex flex-col items-start justify-start gap-2.5">
+                  <Skeleton className="h-5 w-32 max-w-sm bg-foreground/5" />
+                  <Skeleton className="h-5 w-32 max-w-sm bg-foreground/5" />
+                </div>
+                <div className="flex flex-col items-start justify-start gap-2.5">
+                  <Skeleton className="h-5 w-32 max-w-sm bg-foreground/5" />
+                  <Skeleton className="h-5 w-32 max-w-sm bg-foreground/5" />
+                </div>
+              </div>
+            }>
+            <PublicProfileStats user={user} />
+          </Suspense>
         </div>
       </div>
 
@@ -152,52 +198,7 @@ export const PublicProfile = function PublicProfile({ user }: { user: User }) {
 
       <ProfileInfoRoles roles={user.roles} />
 
-      <ProfileNavigation
-        items={[
-          {
-            key: "comments",
-            href: `/user/${user.id}/comments`,
-            label: "Comments",
-            icon: MessagesSquareIcon,
-          },
-          {
-            key: "diary-entries",
-            href: `/user/${user.id}/diary-entries`,
-            label: "Diary Entries",
-            icon: PencilLineIcon,
-          },
-          ...(user.privacySettings.showOrders
-            ? [
-                {
-                  key: "orders",
-                  href: `/user/${user.id}/orders`,
-                  label: "Orders",
-                  icon: Package2Icon,
-                },
-              ]
-            : []),
-          ...(user.privacySettings.showAchievements
-            ? [
-                {
-                  key: "achievements",
-                  href: `/user/${user.id}/achievements`,
-                  label: "Achievements",
-                  icon: TrophyIcon,
-                },
-              ]
-            : []),
-          ...(user.privacySettings.showActivity
-            ? [
-                {
-                  key: "activity",
-                  href: `/user/${user.id}/activity`,
-                  label: "Activity",
-                  icon: ActivityIcon,
-                },
-              ]
-            : []),
-        ]}
-      />
+      <ProfileNavigation items={getNavigationItems(user)} />
     </div>
   );
 };

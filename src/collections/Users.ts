@@ -1,4 +1,4 @@
-// REVIEWED - 25
+// REVIEWED - 27
 import type { CollectionConfig } from "payload";
 
 import {
@@ -100,7 +100,7 @@ export const Users: CollectionConfig = {
       label: "Avatar",
       name: "avatar",
       type: "upload",
-      relationTo: "media",
+      relationTo: "media-public",
       required: false,
     },
     {
@@ -136,14 +136,6 @@ export const Users: CollectionConfig = {
           label: "Website",
           name: "website",
           type: "text",
-          required: false,
-        },
-        {
-          label: "Room",
-          name: "room",
-          type: "relationship",
-          relationTo: "rooms",
-          hasMany: false,
           required: false,
         },
       ],
@@ -210,4 +202,7 @@ export const Users: CollectionConfig = {
       required: true,
     },
   ],
+  hooks: {
+    afterChange: [],
+  },
 };

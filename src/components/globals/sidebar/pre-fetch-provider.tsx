@@ -1,30 +1,42 @@
-// REVIEWED
+// REVIEWED - 01
 
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { PropsWithChildren } from "react";
+import { Fragment } from "react";
 
-import { getRoomList } from "@/actions/room";
-import { getQueryClient } from "@/lib/query";
+import { SidebarContent, SidebarHeader } from "@/components/ui/sidebar";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
 
-export const SidebarContentPreFetch = function SidebarContentPreFetch({
-  children,
-}: PropsWithChildren) {
-  const queryClient = getQueryClient();
+import { SidebarMainMenu } from "./menu";
+import { WebsiteSwitcher } from "./website-switcher";
 
-  queryClient.prefetchQuery({
-    queryKey: ["room-list"],
-    queryFn: async () => {
-      const response = await getRoomList();
-      if (!response.data || response.data.docs.length === 0 || response.error)
-        return null;
+export const SidebarContentPreFetch = async function SidebarContentPreFetch() {
+  const response = await actionSafeExecute(
+    payload.find({
+      collection: "rooms",
+      select: {
+        id: true,
+        user: true,
+        name: true,
+        slug: true,
+        information: { photograph: true },
+        links: true,
+      },
+      depth: 1,
+    }),
+    messages.actions.room.serverError,
+  );
 
-      return response.data;
-    },
-  });
+  if (!response.data || response.error) return null;
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      {children}
-    </HydrationBoundary>
+    <Fragment>
+      <SidebarHeader>
+        <WebsiteSwitcher roomList={response.data.docs} />
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarMainMenu roomList={response.data.docs} />
+      </SidebarContent>
+    </Fragment>
   );
 };

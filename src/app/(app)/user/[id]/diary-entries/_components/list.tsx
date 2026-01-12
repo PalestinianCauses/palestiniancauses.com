@@ -1,77 +1,37 @@
-"use client";
+// REVIEWED - 03
 
-// REVIEWED - 02
-
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { ArrowDownIcon, ArrowUpRightIcon, PencilOffIcon } from "lucide-react";
+import { ArrowUpRightIcon, PencilOffIcon } from "lucide-react";
 import Link from "next/link";
-import { useMemo } from "react";
 
-import { getCollection } from "@/actions/collection";
+import { RedirectProvider } from "@/app/(app)/providers";
 import { DiaryEntryListItem } from "@/components/diary-entry/list";
-import { DiaryEntryListLoading } from "@/components/diary-entry/loading";
 import { Paragraph, SubSectionHeading } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
 import { HumansButFromGazaPageLink } from "@/lib/utils/strings";
 import { cn } from "@/lib/utils/styles";
+import { User } from "@/payload-types";
 
 export const PublicProfileDiaryEntriesList =
-  function PublicProfileDiaryEntriesList({ userId }: { userId: number }) {
-    const queryKey = useMemo(
-      () => ["public-user-diary-entries", userId],
-      [userId],
+  async function PublicProfileDiaryEntriesList({ user }: { user: User }) {
+    const response = await actionSafeExecute(
+      payload.find({
+        collection: "diary-entries",
+        where: { author: { equals: user.id }, status: { equals: "approved" } },
+      }),
+      messages.actions.diaryEntry.serverErrorGet,
     );
 
-    const {
-      isLoading,
-      isFetching,
-      isFetchingNextPage,
-      hasNextPage,
-      fetchNextPage,
-      data,
-    } = useInfiniteQuery({
-      queryKey,
-      queryFn: async ({ pageParam = 1 }) => {
-        const response = await getCollection({
-          collection: "diary-entries",
-          filters: {
-            page: pageParam,
-            limit: 5,
-            fields: {
-              author: { equals: userId },
-              status: { equals: "approved" },
-            },
-          },
-          depth: 2,
-        });
-
-        if (!response.data || response.data.docs.length === 0 || response.error)
-          return null;
-
-        return response.data;
-      },
-      initialPageParam: 1,
-      getNextPageParam: (lastPage) =>
-        lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
-    });
-
-    const { diaryEntries } = useMemo(() => {
-      if (!data) return { diaryEntries: [] };
-
-      const pages = data.pages.flatMap((page) => (page ? page.docs : []));
-      return { diaryEntries: pages };
-    }, [data]);
-
-    if (isLoading) return <DiaryEntryListLoading />;
+    if (!response.data || response.error)
+      return <RedirectProvider path={`/user/${user.id}`} />;
 
     return (
       <div className="space-y-10">
-        <section
-          className={cn("grid grid-cols-1 gap-10", {
-            "pointer-events-none opacity-50": isFetching,
-          })}>
-          {diaryEntries.length !== 0 ? (
-            diaryEntries.map((diaryEntry) => (
+        <section className={cn("grid grid-cols-1 gap-10", {})}>
+          {response.data.docs.length !== 0 ? (
+            response.data.docs.map((diaryEntry) => (
               <DiaryEntryListItem key={diaryEntry.id} diaryEntry={diaryEntry} />
             ))
           ) : (
@@ -96,20 +56,6 @@ export const PublicProfileDiaryEntriesList =
             </div>
           )}
         </section>
-
-        {hasNextPage ? (
-          <div className="flex w-full items-center justify-center">
-            <Button
-              variant="link"
-              disabled={isFetchingNextPage}
-              onClick={() => fetchNextPage()}>
-              {isFetchingNextPage
-                ? "Loading more diary entries..."
-                : "Read more diary entries"}
-              <ArrowDownIcon />
-            </Button>
-          </div>
-        ) : null}
       </div>
     );
   };

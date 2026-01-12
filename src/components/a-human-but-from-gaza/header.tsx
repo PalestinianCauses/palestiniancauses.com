@@ -1,8 +1,10 @@
-// REVIEWED - 11
+// REVIEWED - 13
 
+import { list } from "@vercel/blob";
 import { Suspense } from "react";
 
-import { getBlobsByPrefix } from "@/actions/blob";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
 
 import { Container } from "../globals/container";
 import { InfiniteMarquee, MarqueeItem } from "../globals/marquee";
@@ -12,14 +14,26 @@ import { Badge } from "../ui/badge";
 import { Skeleton } from "../ui/skeleton";
 
 import { HeaderButtons } from "./header-buttons";
+import { SalesAlert } from "./sales-alert";
 
 const isLoadingElement = <Skeleton className="absolute inset-0 bg-primary/5" />;
 
 const HeaderImages = async function HeaderImages() {
-  const { data: images } = await getBlobsByPrefix("book-pages-images/");
+  const response = await actionSafeExecute(
+    list({
+      prefix: "book-pages-images/",
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    }),
+    messages.actions.blob.serverError,
+  );
 
-  if (!images || images.blobs.filter((blob) => blob.size !== 0).length === 0)
+  if (
+    !response.data ||
+    response.data.blobs.filter((blob) => blob.size !== 0).length === 0
+  )
     return null;
+
+  const images = response.data;
 
   return (
     <SafeHydrate>
@@ -45,10 +59,21 @@ const HeaderImages = async function HeaderImages() {
 };
 
 const HeaderCover = async function HeaderCover() {
-  const { data: cover } = await getBlobsByPrefix("book-cover/");
+  const response = await actionSafeExecute(
+    list({
+      prefix: "book-cover/",
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    }),
+    messages.actions.blob.serverError,
+  );
 
-  if (!cover || cover.blobs.filter((blob) => blob.size !== 0).length === 0)
+  if (
+    !response.data ||
+    response.data.blobs.filter((blob) => blob.size !== 0).length === 0
+  )
     return null;
+
+  const cover = response.data;
 
   return (
     <div className="absolute left-1/2 top-1/2 z-20 aspect-[2/3] h-auto w-72 -translate-x-1/2 -translate-y-1/2 lg:w-96">
@@ -76,6 +101,7 @@ export const Header = function Header() {
           <Badge variant="outline" className="mb-4">
             Be Part Of PalestinianCauses&apos; Journey
           </Badge>
+          <SalesAlert />
           <h1 className="mb-6 w-full max-w-4xl text-left text-6xl !leading-none tracking-tight sm:text-7xl md:justify-center md:text-center lg:max-w-none lg:text-8xl xl:text-9xl">
             Families&apos; Shadows Over Gaza&apos;s Rubble.
           </h1>

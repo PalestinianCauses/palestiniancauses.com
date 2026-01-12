@@ -1,4 +1,4 @@
-// REVIEWED - 17
+// REVIEWED - 18
 
 import { CollectionConfig } from "payload";
 
@@ -219,6 +219,28 @@ export const Comments: CollectionConfig = {
           if (resourceUserId && resourceUserId !== commenterId)
             if (createNotificationPromise) await createNotificationPromise;
         }
+      },
+    ],
+    beforeDelete: [
+      async ({ id, req }) => {
+        // Cascade delete: remove all replies to this comment
+        // Each delete triggers this hook again for nested replies (recursive)
+        const replies = await req.payload.find({
+          collection: "comments",
+          where: { parent: { equals: id } },
+          limit: 0,
+        });
+
+        // Delete one by one to ensure beforeDelete hook runs for each
+        // This guarantees recursive cascade for deeply nested replies
+        await Promise.all(
+          replies.docs.map((reply) =>
+            req.payload.delete({
+              collection: "comments",
+              id: reply.id,
+            }),
+          ),
+        );
       },
     ],
   },

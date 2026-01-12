@@ -1,13 +1,15 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Metadata } from "next";
 import { Fragment } from "react";
 
-import { getBlogRoom } from "@/actions/blog-room";
 import { BlogPostList } from "@/components/blog-post/list";
 import { BlogRoomHeader } from "@/components/blog-room/header";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
 import { isObject } from "@/lib/types/guards";
 
 import { RedirectProvider } from "../../providers";
@@ -20,11 +22,20 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   // eslint-disable-next-line prefer-destructuring
   const slug = (await params).slug;
-  const response = await getBlogRoom(slug);
+  const response = await actionSafeExecute(
+    payload.find({
+      collection: "blogs-rooms",
+      where: { slug: { equals: slug } },
+      limit: 1,
+      depth: 2,
+    }),
+    messages.actions.blogRoom.serverErrorGet,
+  );
 
-  if (!response.data || response.error) return { title: "Blog Room Not Found" };
+  if (!response.data || response.error || response.data.docs.length === 0)
+    return { title: "Blog Room Not Found" };
 
-  const room = response.data;
+  const room = response.data.docs[0];
   const roomOwner = isObject(room.roomOwner) ? room.roomOwner : null;
   // eslint-disable-next-line no-nested-ternary
   const ownerName = roomOwner
@@ -63,12 +74,20 @@ export default async function BlogRoomPage({
 }) {
   // eslint-disable-next-line prefer-destructuring
   const slug = (await params).slug;
-  const response = await getBlogRoom(slug);
+  const response = await actionSafeExecute(
+    payload.find({
+      collection: "blogs-rooms",
+      where: { slug: { equals: slug } },
+      limit: 1,
+      depth: 2,
+    }),
+    messages.actions.blogRoom.serverErrorGet,
+  );
 
-  if (!response.data || response.error)
+  if (!response.data || response.error || response.data.docs.length === 0)
     return <RedirectProvider path="/blogs" />;
 
-  const room = response.data;
+  const room = response.data.docs[0];
   const siteURL =
     process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
   const roomURL = `${siteURL}/blogs/${room.slug}`;

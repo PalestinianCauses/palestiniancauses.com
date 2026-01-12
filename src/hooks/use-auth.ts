@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,8 @@ import { z } from "zod";
 import { deleteCookie, getCookie } from "@/actions/cookies";
 import { forgotPassword as forgotPassAction } from "@/actions/forgot-password";
 import { resetPassword as resetPassAction } from "@/actions/reset-password";
-import { createUser, getUserByEmail } from "@/actions/user";
+import { createUser } from "@/actions/user";
+import { getUserByEmail } from "@/lib/api/user";
 import { messages } from "@/lib/messages";
 import { httpSafeExecute } from "@/lib/network";
 import { SignInSchema, SignUpSchema } from "@/lib/schemas/auth";
@@ -61,9 +62,6 @@ export const useAuth = function useAuth() {
           const responseUserExists = await getUserByEmail(signInData.email);
 
           if (!responseUserExists.data || responseUserExists.error)
-            return responseUserExists;
-
-          if (responseUserExists.data.docs.length === 0)
             return {
               data: null,
               error: messages.actions.auth.signIn.notFound(signInData.email),

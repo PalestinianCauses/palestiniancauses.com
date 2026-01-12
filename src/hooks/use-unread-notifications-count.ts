@@ -1,22 +1,29 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { useQuery } from "@tanstack/react-query";
 
-import { getNotificationsCountUnRead as actionGetNotificationsCountUnRead } from "@/actions/notifications";
+import { sdk } from "@/lib/query";
 import { User } from "@/payload-types";
 
 export const useNotificationsCountUnRead =
   function useNotificationsCountUnRead({ user }: { user?: User }) {
-    const { data: response } = useQuery({
+    const { data: count } = useQuery({
       queryKey: ["user-notifications-count-un-read", user?.id],
-      queryFn: actionGetNotificationsCountUnRead,
+      queryFn: async () => {
+        const response = await sdk.count({
+          collection: "notifications",
+          where: {
+            and: [{ user: { equals: user?.id } }, { read: { equals: false } }],
+          },
+        });
+
+        return response.totalDocs || 0;
+      },
       enabled: Boolean(user),
       refetchInterval: 30_000,
     });
 
-    if (!response || !response.data || response.error) return 0;
-
-    return response.data;
+    return count || 0;
   };

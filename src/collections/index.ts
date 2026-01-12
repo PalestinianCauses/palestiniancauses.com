@@ -7,6 +7,7 @@ import { BlogsRooms } from "./BlogsRooms";
 import { Comments } from "./Comments";
 import { DiaryEntries } from "./DiaryEntries";
 import { Media } from "./Media";
+import { MediaPublic } from "./MediaPublic";
 import { Notifications } from "./Notifications";
 import { NotificationSubscriptions } from "./NotificationSubscriptions";
 import { Orders } from "./Orders";
@@ -29,6 +30,7 @@ export const collections = [
   Comments,
   DiaryEntries,
   Media,
+  MediaPublic,
   Notifications,
   NotificationSubscriptions,
   Orders,

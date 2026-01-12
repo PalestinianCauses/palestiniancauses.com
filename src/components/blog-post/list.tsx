@@ -1,15 +1,15 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { ArrowDownIcon, ArrowUpRightIcon, BookTextIcon } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
 
-import { getCollection } from "@/actions/collection";
 import { Paragraph, SubSectionHeading } from "@/components/globals/typography";
 import { Button } from "@/components/ui/button";
+import { getPublicCollection } from "@/lib/api/public";
 import { cn } from "@/lib/utils/styles";
 import { BlogsRoom } from "@/payload-types";
 
@@ -50,21 +50,19 @@ export const BlogPostList = function BlogPostList({
   } = useInfiniteQuery({
     queryKey,
     queryFn: async ({ pageParam = 1 }) => {
-      const response = await getCollection({
+      const response = await getPublicCollection<"blogs-posts">({
         collection: "blogs-posts",
-        filters: {
-          page: pageParam,
-          limit: 10,
-          fields: {
-            blogRoom: { equals: blogRoomId },
-            status: { equals: "published" },
-          },
-          sort: ["-publishedAt", "-createdAt"],
+        page: pageParam,
+        limit: 10,
+        sort: ["-publishedAt", "-createdAt"].join(","),
+        where: {
+          blogRoom: { equals: blogRoomId },
+          status: { equals: "published" },
         },
         depth: 1,
       });
 
-      if (!response.data || response.data.docs.length === 0 || response.error)
+      if (!response.data || response.error || response.data.docs.length === 0)
         return null;
 
       return response.data;

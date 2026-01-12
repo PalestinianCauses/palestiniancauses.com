@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 11
+// REVIEWED - 12
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -52,7 +52,7 @@ export const CreateCommentForm = function CreateCommentForm({
 
   const { isLoading, data: user } = useUser();
 
-  const { createComment } = useComment();
+  const { createComment } = useComment(user);
 
   const form = useForm<CreateCommentSchema>({
     mode: "onBlur",
@@ -67,17 +67,21 @@ export const CreateCommentForm = function CreateCommentForm({
       id: "create-comment",
     });
 
+    form.reset();
+
     createComment.mutate(
       {
-        user,
+        user: user.id,
         on,
         content: data.content,
         status: "approved",
       },
       {
         onSuccess: () => {
-          form.reset();
           queryClient.invalidateQueries({ queryKey: ["comments"] });
+        },
+        onError: () => {
+          form.setValue("content", data.content);
         },
       },
     );

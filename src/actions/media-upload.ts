@@ -1,22 +1,23 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 06
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { getAuthentication } from "@/lib/server/auth";
 import { ResponseSafeExecute } from "@/lib/types";
-import { Media } from "@/payload-types";
-
-import { getAuthentication } from "./auth";
+import { MediaPrivate, MediaPublic } from "@/payload-types";
 
 export const mediaUpload = async function mediaUpload({
   file,
   alt,
+  collection = "media-public",
 }: {
   file: File;
   alt: string;
-}): Promise<ResponseSafeExecute<Media, string>> {
+  collection?: "media-private" | "media-public";
+}): Promise<ResponseSafeExecute<MediaPrivate | MediaPublic, string>> {
   const auth = await getAuthentication();
 
   if (!auth)
@@ -31,16 +32,25 @@ export const mediaUpload = async function mediaUpload({
       error: messages.actions.media.upload.noFile,
     };
 
+  if (collection !== "media-private" && collection !== "media-public")
+    return {
+      data: null,
+      error: messages.actions.media.upload.collectionError,
+    };
+
   // Convert File to Buffer for PayLoad
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
   const response = await actionSafeExecute(
     payload.create({
-      req: { user: auth },
+      req: { user: { ...auth, collection: "users" } },
       user: auth,
-      collection: "media",
-      data: { alt: alt || file.name },
+      collection,
+      data:
+        collection === "media-private"
+          ? { owner: auth.id, user: auth.id, alt: alt || file.name } // user for backward compatibility
+          : { user: auth.id, alt: alt || file.name },
       file: {
         data: buffer,
         mimetype: file.type,
@@ -57,9 +67,11 @@ export const mediaUpload = async function mediaUpload({
 
 export const mediaDelete = async function mediaDelete({
   id,
+  collection = "media-public",
 }: {
   id: number;
-}): Promise<ResponseSafeExecute<Media, string>> {
+  collection?: "media-private" | "media-public";
+}): Promise<ResponseSafeExecute<MediaPrivate | MediaPublic, string>> {
   const auth = await getAuthentication();
 
   if (!auth)
@@ -70,9 +82,9 @@ export const mediaDelete = async function mediaDelete({
 
   const response = await actionSafeExecute(
     payload.delete({
-      req: { user: auth },
+      req: { user: { ...auth, collection: "users" } },
       user: auth,
-      collection: "media",
+      collection,
       id,
       overrideAccess: false,
     }),

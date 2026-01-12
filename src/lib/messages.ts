@@ -1,8 +1,9 @@
-// REVIEWED - 35
+// REVIEWED - 37
 
 export const messages = {
   http: {
     skip: "The requested operation was skipped.",
+    bad: "Bad request. Please try again later.",
     unAuthorized: "Authorization failed for this request.",
     unAuthenticated: "Authentication required. Please sign in to continue.",
     notFound:
@@ -21,6 +22,8 @@ export const messages = {
       successEveryRead: "Successfully marked every notification as read.",
       notFound: "Notification not found. Please try again later.",
       serverError: "Failed to retrieve notification. Please try again later.",
+      serverErrorRead:
+        "Failed to mark notification as read. Please try again later.",
     },
     notificationSubscription: {
       success: "Successfully subscribed to notifications.",
@@ -315,6 +318,7 @@ export const messages = {
 
 export const httpStatusesMessages = {
   http: {
+    400: messages.http.bad,
     401: messages.http.unAuthorized,
     403: messages.http.unAuthenticated,
     404: messages.http.notFound,
