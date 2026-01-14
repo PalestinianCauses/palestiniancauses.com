@@ -28,9 +28,9 @@ const PUBLIC_COLLECTIONS = [
 type PublicCollection = (typeof PUBLIC_COLLECTIONS)[number];
 
 export default buildConfig({
-  serverURL: process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com",
-  cors: [process.env.NEXT_PUBLIC_DOMAIN || "https://palestiniancauses.com"],
-  csrf: [process.env.NEXT_PUBLIC_DOMAIN || "https://palestiniancauses.com"],
+  serverURL: "https://palestiniancauses.com",
+  cors: ["palestiniancauses.com", "https://palestiniancauses.com"],
+  csrf: ["palestiniancauses.com", "https://palestiniancauses.com"],
   secret: process.env.PAYLOAD_SECRET || "",
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URI || "" },

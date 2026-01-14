@@ -4,12 +4,6 @@ import withSerwistInit from "@serwist/next";
 import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    serverActions: {
-      allowedOrigins: [process.env.NEXT_PUBLIC_DOMAIN!],
-    },
-  },
-
   eslint: { ignoreDuringBuilds: true },
 
   images: {
