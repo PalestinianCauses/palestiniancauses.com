@@ -1,4 +1,4 @@
-// REVIEWED - 18
+// REVIEWED - 19
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -28,6 +28,9 @@ const PUBLIC_COLLECTIONS = [
 type PublicCollection = (typeof PUBLIC_COLLECTIONS)[number];
 
 export default buildConfig({
+  serverURL: process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com",
+  cors: [process.env.NEXT_PUBLIC_DOMAIN || "https://palestiniancauses.com"],
+  csrf: [process.env.NEXT_PUBLIC_DOMAIN || "https://palestiniancauses.com"],
   secret: process.env.PAYLOAD_SECRET || "",
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URI || "" },
