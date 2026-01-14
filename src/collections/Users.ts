@@ -1,4 +1,4 @@
-// REVIEWED - 27
+// REVIEWED - 28
 import type { CollectionConfig } from "payload";
 
 import {
@@ -8,6 +8,7 @@ import {
 } from "@/access/global";
 import { messages } from "@/lib/messages";
 import { hasPermission } from "@/lib/permissions";
+import { isNumber } from "@/lib/types/guards";
 import { createResetPassEmail } from "@/lib/utils/email-templates-auth";
 import { User } from "@/payload-types";
 
@@ -204,5 +205,225 @@ export const Users: CollectionConfig = {
   ],
   hooks: {
     afterChange: [],
+    beforeDelete: [
+      async ({ id, req }) => {
+        try {
+          const [
+            blogRoomWithUser,
+            blogPostWithUser,
+            mediaPrivateWithUserAccess,
+            productWithUser,
+          ] = await Promise.all([
+            req.payload.find({
+              collection: "blogs-rooms",
+              where: {
+                and: [
+                  { roomOwner: { not_equals: id } },
+                  { authors: { equals: id } },
+                ],
+              },
+              limit: 0,
+            }),
+            req.payload.find({
+              collection: "blogs-posts",
+              where: {
+                "blogRoom.roomOwner": { not_equals: id },
+                "or": [
+                  { authors: { equals: id } },
+                  { translators: { equals: id } },
+                ],
+              },
+              limit: 0,
+            }),
+            req.payload.find({
+              collection: "media-private",
+              where: {
+                owner: { not_equals: id },
+                users: { equals: id },
+              },
+              limit: 0,
+            }),
+            req.payload.find({
+              collection: "products",
+              where: { authors: { equals: id } },
+              limit: 0,
+            }),
+          ]);
+
+          if (blogRoomWithUser.docs.length !== 0) {
+            await Promise.all(
+              blogRoomWithUser.docs.map(async (blogRoom) => {
+                let authorsId: number[] = [];
+
+                if (blogRoom.authors && blogRoom.authors.length !== 0) {
+                  authorsId = blogRoom.authors
+                    .map((author) => (isNumber(author) ? author : author.id))
+                    .filter((authorId) => authorId !== id);
+                }
+
+                return req.payload.update({
+                  collection: "blogs-rooms",
+                  id: blogRoom.id,
+                  data: {
+                    authors: authorsId,
+                  },
+                });
+              }),
+            );
+          }
+
+          if (blogPostWithUser.docs.length !== 0) {
+            await Promise.all(
+              blogPostWithUser.docs.map(async (blogPost) => {
+                let authorsId: number[] = [];
+                let translatorsId: number[] = [];
+
+                if (blogPost.authors && blogPost.authors.length !== 0) {
+                  authorsId = blogPost.authors
+                    .map((author) => (isNumber(author) ? author : author.id))
+                    .filter((authorId) => authorId !== id);
+                }
+
+                if (blogPost.translators && blogPost.translators.length !== 0) {
+                  translatorsId = blogPost.translators
+                    .map((translator) =>
+                      isNumber(translator) ? translator : translator.id,
+                    )
+                    .filter((translatorId) => translatorId !== id);
+                }
+
+                if (authorsId.length === 0)
+                  return req.payload.delete({
+                    collection: "blogs-posts",
+                    id: blogPost.id,
+                  });
+
+                return req.payload.update({
+                  collection: "blogs-posts",
+                  id: blogPost.id,
+                  data: {
+                    authors: authorsId,
+                    translators: translatorsId,
+                  },
+                });
+              }),
+            );
+          }
+
+          if (mediaPrivateWithUserAccess.docs.length !== 0) {
+            await Promise.all(
+              mediaPrivateWithUserAccess.docs.map(async (media) => {
+                let usersId: number[] = [];
+
+                if (media.users && media.users.length !== 0) {
+                  usersId = media.users
+                    .map((user) => (isNumber(user) ? user : user.id))
+                    .filter((userId) => userId !== id);
+                }
+
+                return req.payload.update({
+                  collection: "media-private",
+                  id: media.id,
+                  data: {
+                    users: usersId,
+                  },
+                });
+              }),
+            );
+          }
+
+          if (productWithUser.docs.length !== 0) {
+            await Promise.all(
+              productWithUser.docs.map(async (product) => {
+                let authorsId: number[] = [];
+
+                if (product.authors && product.authors.length !== 0) {
+                  authorsId = product.authors
+                    .map((author) => (isNumber(author) ? author : author.id))
+                    .filter((authorId) => authorId !== id);
+                }
+
+                return req.payload.update({
+                  collection: "products",
+                  id: product.id,
+                  data: {
+                    authors: authorsId,
+                  },
+                });
+              }),
+            );
+          }
+
+          await Promise.all([
+            req.payload.delete({
+              collection: "achievement-notifications",
+              where: { user: { equals: id } },
+            }),
+
+            req.payload.delete({
+              collection: "blogs-rooms",
+              where: { roomOwner: { equals: id } },
+            }),
+
+            req.payload.delete({
+              collection: "comments",
+              where: { user: { equals: id } },
+            }),
+
+            req.payload.delete({
+              collection: "diary-entries",
+              where: { author: { equals: id } },
+            }),
+
+            req.payload.delete({
+              collection: "media-private",
+              where: { owner: { equals: id } },
+            }),
+
+            req.payload.delete({
+              collection: "media-public",
+              where: { user: { equals: id } },
+            }),
+
+            req.payload.delete({
+              collection: "notifications",
+              where: { user: { equals: id } },
+            }),
+
+            req.payload.delete({
+              collection: "orders",
+              where: { user: { equals: id } },
+            }),
+
+            req.payload.delete({
+              collection: "rooms",
+              where: { user: { equals: id } },
+            }),
+
+            req.payload.delete({
+              collection: "rooms-contact",
+              where: { user: { equals: id } },
+            }),
+
+            req.payload.delete({
+              collection: "rooms-packages",
+              where: { user: { equals: id } },
+            }),
+
+            req.payload.delete({
+              collection: "rooms-services",
+              where: { user: { equals: id } },
+            }),
+
+            req.payload.delete({
+              collection: "verification-tokens-email",
+              where: { user: { equals: id } },
+            }),
+          ]);
+        } catch (error) {
+          console.error("Error deleting user's dependent collections:", error);
+        }
+      },
+    ],
   },
 };

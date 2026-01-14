@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { ProfileStatistics } from "@/components/profile/statistics";
 import { messages } from "@/lib/messages";
@@ -41,8 +41,8 @@ export const PublicProfileStatistics = async function PublicProfileStatistics({
               { orderStatus: { not_equals: "cancelled" } },
               {
                 or: [
-                  { productOrderType: { equals: "paid" } },
-                  { productOrderType: { equals: "not-applicable" } },
+                  { productOrderStatus: { equals: "paid" } },
+                  { productOrderStatus: { equals: "not-applicable" } },
                 ],
               },
             ],

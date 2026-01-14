@@ -1,8 +1,9 @@
-// REVIEWED
+// REVIEWED - 01
 
 import type { CollectionConfig } from "payload";
 
 import { hasPermissionAccess, isSelf } from "@/access/global";
+import { messages } from "@/lib/messages";
 import { hasPermission } from "@/lib/permissions";
 import { User } from "@/payload-types";
 
@@ -90,6 +91,49 @@ export const MediaPublic: CollectionConfig = {
               data.user = req.user.id;
 
         return data;
+      },
+    ],
+    beforeDelete: [
+      async ({ id, req }) => {
+        const responses = await Promise.all([
+          req.payload.find({
+            collection: "blogs-categories",
+            where: { image: { equals: id } },
+            limit: 1,
+          }),
+          req.payload.find({
+            collection: "blogs-posts",
+            where: { imageFeatured: { equals: id } },
+            limit: 1,
+          }),
+          req.payload.find({
+            collection: "rooms",
+            where: {
+              or: [
+                { "information.photograph": { equals: id } },
+                { "about.photograph": { equals: id } },
+                { "experience.photograph": { equals: id } },
+                { "qualification.photograph": { equals: id } },
+                { "qualification.certificate": { equals: id } },
+              ],
+            },
+            limit: 1,
+          }),
+          req.payload.find({
+            collection: "rooms-packages",
+            where: { image: { equals: id } },
+            limit: 1,
+          }),
+          req.payload.find({
+            collection: "users",
+            where: { avatar: { equals: id } },
+            limit: 1,
+          }),
+        ]);
+
+        if (responses.some((response) => response.docs.length !== 0)) {
+          throw new Error(messages.actions.media.canNotDeleteReferenced);
+        }
       },
     ],
   },

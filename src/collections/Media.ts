@@ -1,7 +1,8 @@
-// REVIEWED - 15
+// REVIEWED - 16
 import type { CollectionConfig } from "payload";
 
 import { hasPermissionAccess, isSelf } from "@/access/global";
+import { messages } from "@/lib/messages";
 import { hasPermission } from "@/lib/permissions";
 import { User } from "@/payload-types";
 
@@ -78,6 +79,19 @@ export const Media: CollectionConfig = {
               data.owner = req.user.id;
 
         return data;
+      },
+    ],
+    beforeDelete: [
+      async ({ id, req }) => {
+        const products = await req.payload.find({
+          collection: "products",
+          where: { "type": { equals: "file" }, "files.file": { equals: id } },
+          limit: 1,
+        });
+
+        if (products.docs.length !== 0) {
+          throw new Error(messages.actions.media.canNotDeleteReferenced);
+        }
       },
     ],
   },

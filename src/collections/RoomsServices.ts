@@ -1,8 +1,9 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { CollectionConfig } from "payload";
 
 import { hasPermissionAccess, isSelf } from "@/access/global";
+import { messages } from "@/lib/messages";
 import { hasPermission } from "@/lib/permissions";
 import { User } from "@/payload-types";
 
@@ -181,6 +182,19 @@ export const RoomsServices: CollectionConfig = {
               data.user = req.user.id;
 
         return data;
+      },
+    ],
+    beforeDelete: [
+      async ({ id, req }) => {
+        const packages = await req.payload.find({
+          collection: "rooms-packages",
+          where: { services: { equals: id } },
+          limit: 1,
+        });
+
+        if (packages.docs.length !== 0) {
+          throw new Error(messages.actions.roomService.canNotDeleteReferenced);
+        }
       },
     ],
   },

@@ -1,8 +1,9 @@
-// REVIEWED - 15
+// REVIEWED - 16
 
 import type { CollectionConfig } from "payload";
 
 import { hasPermissionAccess } from "@/access/global";
+import { messages } from "@/lib/messages";
 import { hasPermission } from "@/lib/permissions";
 import { User } from "@/payload-types";
 
@@ -124,4 +125,19 @@ export const Permissions: CollectionConfig = {
       required: false,
     },
   ],
+  hooks: {
+    beforeDelete: [
+      async ({ id, req }) => {
+        const roles = await req.payload.find({
+          collection: "roles",
+          where: { permissions: { equals: id } },
+          limit: 1,
+        });
+
+        if (roles.docs.length !== 0) {
+          throw new Error(messages.actions.role.canNotDeleteReferenced);
+        }
+      },
+    ],
+  },
 };

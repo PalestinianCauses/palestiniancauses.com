@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { messages } from "@/lib/messages";
 
@@ -42,7 +42,7 @@ test.describe("Diary Entry: Create Diary Entry", () => {
       [
         "/humans-but-from-gaza",
         [
-          ["limit", 50].join("="),
+          ["limit", 100].join("="),
           ["page", 1].join("="),
           ["sort", "-date"].join("="),
         ].join("&"),

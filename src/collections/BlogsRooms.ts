@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 07
 
 import { CollectionConfig } from "payload";
 
@@ -164,6 +164,27 @@ export const BlogsRooms: CollectionConfig = {
               data.roomOwner = req.user.id;
 
         return data;
+      },
+    ],
+    beforeDelete: [
+      async ({ id, req }) => {
+        try {
+          await Promise.all([
+            req.payload.delete({
+              collection: "blogs-categories",
+              where: { room: { equals: id } },
+            }),
+            req.payload.delete({
+              collection: "blogs-posts",
+              where: { blogRoom: { equals: id } },
+            }),
+          ]);
+        } catch (error) {
+          console.error(
+            "Error deleting blog room's dependent collections:",
+            error,
+          );
+        }
       },
     ],
   },

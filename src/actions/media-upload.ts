@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
@@ -49,7 +49,7 @@ export const mediaUpload = async function mediaUpload({
       collection,
       data:
         collection === "media-private"
-          ? { owner: auth.id, user: auth.id, alt: alt || file.name } // user for backward compatibility
+          ? { owner: auth.id, alt: alt || file.name }
           : { user: auth.id, alt: alt || file.name },
       file: {
         data: buffer,

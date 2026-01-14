@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 18
+// REVIEWED - 19
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
@@ -16,6 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useAchievementNotifications } from "@/hooks/use-achievement-notifications";
 import { useActivity } from "@/hooks/use-activity";
 import { getQueryClient } from "@/lib/query";
 
@@ -39,7 +40,7 @@ export const ActivityProvider = function ActivityProvider() {
   } = useActivity();
 
   // Check for achievement notifications
-  // useAchievementNotifications();
+  useAchievementNotifications();
 
   if (isFetching || !user) return null;
 

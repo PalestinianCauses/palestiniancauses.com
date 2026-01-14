@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { CollectionConfig } from "payload";
 
@@ -172,6 +172,19 @@ export const BlogsCategories: CollectionConfig = {
         }
 
         return category;
+      },
+    ],
+    beforeDelete: [
+      async ({ id, req }) => {
+        const posts = await req.payload.find({
+          collection: "blogs-posts",
+          where: { categories: { equals: id } },
+          limit: 1,
+        });
+
+        if (posts.docs.length !== 0) {
+          throw new Error(messages.actions.blogCategory.canNotDeleteReferenced);
+        }
       },
     ],
   },

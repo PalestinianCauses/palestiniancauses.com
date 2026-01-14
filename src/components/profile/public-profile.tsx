@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { format } from "date-fns/format";
 import {
@@ -60,8 +60,8 @@ export const PublicProfileStats = async function PublicProfileStats({
             { orderStatus: { not_equals: "cancelled" } },
             {
               or: [
-                { productOrderType: { equals: "paid" } },
-                { productOrderType: { equals: "not-applicable" } },
+                { productOrderStatus: { equals: "paid" } },
+                { productOrderStatus: { equals: "not-applicable" } },
               ],
             },
           ],

@@ -1,10 +1,11 @@
-// REVIEWED - 13
+// REVIEWED - 14
 
-import { list } from "@vercel/blob";
 import { Suspense } from "react";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
+import { getMediaSizeURL } from "@/lib/utils/media";
 
 import { Container } from "../globals/container";
 import { InfiniteMarquee, MarqueeItem } from "../globals/marquee";
@@ -20,39 +21,39 @@ const isLoadingElement = <Skeleton className="absolute inset-0 bg-primary/5" />;
 
 const HeaderImages = async function HeaderImages() {
   const response = await actionSafeExecute(
-    list({
-      prefix: "book-pages-images/",
-      token: process.env.BLOB_READ_WRITE_TOKEN,
+    payload.find({
+      collection: "media-public",
+      where: { alt: { like: "book-pages-images-" } },
+      limit: 0,
     }),
-    messages.actions.blob.serverError,
+    messages.http.serverError,
   );
 
-  if (
-    !response.data ||
-    response.data.blobs.filter((blob) => blob.size !== 0).length === 0
-  )
-    return null;
+  if (!response.data || response.data.docs.length === 0) return null;
 
-  const images = response.data;
+  const images = response.data.docs;
 
   return (
     <SafeHydrate>
       <InfiniteMarquee speed={80}>
-        {images.blobs
-          .filter((blob) => blob.size !== 0)
-          .map(async (blob, index) => (
-            <MarqueeItem key={blob.pathname}>
+        {images.map(async (doc, index) => {
+          const src = getMediaSizeURL(doc, "room-photograph");
+
+          if (!src) return null;
+
+          return (
+            <MarqueeItem key={doc.id}>
               <SuspenseImage
                 isLoadingElement={isLoadingElement}
-                src={blob.url}
+                src={src}
                 alt={`Book Image ${index.toString()}`}
                 fill
-                sizes="(min-width: 64rem) 10rem, 7.5rem"
                 containerClassName="w-60 lg:w-80"
                 className="!relative object-cover object-top opacity-20"
               />
             </MarqueeItem>
-          ))}
+          );
+        })}
       </InfiniteMarquee>
     </SafeHydrate>
   );
@@ -60,32 +61,31 @@ const HeaderImages = async function HeaderImages() {
 
 const HeaderCover = async function HeaderCover() {
   const response = await actionSafeExecute(
-    list({
-      prefix: "book-cover/",
-      token: process.env.BLOB_READ_WRITE_TOKEN,
+    payload.find({
+      collection: "media-public",
+      where: { alt: { like: "book-cover-new" } },
+      limit: 0,
     }),
-    messages.actions.blob.serverError,
+    messages.http.serverError,
   );
 
-  if (
-    !response.data ||
-    response.data.blobs.filter((blob) => blob.size !== 0).length === 0
-  )
-    return null;
+  if (!response.data || response.data.docs.length === 0) return null;
 
-  const cover = response.data;
+  const cover = response.data.docs[0];
+  const src = getMediaSizeURL(cover, "room-photograph");
+
+  if (!src) return null;
 
   return (
     <div className="absolute left-1/2 top-1/2 z-20 aspect-[2/3] h-auto w-72 -translate-x-1/2 -translate-y-1/2 lg:w-96">
       <div className="relative h-full w-full border border-muted">
         <SuspenseImage
           isLoadingElement={isLoadingElement}
-          src={cover.blobs.filter((blob) => blob.size !== 0)[0].url}
+          src={src}
           alt="Book Cover"
           priority
           fill
           placeholder="empty"
-          sizes="(min-width: 64rem) 12rem, 9rem"
           className="!relative object-cover object-left"
         />
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -34,6 +34,7 @@ export const useUpdateUser = function useUpdateUser() {
   const updateUserAvatar = useMutation({
     mutationFn: async ({ file, alt }: { file: File; alt: string }) => {
       const responseMedia = await mediaUpload({
+        collection: "media-public",
         file,
         alt,
       });
@@ -69,7 +70,10 @@ export const useUpdateUser = function useUpdateUser() {
       if (!responseUpdateUser.data || responseUpdateUser.error)
         return responseUpdateUser;
 
-      const responseMedia = await mediaDelete({ id });
+      const responseMedia = await mediaDelete({
+        collection: "media-public",
+        id,
+      });
 
       if (!responseMedia.data || responseMedia.error) return responseMedia;
 

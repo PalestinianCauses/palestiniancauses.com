@@ -1,4 +1,4 @@
-// REVIEWED - 11
+// REVIEWED - 12
 
 import {
   InfiniteData,
@@ -129,11 +129,18 @@ export const useComment = function useComment(user: User | undefined | null) {
 
       return { previousQueries, optimisticComment };
     },
-    onSuccess: (response) => {
+    onSuccess: (response, _, context) => {
       if (!response.data || response.error) {
         toast.error(response.error);
+
+        if (context?.previousQueries)
+          context.previousQueries.forEach(([queryKey, data]) => {
+            queryClient.setQueryData(queryKey, data);
+          });
+
         return;
       }
+
       toast.success(response.data);
     },
     onError: (_error, _, context) => {
@@ -224,9 +231,26 @@ export const useComment = function useComment(user: User | undefined | null) {
         parentId,
       };
     },
-    onSuccess: (response) => {
+    onSuccess: (response, _, context) => {
       if (!response.data || response.error) {
         toast.error(response.error);
+
+        if (context?.previousComments)
+          context.previousComments.forEach(([queryKey, data]) => {
+            queryClient.setQueryData(queryKey, data);
+          });
+
+        if (context?.previousReplies)
+          context.previousReplies.forEach(([queryKey, data]) => {
+            queryClient.setQueryData(queryKey, data);
+          });
+
+        if (context?.parentId && context?.previousRepliesCount !== undefined)
+          queryClient.setQueryData(
+            ["comment-replies-count", context.parentId],
+            context.previousRepliesCount,
+          );
+
         return;
       }
 

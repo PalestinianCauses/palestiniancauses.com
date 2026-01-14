@@ -1,9 +1,9 @@
-// REVIEWED - 17
+// REVIEWED - 18
 import path from "path";
 import { fileURLToPath } from "url";
 
 import { postgresAdapter } from "@payloadcms/db-postgres";
-import { resendAdapter } from "@payloadcms/email-resend";
+import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import { buildConfig, Where } from "payload";
@@ -40,10 +40,17 @@ export default buildConfig({
   },
   collections,
   sharp,
-  email: resendAdapter({
-    defaultFromAddress: "hello@notifications.palestiniancauses.com",
+  email: nodemailerAdapter({
+    defaultFromAddress: "no-reply@palestiniancauses.com",
     defaultFromName: "PalestinianCauses LLC.",
-    apiKey: process.env.RESEND_API_KEY || "",
+    transportOptions: {
+      host: process.env.SMTP_HOST,
+      port: 587,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    },
   }),
   plugins: [
     vercelBlobStorage({

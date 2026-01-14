@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ export const useDeleteAccount = function useDeleteAccount() {
     mutationFn: deleteUserAccountAction,
     onSuccess: () => {
       queryClient.clear();
-      router.push("/");
+      router.refresh();
     },
   });
 };

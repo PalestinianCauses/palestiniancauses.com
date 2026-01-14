@@ -1,284 +1,316 @@
-// REVIEWED - 37
+// REVIEWED - 39
 
 export const messages = {
   http: {
     skip: "The requested operation was skipped.",
-    bad: "Bad request. Please try again later.",
-    unAuthorized: "Authorization failed for this request.",
-    unAuthenticated: "Authentication required. Please sign in to continue.",
+    bad: "We couldn't process your request. Please check your input and try again.",
+    unAuthorized: "You don't have permission to access this resource.",
+    unAuthenticated: "Please sign in to continue.",
     notFound:
-      "The requested resource could not be found. Please try a different resource.",
+      "We couldn't find what you're looking for. Please check your request and try again.",
     serverError:
-      "A server error occurred while processing your request. Please try again later.",
+      "Something went wrong on our end. Please try again in a moment.",
     typeError:
-      "An error occurred while processing response data. Please try again later.",
+      "We encountered an issue processing your data. Please try again.",
   },
   actions: {
     blob: {
-      serverError: "Failed to retrieve blobs. Please try again later.",
+      serverError:
+        "We couldn't retrieve the requested files. Please try again.",
     },
     notification: {
-      successRead: "Successfully marked notification as read.",
-      successEveryRead: "Successfully marked every notification as read.",
-      notFound: "Notification not found. Please try again later.",
-      serverError: "Failed to retrieve notification. Please try again later.",
+      successRead: "Notification marked as read.",
+      successEveryRead: "All notifications marked as read.",
+      notFound:
+        "We couldn't find this notification. Please refresh and try again.",
+      serverError: "We couldn't retrieve your notification. Please try again.",
       serverErrorRead:
-        "Failed to mark notification as read. Please try again later.",
+        "We couldn't mark this notification as read. Please try again.",
     },
     notificationSubscription: {
-      success: "Successfully subscribed to notifications.",
-      successDelete: "Successfully unsubscribed from notifications.",
-      successNotify: "Successfully notified all subscribers.",
-      duplication: "You are already subscribed to notifications.",
-      notFound: "Notification subscription not found. Please try again later.",
+      success:
+        "You're now subscribed to notifications. We'll keep you updated!",
+      successDelete: "You've been unsubscribed from notifications.",
+      successNotify: "All subscribers have been notified successfully.",
+      duplication: "You're already subscribed to notifications.",
+      notFound: "We couldn't find your subscription. Please try again.",
       serverError:
-        "Failed to create notification subscription. Please try again later.",
+        "We couldn't set up your notification subscription. Please try again.",
       serverErrorGet:
-        "Failed to retrieve notification subscription. Please try again later.",
+        "We couldn't retrieve your notification subscription. Please try again.",
       serverErrorDelete:
-        "Failed to delete notification subscription. Please try again later.",
+        "We couldn't remove your notification subscription. Please try again.",
       serverErrorNotify:
-        "Failed to notify subscribers. Please try again later.",
+        "We couldn't send notifications to subscribers. Please try again.",
     },
     user: {
       update: {
-        success: "Successfully updated user account.",
-        successPassword: "Successfully updated user password.",
+        success: "Your account has been updated successfully.",
+        successPassword: "Your password has been updated successfully.",
         inCorrectCurrentPassword:
-          "Incorrect current password has been entered. Please try again.",
+          "The current password you entered is in-correct. Please try again.",
       },
-      unAuthorized: "You are not authorized to perform this action.",
-      unAuthenticated:
-        "Authentication required. Please sign in to perform this action.",
-      notFound: "User not found. Please try again later.",
+      unAuthorized: "You don't have permission to perform this action.",
+      unAuthenticated: "Please sign in to perform this action.",
+      notFound: "We couldn't find this user account. Please try again.",
       serverError:
-        "Failed to retrieve authenticated user. Please try again later.",
-      serverErrorUpdate:
-        "Failed to update user account. Please try again later.",
+        "We couldn't retrieve your account information. Please try again.",
+      serverErrorUpdate: "We couldn't update your account. Please try again.",
       delete: {
-        success: "User account deleted successfully.",
-        serverError: "Failed to delete user account. Please try again later.",
+        success:
+          "Your account has been deleted successfully. We're sorry to see you go.",
+        serverError: "We couldn't delete your account. Please try again.",
       },
       roles: {
-        serverError: "Failed to retrieve user roles. Please try again later.",
+        serverError:
+          "We couldn't retrieve your account roles. Please try again.",
       },
     },
     auth: {
       signIn: {
-        pending: "Signing in...",
-        success: "Successfully signed in.",
+        pending: "Signing you in...",
+        success: "Welcome back! You've been signed in successfully.",
         unAuthenticated: (email: string) =>
-          `Incorrect password for user with email ${email}.`,
+          `The password for ${email} is in-correct. Please try again.`,
         notFound: (email: string) =>
-          `User with email ${email} is not yet a family member. Would you like to sign up?`,
-        serverError: "Failed to sign in. Please try again later.",
+          `We couldn't find an account with ${email}. Would you like to sign up instead?`,
+        serverError: "We couldn't sign you in right now. Please try again.",
       },
       signUp: {
-        pending: "Signing up...",
-        success: "Successfully signed up.",
+        pending: "Creating your account...",
+        success:
+          "Welcome to the family! Your account has been created successfully.",
         duplication: (email: string) =>
-          `User with email ${email} is already a family member. Would you like to sign in instead?`,
-        validation: "Please check that all fields are valid.",
-        password: "Password must be as resilient as Gaza's people.",
+          `An account with ${email} already exists. Would you like to sign in instead?`,
+        validation: "Please check that all fields are filled correctly.",
+        password: "Your password must be as resilient as Gaza's people.",
         signIn:
-          "Sign up successful, but automatic sign-in failed. Please sign in manually.",
-        serverError: "Failed to sign up. Please try again later.",
+          "Your account was created, but we couldn't sign you in automatically. Please sign in manually.",
+        serverError:
+          "We couldn't create your account right now. Please try again.",
       },
       signOut: {
-        pending: "Signing out...",
-        success: "Successfully signed out.",
-        serverError: "Failed to sign out. Please try again later.",
+        pending: "Signing you out...",
+        success: "You've been signed out successfully. See you soon!",
+        serverError: "We couldn't sign you out right now. Please try again.",
       },
       tokenRefresh: {
         pending: "Refreshing your session...",
-        success: "Session refreshed successfully.",
-        expired: "Your session has expired. Please sign in to continue.",
-        notFound: "Session token not found. Please sign in again.",
-        serverError: "Failed to refresh session. Please sign in again.",
-        decodeError: "Failed to decode session token. Please sign in again.",
+        success: "Your session has been refreshed.",
+        expired: "Your session has expired. Please sign in again to continue.",
+        notFound: "We couldn't find your session. Please sign in again.",
+        serverError: "We couldn't refresh your session. Please sign in again.",
+        decodeError: "We couldn't verify your session. Please sign in again.",
         expirationTypeError:
-          "Failed to verify session expiration. Please sign in again.",
+          "We couldn't verify your session expiration. Please sign in again.",
       },
       forgotPassword: {
-        pending: "Sending password reset email...",
+        pending: "Sending password reset instructions...",
         success:
-          "In case an account with this email exists, a password reset link has been sent. Please check your inbox or spam/junk folder.",
+          "If an account with this email exists, we've sent password reset instructions. Please check your inbox and spam folder.",
         notVerified:
-          "Your email address is not verified. Please verify your email address before attempting to reset your password.",
+          "Please verify your email address before resetting your password.",
         serverError:
-          "Failed to send password reset email. Please try again later.",
+          "We couldn't send the password reset email right now. Please try again.",
       },
       resetPassword: {
-        pending: "Resetting password...",
+        pending: "Resetting your password...",
         success:
-          "Password reset successfully. You can now sign in with your new password.",
+          "Your password has been reset successfully. You can now sign in with your new password.",
         tokenNotFound:
-          "Password reset token not found. Please request a new one.",
+          "This password reset link is invalid. Please request a new one.",
         tokenExpired:
-          "Password reset token has expired. Please request a new one.",
-        serverError: "Failed to reset password. Please try again later.",
+          "This password reset link has expired. Please request a new one.",
+        serverError:
+          "We couldn't reset your password right now. Please try again.",
       },
       verificationEmail: {
-        success: "Successfully verified email!",
-        successSent: "Successfully sent verification email.",
+        success: "Your email has been verified successfully!",
+        successSent:
+          "We've sent a verification email. Please check your inbox.",
         tokenNotFound:
-          "Verification token not found. Please request a new one.",
+          "This verification link is invalid. Please request a new one.",
         tokenExpired:
-          "Verification token has expired. Please request a new one.",
+          "This verification link has expired. Please request a new one.",
         tokenUsed:
-          "Verification token has already been used before. Please request a new one.",
-        accountVerified: "Account is already verified.",
-        serverError: "Failed to verify email. Please try again later.",
+          "This verification link has already been used. Please request a new one.",
+        accountVerified: "Your account is already verified.",
+        serverError:
+          "We couldn't verify your email right now. Please try again.",
         serverErrorCreate:
-          "Failed to create verification token. Please try again later.",
+          "We couldn't create a verification link. Please try again.",
         serverErrorPreviousTokenFind:
-          "Failed to retrieve previous verification token. Please try again later.",
+          "We couldn't retrieve your previous verification link. Please try again.",
         serverErrorPreviousTokenDelete:
-          "Failed to delete previous verification token. Please try again later.",
+          "We couldn't remove your previous verification link. Please try again.",
         serverErrorSend:
-          "Failed to send verification token email. Please try again later.",
+          "We couldn't send the verification email. Please try again.",
         serverErrorDelete:
-          "Failed to delete verification token. Please try again later.",
+          "We couldn't process your verification request. Please try again.",
       },
       changeEmail: {
         success:
-          "Verification token email has been sent to your new email address. Please check your inbox or spam/junk folder.",
+          "We've sent a verification email to your new address. Please check your inbox and spam folder.",
         successCancelingPendingEmail:
-          "Successfully cancelled pending email change",
+          "Your pending email change has been cancelled successfully.",
         inUseEmail:
-          "Email address is already in use. Please try again with a different email address.",
+          "This email address is already in use. Please try a different email address.",
         serverError:
-          "Failed to process email change request. Please try again later.",
+          "We couldn't process your email change request. Please try again.",
         serverErrorCancelingPendingEmail:
-          "Failed to cancel pending email change. Please try again later.",
-        noPendingEmail: "Failed to find pending email. Please try again later.",
+          "We couldn't cancel your pending email change. Please try again.",
+        noPendingEmail:
+          "We couldn't find a pending email change. Please try again.",
       },
     },
     media: {
       upload: {
-        success: "Successfully uploaded media.",
-        successRemove: "Successfully removed media.",
-        noFile: "No file was provided. Please try again.",
-        serverError: "Failed to upload media. Please try again later.",
-        serverErrorDelete: "Failed to delete media. Please try again later.",
+        success: "Your file has been uploaded successfully.",
+        successRemove: "Your file has been removed successfully.",
+        noFile: "No file was provided. Please select a file and try again.",
+        serverError:
+          "We couldn't upload your file right now. Please try again.",
+        serverErrorDelete: "We couldn't delete your file. Please try again.",
+        collectionError: "Invalid collection specified. Please try again.",
       },
+      canNotDeleteReferenced:
+        "This media file can not be deleted because it is being used by other content. Please remove it from all references first.",
+    },
+    serviceCategory: {
+      canNotDeleteReferenced:
+        "This service category can not be deleted because it is being used by one or more services. Please re-assign or delete those services first.",
+      serverErrorDelete:
+        "We couldn't delete this service category. Please try again.",
     },
     role: {
-      serverError: "Failed to retrieve roles. Please try again later.",
+      canNotDeleteReferenced:
+        "This role can not be deleted because it is being used by one or more users. Please remove it from all users first.",
+      serverError: "We couldn't retrieve your account roles. Please try again.",
     },
     product: {
       file: {
-        unAuthenticated:
-          "Authentication required to access product files. Please sign in.",
-        notFound: "Product files not found. Please try again later.",
+        unAuthenticated: "Please sign in to access product files.",
+        notFound: "We couldn't find the product files. Please try again.",
       },
       external: {
-        unAuthenticated:
-          "Authentication required to access product links. Please sign in.",
-        notFound: "Product links not found. Please try again later.",
+        unAuthenticated: "Please sign in to access product links.",
+        notFound: "We couldn't find the product links. Please try again.",
         serverError:
-          "Failed to retrieve product links. Please try again later.",
+          "We couldn't retrieve the product links. Please try again.",
       },
-      notFound: "Product not found. Please try again later.",
+      notFound: "We couldn't find this product. Please try again.",
       notAvailableForPurchasing:
-        "Product is not available for purchasing. Please try again with a different product.",
-      serverError: "Failed to retrieve product. Please try again later.",
+        "This product is currently unavailable for purchase. Please try a different product.",
+      serverError: "We couldn't retrieve this product. Please try again.",
     },
     order: {
       pending: "Creating your order...",
       successServiceOrPackage:
-        "Successfully created order! Our room owner who owns this room will contact you soon.",
-      successDelete: "Successfully deleted order.",
-      successCancel: "Successfully cancelled order.",
-      notFound: "Order not found. Please try again later.",
-      serverError: "Failed to create order. Please try again later.",
-      serverErrorGet: "Failed to retrieve order. Please try again later.",
-      serverErrorUpdate: "Failed to update order. Please try again later.",
-      serverErrorDelete: "Failed to delete order. Please try again later.",
-      serverErrorCancel: "Failed to cancel order. Please try again later.",
+        "Your order has been created successfully! The room owner will contact you soon.",
+      successDelete: "Your order has been deleted successfully.",
+      successCancel: "Your order has been cancelled successfully.",
+      notFound: "We couldn't find this order. Please try again.",
+      serverError: "We couldn't create your order right now. Please try again.",
+      serverErrorGet: "We couldn't retrieve your order. Please try again.",
+      serverErrorUpdate: "We couldn't update your order. Please try again.",
+      serverErrorDelete: "We couldn't delete your order. Please try again.",
+      serverErrorCancel: "We couldn't cancel your order. Please try again.",
       serverErrorCreateCheckoutSession:
-        "Failed to create order checkout session. Please try again later.",
+        "We couldn't set up your checkout session. Please try again.",
       serverErrorGetCheckoutSession:
-        "Failed to retrieve order checkout session. Please try again later.",
-      orderNotFound: "Order not found. Please try again later.",
-      paymentNotCompleted: "Payment not completed. Please try again later.",
-      inCorrectOrderTypeError: "Order type is incorrect. Please try again.",
-      noOrderItemsError: "Order items not found. Please try again later.",
+        "We couldn't retrieve your checkout session. Please try again.",
+      orderNotFound: "We couldn't find this order. Please try again.",
+      paymentNotCompleted:
+        "Your payment hasn't been completed yet. Please try again.",
+      inCorrectOrderTypeError: "This order type is invalid. Please try again.",
+      noOrderItemsError:
+        "We couldn't find items for this order. Please try again.",
+      orderNotAvailableForCheckout: "This order is not available for checkout.",
+      checkoutSessionNotAvailable: "Your checkout session is not available.",
     },
     collection: {
-      serverError: "Failed to retrieve collection. Please try again later.",
+      serverError: "We couldn't retrieve this collection. Please try again.",
     },
     comment: {
       pendingCreate: "Posting your comment...",
-      successCreate: "Comment posted successfully.",
-      successDelete: "Comment deleted successfully.",
-      createUnAuthenticated:
-        "Authentication required to post a comment. Please sign in.",
-      deleteUnAuthorized: "You are not authorized to delete this comment.",
-      deleteUnAuthenticated:
-        "Authentication required to delete a comment. Please sign in.",
-      notFound: "Comment not found. Please try again later.",
-      serverErrorCreate: "Failed to post comment. Please try again later.",
-      serverErrorGet: "Failed to retrieve comment. Please try again later.",
-      serverErrorDelete: "Failed to delete comment. Please try again later.",
+      successCreate: "Your comment has been posted successfully.",
+      successDelete: "Your comment has been deleted successfully.",
+      createUnAuthenticated: "Please sign in to post a comment.",
+      deleteUnAuthorized: "You don't have permission to delete this comment.",
+      deleteUnAuthenticated: "Please sign in to delete a comment.",
+      notFound: "We couldn't find this comment. Please try again.",
+      serverErrorCreate:
+        "We couldn't post your comment right now. Please try again.",
+      serverErrorGet: "We couldn't retrieve this comment. Please try again.",
+      serverErrorDelete: "We couldn't delete this comment. Please try again.",
       replies: {
-        successDelete: "Replies deleted successfully.",
+        successDelete: "Replies have been deleted successfully.",
         serverErrorCount:
-          "Failed to retrieve replies count. Please try again later.",
+          "We couldn't retrieve the replies count. Please try again.",
       },
       votes: {
-        success: "Successfully voted on comment.",
-        unAuthenticated:
-          "Authentication required to vote on a comment. Please sign in.",
-        serverError: "Failed to vote on comment. Please try again later.",
+        success: "Your vote has been recorded successfully.",
+        unAuthenticated: "Please sign in to vote on comments.",
+        serverError: "We couldn't record your vote. Please try again.",
       },
     },
     diaryEntry: {
-      pending: "Sharing your diary...",
+      pending: "Sharing your diary entry...",
       success:
-        'Thank you for sharing your authentic testimony with PalestinianCauses. Your diary has been received and is valued. We will review it carefully before adding it to "The Truth Museum"—please check back soon!',
-      successPCAuthor: "Diary entry shared successfully.",
+        'Thank you for sharing your authentic testimony with PalestinianCauses. Your diary entry has been received and is deeply valued. We will review it carefully before adding it to "The Truth Museum"—please check back soon!',
+      successPCAuthor: "Your diary entry has been shared successfully.",
       unique: (title: string) =>
-        `"${title}" - A powerful title! Another resilient author has used this exact title for "The Truth Museum." To ensure your unique testimony stands out, please provide an alternative title. Thank you!`,
-      unAuthorized: "You are not authorized to share a diary.",
-      unAuthenticated:
-        "Authentication required to share a diary. Please sign in.",
-      notFound: "Diary entry not found. Please try again later.",
-      serverErrorShare: "Failed to share diary. Please try again later.",
-      serverErrorGet: "Failed to retrieve diary entry. Please try again later.",
+        `"${title}" is a powerful title! Another resilient author has already used this exact title for "The Truth Museum." To ensure your unique testimony stands out, please provide an alternative title. Thank you!`,
+      unAuthorized: "You don't have permission to share a diary entry.",
+      unAuthenticated: "Please sign in to share a diary entry.",
+      notFound: "We couldn't find this diary entry. Please try again.",
+      serverErrorShare:
+        "We couldn't share your diary entry right now. Please try again.",
+      serverErrorGet:
+        "We couldn't retrieve this diary entry. Please try again.",
       author: {
         serverError:
-          "Failed to retrieve author information. Please try again later.",
+          "We couldn't retrieve the author information. Please try again.",
       },
       delete: {
-        success: "Successfully deleted diary entry.",
-        serverError: "Failed to delete diary entry. Please try again later.",
+        success: "Your diary entry has been deleted successfully.",
+        serverError: "We couldn't delete your diary entry. Please try again.",
       },
     },
     blogRoom: {
-      notFound: "Blog room not found. Please try again later.",
-      serverErrorGet: "Failed to retrieve blog room. Please try again later.",
+      notFound: "We couldn't find this blog room. Please try again.",
+      serverErrorGet: "We couldn't retrieve this blog room. Please try again.",
     },
     blogCategory: {
-      notFound: "Blog category not found. Please try again later.",
+      notFound: "We couldn't find this blog category. Please try again.",
       serverErrorGet:
-        "Failed to retrieve blog category. Please try again later.",
+        "We couldn't retrieve this blog category. Please try again.",
+      canNotDeleteReferenced:
+        "This category can not be deleted because it is being used by one or more blog posts. Please remove it from all posts first.",
+      serverErrorDelete:
+        "We couldn't delete this blog category. Please try again.",
     },
     blogPost: {
-      notFound: "Blog post not found. Please try again later.",
-      serverErrorGet: "Failed to retrieve blog post. Please try again later.",
+      notFound: "We couldn't find this blog post. Please try again.",
+      serverErrorGet: "We couldn't retrieve this blog post. Please try again.",
     },
     room: {
-      serverError: "Failed to retrieve room. Please try again later.",
+      serverError: "We couldn't retrieve this room. Please try again.",
       links: {
-        serverError: "Failed to retrieve room links. Please try again later.",
+        serverError: "We couldn't retrieve the room links. Please try again.",
       },
+    },
+    roomService: {
+      canNotDeleteReferenced:
+        "This room service can not be deleted because it is being used by one or more packages. Please remove it from all packages first.",
     },
     stripe: {
       webhook: {
-        missingStripeSignature: "Signature not found. Please try again later.",
-        verifyStripeSignature: "Failed to verify signature. Please try again.",
-        missingIDsData: "Required IDs data not found. Please try again later.",
+        missingStripeSignature:
+          "Payment verification failed. Please try again.",
+        verifyStripeSignature:
+          "We couldn't verify the payment signature. Please try again.",
+        missingIDsData: "Payment information is in-complete. Please try again.",
       },
     },
   },
@@ -305,13 +337,13 @@ export const messages = {
   crypto: {
     copy: {
       pending: "Copying address to clipboard...",
-      success: "Address copied to clipboard.",
-      error: "Failed to copy address to clipboard.",
+      success: "Address copied to clipboard successfully.",
+      error: "We couldn't copy the address to clipboard. Please try again.",
     },
   },
   code: {
     copy: {
-      success: "Code has been copied to clipboard!",
+      success: "Code copied to clipboard successfully!",
     },
   },
 };

@@ -1,8 +1,9 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { CollectionConfig } from "payload";
 
 import { hasPermissionAccess, hasPermissionFieldAccess } from "@/access/global";
+import { messages } from "@/lib/messages";
 import { hasPermission } from "@/lib/permissions";
 import { User } from "@/payload-types";
 
@@ -200,4 +201,21 @@ export const ServiceCategories: CollectionConfig = {
       ],
     },
   ],
+  hooks: {
+    beforeDelete: [
+      async ({ id, req }) => {
+        const services = await req.payload.find({
+          collection: "rooms-services",
+          where: { category: { equals: id } },
+          limit: 1,
+        });
+
+        if (services.docs.length !== 0) {
+          throw new Error(
+            messages.actions.serviceCategory.canNotDeleteReferenced,
+          );
+        }
+      },
+    ],
+  },
 };
