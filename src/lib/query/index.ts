@@ -40,4 +40,9 @@ export const getQueryClient = function getQueryClient() {
 export const sdk = new PayloadSDK<Config>({
   // eslint-disable-next-line prefer-template
   baseURL: process.env.NEXT_PUBLIC_URL! + "/api",
+  fetch: (url, options = {}) =>
+    fetch(url, {
+      ...options,
+      credentials: "include",
+    }),
 });

@@ -51,4 +51,15 @@ self.addEventListener("notificationclick", (event) => {
     event.waitUntil(self.clients.openWindow(event.notification.data.url));
 });
 
+self.addEventListener("fetch", (event) => {
+  const url = new URL(event.request.url);
+
+  if (url.pathname.startsWith("/api/"))
+    event.respondWith(
+      fetch(event.request, {
+        credentials: "include",
+      }),
+    );
+});
+
 serwist.addEventListeners();
