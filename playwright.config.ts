@@ -17,8 +17,11 @@ export default defineConfig({
   globalTeardown: "./tests/global-teardown.ts",
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: "npm run start",
+    command: "pnpm run start",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000, // 2 minutes timeout for server to start
+    stdout: "pipe",
+    stderr: "pipe",
   },
 });
