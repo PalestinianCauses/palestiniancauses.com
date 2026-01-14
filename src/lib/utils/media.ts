@@ -1,12 +1,12 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
-import type { Media } from "@/payload-types";
+import type { MediaPublic } from "@/payload-types";
 
 import { isDefined, isString } from "../types/guards";
 
 export const isMediaObject = function isMediaObject(
-  value: number | Media | null | undefined,
-): value is Media & Required<Pick<Media, "url" | "sizes">> {
+  value: number | MediaPublic | null | undefined,
+): value is MediaPublic & Required<Pick<MediaPublic, "url" | "sizes">> {
   return (
     typeof value === "object" &&
     isDefined(value) &&
@@ -20,16 +20,16 @@ export const isMediaObject = function isMediaObject(
 };
 
 export const isMediaPlusSizeObjects = function isMediaPlusSizeObjects<
-  T extends keyof Required<NonNullable<Media["sizes"]>>,
+  T extends keyof Required<NonNullable<MediaPublic["sizes"]>>,
 >(
-  value: number | Media | null | undefined,
+  value: number | MediaPublic | null | undefined,
   sizeKey: T,
-): value is Media &
-  Required<Pick<Media, "url" | "sizes">> & {
+): value is MediaPublic &
+  Required<Pick<MediaPublic, "url" | "sizes">> & {
     sizes: {
-      [K in T]-?: Required<NonNullable<Media["sizes"]>>[K] &
-        Required<Pick<Required<NonNullable<Media["sizes"]>>[K], "url">>;
-    } & Omit<NonNullable<Media["sizes"]>, T>;
+      [K in T]-?: Required<NonNullable<MediaPublic["sizes"]>>[K] &
+        Required<Pick<Required<NonNullable<MediaPublic["sizes"]>>[K], "url">>;
+    } & Omit<NonNullable<MediaPublic["sizes"]>, T>;
   } {
   return (
     isMediaObject(value) &&
@@ -39,28 +39,28 @@ export const isMediaPlusSizeObjects = function isMediaPlusSizeObjects<
 };
 
 export const isMediaId = function isMediaId(
-  value: number | Media | null | undefined,
+  value: number | MediaPublic | null | undefined,
 ): value is number {
   return typeof value === "number";
 };
 
 export const getMediaURL = function getMediaURL(
-  media: number | Media | null | undefined,
+  media: number | MediaPublic | null | undefined,
 ): string | null {
   if (!isMediaObject(media)) return null;
   return media.url || null;
 };
 
 export const getMediaAltText = function getMediaAltText(
-  media: number | Media | null | undefined,
+  media: number | MediaPublic | null | undefined,
 ): string | null {
   if (!isMediaObject(media)) return null;
   return media.alt;
 };
 
 export const getMediaSizeURL = function getMediaSizeURL(
-  media: number | Media | null | undefined,
-  sizeKey: keyof NonNullable<Media["sizes"]>,
+  media: number | MediaPublic | null | undefined,
+  sizeKey: keyof NonNullable<MediaPublic["sizes"]>,
 ): string | null {
   if (isMediaPlusSizeObjects(media, sizeKey)) {
     const size = media.sizes[sizeKey];
