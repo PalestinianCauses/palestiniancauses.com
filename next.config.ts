@@ -1,10 +1,11 @@
-// REVIEWED - 16
+// REVIEWED - 17
 import { withPayload } from "@payloadcms/next/withPayload";
 import withSerwistInit from "@serwist/next";
 import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   eslint: { ignoreDuringBuilds: true },
+  trailingSlash: false,
 
   images: {
     remotePatterns: [
