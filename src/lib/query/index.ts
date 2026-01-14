@@ -44,5 +44,9 @@ export const sdk = new PayloadSDK<Config>({
     fetch(url, {
       ...options,
       credentials: "include",
+      headers: {
+        ...options.headers,
+        "Access-Control-Allow-Origin": "*",
+      },
     }),
 });
