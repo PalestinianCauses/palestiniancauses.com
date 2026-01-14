@@ -28,15 +28,15 @@ const PUBLIC_COLLECTIONS = [
 type PublicCollection = (typeof PUBLIC_COLLECTIONS)[number];
 
 export default buildConfig({
-  serverURL: "https://palestiniancauses.com",
+  serverURL: "https://www.palestiniancauses.com",
   cors: [
-    "https://palestiniancauses.com",
+    "https://www.palestiniancauses.com",
     ...(process.env.NODE_ENV === "development"
       ? ["http://localhost:3000"]
       : []),
   ],
   csrf: [
-    "https://palestiniancauses.com",
+    "https://www.palestiniancauses.com",
     ...(process.env.NODE_ENV === "development"
       ? ["http://localhost:3000"]
       : []),
