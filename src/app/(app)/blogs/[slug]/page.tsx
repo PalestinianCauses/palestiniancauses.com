@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { Metadata } from "next";
 import { Fragment } from "react";
@@ -43,7 +43,7 @@ export async function generateMetadata({
     : "Anonymous";
 
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
   const roomURL = `${siteURL}/blogs/${slug}`;
 
   return {
@@ -89,7 +89,7 @@ export default async function BlogRoomPage({
 
   const room = response.data.docs[0];
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
   const roomURL = `${siteURL}/blogs/${room.slug}`;
 
   const roomOwner = isObject(room.roomOwner) ? room.roomOwner : null;

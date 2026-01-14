@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
@@ -23,7 +23,7 @@ const ctas = [
   },
   {
     title: "Support Our Mission",
-    href: "https://palestiniancauses.com/support",
+    href: "https://www.palestiniancauses.com/support-us",
   },
   {
     title: "Amplify our Work—Follow our Social Networks.",

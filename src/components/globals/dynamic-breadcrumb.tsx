@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 01
+// REVIEWED - 02
 
 import Link from "next/link";
 import { Fragment, HTMLAttributes, useEffect, useState } from "react";
@@ -25,7 +25,7 @@ const DynamicBreadcrumb = function DynamicBreadcrumb({
   itemsMaximum?: number;
 } & HTMLAttributes<HTMLElement>) {
   const breadcrumbs = useBreadcrumbs();
-  const [baseURL, setBaseURL] = useState("https://palestiniancauses.com");
+  const [baseURL, setBaseURL] = useState("https://www.palestiniancauses.com");
 
   useEffect(() => {
     if (typeof window !== "undefined") setBaseURL(window.location.origin);

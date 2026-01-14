@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { Metadata } from "next";
 import { Fragment, Suspense } from "react";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "PalestinianCauses Digital Agency",
-    url: `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/blogs`,
+    url: `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/blogs`,
     title: "The Riwaq: Blog Rooms | PalestinianCauses Digital Agency",
     description:
       "Welcome to The Riwaq, the intellectual gallery of the PalestinianCauses collective. Explore curated collections of writings on craft, resilience, and creative excellence.",
@@ -27,13 +27,13 @@ export const metadata: Metadata = {
       "Welcome to The Riwaq, the intellectual gallery of the PalestinianCauses collective.",
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/blogs`,
+    canonical: `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/blogs`,
   },
 };
 
 export default function BlogsRoomsPage() {
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
 
   const collectionPageSchema = {
     "@context": "https://schema.org",

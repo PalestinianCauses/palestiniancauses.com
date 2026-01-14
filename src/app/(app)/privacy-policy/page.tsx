@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { Metadata } from "next";
 import Link from "next/link";
@@ -40,7 +40,7 @@ export default function PrivacyPolicyPage() {
                 className="p-0 font-medium text-foreground"
                 style={{ fontSize: "inherit" }}
                 asChild>
-                <Link href="https://palestiniancauses.com">
+                <Link href="https://www.palestiniancauses.com">
                   palestiniancauses.com
                 </Link>
               </Button>

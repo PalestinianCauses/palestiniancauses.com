@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { format } from "date-fns";
 import { ar, enUS } from "date-fns/locale";
@@ -78,7 +78,7 @@ export async function generateMetadata({
   const imageFeatured = getMediaURL(post.imageFeatured);
 
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
   const postURL = `${siteURL}/blogs/posts/${slug}`;
 
   return {
@@ -160,7 +160,7 @@ export default async function BlogPostPage({
   );
 
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
   const blogRoomURL = blogRoom
     ? `${siteURL}/blogs/${blogRoom.slug}`
     : undefined;

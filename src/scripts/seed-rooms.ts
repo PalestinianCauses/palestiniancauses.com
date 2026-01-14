@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// REVIEWED - 12
+// REVIEWED - 13
 
 import dotenv from "dotenv";
 
@@ -124,7 +124,7 @@ const data: Omit<Room, "id" | "createdAt" | "updatedAt"> = {
         location: "Cape Town, South Africa",
         position: "Founder, CEO, and CTO",
         dateStart: "2024-12-01",
-        link: "https://palestiniancauses.com",
+        link: "https://www.palestiniancauses.com",
         description:
           "Launched in July 2024 and went digital-first in December 2024. I also manage the company's strategic direction (vision), CEO-led operations, and tech architecture. As CEO, I am the head of our team, guiding and working on project road maps, like 'A Human But from Gaza' and 'The Truth Museum.' And I lead our mission to amplify authentic narratives and build global solidarity. As CTO, I design and lead the creation of our full-stack digital platforms, using a modern tech stack focused on Next.JS and Node.JS to write resilient, maintainable, and beautiful user interfaces.",
       },

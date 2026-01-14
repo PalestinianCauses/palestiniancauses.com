@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 12
+// REVIEWED - 13
 
 import { Menu } from "lucide-react";
 import Link from "next/link";
@@ -38,7 +38,7 @@ export const navigation = [
   },
   {
     label: "Support Us",
-    href: "/support",
+    href: "/support-us",
     coming: false,
   },
   {

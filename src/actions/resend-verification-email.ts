@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { revalidatePath } from "next/cache";
 
@@ -44,7 +44,7 @@ export const resendingVerificationEmail =
       return { data: null, error: tokenResponse.error };
 
     // Send verification email
-    const verificationURL = `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/verify-email/${tokenResponse.data.token}`;
+    const verificationURL = `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/verify-email/${tokenResponse.data.token}`;
     const templateEmail = createVerificationEmail(verificationURL);
 
     const responseEmail = await sendingVerificationEmail({

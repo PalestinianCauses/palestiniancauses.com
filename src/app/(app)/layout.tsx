@@ -1,4 +1,4 @@
-// REVIEWED - 35
+// REVIEWED - 36
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Analytics } from "@vercel/analytics/next";
@@ -103,7 +103,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "PalestinianCauses Digital Agency",
-    url: "https://palestiniancauses.com",
+    url: "https://www.palestiniancauses.com",
     title: "PalestinianCauses Digital Agency",
     description:
       "A world-class digital services agency powered by Gazan talent, PalestinianCauses specializes in Branded Web Applications, Strategic Content Creation, Expert Translation Services, and Comprehensive Digital Marketing Solutions.",
@@ -128,7 +128,7 @@ export const metadata: Metadata = {
       "https://qwvvvruhbe.ufs.sh/f/ZhaM3m5tNWzXfJafovpKAixQkOwjFU9IWn4ZtucV2dL16J7T",
     ],
   },
-  alternates: { canonical: "https://palestiniancauses.com" },
+  alternates: { canonical: "https://www.palestiniancauses.com" },
 };
 
 export const viewport: Viewport = {
@@ -140,7 +140,7 @@ export const viewport: Viewport = {
 
 const RootLayout = function RootLayout({ children }: PropsWithChildren) {
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
 
   const organizationSchema = {
     "@context": "https://schema.org",

@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import { revalidatePath } from "next/cache";
 
@@ -115,7 +115,7 @@ export const requestChangeEmail = async function requestChangeEmail(data?: {
   }
 
   // Send verification email
-  const verificationURL = `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/verify-email/${tokenResult.data.token}`;
+  const verificationURL = `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/verify-email/${tokenResult.data.token}`;
   const templateEmail = createVerificationChangeEmail(
     targetEmail,
     verificationURL,

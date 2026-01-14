@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 import { Metadata } from "next";
 import { Fragment } from "react";
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "PalestinianCauses Digital Agency",
-    url: `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/a-human-but-from-gaza`,
+    url: `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/a-human-but-from-gaza`,
     title: "A Human But From Gaza | PalestinianCauses Digital Agency",
     description:
       'Explore "A Human But From Gaza," an essential collection merging intimate diaries and powerful artwork. Witness firsthand the pain, resilience, and enduring hope of Gazans living through the war in Gaza.',
@@ -41,13 +41,13 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/a-human-but-from-gaza`,
+    canonical: `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/a-human-but-from-gaza`,
   },
 };
 
 export default async function AHumanButFromGazaPage() {
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
 
   const bookSchema = {
     "@context": "https://schema.org",

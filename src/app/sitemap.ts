@@ -1,10 +1,10 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
@@ -38,7 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${baseURL}/support`,
+      url: `${baseURL}/support-us`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,

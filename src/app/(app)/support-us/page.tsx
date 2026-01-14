@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 import { Metadata } from "next";
 
 import { RedirectProvider } from "../providers";
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "PalestinianCauses Digital Agency",
-    url: `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/support`,
+    url: `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/support-us`,
     title: "Support Us | PalestinianCauses Digital Agency",
     description:
       "Support PalestinianCauses Digital Agency and help empower Gazan talent. Your contribution helps us continue delivering world-class digital solutions.",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
       "Support PalestinianCauses Digital Agency and help empower Gazan talent.",
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/support`,
+    canonical: `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/support-us`,
   },
 };
 

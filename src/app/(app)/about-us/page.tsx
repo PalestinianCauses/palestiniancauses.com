@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { Metadata } from "next";
 import { Fragment } from "react";
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "PalestinianCauses Digital Agency",
-    url: `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/about-us`,
+    url: `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/about-us`,
     title: "About Us | PalestinianCauses Digital Agency",
     description:
       "Learn about PalestinianCauses Digital Agency - where excellence meets purpose in every project. Discover our mission, vision, core values, and the resilient Gazan talent powering world-class digital solutions.",
@@ -87,13 +87,13 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/about-us`,
+    canonical: `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/about-us`,
   },
 };
 
 export default async function AboutPage() {
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
 
   const aboutPageSchema = {
     "@context": "https://schema.org",

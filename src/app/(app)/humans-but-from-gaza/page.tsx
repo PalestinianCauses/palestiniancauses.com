@@ -1,4 +1,4 @@
-// REVIEWED - 20
+// REVIEWED - 21
 
 import { Metadata } from "next";
 import Link from "next/link";
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "PalestinianCauses Digital Agency",
-    url: `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/humans-but-from-gaza`,
+    url: `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/humans-but-from-gaza`,
     title:
       "The Truth Museum: Humans But From Gaza | PalestinianCauses Digital Agency",
     description:
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/humans-but-from-gaza`,
+    canonical: `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/humans-but-from-gaza`,
   },
 };
 
@@ -125,7 +125,7 @@ export default async function HumansButFromGazaPage({
   };
 
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
 
   const collectionPageSchema = {
     "@context": "https://schema.org",

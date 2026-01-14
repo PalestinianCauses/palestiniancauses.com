@@ -1,4 +1,4 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { Metadata } from "next";
 import { Fragment } from "react";
@@ -69,7 +69,7 @@ export async function generateMetadata({
   const photograph = getMediaURL(room.information.photograph);
 
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
   const roomURL = `${siteURL}/rooms/${slug}`;
 
   return {
@@ -137,7 +137,7 @@ export default async function RoomPage({
   const { name, title } = room.information;
 
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
   const roomURL = `${siteURL}/rooms/${slug}`;
 
   const photograph = getMediaURL(room.information.photograph);

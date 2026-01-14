@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -36,7 +36,7 @@ export default function CookiePolicyPage() {
                 className="p-0 font-medium text-foreground"
                 style={{ fontSize: "inherit" }}
                 asChild>
-                <Link href="https://palestiniancauses.com">
+                <Link href="https://www.palestiniancauses.com">
                   palestiniancauses.com
                 </Link>
               </Button>
@@ -59,7 +59,7 @@ export default function CookiePolicyPage() {
                 className="p-0 font-medium text-foreground"
                 style={{ fontSize: "inherit" }}
                 asChild>
-                <Link href="https://palestiniancauses.com">
+                <Link href="https://www.palestiniancauses.com">
                   palestiniancauses.com
                 </Link>
               </Button>

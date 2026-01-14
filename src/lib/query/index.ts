@@ -1,4 +1,4 @@
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { PayloadSDK } from "@payloadcms/sdk";
 import {
@@ -40,13 +40,4 @@ export const getQueryClient = function getQueryClient() {
 export const sdk = new PayloadSDK<Config>({
   // eslint-disable-next-line prefer-template
   baseURL: process.env.NEXT_PUBLIC_URL! + "/api",
-  fetch: (url, options = {}) =>
-    fetch(url, {
-      ...options,
-      credentials: "include",
-      headers: {
-        ...options.headers,
-        "Access-Control-Allow-Origin": "*",
-      },
-    }),
 });

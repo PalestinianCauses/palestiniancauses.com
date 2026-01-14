@@ -1,4 +1,4 @@
-// REVIEWED - 01
+// REVIEWED - 02
 
 import { isDefined, isObject } from "@/lib/types/guards";
 import { Product } from "@/payload-types";
@@ -9,7 +9,7 @@ const generateAbsoluteURL = (url: string): string =>
   url.startsWith("http")
     ? url
     : [
-        `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}`,
+        `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}`,
         `${url}`,
       ].join("");
 

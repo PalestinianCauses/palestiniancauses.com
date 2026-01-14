@@ -1,4 +1,4 @@
-// REVIEWED - 09
+// REVIEWED - 10
 
 import Image from "next/image";
 import Link from "next/link";
@@ -17,7 +17,7 @@ const lists = [
     links: [
       { href: "/", label: "Home" },
       { href: "/about-us", label: "About us" },
-      { href: "/support", label: "Support us" },
+      { href: "/support-us", label: "Support us" },
       { href: "/a-human-but-from-gaza", label: "A Human But From Gaza" },
       { href: HumansButFromGazaPageLink, label: "Humans But From Gaza" },
     ],

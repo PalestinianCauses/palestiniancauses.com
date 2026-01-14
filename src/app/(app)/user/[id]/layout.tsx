@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -29,7 +29,7 @@ export const generateMetadata = async function generateMetadata({
     };
 
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
   const profileURL = `${siteURL}/user/${userId}`;
 
   const userName =
@@ -71,7 +71,7 @@ const PublicProfileLayout = async function PublicProfileLayout({
   if (!userResponse.data || userResponse.error) notFound();
 
   const siteURL =
-    process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+    process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
   const profileURL = `${siteURL}/user/${userId}`;
 
   const userName =

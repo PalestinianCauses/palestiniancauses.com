@@ -1,4 +1,4 @@
-// REVIEWED - 28
+// REVIEWED - 29
 import type { CollectionConfig } from "payload";
 
 import {
@@ -50,7 +50,7 @@ export const Users: CollectionConfig = {
         if (!token)
           throw new Error(messages.actions.auth.forgotPassword.serverError);
 
-        const resetPassURL = `${process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com"}/reset-password/${token}`;
+        const resetPassURL = `${process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com"}/reset-password/${token}`;
         return createResetPassEmail(resetPassURL);
       },
     },

@@ -1,4 +1,4 @@
-<!-- REVIEWED - 02 -->
+<!-- REVIEWED - 03 -->
 
 # PalestinianCauses.com
 
@@ -8,7 +8,7 @@ Welcome to the open-source repository for the PalestinianCauses website! This pl
 
 We aim to share vital narratives from Gaza and beyond, like those in our project "A Human But From Gaza" and The Truth Museum, while building a sustainable foundation for Gazan empowerment.
 
-This repository contains the codebase for the website at [PalestinianCauses.com](https://palestiniancauses.com). We believe in transparency and collaboration, and we're opening our code for others to learn from, use, and contribute to.
+This repository contains the codebase for the website at [PalestinianCauses.com](https://www.palestiniancauses.com). We believe in transparency and collaboration, and we're opening our code for others to learn from, use, and contribute to.
 
 ## What You'll Find and Learn
 
@@ -49,9 +49,9 @@ Ready to dive in?
 
 Our work relies on solidarity and support.
 
-- Visit our [website](https://palestiniancauses.com).
-- Learn more about our [mission](https://palestiniancauses.com/about-us)
-- Get ["A Human But From Gaza"](https://palestiniancauses.com/a-human-but-from-gaza)
+- Visit our [website](https://www.palestiniancauses.com).
+- Learn more about our [mission](https://www.palestiniancauses.com/about-us)
+- Get ["A Human But From Gaza"](https://www.palestiniancauses.com/a-human-but-from-gaza)
 
 Thank you for your interest and support! Together, we amplify truth and foster resilience.
 

@@ -6,5 +6,5 @@ Disallow: /_next/
 Disallow: /test-results/
 Disallow: /playwright-report/
 
-Sitemap: https://palestiniancauses.com/sitemap.xml
+Sitemap: https://www.palestiniancauses.com/sitemap.xml
 

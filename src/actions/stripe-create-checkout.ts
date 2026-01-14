@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
@@ -132,7 +132,7 @@ export const createProductStripeCheckoutSession =
 
     // Create Stripe checkout session
     const baseURL =
-      process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com";
+      process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
 
     // eslint-disable-next-line camelcase
     const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [

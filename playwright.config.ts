@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { defineConfig, devices } from "@playwright/test";
 import "dotenv/config";
@@ -11,7 +11,7 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   retries: 0,
   workers: 1,
-  reporter: process.env.CI ? [["github"], ["html"]] : "html",
+  reporter: "html",
   use: { baseURL: process.env.NEXT_PUBLIC_URL, trace: "on-first-retry" },
   globalSetup: "./tests/global-setup.ts",
   globalTeardown: "./tests/global-teardown.ts",

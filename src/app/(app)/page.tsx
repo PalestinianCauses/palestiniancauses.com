@@ -1,4 +1,4 @@
-// REVIEWED - 15
+// REVIEWED - 16
 import { Metadata } from "next";
 
 import { Loading } from "@/components/globals/loading";
@@ -11,7 +11,8 @@ export const metadata: Metadata = {
   description:
     "PalestinianCauses Digital Agency - A world-class digital services agency powered by Gazan talent, delivering outstanding, globally competitive digital solutions.",
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_URL || "https://palestiniancauses.com",
+    canonical:
+      process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com",
   },
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -493,7 +493,7 @@ export const ProfileSettings = function ProfileSettings({
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="e.g. https://palestiniancauses.com"
+                        placeholder="e.g. https://www.palestiniancauses.com"
                       />
                     </FormControl>
                     <FormDescription>
