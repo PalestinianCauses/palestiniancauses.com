@@ -11,7 +11,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "payload:migrate": "NODE_ENV=production payload migrate",
+    "payload:migrate": "payload migrate",
     "payload:migrate:create": "payload migrate:create",
     "payload:migrate:status": "payload migrate:status",
     "seed:rooms": "payload run src/scripts/seed-rooms.ts",
