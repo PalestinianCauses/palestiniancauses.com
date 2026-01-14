@@ -158,7 +158,7 @@ export const createProductStripeCheckoutSession =
           `${baseURL}/a-human-but-from-gaza/thank-you`,
           ["session_id", "{CHECKOUT_SESSION_ID}"].join("="),
         ].join("?"),
-        cancel_url: `${baseURL}/a-human-but-from-gaza/cancel`,
+        cancel_url: `${baseURL}/a-human-but-from-gaza`,
         customer_email: auth.email,
         metadata: {
           productSlug: product.slug,
