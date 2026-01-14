@@ -1,4 +1,4 @@
-// REVIEWED - 20
+// REVIEWED - 21
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -58,6 +58,7 @@ export default buildConfig({
       token: process.env.BLOB_READ_WRITE_TOKEN,
       collections: { "media-private": true, "media-public": true },
       enabled: true,
+      clientUploads: true,
     }),
   ],
   endpoints: [
