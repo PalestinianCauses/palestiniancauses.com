@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 export const ensureStartsWith = function ensureStartsWith(
   stringToCheck: string,
@@ -12,7 +12,7 @@ export const ensureStartsWith = function ensureStartsWith(
 export const HumansButFromGazaPageLink = [
   "/humans-but-from-gaza",
   [
-    ["limit", 50].join("="),
+    ["limit", 100].join("="),
     ["page", 1].join("="),
     ["sort", "-date"].join("="),
   ].join("&"),

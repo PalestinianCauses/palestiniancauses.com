@@ -1,8 +1,8 @@
-// REVIEWED - 02
+// REVIEWED - 04
 
 import { NextRequest, NextResponse } from "next/server";
 
-const PATHS_PROTECTED = ["/admin", "/humans-but-from-gaza/share"];
+const PATHS_PROTECTED = ["/profile", "/admin", "/humans-but-from-gaza/share"];
 const PATHS_AUTHENTICATION = ["/signin", "/signup"];
 
 export const middleware = async function middleware({
@@ -28,7 +28,7 @@ export const middleware = async function middleware({
     PATHS_AUTHENTICATION.some((path) => pathname.startsWith(path)) &&
     isAuthenticated
   ) {
-    let redirectTo = new URL("/", RequestURL);
+    let redirectTo = new URL("/a-human-but-from-gaza", RequestURL);
     const redirect = NextURL.searchParams.get("redirect");
 
     if (redirect) redirectTo = new URL(redirect, RequestURL);

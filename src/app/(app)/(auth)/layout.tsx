@@ -1,4 +1,4 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
 import Image from "next/image";
 import { PropsWithChildren } from "react";
@@ -7,7 +7,7 @@ import { Container } from "@/components/globals/container";
 
 const AuthLayout = async function AuthLayout({ children }: PropsWithChildren) {
   return (
-    <div className="flex h-full max-h-screen min-h-[48rem] items-center justify-center">
+    <div className="section-padding-start-xl section-padding-end-xl flex items-center justify-center">
       <Container className="relative">
         <Image
           src="/logo-primary.png"

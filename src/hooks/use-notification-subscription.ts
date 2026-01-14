@@ -1,17 +1,17 @@
 "use client";
 
-// REVIEWED - 07
+// REVIEWED - 08
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import {
-  getNotificationSubscription,
   notifySubscribers,
   subscribeToNotifications,
   unsubscribeFromNotifications,
 } from "@/actions/notification-subscription";
+import { getNotificationSubscription } from "@/lib/api/notification-subscription";
 import { messages } from "@/lib/messages";
 import { base64ToUint8Array } from "@/lib/utils/pwa";
 import { NotificationSubscription } from "@/payload-types";

@@ -1,27 +1,46 @@
-// REVIEWED - 12
+// REVIEWED - 21
 
 import { CollectionConfig } from "payload";
 
 import {
-  isAdminOrSystemUserOrSelf,
-  isAdminOrSystemUserOrSelfOrPublished,
-} from "@/access/diary-entry";
-import { isAdminOrSystemUserField, isAuthenticated } from "@/access/global";
+  hasPermissionAccess,
+  hasPermissionFieldAccess,
+  isSelf,
+} from "@/access/global";
+import { hasPermission } from "@/lib/permissions";
+import { isObject } from "@/lib/types/guards";
+import { DiaryEntry, User } from "@/payload-types";
 
 export const DiaryEntries: CollectionConfig = {
   slug: "diary-entries",
   access: {
-    create: isAuthenticated,
-    read: isAdminOrSystemUserOrSelfOrPublished,
-    update: isAdminOrSystemUserOrSelf,
-    delete: isAdminOrSystemUserOrSelf,
+    create: hasPermissionAccess({
+      resource: "diary-entries",
+      action: "create",
+    }),
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "diary-entries", action: "read" })({
+        req,
+      }) || isSelf("author")({ req }),
+    update: ({ req }) =>
+      hasPermissionAccess({ resource: "diary-entries", action: "update" })({
+        req,
+      }) || isSelf("author")({ req }),
+    delete: ({ req }) =>
+      hasPermissionAccess({ resource: "diary-entries", action: "delete" })({
+        req,
+      }) || isSelf("author")({ req }),
   },
   admin: {
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "diary-entries",
+        action: "manage",
+      }),
     group: "Content",
     defaultColumns: ["id", "title", "date", "status", "author", "createdAt"],
     useAsTitle: "title",
   },
-  labels: { singular: "Diary Entry", plural: "Diary Entries" },
   fields: [
     {
       label: "Title",
@@ -36,12 +55,7 @@ export const DiaryEntries: CollectionConfig = {
       admin: {
         date: {
           pickerAppearance: "dayOnly",
-          minDate: new Date(2023, 9, 7, 0, 0, 0, 0),
-          maxDate: new Date(
-            new Date(
-              new Date().setUTCDate(new Date().getUTCDate() - 1),
-            ).setUTCHours(0, 0, 0, 0),
-          ),
+          maxDate: new Date(new Date().setUTCHours(23, 59, 59, 999)),
         },
       },
       label: "Date",
@@ -57,7 +71,11 @@ export const DiaryEntries: CollectionConfig = {
       required: true,
     },
     {
-      access: { update: isAdminOrSystemUserField },
+      access: {
+        create: hasPermissionFieldAccess("diary-entries.status", "create"),
+        update: hasPermissionFieldAccess("diary-entries.status", "update"),
+      },
+      admin: { position: "sidebar" },
       label: "Status",
       name: "status",
       type: "select",
@@ -71,7 +89,11 @@ export const DiaryEntries: CollectionConfig = {
       required: true,
     },
     {
-      access: { update: isAdminOrSystemUserField },
+      access: {
+        create: hasPermissionFieldAccess("diary-entries.author", "create"),
+        update: hasPermissionFieldAccess("diary-entries.author", "update"),
+      },
+      admin: { position: "sidebar" },
       label: "Author",
       name: "author",
       type: "relationship",
@@ -79,6 +101,9 @@ export const DiaryEntries: CollectionConfig = {
       required: true,
     },
     {
+      access: {
+        update: hasPermissionFieldAccess("diary-entries.isAuthentic", "update"),
+      },
       label: "Is Authentic",
       name: "isAuthentic",
       type: "checkbox",
@@ -93,15 +118,94 @@ export const DiaryEntries: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [
-      async ({ req, data }) => {
-        const document = data;
-        if (
-          req.user &&
-          (req.user.role === "admin" || req.user.role === "system-user")
-        )
-          document.status = "approved";
+      async ({ operation, req, data }) => {
+        if (operation === "create")
+          if (!data.author)
+            if (req.user)
+              // eslint-disable-next-line no-param-reassign
+              data.author = req.user.id;
 
-        return document;
+        if (
+          hasPermission(req.user, {
+            resource: "diary-entries",
+            action: "publish",
+          })
+        )
+          // eslint-disable-next-line no-param-reassign
+          data.status = "approved";
+
+        return data;
+      },
+    ],
+    afterChange: [
+      async ({ doc, req, previousDoc, operation }) => {
+        if (
+          hasPermission(req.user, {
+            resource: "diary-entries",
+            action: "publish",
+          })
+        )
+          return;
+
+        const document = doc as DiaryEntry;
+        const previousDocument = previousDoc as DiaryEntry | null;
+
+        const authorId = isObject(document.author)
+          ? document.author.id
+          : document.author;
+
+        const createNotificationPromise = req.payload.create({
+          collection: "notifications",
+          data: {
+            user: authorId,
+            type: "diary-entry",
+            resource: {
+              relationTo: "diary-entries",
+              value: document.id,
+            },
+            resourceType: "diary-entries",
+            title: "Diary Entry Approved",
+            message: `Your diary entry "${document.title}" has been approved and published.`,
+            read: false,
+          },
+        });
+
+        if (operation === "create" && document.status === "approved")
+          await createNotificationPromise;
+        else if (
+          operation === "update" &&
+          document.status === "approved" &&
+          previousDocument &&
+          previousDocument.status !== "approved"
+        )
+          await createNotificationPromise;
+      },
+    ],
+    beforeDelete: [
+      async ({ id, req }) => {
+        // Cascade delete: remove all comments on this diary entry
+        // Only delete top-level comments (no parent) - their replies are handled by Comments hook
+        const comments = await req.payload.find({
+          collection: "comments",
+          where: {
+            and: [
+              { on: { equals: { relationTo: "diary-entries", value: id } } },
+              { parent: { exists: false } },
+            ],
+          },
+          limit: 0,
+        });
+
+        // Delete one by one to ensure Comments beforeDelete hook runs for each
+        // This triggers cascade delete for replies
+        await Promise.all(
+          comments.docs.map((comment) =>
+            req.payload.delete({
+              collection: "comments",
+              id: comment.id,
+            }),
+          ),
+        );
       },
     ],
   },

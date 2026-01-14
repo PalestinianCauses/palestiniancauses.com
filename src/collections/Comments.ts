@@ -1,43 +1,61 @@
-// REVIEWED - 09
+// REVIEWED - 18
 
 import { CollectionConfig } from "payload";
 
-import { isAdminOrSelf, isAuthenticated } from "@/access/global";
+import {
+  hasPermissionAccess,
+  hasPermissionFieldAccess,
+  isSelf,
+} from "@/access/global";
+import { hasPermission } from "@/lib/permissions";
+import { isObject } from "@/lib/types/guards";
+import { Comment, User } from "@/payload-types";
 
 export const Comments: CollectionConfig = {
   slug: "comments",
   access: {
-    read: () => true,
-    create: isAuthenticated,
-    update: isAdminOrSelf,
-    delete: isAdminOrSelf,
+    create: hasPermissionAccess({ resource: "comments", action: "create" }),
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "comments", action: "read" })({ req }) ||
+      isSelf("user")({ req }),
+    update: ({ req }) =>
+      hasPermissionAccess({ resource: "comments", action: "update" })({
+        req,
+      }) || isSelf("user")({ req }),
+    delete: ({ req }) =>
+      hasPermissionAccess({ resource: "comments", action: "delete" })({
+        req,
+      }) || isSelf("user")({ req }),
   },
   admin: {
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "comments",
+        action: "manage",
+      }),
     group: "Content",
     useAsTitle: "id",
-    defaultColumns: [
-      "id",
-      "user",
-      "content",
-      "status",
-      "votesScore",
-      "createdAt",
-    ],
+    defaultColumns: ["id", "user", "content"],
     enableRichTextRelationship: false,
   },
   fields: [
     {
-      admin: { readOnly: true, position: "sidebar" },
+      access: { update: hasPermissionFieldAccess("comments.on", "update") },
+      admin: { position: "sidebar" },
       label: "Commented On",
       name: "on",
       type: "relationship",
-      relationTo: ["diary-entries", "blogs"],
+      relationTo: ["diary-entries"],
       hasMany: false,
       required: true,
       index: true,
     },
     {
-      admin: { readOnly: true, position: "sidebar" },
+      access: { update: hasPermissionFieldAccess("comments.parent", "update") },
+      admin: {
+        condition: (_, siblingData) => Boolean((siblingData as Comment).on),
+        position: "sidebar",
+      },
       label: "In Reply To",
       name: "parent",
       type: "relationship",
@@ -45,9 +63,16 @@ export const Comments: CollectionConfig = {
       hasMany: false,
       required: false,
       index: true,
+      filterOptions: ({ siblingData }) => ({
+        on: { equals: (siblingData as Comment).on },
+      }),
     },
     {
-      admin: { readOnly: true, position: "sidebar" },
+      access: {
+        create: hasPermissionFieldAccess("comments.user", "create"),
+        update: hasPermissionFieldAccess("comments.user", "update"),
+      },
+      admin: { position: "sidebar" },
       label: "User",
       name: "user",
       type: "relationship",
@@ -57,7 +82,6 @@ export const Comments: CollectionConfig = {
       index: true,
     },
     {
-      admin: { readOnly: true },
       label: "Content",
       name: "content",
       type: "textarea",
@@ -66,6 +90,10 @@ export const Comments: CollectionConfig = {
       required: true,
     },
     {
+      access: {
+        create: hasPermissionFieldAccess("comments.status", "create"),
+        update: hasPermissionFieldAccess("comments.status", "update"),
+      },
       admin: { position: "sidebar" },
       label: "Status",
       name: "status",
@@ -80,6 +108,7 @@ export const Comments: CollectionConfig = {
       index: true,
     },
     {
+      admin: { hidden: true },
       label: "Votes",
       name: "votes",
       type: "array",
@@ -105,7 +134,7 @@ export const Comments: CollectionConfig = {
       ],
     },
     {
-      admin: { readOnly: true },
+      admin: { hidden: true },
       label: "Votes Score",
       name: "votesScore",
       type: "number",
@@ -113,4 +142,106 @@ export const Comments: CollectionConfig = {
       index: true,
     },
   ],
+  hooks: {
+    beforeChange: [
+      ({ operation, req, data }) => {
+        if (operation === "create")
+          if (!data.user)
+            if (req.user)
+              // eslint-disable-next-line no-param-reassign
+              data.user = req.user.id;
+
+        return data;
+      },
+    ],
+    afterChange: [
+      async ({ doc, previousDoc, req, operation }) => {
+        const document = doc as Comment;
+        const previousDocument = previousDoc as Comment | null;
+
+        const onId = isObject(document.on.value)
+          ? document.on.value.id
+          : document.on.value;
+        const commenterId = isObject(document.user)
+          ? document.user.id
+          : document.user;
+
+        const resource = await req.payload.findByID({
+          collection: document.on.relationTo,
+          id: onId,
+          depth: 0,
+        });
+
+        let resourceUserId: number | null = null;
+
+        if (resource) {
+          resourceUserId = isObject(resource.author)
+            ? resource.author.id
+            : resource.author;
+        }
+
+        const createNotificationPromise = resourceUserId
+          ? req.payload.create({
+              collection: "notifications",
+              data: {
+                user: resourceUserId,
+                type: "comment",
+                resource: {
+                  relationTo: document.on.relationTo,
+                  value: isObject(document.on.value)
+                    ? document.on.value.id
+                    : document.on.value,
+                },
+                resourceType: document.on.relationTo,
+                title: "New Comment",
+                message: `Someone has commented on your ${document.on.relationTo === "diary-entries" ? "diary entry" : "blog post"}: "${resource.title}".`,
+                read: false,
+              },
+            })
+          : null;
+
+        if (
+          operation === "create" &&
+          document.on &&
+          document.user &&
+          document.status === "approved"
+        ) {
+          if (resourceUserId && resourceUserId !== commenterId)
+            if (createNotificationPromise) await createNotificationPromise;
+        } else if (
+          operation === "update" &&
+          document.on &&
+          document.user &&
+          document.status === "approved" &&
+          previousDocument &&
+          previousDocument.status !== "approved"
+        ) {
+          if (resourceUserId && resourceUserId !== commenterId)
+            if (createNotificationPromise) await createNotificationPromise;
+        }
+      },
+    ],
+    beforeDelete: [
+      async ({ id, req }) => {
+        // Cascade delete: remove all replies to this comment
+        // Each delete triggers this hook again for nested replies (recursive)
+        const replies = await req.payload.find({
+          collection: "comments",
+          where: { parent: { equals: id } },
+          limit: 0,
+        });
+
+        // Delete one by one to ensure beforeDelete hook runs for each
+        // This guarantees recursive cascade for deeply nested replies
+        await Promise.all(
+          replies.docs.map((reply) =>
+            req.payload.delete({
+              collection: "comments",
+              id: reply.id,
+            }),
+          ),
+        );
+      },
+    ],
+  },
 };

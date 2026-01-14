@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 05
 
 import { Container } from "../globals/container";
 import {
@@ -11,37 +11,37 @@ const values = [
   {
     title: "Authenticity",
     description:
-      "We are committed to sharing genuine, un-filtered narratives and perspectives directly from Gaza, ensuring the truth of the lived experience is central to all our work.",
+      "Our top priority is sharing truthful, unfiltered voices and perspectives directly from Gaza. The authenticity of the lived experience is at the heart of everything we do—from the stories we tell to the client services we provide.",
   },
   {
-    title: "Solidarity",
+    title: "Professional Excellence",
     description:
-      "We stand unwaveringly with the people of Gaza, advocating for their rights, amplifying their voices, and acting as allies in their struggle for justice and self-determination.",
+      "Our world-class digital services adhere to the highest international standards and quality. We exceed client expectations and outperform industry benchmarks, demonstrating the talent and quality of digital work Gaza offers.",
   },
   {
     title: "Resilience (Sumoud)",
     description:
-      "We honor, celebrate, and amplify the profound steadfastness, enduring spirit, and cultural richness of the Gazan people in the face of adversity.",
+      "We honor, embrace, and spread the tremendous and inherent spirit of resilience shown by the people of Gaza, thanks to a long-standing culture and identity. This strength is embedded in every project we take on.",
   },
   {
-    title: "Empathy and Understanding",
+    title: "Solidarity",
     description:
-      "We strive to build bridges across cultures and communities by fostering deep empathy through powerful storytelling while aiming to break down barriers and challenge harmful stereotypes.",
+      "We are by the side of the people of Gaza and do not waver. In our professional work, we act as advocates of justice for their rights and leverage our learning to help amplify their voices and stories.",
   },
   {
     title: "Empowerment",
     description:
-      "We believe in empowering Gazan's voices, creativity, and expertise. Our long-term vision focuses on creating opportunities that contribute to self-sufficiency, economic growth, and the rebuilding of futures.",
+      "We believe in enabling Gazan voices, creativity, and talent through long-term economic opportunities. Our agency model uniquely establishes self-reliance, economic development, and community growth.",
   },
   {
     title: "Integrity",
     description:
-      "We operate with transparency, accountability, and profound respect for the individuals whose stories we share and the communities we serve.",
+      "We uphold transparency and accountability. We have a high regard for the people whose perspectives we promote, the people we assist, and the clients who entrust us with their favorite projects.",
   },
   {
-    title: "Creativity and Innovation",
+    title: "Innovation",
     description:
-      "We leverage the power of creative expression—through art, writing, and digital media—and embrace innovative approaches to effectively share stories, connect people, and achieve our mission.",
+      "We use cutting-edge technology and creative expression in the arts, literature, and digital media to provide a fresh and innovative vision in creating stellar and effective outcomes for storytelling and linking people.",
   },
 ];
 
@@ -53,13 +53,12 @@ export const CoreValues = function CoreValues() {
       <Container className="max-w-7xl">
         <SectionHeadingBadge
           as="h2"
-          number="04"
+          number="05"
           className="mb-8 text-background">
           Our Core Values
         </SectionHeadingBadge>
         <SectionHeading as="h3" className="mb-12 text-background xl:mb-24">
-          Rooted in authentic storytelling, inspired by unwavering Gazans&apos;
-          resilience.
+          The Principles That Determine Our Excellence and Define Our Character
         </SectionHeading>
         <ul className="grid w-full grid-cols-1 items-start gap-8 text-background md:grid-cols-2">
           {values.map(({ title, description }) => (

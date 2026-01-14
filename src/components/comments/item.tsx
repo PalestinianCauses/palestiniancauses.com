@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 09
+// REVIEWED - 19
 
 import {
   QueryKey,
@@ -22,35 +22,36 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, MutableRefObject, useMemo, useState } from "react";
 
-import { getCollection } from "@/actions/collection";
 import { useComment, useCommentRepliesCount } from "@/hooks/use-comment";
+import { useUser } from "@/hooks/use-user";
+import { getPublicCollection } from "@/lib/api/public";
+import { hasAnyRole } from "@/lib/permissions";
+import { isObject } from "@/lib/types/guards";
 import { cn } from "@/lib/utils/styles";
-import { Comment, User } from "@/payload-types";
+import { Comment } from "@/payload-types";
 
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { UserAvatar } from "../globals/user-avatar";
 import { Button } from "../ui/button";
 
 import { ReplyCommentForm } from "./forms/reply";
 import { CommentVotes } from "./votes";
 
 export type CommentItemProps = {
-  isPageComment?: boolean;
+  page?: "private-profile" | "public-profile" | "comment" | "none";
   queryKey?: QueryKey;
   depth: number;
-  user: User | null | undefined;
   comment: Comment;
-  elementId: MutableRefObject<string | null>;
+  elementId?: MutableRefObject<string | null>;
   // eslint-disable-next-line no-unused-vars
-  jumpToPlusHighlight: (id: string) => void;
+  jumpToPlusHighlight?: (id: string) => void;
 };
 
 TimeAgo.addLocale(en);
 
 export const CommentItem = function CommentItem({
-  isPageComment = false,
+  page = "none",
   queryKey,
   depth,
-  user,
   comment,
   elementId,
   jumpToPlusHighlight,
@@ -58,17 +59,21 @@ export const CommentItem = function CommentItem({
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { deleteComment, deleteCommentReplies } = useComment();
+  // Real database IDs are typically much smaller numbers
+  const isOptimisticComment = comment.id > 1_000_000_000_000_000;
+
+  const { isLoading: isLoadingUser, data: user } = useUser();
+  const { deleteComment } = useComment(user);
 
   const { isLoading: isLoadingRepliesCount, data: repliesCount } =
     useCommentRepliesCount(comment.id);
 
   const [isReplyFormOpen, setIsReplyFormOpen] = useState(
-    repliesCount === 0 && isPageComment,
+    repliesCount === 0 && page === "comment",
   );
 
   const [isRepliesOpen, setIsRepliesOpen] = useState(
-    repliesCount !== 0 && isPageComment,
+    repliesCount !== 0 && page === "comment",
   );
 
   const isMaximumDepth = depth >= 3;
@@ -83,35 +88,33 @@ export const CommentItem = function CommentItem({
   } = useInfiniteQuery({
     queryKey: ["comment-replies", comment.id],
     queryFn: async ({ pageParam = 1 }) => {
-      const response = await getCollection({
+      const response = await getPublicCollection<"comments">({
         collection: "comments",
-        filters: {
-          page: pageParam,
-          limit: 5,
-          sort: ["createdAt"],
-          fields: {
-            on: {
-              equals: {
-                relationTo: comment.on.relationTo,
-                value:
-                  typeof comment.on.value === "object"
-                    ? comment.on.value.id
-                    : comment.on.value,
-              },
+        page: pageParam,
+        limit: 5,
+        sort: "createdAt",
+        where: {
+          on: {
+            equals: {
+              relationTo: comment.on.relationTo,
+              value:
+                typeof comment.on.value === "object"
+                  ? comment.on.value.id
+                  : comment.on.value,
             },
-            parent: { equals: comment.id },
           },
+          parent: { equals: comment.id },
         },
-        fieldsSearch: ["user", "content", "createdAt"],
         depth: 2,
       });
 
-      if (!response.data || response.data.docs.length === 0 || response.error)
+      if (!response.data || response.error || response.data.docs.length === 0)
         return null;
 
       return response.data;
     },
-    enabled: isRepliesOpen,
+    // Disable for optimistic comments (they have no replies yet)
+    enabled: !isOptimisticComment && isRepliesOpen,
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage && lastPage.hasNextPage ? lastPage.nextPage : undefined,
@@ -131,10 +134,56 @@ export const CommentItem = function CommentItem({
   const replies = useMemo(() => {
     if (!data) return [];
 
-    const pages = data.pages.flatMap((page) => (page ? page.docs : []));
+    const pages = data.pages.flatMap((pageElement) =>
+      pageElement ? pageElement.docs : [],
+    );
 
     return pages;
   }, [data]);
+
+  const doDelete = () => {
+    let parentId: number | undefined;
+    if (comment.parent)
+      parentId =
+        typeof comment.parent === "object" ? comment.parent.id : comment.parent;
+
+    deleteComment.mutate(
+      { id: comment.id, parentId },
+      {
+        onSuccess: () => {
+          if (parentId) {
+            queryClient.invalidateQueries({
+              queryKey: ["comment-replies", parentId],
+              exact: true,
+            });
+
+            queryClient.invalidateQueries({
+              queryKey: ["comment-replies-count", parentId],
+              exact: true,
+            });
+          } else if (queryKey)
+            queryClient.invalidateQueries({ queryKey, exact: true });
+          else queryClient.invalidateQueries({ queryKey: ["comments"] });
+
+          if (page === "comment") {
+            const resourceSlug =
+              comment.on.relationTo === "diary-entries"
+                ? "humans-but-from-gaza"
+                : "blog";
+
+            const resourceId =
+              typeof comment.on.value === "object"
+                ? comment.on.value.id
+                : comment.on.value;
+
+            router.push(`/${resourceSlug}/${resourceId}`);
+          }
+        },
+      },
+    );
+  };
+
+  if (!isObject(comment.user)) return null;
 
   return (
     <article
@@ -145,33 +194,37 @@ export const CommentItem = function CommentItem({
         style={{ scrollMarginTop: `${5}rem` }}
         className={cn(
           "relative grid w-full grid-cols-[2rem_1fr] grid-rows-[repeat(4,auto)] flex-col content-center items-start justify-start gap-x-2.5 gap-y-5 before:absolute before:-inset-2.5 before:-z-10 before:bg-transparent md:grid-cols-[2.25rem_1fr_auto] md:grid-rows-[2.25rem_1fr_auto]",
-          { highlight: elementId.current === `comment-${comment.id}` },
+          {
+            highlight:
+              elementId && elementId.current === `comment-${comment.id}`,
+          },
         )}>
-        <div className="relative col-start-1 row-start-1 h-full w-full">
+        <Link
+          href={`/user/${comment.user.id}`}
+          className="relative col-start-1 row-start-1 h-full w-full">
           {depth > 0 ? (
             <div className="absolute -left-4 top-1/2 h-px w-4 -translate-y-1/2 bg-input md:-left-12 md:w-12" />
           ) : null}
-
-          <Avatar className="aspect-square h-auto w-full ring-1 ring-input">
-            <AvatarFallback className="bg-muted/50">
-              {author.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-        </div>
+          <UserAvatar user={comment.user} size="user-avatar" />
+        </Link>
 
         <div className="col-start-2 row-start-1 flex h-full w-full items-center justify-start">
-          <h3
+          <Link
             id={`comment-${comment.id}-author`}
+            href={`/user/${comment.user.id}`}
             className="flex items-center justify-start gap-1.5 text-base font-medium leading-none">
             {author}
             {typeof comment.user === "object" &&
-            (comment.user.role === "admin" ||
-              comment.user.role === "system-user") ? (
+            hasAnyRole(comment.user, [
+              "admin-user",
+              "system-user",
+              "author-user",
+            ]) ? (
               <span>
                 <VerifiedIcon className="h-4 w-4" />
               </span>
             ) : null}
-          </h3>
+          </Link>
           <DotIcon className="h-5 w-5 text-input" />
           <Button
             variant="ghost"
@@ -197,18 +250,22 @@ export const CommentItem = function CommentItem({
           {!user ? (
             <Button
               variant="ghost"
-              className="p-0 text-muted-foreground hover:bg-transparent"
+              className={cn("p-0 text-muted-foreground hover:bg-transparent", {
+                "pointer-events-none opacity-50": isLoadingUser,
+              })}
               asChild>
               <Link href="/signin">
                 <CornerDownRightIcon className="stroke-[1.5]" />
-                Join this conversation — sign in to reply!
+                {isLoadingUser
+                  ? "Retrieving user details, please wait..."
+                  : "Join this conversation — sign in to reply!"}
               </Link>
             </Button>
-          ) : null}
-
-          {user ? (
+          ) : (
             <Button
               variant="ghost"
+              disabled={isOptimisticComment}
+              data-testid="comment-reply-button"
               className="p-0 text-muted-foreground hover:bg-transparent"
               onClick={() => setIsReplyFormOpen((previous) => !previous)}>
               {isReplyFormOpen ? (
@@ -219,14 +276,14 @@ export const CommentItem = function CommentItem({
               ) : (
                 <Fragment>
                   <CornerDownRightIcon className="stroke-[1.5]" />
-                  Reply
+                  {isOptimisticComment ? "Syncing..." : "Reply"}
                 </Fragment>
               )}
             </Button>
-          ) : null}
+          )}
 
           {/* eslint-disable-next-line no-nested-ternary */}
-          {!isLoadingRepliesCount && repliesCount !== 0 ? (
+          {!isLoadingRepliesCount && repliesCount && repliesCount !== 0 ? (
             isMaximumDepth ? (
               <Button
                 variant="ghost"
@@ -241,6 +298,7 @@ export const CommentItem = function CommentItem({
             ) : (
               <Button
                 variant="ghost"
+                data-testid="comment-show-replies-button"
                 className="p-0 text-muted-foreground hover:bg-transparent"
                 disabled={isFetching}
                 aria-expanded={isRepliesOpen}
@@ -255,65 +313,26 @@ export const CommentItem = function CommentItem({
             )
           ) : null}
 
-          {user &&
+          {page !== "public-profile" &&
+          user &&
           user.id ===
             (typeof comment.user === "object"
               ? comment.user.id
               : comment.user) ? (
             <Button
               variant="ghost"
+              disabled={deleteComment.isPending || isOptimisticComment}
+              data-testid="comment-delete-button"
               className="p-0 text-muted-foreground hover:bg-transparent"
-              disabled={deleteComment.isPending}
-              onClick={() =>
-                deleteComment.mutate(comment.id, {
-                  onSuccess: () => {
-                    if (comment.parent) {
-                      queryClient.invalidateQueries({
-                        queryKey: [
-                          "comment-replies",
-                          typeof comment.parent === "object"
-                            ? comment.parent.id
-                            : comment.parent,
-                        ],
-                      });
-
-                      queryClient.invalidateQueries({
-                        queryKey: [
-                          "comment-replies-count",
-                          typeof comment.parent === "object"
-                            ? comment.parent.id
-                            : comment.parent,
-                        ],
-                      });
-                    } else if (queryKey)
-                      queryClient.invalidateQueries({
-                        queryKey,
-                        exact: true,
-                      });
-                    else
-                      queryClient.invalidateQueries({
-                        queryKey: ["comments"],
-                        exact: false,
-                      });
-
-                    if (isPageComment)
-                      router.push(
-                        `/${comment.on.relationTo === "diary-entries" ? "humans-but-from-gaza" : "blog"}/${typeof comment.on.value === "object" ? comment.on.value.id : comment.on.value}`,
-                      );
-
-                    if (replies.length !== 0) {
-                      const repliesIds = replies.map((reply) => reply.id);
-                      deleteCommentReplies.mutate(repliesIds);
-                    }
-                  },
-                })
-              }>
+              onClick={doDelete}>
               <Trash2Icon className="stroke-[1.5]" />
-              {deleteComment.isPending ? "Deleting..." : "Delete"}
+              {deleteComment.isPending && "Deleting..."}
+              {!deleteComment.isPending && isOptimisticComment && "Syncing..."}
+              {!deleteComment.isPending && !isOptimisticComment && "Delete"}
             </Button>
           ) : null}
 
-          {!isPageComment &&
+          {page !== "comment" &&
           comment.parent &&
           typeof comment.parent === "object" &&
           typeof comment.parent.user === "object" ? (
@@ -326,8 +345,17 @@ export const CommentItem = function CommentItem({
                   className="p-0"
                   onClick={() => {
                     if (comment.parent) {
-                      const commentId = `comment-${typeof comment.parent === "object" ? comment.parent.id : comment.parent}`;
-                      jumpToPlusHighlight(commentId);
+                      if (
+                        page === "private-profile" ||
+                        page === "public-profile"
+                      )
+                        router.push(
+                          `/comment/${isObject(comment.parent) ? comment.parent.id : comment.parent}`,
+                        );
+                      else {
+                        const commentId = `comment-${typeof comment.parent === "object" ? comment.parent.id : comment.parent}`;
+                        if (jumpToPlusHighlight) jumpToPlusHighlight(commentId);
+                      }
                     }
                   }}>
                   {comment.parent.user.firstName}
@@ -338,11 +366,12 @@ export const CommentItem = function CommentItem({
         </div>
       </div>
 
-      {user && isReplyFormOpen && (
+      {user && isReplyFormOpen && !isOptimisticComment && (
         <ReplyCommentForm
           user={user}
           on={comment.on}
           parent={comment.id}
+          setIsRepliesOpen={setIsRepliesOpen}
           onSuccess={() => {
             if (isMaximumDepth) router.push(`/comment/${comment.id}`);
             else {
@@ -353,12 +382,11 @@ export const CommentItem = function CommentItem({
         />
       )}
 
-      {!isMaximumDepth && isRepliesOpen ? (
+      {!isMaximumDepth && isRepliesOpen && replies.length !== 0 ? (
         <section
           id={`comment-${comment.id}-replies`}
           className={cn(
             "relative flex w-full flex-col gap-5 pl-4 md:gap-10 md:pl-12",
-            { "pointer-events-none opacity-50": isFetching },
           )}>
           <div className="absolute left-0 top-0 h-full w-px -translate-x-1/2 bg-input" />
 
@@ -366,7 +394,6 @@ export const CommentItem = function CommentItem({
             <CommentItem
               key={reply.id}
               depth={depth + 1}
-              user={user}
               comment={reply}
               elementId={elementId}
               jumpToPlusHighlight={jumpToPlusHighlight}

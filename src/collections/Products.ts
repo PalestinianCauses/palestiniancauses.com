@@ -1,23 +1,29 @@
-// REVIEWED - 07
+// REVIEWED - 12
 
 import { CollectionConfig } from "payload";
 
-import { isAdmin } from "@/access/global";
+import { hasPermissionAccess } from "@/access/global";
+import { hasPermission } from "@/lib/permissions";
+import { User } from "@/payload-types";
 
 export const Products: CollectionConfig = {
   slug: "products",
   access: {
-    read: () => true,
-    create: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+    read: hasPermissionAccess({ resource: "products", action: "read" }),
+    create: hasPermissionAccess({ resource: "products", action: "create" }),
+    update: hasPermissionAccess({ resource: "products", action: "update" }),
+    delete: hasPermissionAccess({ resource: "products", action: "delete" }),
   },
   admin: {
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "products",
+        action: "manage",
+      }),
     group: "Database",
     defaultColumns: ["id", "title", "price", "type", "createdAt"],
     useAsTitle: "title",
   },
-  labels: { singular: "Product", plural: "Products" },
   fields: [
     {
       name: "slug",
@@ -75,7 +81,7 @@ export const Products: CollectionConfig = {
           name: "file",
           label: "File",
           type: "upload",
-          relationTo: "media",
+          relationTo: "media-private",
           required: true,
         },
       ],

@@ -1,4 +1,4 @@
-// REVIEWED - 06
+// REVIEWED - 07
 
 import { z } from "zod";
 
@@ -24,24 +24,19 @@ export const diaryEntrySchema = z.object({
     )
     .refine(
       (date) => {
-        date.setUTCHours(0, 0, 0, 0);
+        // Compare dates without mutating original date
+        // Create new Date objects for comparison only
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
-        const start = new Date(2023, 9, 7);
-        start.setUTCHours(0, 0, 0, 0);
+        const dateSelected = new Date(date);
+        dateSelected.setHours(0, 0, 0, 0);
 
-        const end = new Date();
-        end.setUTCDate(end.getUTCDate() - 1);
-        end.setUTCHours(0, 0, 0, 0);
-
-        return (
-          date.getTime() > start.getTime() && date.getTime() <= end.getTime()
-        );
+        // Allow any date in past or today, but not future dates
+        return dateSelected.getTime() <= today.getTime();
       },
       {
-        message: messages.forms.date(
-          new Date(2023, 9, 7).toLocaleDateString(),
-          "yesterday",
-        ),
+        message: "Please enter a date that is not in the future.",
       },
     ),
   content: z.string().min(1500, messages.forms.diaryEntry.content),

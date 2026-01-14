@@ -1,6 +1,4 @@
-"use client";
-
-// REVIEWED - 05
+// REVIEWED - 08
 
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
@@ -16,7 +14,11 @@ import { Button } from "../ui/button";
 
 const ctas = [
   {
-    title: 'Get "A Human But From Gaza"',
+    title: "Hire PalestinianCauses for a one-time service.",
+    href: "mailto:palestiniancauses.com",
+  },
+  {
+    title: 'Get the "A Human But From Gaza" book today.',
     href: "/a-human-but-from-gaza",
   },
   {
@@ -24,34 +26,32 @@ const ctas = [
     href: "https://palestiniancauses.com/support",
   },
   {
-    title: "Amplify Our Voice: Follow and Share",
+    title: "Amplify our Work—Follow our Social Networks.",
     href: "https://www.instagram.com/palestiniancauses",
-  },
-  {
-    title: "Contact Us",
-    href: "mailto:palestiniancauses.com",
   },
 ];
 
 export const CTA = function CTA() {
   return (
     <Container as="section" className="my-12 max-w-7xl xl:my-24">
-      <SectionHeadingBadge as="h2" number="05" className="mb-8">
-        Join Our Mission
+      <SectionHeadingBadge as="h2" number="06" className="mb-8">
+        Partner With Us
       </SectionHeadingBadge>
       <SectionHeading
         as="h3"
         className="mb-8 max-w-none lg:!max-w-2xl xl:!max-w-3xl">
-        Amplify Truth, Foster Resilience: Join Our Mission.
+        Ready to Partner? Let&apos;s Build Something Extraordinary Together!
       </SectionHeading>
       <Paragraph className="mb-12 xl:mb-24">
-        You&apos;ve learned about our commitment to illuminating the Gazan
-        experience and standing in unwavering solidarity with Gaza. Now, help us
-        transform awareness into meaningful action. Your support enables us to
-        share authentic narratives like those in &ldquo;A Human But From
-        Gaza,&ldquo; challenge harmful stereotypes, and invest in the long-term
-        vision of empowering Gazan creativity and expertise for a
-        self-sufficient future.
+        Now that you have read our mission and efforts to deliver the best
+        digital services to the world, see how Gazan experience turns into
+        innovation and excellence. It is your turn to turn awareness into
+        action. By hiring PalestinianCauses, you enjoy exceptional
+        output—empowering Gazan talent, funding projects that demonstrate Gazan
+        excellence, and championing sustainable development. By partnering with
+        us, you are helping to tell crucial stories, show how resilience makes
+        excellence, and invest in the long term empowerment of Gazan creativity
+        and expertise for a self-reliant future.
       </Paragraph>
       <ul className="grid h-full grid-rows-4">
         {ctas.map(({ title, href }) => (

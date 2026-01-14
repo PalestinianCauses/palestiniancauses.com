@@ -1,538 +1,343 @@
-// REVIEWED - 09
+// REVIEWED - 31
 
 import { CollectionConfig } from "payload";
-import slugify from "slugify";
 
-import { messages } from "@/lib/messages";
-import { validateDateInRange } from "@/lib/utils/dates";
+import { hasPermissionAccess, isSelf } from "@/access/global";
+import { hasPermission } from "@/lib/permissions";
+import { Room, User } from "@/payload-types";
+
+import { AboutField } from "./rooms/fields/about";
+import { EducationField } from "./rooms/fields/education";
+import { ExperienceField } from "./rooms/fields/experience";
+import { InformationField } from "./rooms/fields/information";
+import { QualificationField } from "./rooms/fields/qualification";
+import { Skill } from "./rooms/fields/skill";
+
+export const ServicesHeadline =
+  "Crafting Solutions to Elevate Your Vision: My Core Offerings";
+export const ServicesHeadlineSub = "A Menu of Professional Services";
+
+export const PackagesHeadline =
+  "Your Roadmap to Results: A Clear Path to Achieving Your Goals";
+export const PackagesHeadlineSub = "Curated Packages for Common Needs";
 
 export const Rooms: CollectionConfig = {
   slug: "rooms",
   access: {
-    // create: async ({ req }) => {
-    //   const { user } = req;
-    //   if (!user) return false;
+    create: async ({ req }) => {
+      if (
+        hasPermissionAccess({ resource: "rooms", action: "create" })({ req })
+      ) {
+        const room = await req.payload.find({
+          collection: "rooms",
+          where: { user: { equals: req.user?.id } },
+        });
 
-    //   if (user.role === "admin") return true;
+        if (room.docs.length === 0) return true;
 
-    //   if (user.role === "system-user") {
-    //     const room = await req.payload.find({
-    //       collection: "rooms",
-    //       where: { user: { equals: user.id } },
-    //     });
+        return false;
+      }
 
-    //     if (room.docs.length === 0) return true;
-
-    //     return false;
-    //   }
-
-    //   return false;
-    // },
-    // read: isAdminOrSelf,
-    // update: isAdminOrSelf,
-    // delete: isAdminOrSelf,
-    create: () => false,
-    read: () => false,
-    update: () => false,
-    delete: () => false,
+      return false;
+    },
+    read: ({ req }) =>
+      hasPermissionAccess({ resource: "rooms", action: "read" })({ req }) ||
+      isSelf("user")({ req }),
+    update: ({ req }) =>
+      hasPermissionAccess({ resource: "rooms", action: "update" })({ req }) ||
+      isSelf("user")({ req }),
+    delete: ({ req }) =>
+      hasPermissionAccess({ resource: "rooms", action: "delete" })({ req }) ||
+      isSelf("user")({ req }),
   },
   admin: {
-    group: "Content",
-    defaultColumns: ["id", "name", "slug", "createdAt"],
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "rooms",
+        action: "manage",
+      }),
+    group: "Rooms Content",
+    defaultColumns: ["id", "name", "slug", "status", "createdAt"],
     useAsTitle: "name",
+    preview: (doc) => {
+      if (doc.slug)
+        return [process.env.NEXT_PUBLIC_URL! + doc.slug].join("/rooms/");
+      return null;
+    },
   },
   fields: [
     {
-      admin: {
-        readOnly: true,
-        description: "The unique identifier for this room",
-      },
-      label: "Room Name",
-      name: "name",
-      type: "text",
-      unique: true,
-      required: true,
-    },
-    {
-      admin: {
-        readOnly: true,
-        description: "URL-friendly version of the room name",
-      },
-      label: "Room Slug",
-      name: "slug",
-      type: "text",
-      unique: true,
-      required: true,
-    },
-    {
-      admin: {
-        description:
-          "Personal and professional information displayed at the top of the room",
-      },
-      label: "Hero Section",
-      name: "hero",
-      type: "group",
-      fields: [
+      type: "tabs",
+      tabs: [
         {
-          admin: {
-            description:
-              "Your full name as you want it to appear professionally",
-          },
-          label: "Name",
-          name: "nameProfessional",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: { description: "Your current professional role or title" },
-          label: "Professional Title",
-          name: "titleProfessional",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: {
-            description:
-              "A brief overview of your professional background and expertise",
-          },
-          label: "Professional Description",
-          name: "descriptionProfessional",
-          type: "textarea",
-          required: true,
-        },
-        {
-          admin: {
-            description: "Optional professional head-shot or profile picture",
-          },
-          label: "Professional Image",
-          name: "imageProfessional",
-          type: "upload",
-          relationTo: "media",
-          hasMany: false,
-          required: false,
-        },
-      ],
-    },
-    {
-      admin: {
-        description: "Your academic background and educational achievements",
-      },
-      label: "Education",
-      name: "education",
-      type: "array",
-      required: true,
-      fields: [
-        {
-          admin: { description: "Name of the educational institution" },
-          label: "Institution",
-          name: "institution",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: { description: "Degree or qualification earned" },
-          label: "Degree",
-          name: "degree",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: { description: "Current status of your education" },
-          label: "Status",
-          name: "status",
-          type: "select",
-          options: [
-            { label: "In Progress", value: "in-progress" },
-            { label: "Completed", value: "completed" },
-            { label: "Cancelled", value: "cancelled" },
-          ],
-          required: true,
-        },
-        {
-          admin: {
-            description: "When you started this educational program",
-            date: {
-              pickerAppearance: "monthOnly",
-              minDate: new Date(2010, 0, 1, 0, 0, 0, 0),
-              maxDate: new Date(
-                new Date(
-                  new Date().setUTCDate(new Date().getUTCDate() - 1),
-                ).setUTCHours(0, 0, 0, 0),
-              ),
-            },
-          },
-          label: "Start Date",
-          name: "dateStart",
-          type: "date",
-          required: true,
-        },
-        {
-          admin: {
-            condition: (_, siblingData) => siblingData.status !== "in-progress",
-            description: "When you completed or ended this educational program",
-            date: { pickerAppearance: "monthOnly" },
-          },
-          label: "End Date",
-          name: "dateEnd",
-          type: "date",
-          required: true,
-          validate: (value, { siblingData }) => {
-            if (
-              !("dateStart" in siblingData) ||
-              !siblingData.dateStart ||
-              !(
-                siblingData.dateStart instanceof Date ||
-                typeof siblingData.dateStart === "string"
-              )
-            )
-              return messages.forms.required("start date");
-
-            const start = new Date(siblingData.dateStart);
-            const end = new Date();
-            end.setUTCDate(end.getUTCDate() - 1);
-
-            return validateDateInRange(
-              value,
-              start,
-              end,
-              messages.forms.required("end date"),
-              messages.forms.valid("end date"),
-              messages.forms.date(start.toLocaleDateString(), "yesterday"),
-            );
-          },
-        },
-        {
-          admin: { description: "Details about your studies and achievements" },
-          label: "Description",
-          name: "description",
-          type: "textarea",
-          required: true,
-        },
-      ],
-    },
-    {
-      admin: { description: "Your work history and professional activities" },
-      label: "Experience",
-      name: "experience",
-      type: "array",
-      required: true,
-      fields: [
-        {
-          admin: { description: "Type of experience you want to add" },
-          label: "Type",
-          name: "type",
-          type: "select",
-          options: [
-            { label: "Employment", value: "employment" },
-            { label: "External Activities", value: "activity" },
-          ],
-          defaultValue: "employment",
-          required: true,
-        },
-        {
-          admin: {
-            condition: (_, siblingData) => siblingData.type === "employment",
-            description: "Name of the company you worked for",
-          },
-          label: "Company",
-          name: "company",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: {
-            condition: (_, siblingData) => siblingData.type === "activity",
-            description: "Name of the organization you were involved with",
-          },
-          label: "Organization",
-          name: "organization",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: {
-            condition: (_, siblingData) => siblingData.type === "activity",
-            description:
-              "Name of the activity or project you were involved with",
-          },
-          label: "Activity Title",
-          name: "title",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: { description: "Your position or role in this experience" },
-          label: "Position",
-          name: "position",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: { description: "Indicate if this was a remote position" },
-          label: "Is Remote",
-          name: "isRemote",
-          type: "checkbox",
-          defaultValue: false,
-        },
-        {
-          admin: {
-            condition: (_, siblingData) => siblingData.isRemote === false,
-            description: "Physical location of the work-place",
-          },
-          label: "Location",
-          name: "location",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: {
-            description: "When you started this position",
-            date: {
-              pickerAppearance: "monthOnly",
-              minDate: new Date(2010, 0, 1, 0, 0, 0, 0),
-              maxDate: new Date(
-                new Date(
-                  new Date().setUTCDate(new Date().getUTCDate() - 1),
-                ).setUTCHours(0, 0, 0, 0),
-              ),
-            },
-          },
-          label: "Start Date",
-          name: "dateStart",
-          type: "date",
-          required: true,
-        },
-        {
-          admin: { description: "Indicate if this is your current position" },
-          label: "Is Current/On Going",
-          name: "isCurrent",
-          type: "checkbox",
-          defaultValue: false,
-        },
-        {
-          admin: {
-            condition: (_, siblingData) => siblingData.isCurrent === false,
-            description: "When you ended this position",
-            date: { pickerAppearance: "monthOnly" },
-          },
-          label: "End Date",
-          name: "dateEnd",
-          type: "date",
-          required: true,
-          validate: (value, { siblingData }) => {
-            if (
-              !("dateStart" in siblingData) ||
-              !siblingData.dateStart ||
-              !(
-                siblingData.dateStart instanceof Date ||
-                typeof siblingData.dateStart === "string"
-              )
-            )
-              return messages.forms.required("start date");
-
-            const start = new Date(siblingData.dateStart);
-            const end = new Date();
-            end.setUTCDate(end.getUTCDate() - 1);
-
-            return validateDateInRange(
-              value,
-              start,
-              end,
-              messages.forms.required("end date"),
-              messages.forms.valid("end date"),
-              messages.forms.date(start.toLocaleDateString(), "yesterday"),
-            );
-          },
-        },
-        {
-          admin: {
-            description:
-              "Add a URL to the company's website, social media profile, or official announcement",
-          },
-          label: "Link",
-          name: "link",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: {
-            description:
-              "Provide a detailed description of your work, achievements, and responsibilities",
-          },
-          label: "Description",
-          name: "description",
-          type: "textarea",
-          required: true,
-        },
-      ],
-    },
-    {
-      admin: {
-        description:
-          "List your professional qualifications' courses and certifications",
-      },
-      label: "Qualifications",
-      name: "qualification",
-      type: "array",
-      required: true,
-      fields: [
-        {
-          admin: {
-            description: "Enter the full title of your course or certification",
-          },
-          label: "Title",
-          name: "title",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: {
-            description:
-              "Name of the organization or platform that issued the qualification",
-          },
-          label: "Issuer",
-          name: "issuer",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: {
-            description: "When you started this qualification",
-            date: {
-              pickerAppearance: "monthOnly",
-              minDate: new Date(2010, 0, 1, 0, 0, 0, 0),
-              maxDate: new Date(
-                new Date(
-                  new Date().setUTCDate(new Date().getUTCDate() - 1),
-                ).setUTCHours(0, 0, 0, 0),
-              ),
-            },
-          },
-          label: "Start Date",
-          name: "dateStart",
-          type: "date",
-          required: true,
-        },
-        {
-          admin: {
-            description: "When you completed or received this qualification",
-            date: { pickerAppearance: "monthOnly" },
-          },
-          label: "End Date",
-          name: "dateEnd",
-          type: "date",
-          required: true,
-          validate: (value, { siblingData }) => {
-            if (
-              !("dateStart" in siblingData) ||
-              !siblingData.dateStart ||
-              !(
-                siblingData.dateStart instanceof Date ||
-                typeof siblingData.dateStart === "string"
-              )
-            )
-              return messages.forms.required("start date");
-
-            const start = new Date(siblingData.dateStart);
-            const end = new Date();
-            end.setUTCDate(end.getUTCDate() - 1);
-
-            return validateDateInRange(
-              value,
-              start,
-              end,
-              messages.forms.required("end date"),
-              messages.forms.valid("end date"),
-              messages.forms.date(start.toLocaleDateString(), "yesterday"),
-            );
-          },
-        },
-        {
-          admin: {
-            description: "Optional URL to the organization or course page",
-          },
-          label: "Link",
-          name: "link",
-          type: "text",
-          required: false,
-        },
-        {
-          admin: {
-            description:
-              "Indicate if you received a certificate for this qualification",
-          },
-          label: "Has Certificate",
-          name: "hasCertificate",
-          type: "checkbox",
-          defaultValue: false,
-        },
-        {
-          admin: {
-            condition: (_, siblingData) => siblingData.hasCertificate === true,
-            description: "Upload your certificate document or image",
-          },
-          label: "Certificate",
-          name: "certificate",
-          type: "upload",
-          relationTo: "media",
-          hasMany: false,
-          required: true,
-        },
-        {
-          admin: {
-            description:
-              "Describe what you learned and achieved through this qualification",
-          },
-          label: "Description",
-          name: "description",
-          type: "textarea",
-          required: true,
-        },
-      ],
-    },
-    {
-      admin: { description: "List your skills and expertise levels" },
-      label: "Skills",
-      name: "skills",
-      type: "array",
-      required: true,
-      fields: [
-        {
-          admin: { description: "Group your skills into categories" },
-          label: "Category",
-          name: "category",
-          type: "text",
-          required: true,
-        },
-        {
-          admin: { description: "List individual skills within this category" },
-          label: "Category Skills",
-          name: "skillsCategorized",
-          type: "array",
-          required: true,
+          label: "Basic Information",
+          description:
+            "Essential room configuration and identification details",
           fields: [
             {
-              admin: { description: "Enter the name of your skill" },
-              label: "Name",
-              name: "name",
-              type: "text",
+              admin: { hidden: true },
+              label: "Associated User Account",
+              name: "user",
+              type: "relationship",
+              relationTo: "users",
+              unique: true,
               required: true,
             },
             {
               admin: {
-                description: "Select your proficiency level for this skill",
+                description:
+                  "A unique, memorable name for this professional room. This will be displayed prominently and used in the URL.",
+                position: "sidebar",
               },
-              label: "Level",
-              name: "level",
+              label: "Room Name",
+              name: "name",
+              type: "text",
+              maxLength: 16,
+              unique: true,
+              required: true,
+            },
+            {
+              admin: {
+                readOnly: true,
+                components: {
+                  Field: {
+                    path: "../components/payload/fields/slug#default",
+                    clientProps: {
+                      description:
+                        "A URL-friendly, unique identifier automatically generated from the room name.",
+                      sourcePath: "name",
+                      slugPath: "slug",
+                      label: "URL Slug",
+                      readOnly: true,
+                      disabled: true,
+                    },
+                  },
+                },
+                position: "sidebar",
+              },
+              label: "URL Slug",
+              name: "slug",
+              type: "text",
+              unique: true,
+              required: true,
+            },
+            {
+              admin: {
+                description:
+                  "Controls the visibility and accessibility of this room to public visitors.",
+                position: "sidebar",
+              },
+              label: "Publication Status",
+              name: "status",
               type: "select",
               options: [
-                { label: "Beginner", value: "beginner" },
-                { label: "Intermediate", value: "intermediate" },
-                { label: "Advanced", value: "advanced" },
-                { label: "Expert", value: "expert" },
+                { label: "Draft - Not visible to public", value: "draft" },
+                { label: "Published - Visible to public", value: "published" },
               ],
-              defaultValue: "expert",
+              defaultValue: "draft",
               required: true,
+            },
+          ],
+        },
+        {
+          label: "Personal Profile",
+          description: "Personal information and professional identity",
+          fields: [InformationField, AboutField],
+        },
+        {
+          label: "Professional Background",
+          description:
+            "Educational qualifications, work experience, and professional skills",
+          fields: [EducationField, ExperienceField, QualificationField, Skill],
+        },
+        {
+          label: "Business Services",
+          description:
+            "Professional services and service packages offered to clients",
+          fields: [
+            {
+              type: "group",
+              name: "services",
+              label: "Professional Services",
+              admin: {
+                description:
+                  "Configure your professional services offering, including section presentation and service assignments.",
+                condition: (data) =>
+                  data.status === "published" || data.information?.title,
+              },
+              fields: [
+                {
+                  admin: {
+                    description:
+                      "A compelling headline that introduces your services section to visitors.",
+                    position: "sidebar",
+                  },
+                  label: "Services Section Headline",
+                  name: "headline",
+                  type: "text",
+                  defaultValue: ServicesHeadline,
+                  maxLength: 80,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "A descriptive sub-headline that explains the value and purpose of your services.",
+                    position: "sidebar",
+                  },
+                  label: "Services Section Sub-Headline",
+                  name: "headline-sub",
+                  type: "text",
+                  defaultValue: ServicesHeadlineSub,
+                  maxLength: 48,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "Select and organize the professional services you offer to clients and collaborators.",
+                  },
+                  label: "Available Services",
+                  name: "list",
+                  type: "relationship",
+                  relationTo: "rooms-services",
+                  hasMany: true,
+                  required: false,
+                  // eslint-disable-next-line arrow-body-style
+                  filterOptions: (siblingData) => {
+                    return siblingData.user
+                      ? {
+                          user: {
+                            equals: siblingData.user?.id,
+                          },
+                        }
+                      : { user: {} };
+                  },
+                },
+              ],
+            },
+            {
+              type: "group",
+              name: "packages",
+              label: "Service Packages",
+              admin: {
+                description:
+                  "Create bundled service offerings with pricing and comprehensive packages for clients.",
+                condition: (data) =>
+                  data.status === "published" ||
+                  data.services?.list?.length !== 0,
+              },
+              fields: [
+                {
+                  admin: {
+                    description:
+                      "A compelling headline that introduces your service packages to potential clients.",
+                    position: "sidebar",
+                  },
+                  label: "Packages Section Headline",
+                  name: "headline",
+                  type: "text",
+                  defaultValue: PackagesHeadline,
+                  maxLength: 80,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "A descriptive sub-headline explaining your service packages, pricing approach, and value proposition.",
+                    position: "sidebar",
+                  },
+                  label: "Packages Section Sub-Headline",
+                  name: "headline-sub",
+                  type: "text",
+                  defaultValue: PackagesHeadlineSub,
+                  maxLength: 48,
+                  required: true,
+                },
+                {
+                  admin: {
+                    description:
+                      "Configure service packages with bundled offerings, pricing, and comprehensive solutions.",
+                  },
+                  label: "Service Packages",
+                  name: "list",
+                  type: "relationship",
+                  relationTo: "rooms-packages",
+                  hasMany: true,
+                  required: false,
+                  // eslint-disable-next-line arrow-body-style
+                  filterOptions: (siblingData) => {
+                    return siblingData.user
+                      ? {
+                          user: {
+                            equals: siblingData.user.id,
+                          },
+                        }
+                      : { user: {} };
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: "Contact Information",
+          description:
+            "Communication methods and contact details for client inquiries",
+          fields: [
+            {
+              admin: {
+                description:
+                  "Configure multiple contact methods and communication channels for client inquiries and collaboration opportunities.",
+                condition: (data) =>
+                  data.status === "published" || data.information?.title,
+              },
+              label: "Contact Methods",
+              name: "contact",
+              type: "relationship",
+              relationTo: "rooms-contact",
+              hasMany: true,
+              required: false,
+              // eslint-disable-next-line arrow-body-style
+              filterOptions: (siblingData) => {
+                return {
+                  user: {
+                    equals: siblingData.user?.id,
+                  },
+                };
+              },
+            },
+          ],
+        },
+        {
+          label: "Navigation & SEO",
+          description:
+            "Auto-generated navigation and search engine optimization",
+          fields: [
+            {
+              admin: {
+                readOnly: true,
+                description:
+                  "Automatically generated navigation links for sections containing content. These links appear in the room's navigation menu.",
+                position: "sidebar",
+              },
+              label: "Section Navigation Links",
+              name: "links",
+              type: "array",
+              fields: [
+                {
+                  label: "Section Name",
+                  name: "label",
+                  type: "text",
+                  required: true,
+                },
+                {
+                  label: "Section Link",
+                  name: "href",
+                  type: "text",
+                  required: true,
+                },
+              ],
             },
           ],
         },
@@ -541,21 +346,83 @@ export const Rooms: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [
-      async ({ operation, req, data }) => {
-        const { user } = req;
+      ({ operation, req, data }) => {
+        if (!req.user) return data;
 
-        if (!user) return data;
+        if (operation === "create")
+          if (!data.user)
+            // eslint-disable-next-line no-param-reassign
+            data.user = req.user.id;
 
-        if (operation === "create") {
-          const dataModified = data;
+        return data;
+      },
+      ({ data }) => {
+        const links: NonNullable<Room["links"]> = [];
 
-          if (user.firstName) {
-            dataModified.name = `${user.firstName} Room`;
-            dataModified.slug = slugify(user.firstName, { lower: true });
-          }
+        if (
+          data.about &&
+          data.about.paragraphs &&
+          Array.isArray(data.about.paragraphs) &&
+          data.about.paragraphs.length !== 0
+        )
+          links.push({ label: "about", href: "#about" });
 
-          return dataModified;
-        }
+        if (
+          data.education &&
+          data.education.list &&
+          Array.isArray(data.education.list) &&
+          data.education.list.length !== 0
+        )
+          links.push({ label: "education", href: "#education" });
+
+        if (
+          data.experience &&
+          data.experience.list &&
+          Array.isArray(data.experience.list) &&
+          data.experience.list.length !== 0
+        )
+          links.push({ label: "experience", href: "#experience" });
+
+        if (
+          data.qualification &&
+          data.qualification.list &&
+          Array.isArray(data.qualification.list) &&
+          data.qualification.list.length !== 0
+        )
+          links.push({ label: "qualification", href: "#qualification" });
+
+        if (
+          data.skills &&
+          Array.isArray(data.skills) &&
+          data.skills.length !== 0
+        )
+          links.push({ label: "skills", href: "#skills" });
+
+        if (
+          data.services &&
+          data.services.list &&
+          Array.isArray(data.services.list) &&
+          data.services.list.length !== 0
+        )
+          links.push({ label: "services", href: "#services" });
+
+        if (
+          data.packages &&
+          data.packages.list &&
+          Array.isArray(data.packages.list) &&
+          data.packages.list.length !== 0
+        )
+          links.push({ label: "packages", href: "#packages" });
+
+        if (
+          data.contact &&
+          Array.isArray(data.contact) &&
+          data.contact.length !== 0
+        )
+          links.push({ label: "contact", href: "#contact" });
+
+        // eslint-disable-next-line no-param-reassign
+        data.links = links;
 
         return data;
       },

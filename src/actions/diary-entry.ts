@@ -1,15 +1,18 @@
 "use server";
 
-// REVIEWED - 13
+// REVIEWED - 20
+
+import { revalidatePath } from "next/cache";
 
 import { httpStatusesMessages, messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { hasPermission } from "@/lib/permissions";
+import { getAuthentication } from "@/lib/server/auth";
 import { ErrorPayload, ResponseSafeExecute } from "@/lib/types";
 import { isResponseError } from "@/lib/types/guards";
-import { DiaryEntry, User } from "@/payload-types";
+import { DiaryEntry } from "@/payload-types";
 
-import { getAuthentication } from "./auth";
 import { notifySubscribers } from "./notification-subscription";
 
 export const createDiaryEntry = async function createDiaryEntry(
@@ -20,30 +23,33 @@ export const createDiaryEntry = async function createDiaryEntry(
 ): Promise<ResponseSafeExecute<string, string>> {
   const auth = await getAuthentication();
 
-  if (!auth || !auth.user) {
+  if (!auth) {
     return {
       data: null,
       error: messages.actions.diaryEntry.unAuthenticated,
     };
   }
 
-  const { user } = auth;
-
   const response = await actionSafeExecute<DiaryEntry, ErrorPayload>(
     payload.create({
+      req: { user: { ...auth, collection: "users" } },
+      user: auth,
       collection: "diary-entries",
       data: {
         title: data.title,
         date: data.date,
         content: data.content,
-        status:
-          user.role === "admin" || user.role === "system-user"
-            ? "approved"
-            : "pending",
-        author: user,
+        status: hasPermission(auth, {
+          resource: "diary-entries",
+          action: "publish",
+        })
+          ? "approved"
+          : "pending",
+        author: auth,
         isAuthentic: data.isAuthentic,
         isAnonymous: data.isAnonymous,
       },
+      overrideAccess: false,
     }),
     messages.actions.diaryEntry.serverErrorShare,
     isResponseError,
@@ -68,7 +74,7 @@ export const createDiaryEntry = async function createDiaryEntry(
     return { data: null, error: messages.actions.diaryEntry.serverErrorShare };
   }
 
-  if (user.role === "admin" || user.role === "system-user") {
+  if (hasPermission(auth, { resource: "diary-entries", action: "publish" })) {
     const url = `${process.env.NEXT_PUBLIC_URL}/humans-but-from-gaza/${response.data.id}`;
     await notifySubscribers({
       title: data.title,
@@ -78,40 +84,34 @@ export const createDiaryEntry = async function createDiaryEntry(
   }
 
   return {
-    data:
-      user.role === "admin" || user.role === "system-user"
-        ? messages.actions.diaryEntry.successPCAuthor
-        : messages.actions.diaryEntry.success,
+    data: hasPermission(auth, { resource: "diary-entries", action: "publish" })
+      ? messages.actions.diaryEntry.successPCAuthor
+      : messages.actions.diaryEntry.success,
     error: null,
   };
 };
 
-export const getDiaryEntry = async function getDiaryEntry(
+export const deleteDiaryEntry = async function deleteDiaryEntry(
   id: number,
-): Promise<ResponseSafeExecute<DiaryEntry>> {
+): Promise<ResponseSafeExecute<string, string>> {
+  const auth = await getAuthentication();
+
+  if (!auth)
+    return { data: null, error: messages.actions.user.unAuthenticated };
+
   const response = await actionSafeExecute(
-    payload.findByID({
+    payload.delete({
       collection: "diary-entries",
       id,
-      depth: 0,
     }),
-    messages.actions.diaryEntry.serverErrorGet,
+    messages.actions.diaryEntry.delete.serverError,
   );
 
-  return response;
-};
+  if (!response.data || response.error) return response;
 
-export const getDiaryEntryAuthor = async function getDiaryEntryAuthor(
-  id: number,
-): Promise<ResponseSafeExecute<Partial<User>>> {
-  const response = await actionSafeExecute(
-    payload.findByID({
-      collection: "users",
-      id,
-      select: { firstName: true, lastName: true, role: true },
-    }),
-    messages.actions.diaryEntry.author.serverError,
-  );
+  // Comments are automatically deleted via collection beforeDelete hook
 
-  return response;
+  revalidatePath("/profile");
+
+  return { data: messages.actions.diaryEntry.delete.success, error: null };
 };

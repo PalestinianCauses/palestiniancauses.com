@@ -1,21 +1,22 @@
 "use server";
 
-// REVIEWED - 08
+// REVIEWED - 15
+
+import { revalidatePath } from "next/cache";
 
 import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
+import { getAuthentication } from "@/lib/server/auth";
 import { ResponseSafeExecute } from "@/lib/types";
 import { Comment } from "@/payload-types";
-
-import { getAuthentication } from "./auth";
 
 export const createComment = async function createComment(
   data: Omit<Comment, "id" | "createdAt" | "updatedAt">,
 ): Promise<ResponseSafeExecute<string, string>> {
   const auth = await getAuthentication();
 
-  if (!auth || !auth.user)
+  if (!auth)
     return {
       data: null,
       error: messages.actions.comment.createUnAuthenticated,
@@ -23,49 +24,20 @@ export const createComment = async function createComment(
 
   const response = await actionSafeExecute(
     payload.create({
+      req: { user: { ...auth, collection: "users" } },
+      user: auth,
       collection: "comments",
       data,
+      overrideAccess: false,
     }),
     messages.actions.comment.serverErrorCreate,
   );
 
   if (!response.data || response.error) return response;
 
+  revalidatePath("/profile");
+
   return { data: messages.actions.comment.successCreate, error: null };
-};
-
-export const getCommentRepliesCount = async function getCommentRepliesCount(
-  id: number,
-): Promise<number> {
-  const response = await actionSafeExecute(
-    payload.count({
-      collection: "comments",
-      where: { parent: { equals: id } },
-    }),
-    messages.actions.comment.replies.serverErrorCount,
-  );
-
-  if (!response.data || response.error) return 0;
-
-  return response.data.totalDocs || 0;
-};
-
-export const getComment = async function getComment(
-  id: number,
-): Promise<ResponseSafeExecute<Comment & { repliesCount: number }>> {
-  const response = await actionSafeExecute(
-    payload.findByID({
-      collection: "comments",
-      id,
-      depth: 2,
-    }),
-    messages.actions.comment.serverErrorGet,
-  );
-
-  if (!response.data || response.error) return response;
-
-  const repliesCount = await getCommentRepliesCount(id);
-  return { data: { ...response.data, repliesCount }, error: null };
 };
 
 export const deleteComment = async function deleteComment(
@@ -73,15 +45,22 @@ export const deleteComment = async function deleteComment(
 ): Promise<ResponseSafeExecute<string, string>> {
   const auth = await getAuthentication();
 
-  if (!auth || !auth.user)
+  if (!auth)
     return {
       data: null,
       error: messages.actions.comment.deleteUnAuthenticated,
     };
 
-  const comment = await getComment(id);
+  const comment = await actionSafeExecute(
+    payload.findByID({
+      collection: "comments",
+      id,
+      depth: 1,
+    }),
+    messages.actions.comment.serverErrorGet,
+  );
 
-  if (!comment.data || comment.error)
+  if (!comment.data || comment.error || comment.data.status !== "approved")
     return {
       data: null,
       error: messages.actions.comment.notFound,
@@ -90,7 +69,7 @@ export const deleteComment = async function deleteComment(
   if (
     (typeof comment.data.user === "object"
       ? comment.data.user.id
-      : comment.data.user) !== auth.user.id
+      : comment.data.user) !== auth.id
   )
     return {
       data: null,
@@ -98,42 +77,36 @@ export const deleteComment = async function deleteComment(
     };
 
   const response = await actionSafeExecute(
-    payload.delete({ collection: "comments", id }),
+    payload.delete({
+      req: { user: { ...auth, collection: "users" } },
+      user: auth,
+      collection: "comments",
+      id,
+      overrideAccess: false,
+    }),
     messages.actions.comment.serverErrorDelete,
   );
 
   if (!response.data || response.error) return response;
 
+  // Replies are automatically deleted via collection `beforeDelete` hook
+
+  // Revalidate profile page for activity comments
+  revalidatePath("/profile");
+
+  // Revalidate public profile pages where this comment might appear
+  // Get comment's user to revalidate their profile page
+  const userCommentId =
+    typeof comment.data.user === "object"
+      ? comment.data.user.id
+      : comment.data.user;
+
+  if (userCommentId) revalidatePath(`/user/${userCommentId}`);
+
   return { data: messages.actions.comment.successDelete, error: null };
 };
 
-export const deleteCommentReplies = async function deleteCommentReplies(
-  ids: number[],
-) {
-  const auth = await getAuthentication();
-
-  if (!auth || !auth.user) return;
-
-  const deletePromises = ids.map(async (id) => {
-    const response = await actionSafeExecute(
-      payload.delete({
-        collection: "comments",
-        id,
-      }),
-      messages.actions.comment.serverErrorDelete,
-    );
-
-    if (!response.data || response.error)
-      console.error(
-        "Error in `deleteCommentReplies` in `comments.ts` while trying to delete comment replies",
-        id,
-        response,
-      );
-  });
-
-  await Promise.all(deletePromises);
-};
-
+// limited document update no need to override access
 export const voteOnComment = async function voteOnComment({
   id,
   vote,
@@ -145,17 +118,22 @@ export const voteOnComment = async function voteOnComment({
 > {
   const auth = await getAuthentication();
 
-  if (!auth || !auth.user)
+  if (!auth)
     return {
       data: null,
       error: messages.actions.comment.votes.unAuthenticated,
     };
 
-  const { user } = auth;
+  const comment = await actionSafeExecute(
+    payload.findByID({
+      collection: "comments",
+      id,
+      depth: 1,
+    }),
+    messages.actions.comment.serverErrorGet,
+  );
 
-  const comment = await getComment(id);
-
-  if (!comment.data || comment.error)
+  if (!comment.data || comment.error || comment.data.status !== "approved")
     return { data: null, error: messages.actions.comment.notFound };
 
   const votes = comment.data.votes || [];
@@ -165,7 +143,7 @@ export const voteOnComment = async function voteOnComment({
     (voteElement) =>
       (typeof voteElement.user === "object"
         ? voteElement.user.id
-        : voteElement.user) === user.id,
+        : voteElement.user) === auth.id,
   );
 
   if (voteExisting) {
@@ -175,11 +153,11 @@ export const voteOnComment = async function voteOnComment({
 
     if (voteExisting.vote !== vote)
       votesUpdated.push({
-        user,
+        user: auth,
         vote,
       });
   } else {
-    votesUpdated = [...votes, { user, vote }];
+    votesUpdated = [...votes, { user: auth, vote }];
   }
 
   const upVotes = votesUpdated.filter((v) => v.vote === "up").length;

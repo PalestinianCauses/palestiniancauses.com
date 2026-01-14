@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 09
+// REVIEWED - 12
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 import { SafeHydrate } from "@/components/globals/safe-hydrate";
 import { Paragraph } from "@/components/globals/typography";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/globals/user-avatar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -52,7 +52,7 @@ export const CreateCommentForm = function CreateCommentForm({
 
   const { isLoading, data: user } = useUser();
 
-  const { createComment } = useComment();
+  const { createComment } = useComment(user);
 
   const form = useForm<CreateCommentSchema>({
     mode: "onBlur",
@@ -67,17 +67,21 @@ export const CreateCommentForm = function CreateCommentForm({
       id: "create-comment",
     });
 
+    form.reset();
+
     createComment.mutate(
       {
-        user,
+        user: user.id,
         on,
         content: data.content,
         status: "approved",
       },
       {
         onSuccess: () => {
-          form.reset();
           queryClient.invalidateQueries({ queryKey: ["comments"] });
+        },
+        onError: () => {
+          form.setValue("content", data.content);
         },
       },
     );
@@ -107,13 +111,9 @@ export const CreateCommentForm = function CreateCommentForm({
             </div>
           ) : null}
           <div className="flex flex-col items-start gap-5 md:flex-row">
-            <Avatar className="h-11 w-11 ring-1 ring-input md:h-12 md:w-12">
-              <AvatarFallback className="bg-muted/50 text-xl">
-                {user && user.firstName
-                  ? user.firstName.charAt(0).toUpperCase()
-                  : "A"}
-              </AvatarFallback>
-            </Avatar>
+            {user ? (
+              <UserAvatar user={user} size="user-avatar" className="w-16" />
+            ) : null}
             <FormField
               control={form.control}
               name="content"
@@ -123,6 +123,7 @@ export const CreateCommentForm = function CreateCommentForm({
                   <FormControl>
                     <Textarea
                       {...field}
+                      data-testid="comment-content-input"
                       rows={6}
                       disabled={createComment.isPending}
                       className="!mb-2 resize-none"
@@ -134,6 +135,7 @@ export const CreateCommentForm = function CreateCommentForm({
             />
           </div>
           <Button
+            data-testid="comment-submit-button"
             className="w-full self-end text-center md:w-max"
             {...(user
               ? { type: "submit", disabled: createComment.isPending }

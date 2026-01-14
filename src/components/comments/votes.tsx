@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 03
+// REVIEWED - 04
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { HTMLAttributes, useMemo } from "react";
 
@@ -18,7 +18,7 @@ export const CommentVotes = function CommentVotes({
   user: User | null | undefined;
   comment: Comment;
 } & HTMLAttributes<HTMLDivElement>) {
-  const { voteOnComment } = useComment();
+  const { voteOnComment } = useComment(user);
 
   const userVote: false | "up" | "down" = useMemo(() => {
     if (!user || !comment.votes) return false;
@@ -41,7 +41,6 @@ export const CommentVotes = function CommentVotes({
     <div
       className={cn(
         "col-start-1 row-start-4 row-end-4 flex h-full flex-row items-center justify-start gap-3 md:col-start-1 md:row-start-2 md:flex-col",
-        { "pointer-events-none opacity-50": voteOnComment.isPending },
         className,
       )}>
       <Button

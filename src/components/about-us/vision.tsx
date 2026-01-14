@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 03
 
 import { Container } from "../globals/container";
 import {
@@ -10,33 +10,40 @@ import {
 export const Vision = function Vision() {
   return (
     <Container as="section" className="my-12 max-w-7xl xl:my-24">
-      <SectionHeadingBadge as="h2" number="03" className="mb-8">
+      <SectionHeadingBadge as="h2" number="04" className="mb-8">
         Our Vision
       </SectionHeadingBadge>
       <SectionHeading as="h3" className="mb-8">
-        Our Vision for Tomorrow: Illuminating truth today, empowering Gazan
-        talent for a thriving future.
+        Our Vision: A World Where Gazan Innovation Leads Global Progress
       </SectionHeading>
       <Paragraph className="mb-8">
-        We envision a world where authentic Gazan narratives are central to
-        global understanding, fostering deep and impactful solidarity,
-        especially during crises faced by communities in Gaza. PalestinianCauses
-        strives to be a vital bridge, connecting the world directly to the Gazan
-        experience, ensuring these stories are there for the world to hear,
-        value, and act upon.
+        We aspire for PalestinianCauses to be the agency that clients everywhere
+        choose, not just for excellent outcomes. Still, for the meaningful
+        change, their partnership helps effect.
+      </Paragraph>
+      <Paragraph className="mb-8">
+        Going beyond just backing us in the present, this vision is one of
+        PalestinianCauses being self-sustaining, founded on Gazan talent, where
+        every successful project is a telling, distinguished example of Gazan
+        talent and success; every exceptional creative work is another project
+        driving community development.
+      </Paragraph>
+      <Paragraph className="mb-8">
+        We see PalestinianCauses becoming a major, worldwide brand: Gazan
+        resilience, resourcefulness, and skill, aiding in reshaping how the
+        implications of digital service work are material to economic
+        empowerment. The effect of a direct, self-sustaining community
+        development on our clients can not be overstated.
       </Paragraph>
       <Paragraph>
-        Our ultimate vision extends beyond immediate support to establish
-        PalestinianCauses as a self-sustaining entity rooted in Gazan talent. We
-        aspire to a future where Gazan&apos;s resilience, creativity, and
-        expertise are globally recognized and celebrated, powering impactful
-        services offered through our platform that contribute directly to
-        economic empowerment. This sustainable model will drive community
-        development, cultivate long-term opportunities leveraging Gazan skills,
-        and enable Gazans to rebuild with dignity, achieve self-sufficiency,
-        thrive in freedom, shape their prosperous futures, realize their right
-        to self-determination, and contribute significantly to community renewal
-        and lasting justice.
+        It will all foster the development of long-term aspects and pathways for
+        Gazan opportunity, allowing Gazans to get back to reconstruction with
+        dignity, to perpetuate themselves, to thrive in freedom and safety, to
+        orient their globally diversified futures, to flourish in their moral
+        and human right to self-determination, and, above all, Gazan community
+        revival and enduring justice, while continually creating and delivering
+        outstanding world service to the globe, exhibiting Gazan reality that
+        hardship can solve, evolve, and produce.
       </Paragraph>
     </Container>
   );

@@ -1,4 +1,6 @@
-// REVIEWED - 03
+// REVIEWED - 07
+
+import { Permission } from "@/payload-types";
 
 import {
   ErrorPayload,
@@ -95,12 +97,31 @@ export class SafeExecuteError extends Error {
   }
 }
 
+// Booleans
+export const isDefined = function isDefined(
+  value: unknown,
+): value is Required<NonNullable<typeof value>> {
+  return value !== null && value !== undefined;
+};
+
 // Strings
 export const isString = function isString(value: unknown): value is string {
-  return typeof value === "string";
+  return isDefined(value) && typeof value === "string";
 };
 
 // Numbers
 export const isNumber = function isNumber(value: unknown): value is number {
-  return typeof value === "number";
+  return isDefined(value) && typeof value === "number";
+};
+
+// Objects
+export const isObject = function isObject(value: unknown): value is object {
+  return isDefined(value) && typeof value === "object" && !Array.isArray(value);
+};
+
+// Permissions
+export const isConditionsObject = function isConditionsObject(
+  conditions: Permission["conditions"],
+): conditions is Record<string, unknown> {
+  return isObject(conditions) && !Array.isArray(conditions);
 };

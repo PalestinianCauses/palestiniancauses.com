@@ -1,8 +1,10 @@
 "use client";
 
-// REVIEWED - 11
+// REVIEWED - 19
 import { QueryClientProvider } from "@tanstack/react-query";
-import { PropsWithChildren } from "react";
+import { useRouter } from "next/navigation";
+import { PropsWithChildren, useEffect } from "react";
+import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -14,6 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useAchievementNotifications } from "@/hooks/use-achievement-notifications";
 import { useActivity } from "@/hooks/use-activity";
 import { getQueryClient } from "@/lib/query";
 
@@ -35,6 +38,9 @@ export const ActivityProvider = function ActivityProvider() {
     staySignedIn,
     signOutDueToInActivity,
   } = useActivity();
+
+  // Check for achievement notifications
+  useAchievementNotifications();
 
   if (isFetching || !user) return null;
 
@@ -62,4 +68,19 @@ export const ActivityProvider = function ActivityProvider() {
       </AlertDialogContent>
     </AlertDialog>
   );
+};
+
+export const RedirectProvider = function RedirectProvider({
+  path,
+  messageToast,
+  children,
+}: { path: string; messageToast?: string } & PropsWithChildren) {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (messageToast) toast.error(messageToast);
+    router.push(path);
+  }, [router, path, messageToast]);
+
+  return children;
 };

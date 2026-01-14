@@ -1,4 +1,4 @@
-// REVIEWED - 08
+// REVIEWED - 09
 
 import Image from "next/image";
 import Link from "next/link";
@@ -65,10 +65,13 @@ export const Footer = function Footer() {
               </SubSectionHeading>
             </div>
             <Paragraph small className="mb-8">
-              A mission-driven creative and digital platform dedicated to
-              illuminating the Gazan experience, with an urgent focus on
-              amplifying authentic voices and realities from Gaza during the
-              current crisis.
+              A world-class digital services agency powered by Gazan talent,
+              PalestinianCauses specializes in Branded Web Applications,
+              Strategic Content Creation, Expert Translation Services, and
+              Comprehensive Digital Marketing Solutions. PalestinianCauses is
+              where resilience turns into innovation and excellence, developing
+              and delivering outstanding, globally competitive digital
+              solutions.
             </Paragraph>
             <Paragraph
               small

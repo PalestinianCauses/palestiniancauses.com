@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 04
 
 import { Variants } from "motion/react";
 import {
@@ -16,10 +16,9 @@ import { cn } from "@/lib/utils/styles";
 import { MotionDiv } from "./motion";
 
 export const MarqueeItem = function MarqueeItem({
-  delay = 0,
   className,
   children,
-}: HTMLAttributes<HTMLDivElement> & PropsWithChildren<{ delay?: number }>) {
+}: HTMLAttributes<HTMLDivElement> & PropsWithChildren) {
   return (
     <div className={cn("relative inline-block h-full w-full", className)}>
       {children}
@@ -61,7 +60,11 @@ export const InfiniteMarquee = function InfiniteMarquee({
   };
 
   return (
-    <div className={cn("relative h-full w-full overflow-hidden", className)}>
+    <div
+      className={cn(
+        "relative mx-auto h-full w-full overflow-hidden",
+        className,
+      )}>
       {contentWidth > 0 && (
         <MotionDiv
           ref={marqueeRef}

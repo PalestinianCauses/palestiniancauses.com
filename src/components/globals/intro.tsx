@@ -14,7 +14,7 @@ const navigation = [
 
 export const Intro = function Intro() {
   return (
-    <section className="grid grid-rows-[max-content_1fr_max-content] gap-5 p-5 xl:gap-10 xl:p-10">
+    <section className="grid h-full grid-rows-[max-content_1fr_max-content] gap-5 p-5 xl:gap-10 xl:p-10">
       <nav className="flex flex-wrap items-center justify-between gap-5">
         <Label className="text-base">
           <Link href="/">PalestinianCauses.</Link>

@@ -1,4 +1,4 @@
-/* REVIEWED - 11 */
+/* REVIEWED - 20 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -57,6 +57,60 @@
   src: url("../../assets/fonts/gilroy-black.woff2") format("woff2");
 }
 
+@font-face {
+  font-family: "Alama";
+  font-weight: 400;
+  src: url("../../assets/fonts/FFAlama-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Alama";
+  font-weight: 700;
+  src: url("../../assets/fonts/FFAlama-Bold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "AlamaO";
+  font-weight: 400;
+  src: url("../../assets/fonts/FFAlamaO-RegularO.woff") format("woff");
+}
+
+@font-face {
+  font-family: "AlamaO";
+  font-weight: 700;
+  src: url("../../assets/fonts/FFAlamaO-BoldO.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Mufreh";
+  font-weight: 400;
+  src: url("../../assets/fonts/FFMufreh-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "ShamelSansOne";
+  font-weight: 300;
+  src: url("../../assets/fonts/FFShamelSansOne-Light.woff") format("woff");
+}
+
+@font-face {
+  font-family: "ShamelSansOne";
+  font-weight: 400;
+  src: url("../../assets/fonts/FFShamelSansOne-Normal.woff") format("woff");
+}
+
+@font-face {
+  font-family: "ShamelSansOne";
+  font-weight: 500;
+  src: url("../../assets/fonts/FFShamelSansOne-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: "ShamelSansOne";
+  font-weight: 700;
+  src: url("../../assets/fonts/FFShamelSansOne-Bold.woff") format("woff");
+}
+
 @keyframes highlight {
   0% {
     background-color: rgba(255, 255, 255, 0);
@@ -89,6 +143,10 @@
     @apply bg-background text-foreground;
   }
 
+  .ltr {
+    direction: ltr;
+  }
+
   .highlight {
     &::before {
       animation-name: highlight;
@@ -97,6 +155,25 @@
       animation-iteration-count: infinite;
       animation-duration: 1s;
     }
+  }
+
+  input[type="search"]::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  input[type="search"]::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  input[type="search"]::-webkit-search-decoration,
+  input[type="search"]::-webkit-search-results-button,
+  input[type="search"]::-webkit-search-results-decoration,
+  input[type="search"]::-webkit-search-cancel-button {
+    display: none;
   }
 }
 
@@ -117,5 +194,49 @@
       BlinkMacSystemFont,
       sans-serif;
     font-stretch: 150%;
+  }
+
+  .section-padding-start {
+    @apply pt-12 lg:pt-24 xl:pt-32;
+  }
+
+  .section-padding-end {
+    @apply pb-12 lg:pb-24 xl:pb-32;
+  }
+
+  .section-padding-start-lg {
+    @apply pt-24 lg:pt-32 xl:pt-48;
+  }
+
+  .section-padding-end-lg {
+    @apply pb-24 lg:pb-32 xl:pb-48;
+  }
+
+  .section-padding-start-xl {
+    @apply pt-48 lg:pt-32 xl:pt-48;
+  }
+
+  .section-padding-end-xl {
+    @apply pb-48 lg:pb-32 xl:pb-48;
+  }
+
+  .section-margin-start {
+    @apply mt-12 lg:mt-24 xl:mt-32;
+  }
+
+  .section-gap {
+    @apply gap-12 lg:gap-24 xl:gap-32;
+  }
+
+  .section-gap-sm {
+    @apply gap-6 lg:gap-12 xl:gap-24;
+  }
+
+  .section-heading-highlight-primary-foreground {
+    @apply before:!inset-y-[initial] before:-inset-x-2.5 before:!bottom-0 before:h-1/2 before:bg-primary/15 before:ring-primary-foreground;
+  }
+
+  .section-heading-highlight-primary {
+    @apply before:!inset-y-[initial] before:-inset-x-2.5 before:!bottom-0 before:h-1/2 before:bg-primary-foreground/15 before:ring-primary;
   }
 }

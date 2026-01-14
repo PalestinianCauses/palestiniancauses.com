@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 07
+// REVIEWED - 09
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -51,9 +51,12 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
       id: "create-diary-entry",
     });
 
+    // Format date as YYYY-MM-DD using original date directly
+    const dateString = format(data.date, "yyyy-MM-dd");
+
     createDiaryEntry.mutate({
       ...data,
-      date: data.date.toISOString(),
+      date: dateString,
     });
   };
 
@@ -69,7 +72,11 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
                 <FormItem>
                   <FormLabel>Diary Title</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={createDiaryEntry.isPending} />
+                    <Input
+                      {...field}
+                      disabled={createDiaryEntry.isPending}
+                      data-testid="diary-title-input"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -91,7 +98,8 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
                         className={cn(
                           "w-full items-center justify-start text-left font-normal",
                           !field.value && "text-muted-foreground",
-                        )}>
+                        )}
+                        data-testid="diary-date-trigger">
                         <CalendarIcon />
                         {field.value ? (
                           format(field.value, "PPP")
@@ -102,10 +110,16 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
+                        data-testid="diary-date-calendar"
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
                         initialFocus
+                        disabled={(date) => {
+                          const today = new Date();
+                          today.setHours(0, 0, 0, 0);
+                          return date > today;
+                        }}
                       />
                     </PopoverContent>
                   </Popover>
@@ -126,6 +140,7 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
                   {...field}
                   rows={20}
                   disabled={createDiaryEntry.isPending}
+                  data-testid="diary-content-input"
                 />
               </FormControl>
               <FormMessage />
@@ -173,7 +188,10 @@ export const CreateDiaryEntryForm = function CreateDiaryEntryForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={createDiaryEntry.isPending}>
+        <Button
+          type="submit"
+          disabled={createDiaryEntry.isPending}
+          data-testid="diary-submit-button">
           {createDiaryEntry.isPending
             ? "Sharing your diary..."
             : "Share my diary"}

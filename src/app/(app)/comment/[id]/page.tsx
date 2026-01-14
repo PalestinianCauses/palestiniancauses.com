@@ -1,14 +1,16 @@
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { ArrowLeftIcon, CornerDownRightIcon } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { getComment } from "@/actions/comments";
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { messages } from "@/lib/messages";
+import { actionSafeExecute } from "@/lib/network";
+import { payload } from "@/lib/payload";
 
 import { PageCommentItem } from "../item";
 
@@ -60,7 +62,14 @@ export default async function CommentPage(props: {
   // eslint-disable-next-line react/destructuring-assignment
   const params = await props.params;
 
-  const comment = await getComment(parseInt(params.id, 10));
+  const comment = await actionSafeExecute(
+    payload.findByID({
+      collection: "comments",
+      id: parseInt(params.id, 10),
+      depth: 2,
+    }),
+    messages.actions.comment.serverErrorGet,
+  );
 
   if (
     !comment.data ||

@@ -1,13 +1,13 @@
 "use client";
 
-// REVIEWED - 05
+// REVIEWED - 09
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/globals/user-avatar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useComment } from "@/hooks/use-comment";
+import { PublicCollectionResponse } from "@/lib/api/public";
 import { messages } from "@/lib/messages";
 import {
   createCommentSchema,
@@ -26,18 +27,23 @@ import {
 } from "@/lib/schemas/comment";
 import { Comment, User } from "@/payload-types";
 
+type InfiniteDataComments = InfiniteData<PublicCollectionResponse<"comments">>;
+
 export const ReplyCommentForm = function ReplyCommentForm({
   user,
   on,
   parent,
+  setIsRepliesOpen,
   onSuccess,
 }: {
   user: User;
+  // eslint-disable-next-line no-unused-vars
+  setIsRepliesOpen?: (boolean: boolean) => void;
   onSuccess: () => void;
 } & Pick<Comment, "on" | "parent">) {
   const queryClient = useQueryClient();
 
-  const { createComment } = useComment();
+  const { createComment } = useComment(user);
 
   const form = useForm<CreateCommentSchema>({
     mode: "onBlur",
@@ -52,37 +58,83 @@ export const ReplyCommentForm = function ReplyCommentForm({
       id: "create-comment",
     });
 
+    const parentId = typeof parent === "object" ? parent.id : parent;
+    const queryKey = ["comment-replies", parentId];
+
+    const optimisticReply: Comment = {
+      id: 1_000_000_000_000_000 + Date.now(),
+      on,
+      parent,
+      user,
+      content: data.content,
+      status: "approved",
+      votes: [],
+      votesScore: 0,
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    };
+
+    queryClient.setQueryData<InfiniteDataComments>(queryKey, (old) => {
+      if (!old?.pages)
+        return {
+          pages: [
+            {
+              docs: [optimisticReply],
+              hasPrevPage: false,
+              hasNextPage: false,
+              limit: 5,
+              pagingCounter: 1,
+              totalDocs: 1,
+              totalPage: 1,
+              totalPages: 1,
+            },
+          ],
+          pageParams: [1],
+        };
+
+      return {
+        ...old,
+        pages: old.pages.map((page, index) => {
+          if (!page?.docs) return page;
+          if (index === old.pages.length - 1)
+            return {
+              ...page,
+              docs: [...page.docs, optimisticReply],
+            };
+
+          return page;
+        }),
+      };
+    });
+
+    queryClient.setQueryData<number>(
+      ["comment-replies-count", parentId],
+      (old) => (old ?? 0) + 1,
+    );
+
+    form.reset();
+    setIsRepliesOpen?.(true);
+
     createComment.mutate(
       {
-        user,
+        user: user.id,
         on,
         parent,
         content: data.content,
         status: "approved",
       },
       {
-        onSettled: (response) => {
-          if (!response || !response.data || response.error) return;
-
-          form.reset();
-
-          try {
-            const parentId = typeof parent === "object" ? parent.id : parent;
-            queryClient.invalidateQueries({
-              queryKey: ["comment-replies", parentId],
-            });
-
-            queryClient.invalidateQueries({
-              queryKey: ["comment-replies-count", parentId],
-            });
-          } catch (error) {
-            console.error(
-              "Error in `createComment.mutate.onSettled` in `ReplyCommentForm` while trying to in-validate queries after reply:",
-              error,
-            );
-          }
-
+        onSuccess: () => {
           onSuccess();
+        },
+        onError: () => {
+          form.setValue("content", data.content);
+        },
+        onSettled: () => {
+          queryClient.invalidateQueries({ queryKey });
+          queryClient.invalidateQueries({
+            queryKey: ["comment-replies-count", parentId],
+          });
         },
       },
     );
@@ -90,11 +142,7 @@ export const ReplyCommentForm = function ReplyCommentForm({
 
   return (
     <div className="flex w-full flex-col items-start gap-5 md:flex-row">
-      <Avatar className="h-8 w-8 ring-1 ring-input md:h-9 md:w-9">
-        <AvatarFallback className="bg-muted/50">
-          {user.firstName ? user.firstName.charAt(0).toUpperCase() : "A"}
-        </AvatarFallback>
-      </Avatar>
+      <UserAvatar user={user} size="user-avatar" className="w-8" />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -108,6 +156,7 @@ export const ReplyCommentForm = function ReplyCommentForm({
                 <FormControl>
                   <Textarea
                     {...field}
+                    data-testid="comment-reply-content-input"
                     disabled={createComment.isPending}
                     rows={4}
                     className="!mb-2 resize-none"
@@ -119,6 +168,7 @@ export const ReplyCommentForm = function ReplyCommentForm({
           />
           <Button
             type="submit"
+            data-testid="comment-reply-submit-button"
             disabled={createComment.isPending}
             className="w-full self-end text-center md:w-max">
             {createComment.isPending ? "Replying..." : "Reply"}

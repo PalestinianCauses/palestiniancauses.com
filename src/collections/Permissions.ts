@@ -1,0 +1,143 @@
+// REVIEWED - 16
+
+import type { CollectionConfig } from "payload";
+
+import { hasPermissionAccess } from "@/access/global";
+import { messages } from "@/lib/messages";
+import { hasPermission } from "@/lib/permissions";
+import { User } from "@/payload-types";
+
+export const collectionsPermissionsOptions = [
+  { label: "Achievement Notifications", value: "achievement-notifications" },
+  { label: "Blogs Categories", value: "blogs-categories" },
+  { label: "Blogs Posts", value: "blogs-posts" },
+  { label: "Blogs Posts Authors", value: "blogs-posts.authors" },
+  { label: "Blogs Posts Status", value: "blogs-posts.status" },
+  { label: "Blogs Rooms", value: "blogs-rooms" },
+  { label: "Comments", value: "comments" },
+  { label: "Comments On", value: "comments.on" },
+  { label: "Comments Parent", value: "comments.parent" },
+  { label: "Comments Status", value: "comments.status" },
+  { label: "Comments User", value: "comments.user" },
+  { label: "Diary Entries", value: "diary-entries" },
+  { label: "Diary Entries Author", value: "diary-entries.author" },
+  { label: "Diary Entries Is Authentic", value: "diary-entries.isAuthentic" },
+  { label: "Diary Entries Status", value: "diary-entries.status" },
+  { label: "Media Private", value: "media-private" },
+  { label: "Media Public", value: "media-public" },
+  { label: "Notifications", value: "notifications" },
+  {
+    label: "Notification Subscriptions",
+    value: "notification-subscriptions",
+  },
+  { label: "Orders", value: "orders" },
+  { label: "Permissions", value: "permissions" },
+  { label: "Products", value: "products" },
+  { label: "Roles", value: "roles" },
+  { label: "Rooms", value: "rooms" },
+  { label: "Room Contact", value: "room-contact" },
+  { label: "Room Packages", value: "room-packages" },
+  { label: "Room Services", value: "room-services" },
+  { label: "Service Categories", value: "service-categories" },
+  { label: "Categories System", value: "service-categories.system" },
+  { label: "Categories Priority", value: "service-categories.priority" },
+  { label: "Users", value: "users" },
+  { label: "Users Previous Role", value: "users.previousRole" },
+  { label: "Users Roles", value: "users.roles" },
+  { label: "Verification Tokens Email", value: "verification-tokens-email" },
+];
+
+export const Permissions: CollectionConfig = {
+  slug: "permissions",
+  access: {
+    create: hasPermissionAccess({ resource: "permissions", action: "create" }),
+    read: hasPermissionAccess({ resource: "permissions", action: "read" }),
+    update: hasPermissionAccess({ resource: "permissions", action: "update" }),
+    delete: hasPermissionAccess({ resource: "permissions", action: "delete" }),
+  },
+  admin: {
+    hidden: ({ user }) =>
+      !hasPermission(user as unknown as User, {
+        resource: "permissions",
+        action: "manage",
+      }),
+    group: "Authorization",
+    defaultColumns: ["name", "resource", "action", "createdAt"],
+    useAsTitle: "name",
+  },
+  fields: [
+    {
+      admin: {
+        description:
+          "Unique name for the permission (e.g., 'users.create', 'posts.read')",
+      },
+      label: "Name",
+      name: "name",
+      type: "text",
+      required: true,
+      unique: true,
+    },
+    {
+      admin: {
+        description: "Description of what this permission allows",
+      },
+      label: "Description",
+      name: "description",
+      type: "textarea",
+      required: false,
+    },
+    {
+      admin: {
+        description: "The resource this permission applies to",
+      },
+      label: "Resource",
+      name: "resource",
+      type: "select",
+      options: collectionsPermissionsOptions,
+      required: true,
+    },
+    {
+      admin: {
+        description: "The action this permission allows",
+      },
+      label: "Action",
+      name: "action",
+      type: "select",
+      options: [
+        { label: "Create", value: "create" },
+        { label: "Read", value: "read" },
+        { label: "Update", value: "update" },
+        { label: "Delete", value: "delete" },
+        { label: "Manage", value: "manage" },
+        { label: "Publish", value: "publish" },
+        { label: "Un-Publish", value: "unpublish" },
+      ],
+      required: true,
+    },
+    {
+      admin: {
+        description:
+          "JSON object defining additional conditions for this permission (optional)",
+      },
+      label: "Conditions",
+      name: "conditions",
+      type: "json",
+      required: false,
+    },
+  ],
+  hooks: {
+    beforeDelete: [
+      async ({ id, req }) => {
+        const roles = await req.payload.find({
+          collection: "roles",
+          where: { permissions: { equals: id } },
+          limit: 1,
+        });
+
+        if (roles.docs.length !== 0) {
+          throw new Error(messages.actions.role.canNotDeleteReferenced);
+        }
+      },
+    ],
+  },
+};

@@ -1,4 +1,4 @@
-// REVIEWED - 05
+// REVIEWED - 09
 import { HTMLAttributes } from "react";
 
 import { cn } from "@/lib/utils/styles";
@@ -38,7 +38,7 @@ export const SectionHeadingBadge = function SectionHeadingBadge({
   );
 };
 
-export const SectionHeading = function SectionHeading({
+export const SectionTitle = function SectionTitle({
   as = "h1",
   className,
   children,
@@ -55,9 +55,36 @@ export const SectionHeading = function SectionHeading({
   return (
     <Component
       className={cn(
-        "max-w-3xl text-4xl font-medium !leading-tight tracking-tight text-foreground lg:max-w-4xl lg:text-5xl lg:!leading-[1.2] xl:max-w-5xl xl:text-6xl xl:!leading-[1.1]",
+        "max-w-4xl text-6xl font-normal !leading-none tracking-tight text-foreground sm:text-7xl lg:max-w-none lg:text-8xl xl:text-9xl",
         className,
       )}>
+      {children}
+    </Component>
+  );
+};
+
+export const SectionHeading = function SectionHeading({
+  as = "h1",
+  className,
+  children,
+  ...props
+}: {
+  as?: "h1" | "h2" | "h3" | "h4" | "p";
+} & HTMLAttributes<HTMLHeadingElement>) {
+  const Component =
+    (as === "h1" && "h1") ||
+    (as === "h2" && "h2") ||
+    (as === "h3" && "h3") ||
+    (as === "h4" && "h4") ||
+    "p";
+
+  return (
+    <Component
+      className={cn(
+        "max-w-3xl text-4xl font-medium !leading-tight tracking-tight text-foreground lg:max-w-4xl lg:text-5xl lg:!leading-[1.2] xl:max-w-5xl xl:text-6xl xl:!leading-[1.1]",
+        className,
+      )}
+      {...props}>
       {children}
     </Component>
   );
@@ -67,15 +94,17 @@ export const SubSectionHeading = function SubSectionHeading({
   as = "h2",
   small = false,
   className,
+  style,
   children,
 }: {
-  as?: "h2" | "h3" | "h4" | "p";
+  as?: "h2" | "h3" | "h4" | "h5" | "p";
   small?: boolean;
 } & HTMLAttributes<HTMLHeadingElement>) {
   const Component =
     (as === "h2" && "h2") ||
     (as === "h3" && "h3") ||
     (as === "h4" && "h4") ||
+    (as === "h5" && "h5") ||
     "p";
 
   return (
@@ -86,7 +115,8 @@ export const SubSectionHeading = function SubSectionHeading({
           ? "text-xl lg:text-2xl xl:text-3xl"
           : "text-2xl lg:text-3xl xl:text-4xl",
         className,
-      )}>
+      )}
+      style={style}>
       {children}
     </Component>
   );
@@ -96,6 +126,7 @@ export const Paragraph = function Paragraph({
   small = false,
   className,
   children,
+  ...props
 }: {
   small?: boolean;
 } & HTMLAttributes<HTMLParagraphElement>) {
@@ -107,7 +138,8 @@ export const Paragraph = function Paragraph({
         "font-normal !leading-relaxed text-muted-foreground",
         small ? "text-lg xl:text-xl" : "text-xl lg:text-2xl",
         className,
-      )}>
+      )}
+      {...props}>
       {children}
     </Component>
   );

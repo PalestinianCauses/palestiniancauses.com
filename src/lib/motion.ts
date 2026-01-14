@@ -1,4 +1,6 @@
-// REVIEWED - 02
+// REVIEWED - 03
+
+import { Easing } from "motion/react";
 
 export const motions = {
   transition: ({
@@ -6,7 +8,7 @@ export const motions = {
     duration,
     delay,
   }: {
-    ease?: string;
+    ease?: Easing;
     duration?: "slow" | "medium" | "fast";
     delay?: number;
   }) => ({
