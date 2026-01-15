@@ -1,4 +1,4 @@
-// REVIEWED - 16
+// REVIEWED - 17
 
 import { Suspense } from "react";
 
@@ -48,6 +48,7 @@ const HeaderImages = async function HeaderImages() {
                 src={src}
                 alt={`Book Image ${index.toString()}`}
                 fill
+                sizes="28.75rem"
                 containerClassName="w-60 lg:w-80"
                 className="!relative object-cover object-top opacity-20"
               />
@@ -84,6 +85,7 @@ const HeaderCover = async function HeaderCover() {
           src={src}
           alt="Book Cover"
           fill
+          sizes="28.75rem"
           placeholder="empty"
           className="!relative object-cover object-left"
         />
