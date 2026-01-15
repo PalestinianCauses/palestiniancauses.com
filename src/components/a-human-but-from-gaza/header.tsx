@@ -1,4 +1,4 @@
-// REVIEWED - 14
+// REVIEWED - 15
 
 import { Suspense } from "react";
 
@@ -36,7 +36,7 @@ const HeaderImages = async function HeaderImages() {
   return (
     <SafeHydrate>
       <InfiniteMarquee speed={80}>
-        {images.map(async (doc, index) => {
+        {images.map((doc, index) => {
           const src = getMediaSizeURL(doc, "room-photograph");
 
           if (!src) return null;
@@ -83,7 +83,6 @@ const HeaderCover = async function HeaderCover() {
           isLoadingElement={isLoadingElement}
           src={src}
           alt="Book Cover"
-          priority
           fill
           placeholder="empty"
           className="!relative object-cover object-left"

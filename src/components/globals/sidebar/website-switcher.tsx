@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 11
+// REVIEWED - 12
 
 import {
   ArrowLeftFromLineIcon,
@@ -109,7 +109,7 @@ export const WebsiteSwitcher = function WebsiteSwitcher({
                   src: roomActive
                     ? getMediaSizeURL(
                         roomActive.information.photograph,
-                        "room-photograph",
+                        "user-avatar",
                       ) || undefined
                     : "/logo-primary.png",
                   alt: roomActive

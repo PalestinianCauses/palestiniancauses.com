@@ -1,6 +1,6 @@
 "use server";
 
-// REVIEWED - 05
+// REVIEWED - 06
 
 import { revalidatePath } from "next/cache";
 
@@ -55,12 +55,6 @@ export const requestChangeEmail = async function requestChangeEmail(data?: {
   if (!isResend) {
     // Check if new email is already in use
     const existingUser = await getUserByEmail(targetEmail);
-
-    if (!existingUser.data || existingUser.error)
-      return {
-        data: null,
-        error: existingUser.error,
-      };
 
     if (existingUser.data)
       return {

@@ -4,11 +4,14 @@ import withSerwistInit from "@serwist/next";
 import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  eslint: { ignoreDuringBuilds: true },
-  trailingSlash: false,
-
   images: {
     remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3000",
+        pathname: "/**",
+      },
       {
         protocol: "https",
         hostname: process.env.NEXT_PUBLIC_DOMAIN!,
