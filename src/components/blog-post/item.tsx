@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { format } from "date-fns";
 import { ar, enUS } from "date-fns/locale";
@@ -10,7 +10,7 @@ import { useMemo } from "react";
 
 import { Button } from "@/components/ui/button";
 import { isObject } from "@/lib/types/guards";
-import { getMediaURL } from "@/lib/utils/media";
+import { getMediaSizeURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
 import { BlogsCategory, BlogsPost, BlogsRoom } from "@/payload-types";
 
@@ -31,7 +31,7 @@ export const BlogPostImageFeatured = function BlogPostImageFeatured({
   image: BlogsPost["imageFeatured"];
   color: BlogsRoom["color"];
 }) {
-  const imageURL = getMediaURL(image);
+  const imageURL = getMediaSizeURL(image, "blog-post-image");
   const imageSizes =
     sizes || "(max-width: 48rem) 100vw, (max-width: 75rem) 50vw, 33vw";
 

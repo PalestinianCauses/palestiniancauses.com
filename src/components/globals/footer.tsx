@@ -1,4 +1,4 @@
-// REVIEWED - 10
+// REVIEWED - 11
 
 import Image from "next/image";
 import Link from "next/link";
@@ -76,7 +76,8 @@ export const Footer = function Footer() {
             <Paragraph
               small
               className="!text-sm !leading-normal text-foreground">
-              &copy; 2025 PalestinianCauses LLC. All Rights Reserved.
+              &copy; {new Date().getFullYear()} PalestinianCauses LLC. All
+              Rights Reserved.
             </Paragraph>
           </div>
           <div className="flex flex-wrap items-start justify-start gap-20">

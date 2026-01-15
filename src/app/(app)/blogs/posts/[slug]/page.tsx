@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 
 import { format } from "date-fns";
 import { ar, enUS } from "date-fns/locale";
@@ -27,7 +27,7 @@ import { messages } from "@/lib/messages";
 import { actionSafeExecute } from "@/lib/network";
 import { payload } from "@/lib/payload";
 import { isObject } from "@/lib/types/guards";
-import { getMediaURL } from "@/lib/utils/media";
+import { getMediaSizeURL } from "@/lib/utils/media";
 import { cn } from "@/lib/utils/styles";
 import { BlogsCategory, BlogsRoom } from "@/payload-types";
 
@@ -75,7 +75,7 @@ export async function generateMetadata({
     return { title: "Blog Post Not Found" };
 
   const post = response.data.docs[0];
-  const imageFeatured = getMediaURL(post.imageFeatured);
+  const imageFeatured = getMediaSizeURL(post.imageFeatured, "blog-post-image");
 
   const siteURL =
     process.env.NEXT_PUBLIC_URL || "https://www.palestiniancauses.com";
@@ -137,7 +137,7 @@ export default async function BlogPostPage({
   const blogRoomLanguage: BlogsRoom["language"] =
     blogRoom?.language || "english";
 
-  const imageFeatured = getMediaURL(post.imageFeatured);
+  const imageFeatured = getMediaSizeURL(post.imageFeatured, "blog-post-image");
 
   const authors = post.authors
     ? post.authors.filter((author) => isObject(author))
