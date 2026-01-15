@@ -1,4 +1,4 @@
-// REVIEWED - 15
+// REVIEWED - 16
 
 import { Suspense } from "react";
 
@@ -36,13 +36,13 @@ const HeaderImages = async function HeaderImages() {
   return (
     <SafeHydrate>
       <InfiniteMarquee speed={80}>
-        {images.map((doc, index) => {
-          const src = getMediaSizeURL(doc, "room-photograph");
+        {images.map((image, index) => {
+          const src = getMediaSizeURL(image, "room-photograph");
 
           if (!src) return null;
 
           return (
-            <MarqueeItem key={doc.id}>
+            <MarqueeItem key={image.id}>
               <SuspenseImage
                 isLoadingElement={isLoadingElement}
                 src={src}
