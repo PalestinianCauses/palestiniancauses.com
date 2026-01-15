@@ -1,6 +1,6 @@
-// REVIEWED
+// REVIEWED - 01
 
-import { SparklesIcon } from "lucide-react";
+import { AwardIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils/styles";
 
@@ -12,7 +12,7 @@ export const SalesAlert = function SalesAlert() {
       )}>
       <div className="relative z-10 flex flex-col items-start justify-start gap-2.5 sm:flex-row sm:items-center sm:gap-5">
         <div className="flex shrink-0 items-center justify-center bg-gradient-to-br from-green-900 via-green-700 to-green-500 p-2.5 shadow-xl shadow-green-500/10 sm:p-5">
-          <SparklesIcon className="size-6 stroke-[1.5] text-white sm:size-8" />
+          <AwardIcon className="size-6 stroke-[1.5] text-white sm:size-8" />
         </div>
 
         <div className="flex-1 space-y-1.5">

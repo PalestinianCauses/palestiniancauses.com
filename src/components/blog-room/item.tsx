@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 02
+// REVIEWED - 03
 
 import { ArrowUpRightIcon, GlobeIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
@@ -35,6 +35,7 @@ export const BlogRoomListItem = function BlogRoomListItem({
             user={room.roomOwner}
             size="user-avatar"
             className="w-16"
+            fallbackClassName="!font-[Gilroy]"
           />
         ) : null}
       </div>
