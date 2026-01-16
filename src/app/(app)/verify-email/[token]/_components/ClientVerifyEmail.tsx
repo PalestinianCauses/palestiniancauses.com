@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED
+// REVIEWED - 01
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowUpRightIcon, MailCheckIcon, MailXIcon } from "lucide-react";
@@ -75,7 +75,7 @@ export const ClientVerifyEmail = function ClientVerifyEmail({
         )}
       </Paragraph>
       <Button size="lg" asChild>
-        <Link href="/profile/settings">
+        <Link href={["/profile", "tab=settings"].join("?")}>
           <ArrowUpRightIcon />
           Profile Settings
         </Link>
