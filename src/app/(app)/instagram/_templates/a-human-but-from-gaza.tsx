@@ -1,4 +1,4 @@
-// REVIEWED
+// REVIEWED - 01
 
 import { Fragment, ReactNode, useRef } from "react";
 
@@ -10,7 +10,7 @@ import {
   ImageFrame,
   ImageFrameRender,
 } from "../_components/frame";
-import { ThemeColors } from "../page";
+import { ThemeColors } from "../_components/global";
 
 export const AHumanButFromGazaTemplate = function AHumanButFromGazaTemplate({
   id,
