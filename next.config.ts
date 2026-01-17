@@ -1,4 +1,4 @@
-// REVIEWED - 19
+// REVIEWED - 20
 import { withPayload } from "@payloadcms/next/withPayload";
 import withSerwistInit from "@serwist/next";
 import { NextConfig } from "next";
@@ -45,6 +45,7 @@ const nextConfig: NextConfig = {
 const withPWAConfig = withSerwistInit({
   swDest: "public/sw.js",
   swSrc: "src/app/(app)/sw.ts",
+  disable: process.env.NODE_ENV === "development",
 });
 
 export default withPWAConfig(withPayload(nextConfig));

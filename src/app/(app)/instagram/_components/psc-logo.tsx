@@ -1,6 +1,6 @@
-// REVIEWED - 01
-// eslint-disable-next-line import/no-cycle
-import { Properties, ThemeColors, ThemeStyles } from "../page";
+// REVIEWED - 02
+
+import { themeClasses, ThemeColors, ThemeStyles } from "./global";
 
 type PSCLogoProps = {
   style?: ThemeStyles;
@@ -12,48 +12,6 @@ type PSCLogoProps = {
     z?: ThemeColors;
     a?: ThemeColors;
   };
-};
-
-export const themeClasses: {
-  // eslint-disable-next-line no-unused-vars, no-shadow
-  [K in ThemeColors]: { [K in Properties]: string };
-} = {
-  "primary": {
-    bg: "bg-primary",
-    text: "text-primary-foreground",
-    fill: "fill-primary",
-    stroke: "stroke-primary",
-  },
-  "primary-foreground": {
-    bg: "bg-primary-foreground",
-    text: "text-primary",
-    fill: "fill-primary-foreground",
-    stroke: "stroke-primary-foreground",
-  },
-  "secondary": {
-    bg: "bg-secondary",
-    text: "text-secondary-foreground",
-    fill: "fill-secondary",
-    stroke: "stroke-secondary",
-  },
-  "tertiary": {
-    bg: "bg-tertiary",
-    text: "text-tertiary-foreground",
-    fill: "fill-tertiary",
-    stroke: "stroke-tertiary",
-  },
-  "tertiary-2": {
-    bg: "bg-tertiary-2",
-    text: "text-tertiary-2-foreground",
-    fill: "fill-tertiary-2",
-    stroke: "stroke-tertiary-2",
-  },
-  "transparent": {
-    bg: "bg-transparent",
-    text: "text-transparent",
-    fill: "fill-transparent",
-    stroke: "stroke-transparent",
-  },
 };
 
 export const PSCLogo = function PSCLogo({

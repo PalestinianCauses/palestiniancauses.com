@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 19
+// REVIEWED - 20
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
@@ -79,7 +79,12 @@ export const RedirectProvider = function RedirectProvider({
 
   useEffect(() => {
     if (messageToast) toast.error(messageToast);
-    router.push(path);
+
+    const isURLExternal =
+      path.startsWith("http://") || path.startsWith("https://");
+
+    if (isURLExternal) window.location.href = path;
+    else router.push(path);
   }, [router, path, messageToast]);
 
   return children;

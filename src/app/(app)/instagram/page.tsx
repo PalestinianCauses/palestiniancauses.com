@@ -1,33 +1,31 @@
 "use client";
 
-// REVIEWED - 30
+// REVIEWED - 31
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
 import {
+  ArrowRightIcon,
+  BookKeyIcon,
   BookOpenIcon,
-  HeartPulseIcon,
-  PenLineIcon,
-  QuoteIcon,
+  BriefcaseBusinessIcon,
+  GlobeIcon,
+  MessageCircleIcon,
+  PencilLineIcon,
+  ShoppingCartIcon,
+  SparklesIcon,
 } from "lucide-react";
-import Image from "next/image";
 import { Fragment, useRef } from "react";
+import { RiInstagramFill } from "react-icons/ri";
 
-import {
-  SectionHeading,
-  SectionHeadingBadge,
-  SectionTitle,
-  SubSectionHeading,
-} from "@/components/globals/typography";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils/styles";
+import { SectionHeading } from "@/components/globals/typography";
+import { Button } from "@/components/ui/button";
 
-// eslint-disable-next-line import/no-cycle
 import {
   Frame,
+  FrameBadge,
   FrameContent,
   FrameHighlight,
-  FrameImagesGrid,
   FrameParagraph,
   FrameParagraphHighlight,
   FrameSquare,
@@ -35,30 +33,9 @@ import {
   ImageFrame,
   ImageFrameRender,
 } from "./_components/frame";
-// eslint-disable-next-line import/no-cycle
-import { DiaryEntryTemplate } from "./_templates/diary-entry";
-// eslint-disable-next-line import/no-cycle
-import { PSCLogo } from "./_components/psc-logo";
+import { ActionCard, DiaryEntryTemplate } from "./_templates/diary-entry";
 
-export type Properties = "bg" | "text" | "fill" | "stroke";
-export type ThemeStyles = "fill" | "stroke";
-export type ThemeColors =
-  | "primary"
-  | "primary-foreground"
-  | "secondary"
-  | "tertiary"
-  | "tertiary-2"
-  | "transparent";
-export type Dimensions =
-  | "open-graph"
-  | "github"
-  | "1:1"
-  | "1:1.414"
-  | "1.6:1"
-  | "4:5"
-  | "16:9"
-  | "9:16";
-
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 const ShawqiPlusMahaCalligraphy = function ShawqiPlusMahaCalligraphy() {
   return (
     <svg
@@ -139,358 +116,311 @@ const ShawqiPlusMahaCalligraphy = function ShawqiPlusMahaCalligraphy() {
 
 const InstagramStudioPage = function InstagramStudioPage() {
   // Followers from my GitHub profile, please ignore this :)
-
   const frames: ImageFrame[] = [
     {
-      id: "open-graph-01",
+      id: "psc-2.0.0-instagram-01-01",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "open-graph-02",
+      id: "psc-2.0.0-instagram-01-02",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "open-graph-03",
+      id: "psc-2.0.0-instagram-01-03",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "open-graph-04",
+      id: "psc-2.0.0-instagram-01-04",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "i-g-story-template-01",
+      id: "psc-2.0.0-instagram-01-05",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "i-g-story-template-02",
+      id: "psc-2.0.0-instagram-01-06",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "github-01",
+      id: "psc-2.0.0-instagram-01-07",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
   ];
-
-  const profileImagesFrames: ImageFrame[] = [
-    {
-      id: "profile-primary",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "profile-primary-foreground",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "logo-primary",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "logo-primary-foreground",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-  ];
-
-  const hoodiesFrames: ImageFrame[] = [
-    {
-      id: "black-hoodie-back",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "white-hoodie-back",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "red-hoodie-back",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-  ];
-
-  const instagramFrames: ImageFrame[] = [
-    {
-      id: "ig-01",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "ig-02",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "ig-03",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "ig-04",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "ig-05",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-  ];
-
-  const nArtWorkFrames: ImageFrame[] = [
-    {
-      id: "n-art-work-01",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "n-art-work-02",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "n-art-work-03",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "n-art-work-04",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "n-art-work-05",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-  ];
-
-  const qrCodeFrames: ImageFrame[] = [
-    {
-      id: "qr-code-01",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "qr-code-02",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "qr-code-03",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "qr-code-04",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-  ];
-
-  const shawqiPlusMahaCalligraphyFrames: ImageFrame[] = [
-    {
-      id: "shawqi-plus-maha-calligraphy-01",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "shawqi-plus-maha-calligraphy-02",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "shawqi-plus-maha-calligraphy-03",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "shawqi-plus-maha-calligraphy-04",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "shawqi-plus-maha-calligraphy-05",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "shawqi-plus-maha-calligraphy-06",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "shawqi-plus-maha-calligraphy-07",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-  ];
-
-  const otherFrames: ImageFrame[] = [
-    {
-      id: "instagram-profile-links-01",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "instagram-profile-links-02",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-    {
-      id: "instagram-profile-links-03",
-      ref: useRef<HTMLDivElement>(null),
-      as: "png",
-    },
-  ];
-
-  const color: ThemeColors = "primary-foreground";
-  const author = "Lelyan";
 
   return (
     <main className="section-padding-start-lg">
-      {/* Diary Entry */}
-      <ImageFrameRender frames={otherFrames} />
+      <ImageFrameRender frames={frames} />
       <Frame
-        ref={otherFrames[0].ref}
-        dimensions="1:1"
-        color="primary-foreground">
+        ref={frames[0].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-background">
         <FrameContent className="items-center justify-center">
-          <BookOpenIcon className="size-[40rem] stroke-[1]" />
-        </FrameContent>
-      </Frame>
-      <Frame ref={otherFrames[1].ref} dimensions="1:1" color="primary">
-        <FrameContent className="items-center justify-center">
-          <PenLineIcon className="size-[40rem] stroke-[1]" />
-        </FrameContent>
-      </Frame>
-      <Frame
-        ref={otherFrames[2].ref}
-        dimensions="1:1"
-        color="primary-foreground">
-        <FrameContent className="items-center justify-center">
-          <HeartPulseIcon className="size-[40rem] stroke-[1]" />
-        </FrameContent>
-      </Frame>
-      <Frame
-        dimensions="9:16"
-        color={color}
-        className={cn({
-          "bg-background": color === "primary-foreground",
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          "bg-foreground": color === "primary",
-        })}>
-        <div
-          className={cn("absolute bottom-0 h-10 w-full", {
-            "bg-primary": color === "primary-foreground",
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            "bg-background": color === "primary",
-          })}
-        />
-        <FrameContent className="-mt-24 h-[90rem]">
-          <div className="flex items-center gap-5">
-            <FrameSquare
-              className={cn("h-20 w-20", {
-                "bg-primary text-primary-foreground ring-primary":
-                  color === "primary-foreground",
-                "bg-primary-foreground text-primary ring-primary-foreground":
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  color === "primary",
-              })}>
-              <SectionHeading
-                className={cn({
-                  "text-primary-foreground": color === "primary-foreground",
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  "text-primary": color === "primary",
-                })}>
-                {String(author).charAt(0).toUpperCase()}
-              </SectionHeading>
-            </FrameSquare>
-            <div className="flex flex-col gap-2.5">
-              <SubSectionHeading
-                className={cn(
-                  "font-semibold !leading-none lg:!leading-none xl:!leading-none",
-                  {
-                    "text-primary": color === "primary-foreground",
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    "text-primary-foreground": color === "primary",
-                  },
-                )}>
-                Composed by {author}.
-              </SubSectionHeading>
-              <Badge
-                size="sm"
-                className={cn("border-l-4 text-lg font-semibold ring-0", {
-                  "border-primary bg-primary/5 text-primary hover:bg-primary/5":
-                    color === "primary-foreground",
-                  "border-primary-foreground bg-primary-foreground/5 text-primary-foreground hover:bg-primary-foreground/5":
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    color === "primary",
-                })}>
-                Featured in The Truth Museum: Humans But From Gaza.
-              </Badge>
-            </div>
-          </div>
-          <FrameParagraph>
-            Then, from the radio, we heard a sound we know all too well,{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              unmistakable to any heart or ear.
-            </FrameParagraphHighlight>{" "}
-            The sound of tragedy at the very moment it strikes. In the
-            background, a tone rises that cannot be put into words. It is not a
-            scream, nor a cry, but something in between... something
-            unutterable. The news anchor&apos;s voice trembled as he spoke: the
-            occupation had committed a massacre, it had bombed{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              Al-Ahli
-            </FrameParagraphHighlight>{" "}
-            <br />
-            <FrameParagraphHighlight className="bg-primary pr-0 text-primary-foreground">
-              &ldquo;Al-
-            </FrameParagraphHighlight>
-            <FrameParagraphHighlight className="bg-primary pl-0 text-primary-foreground">
-              Ma&apos;amadani&ldquo;
-            </FrameParagraphHighlight>{" "}
-            Hospital in Gaza City. A hospital!
-          </FrameParagraph>
-          <FrameParagraph>
-            A wave of continuous weeping swept over us in a single moment.{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              Hundreds of souls were stolen,
-            </FrameParagraphHighlight>{" "}
-            souls that had sought refuge in a place they believed would protect
-            them. A massacre that took with it new victims, dignity, feelings,
-            memories, and future dreams. It was a clear declaration, there is no
-            safe place in Gaza. That moment was the point at which{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              all hope for the world to act ceased.
-            </FrameParagraphHighlight>{" "}
-            Time kept moving, but without a sound...
-          </FrameParagraph>
-          <FrameTitle className="-mt-8">
-            without an{" "}
-            <FrameHighlight className="section-heading-highlight-primary-foreground">
-              action.
+          <FrameBadge className="border-green-500 bg-gradient-to-r from-green-500/10 text-green-500">
+            PalestinianCauses&apos; 1st Anniversary
+          </FrameBadge>
+          <FrameTitle className="text-center">
+            365{" "}
+            <FrameHighlight className="before:bg-green-500">
+              Days
             </FrameHighlight>
+            : From Rubble To{" "}
+            <FrameHighlight className="before:bg-green-500">
+              Pixels
+            </FrameHighlight>
+            .
           </FrameTitle>
+          <Button
+            size="icon"
+            className="h-24 w-48 justify-end border-r-4 border-green-500 bg-transparent bg-gradient-to-l from-green-500/10 text-green-500 hover:bg-transparent">
+            <ArrowRightIcon className="!size-12 -translate-x-1/2 stroke-[1.5]" />
+          </Button>
         </FrameContent>
       </Frame>
+
+      <Frame
+        ref={frames[1].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-background">
+        <FrameContent>
+          <FrameSquare className="bg-red-500/10 text-red-500 shadow-2xl shadow-red-500/25 ring-red-500">
+            <BookKeyIcon />
+          </FrameSquare>
+          <SectionHeading className="font-semibold">
+            <FrameHighlight className="before:bg-red-500/25">
+              Over 1,000 Orders
+            </FrameHighlight>{" "}
+            of{" "}
+            <span className="font-bold">
+              A Human <br /> But From Gaza
+            </span>{" "}
+            e-book.
+          </SectionHeading>
+          <FrameParagraph className="font-normal text-muted-foreground">
+            What started as a mission to amplify Gazan voices has become a
+            movement. Over a thousand compassionate readers have embraced{" "}
+            <span className="text-foreground underline decoration-red-500 decoration-2 underline-offset-8">
+              &ldquo;A Human But From Gaza,&ldquo;
+            </span>{" "}
+            transforming each order into a powerful declaration of global
+            solidarity.
+          </FrameParagraph>
+          <FrameParagraph className="font-normal text-muted-foreground">
+            <span className="text-foreground underline decoration-red-500 decoration-2 underline-offset-8">
+              Your partnership fuels
+            </span>{" "}
+            our ability to reach even more readers worldwide. The e-book is now
+            available for{" "}
+            <span className="text-foreground underline decoration-red-500 decoration-2 underline-offset-8">
+              18 USD
+            </span>
+            —every purchase sustains our mission and amplifies authentic Gazan
+            voices when they&apos;re needed most.
+          </FrameParagraph>
+        </FrameContent>
+      </Frame>
+
+      <Frame
+        ref={frames[2].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-background">
+        <FrameContent>
+          <FrameSquare className="bg-orange-500/10 text-orange-500 shadow-2xl shadow-orange-500/25 ring-orange-500">
+            <PencilLineIcon />
+          </FrameSquare>
+          <SectionHeading className="font-semibold">
+            <FrameHighlight className="before:bg-orange-500/25">
+              Over 59 Diary Entries
+            </FrameHighlight>{" "}
+            <br />
+            Featured in The Truth Museum.
+          </SectionHeading>
+          <FrameParagraph className="font-normal text-muted-foreground">
+            Behind every number lies a story. The Truth Museum now features over
+            59 diary entries, each written and shared by{" "}
+            <span className="text-foreground underline decoration-orange-500 decoration-2 underline-offset-8">
+              remarkable individuals from Gaza
+            </span>{" "}
+            who chose courage over silence, transforming their pain into
+            powerful narratives of resilience and hope.
+          </FrameParagraph>
+          <FrameParagraph className="font-normal text-muted-foreground">
+            <span className="text-foreground underline decoration-orange-500 decoration-2 underline-offset-8">
+              Every entry you read amplifies
+            </span>{" "}
+            these authentic voices, ensuring Gaza&apos;s truth reaches global
+            audiences. Your engagement transforms silence into solidarity,
+            helping these stories be seen, heard, and remembered.
+          </FrameParagraph>
+        </FrameContent>
+      </Frame>
+
+      <Frame
+        ref={frames[3].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-background">
+        <FrameContent>
+          <FrameSquare className="bg-yellow-500/10 text-yellow-600 shadow-2xl shadow-yellow-500/25 ring-yellow-500">
+            <RiInstagramFill className="!stroke-0" />
+          </FrameSquare>
+          <SectionHeading className="font-semibold">
+            <FrameHighlight className="before:bg-yellow-500/25">
+              Over 7,500 Followers
+            </FrameHighlight>{" "}
+            <br />
+            on our Instagram Profile
+          </SectionHeading>
+          <FrameParagraph className="font-normal text-muted-foreground">
+            From zero to{" "}
+            <span className="text-foreground underline decoration-yellow-500 decoration-2 underline-offset-8">
+              over 7,500 followers
+            </span>
+            —each one represents a commitment to amplifying authentic Gazan
+            stories and building a global community rooted in solidarity and
+            truth.
+          </FrameParagraph>
+          <FrameParagraph className="font-normal text-muted-foreground">
+            <span className="text-foreground underline decoration-yellow-500 decoration-2 underline-offset-8">
+              This community you&apos;ve helped build
+            </span>{" "}
+            has become a powerful platform where Gazan voices resonate far
+            beyond borders. Your support has been the foundation of our
+            journey—and this is just the beginning.
+          </FrameParagraph>
+        </FrameContent>
+      </Frame>
+
+      <Frame
+        ref={frames[4].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-background">
+        <FrameContent>
+          <FrameSquare className="bg-green-500/10 text-green-500 shadow-2xl shadow-green-500/25 ring-green-500">
+            <SparklesIcon />
+          </FrameSquare>
+          <SectionHeading className="font-semibold">
+            Today, We Introduce{" "}
+            <FrameHighlight className="before:bg-green-500/25">
+              Our New Identity:
+            </FrameHighlight>{" "}
+            <br />
+            PalestinianCauses Digital Agency
+          </SectionHeading>
+          <FrameParagraph className="font-normal text-muted-foreground">
+            After a year of amplifying Gazan voices, we&apos;re taking the next
+            step. Today, we proudly introduce{" "}
+            <span className="text-foreground underline decoration-green-500 decoration-2 underline-offset-8">
+              PalestinianCauses Digital Agency
+            </span>
+            —a world-class digital services agency powered by Gazan talent,
+            where excellence meets purpose in every project we deliver.
+          </FrameParagraph>
+          <FrameParagraph className="font-normal text-muted-foreground">
+            <span className="text-foreground underline decoration-green-500 decoration-2 underline-offset-8">
+              Discover Shawqi&apos;s Professional Room
+            </span>
+            —our founder&apos;s showcase of expertise, services, and packages.
+            More Professional Rooms and{" "}
+            <span className="text-foreground underline decoration-green-500 decoration-2 underline-offset-8">
+              The Riwaq: Blog Rooms
+            </span>{" "}
+            are launching soon. Stay tuned for curated writings on craft,
+            resilience, and creative excellence.
+          </FrameParagraph>
+        </FrameContent>
+      </Frame>
+
+      <Frame
+        ref={frames[5].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-background">
+        <FrameContent>
+          <FrameSquare className="bg-teal-500/10 text-teal-500 shadow-2xl shadow-teal-500/25 ring-teal-500">
+            <BriefcaseBusinessIcon />
+          </FrameSquare>
+          <SectionHeading className="font-semibold">
+            <FrameHighlight className="before:bg-teal-500/25">
+              What&apos;s Coming Next?
+            </FrameHighlight>{" "}
+            <br />
+            Building Tomorrow&apos;s Solutions
+          </SectionHeading>
+          <FrameParagraph className="font-normal text-muted-foreground">
+            As PalestinianCauses Digital Agency,{" "}
+            <span className="text-foreground underline decoration-teal-500 decoration-2 underline-offset-8">
+              we deliver
+            </span>{" "}
+            Branded Web Applications, Strategic Content Creation, and Expert
+            Translation Services—each project demonstrating how adversity
+            transforms into competitive advantage.
+          </FrameParagraph>
+          <FrameParagraph className="font-normal text-muted-foreground">
+            <span className="text-foreground underline decoration-teal-500 decoration-2 underline-offset-8">
+              Dive into our new About Us page
+            </span>{" "}
+            to discover our mission, vision, and the resilient Gazan talent
+            powering world-class digital solutions. More Professional Rooms and
+            Blog Rooms content are launching soon—
+            <span className="text-foreground underline decoration-teal-500 decoration-2 underline-offset-8">
+              watch this space.
+            </span>
+          </FrameParagraph>
+        </FrameContent>
+      </Frame>
+
+      <Frame
+        ref={frames[6].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-background">
+        <FrameContent className="items-center justify-center">
+          <SectionHeading className="text-center font-semibold">
+            What Can{" "}
+            <FrameHighlight className="before:bg-foreground/25">
+              You Do Now?
+            </FrameHighlight>
+          </SectionHeading>
+          <div className="mx-auto grid w-full grid-cols-[20rem_20rem] items-center justify-center gap-10">
+            <ActionCard
+              color="primary-foreground"
+              Icon={GlobeIcon}
+              title="Explore Our Website"
+              description="Discover our new About Us page and explore Shawqi's Professional Room. More rooms launching soon—stay connected"
+            />
+            <ActionCard
+              color="primary-foreground"
+              Icon={ShoppingCartIcon}
+              title="Order Our E-book"
+              description="Join over 1,000 readers by ordering &ldquo;A Human But From Gaza&rdquo; for 18 USD. Every purchase amplifies authentic Gazan voices"
+            />
+            <ActionCard
+              color="primary-foreground"
+              Icon={BookOpenIcon}
+              title="Read Diary Entries"
+              description="Explore The Truth Museum and immerse yourself in powerful, authentic stories from remarkable individuals from/in Gaza"
+            />
+            <ActionCard
+              color="primary-foreground"
+              Icon={MessageCircleIcon}
+              title="Join The Conversation"
+              description="Share your thoughts through comments and become part of a community ensuring Gaza's truth is seen, heard, and remembered"
+            />
+          </div>
+        </FrameContent>
+      </Frame>
+
       <DiaryEntryTemplate
         id="diary-entry-09"
         color="primary-foreground"
@@ -553,499 +483,6 @@ const InstagramStudioPage = function InstagramStudioPage() {
         }
         link="palestiniancauses.com/humans-but-from-gaza/28"
       />
-      <ImageFrameRender frames={profileImagesFrames} />
-      <ImageFrameRender frames={hoodiesFrames} />
-      <ImageFrameRender frames={instagramFrames} />
-      <ImageFrameRender frames={nArtWorkFrames} />
-      <ImageFrameRender frames={qrCodeFrames} />
-      <ImageFrameRender frames={shawqiPlusMahaCalligraphyFrames} />
-      {/* Shawqi and Maha Calligraphy */}
-      <Frame
-        dir="rtl"
-        ref={shawqiPlusMahaCalligraphyFrames[0].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-rose-100">
-        <FrameContent className="font-[ShamelSansOne]">
-          <SectionTitle className="my-32 mb-0 font-[inherit] font-bold !leading-tight text-rose-950">
-            مِن أرضٍ <br />
-            <FrameHighlight className="font-[inherit] font-bold before:-inset-x-2.5 before:bottom-2.5 before:top-[initial] before:h-1/2 before:bg-rose-500 before:ring-rose-500">
-              بعيــــــــــــدةٍ،
-            </FrameHighlight>
-          </SectionTitle>
-        </FrameContent>
-      </Frame>
-      <Frame
-        dir="rtl"
-        ref={shawqiPlusMahaCalligraphyFrames[1].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-rose-500">
-        <FrameContent className="font-[ShamelSansOne]">
-          <SectionTitle className="my-32 mb-0 font-[inherit] font-bold !leading-tight text-rose-950">
-            أرسلتُ لكِ قلبِي، فغرستهُ
-            <FrameHighlight className="font-[inherit] font-bold text-rose-100 before:-inset-x-2.5 before:bottom-2.5 before:top-[initial] before:h-1/2 before:bg-rose-950 before:ring-rose-950">
-              غــــــــــــزَّة
-            </FrameHighlight>{" "}
-            فِي ترابِها الطاهِر،
-          </SectionTitle>
-        </FrameContent>
-      </Frame>
-      <Frame
-        dir="rtl"
-        ref={shawqiPlusMahaCalligraphyFrames[2].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-rose-100">
-        <FrameContent className="font-[ShamelSansOne]">
-          <SectionTitle className="my-32 mb-0 font-[inherit] font-bold !leading-tight text-rose-950">
-            لتسقيهِ{" "}
-            <FrameHighlight className="font-[inherit] font-bold before:-inset-x-2.5 before:bottom-2.5 before:top-[initial] before:h-1/2 before:bg-rose-500 before:ring-rose-500">
-              مهَــــــــــــا
-            </FrameHighlight>{" "}
-            مِن روحِها، فينبتُ بَيننا وعــــدٌ مقدسٌ.
-          </SectionTitle>
-        </FrameContent>
-      </Frame>
-      <Frame
-        dir="rtl"
-        ref={shawqiPlusMahaCalligraphyFrames[3].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-rose-500">
-        <FrameContent className="font-[ShamelSansOne]">
-          <SectionTitle className="my-32 mb-0 font-[inherit] font-bold !leading-tight text-rose-950">
-            هذِه{" "}
-            <FrameHighlight className="font-[inherit] font-bold text-rose-100 before:-inset-x-2.5 before:bottom-2.5 before:top-[initial] before:h-1/2 before:bg-rose-950 before:ring-rose-950">
-              خطوبتُنا...
-            </FrameHighlight>
-          </SectionTitle>
-        </FrameContent>
-      </Frame>
-      <Frame
-        dir="rtl"
-        ref={shawqiPlusMahaCalligraphyFrames[4].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-rose-100">
-        <FrameContent className="font-[ShamelSansOne]">
-          <SectionTitle className="my-32 mb-0 font-[inherit] font-bold !leading-tight text-rose-950">
-            أُولــــــى ثمارِ <br /> ذاكَ الغرْس الذِي لَا يعــــرفُ{" "}
-            <FrameHighlight className="font-[inherit] font-bold before:-inset-x-2.5 before:bottom-2.5 before:top-[initial] before:h-1/2 before:bg-rose-500 before:ring-rose-500">
-              المسافــــــاتِ.
-            </FrameHighlight>
-          </SectionTitle>
-        </FrameContent>
-      </Frame>
-      <Frame
-        ref={shawqiPlusMahaCalligraphyFrames[5].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-rose-950">
-        <FrameContent className="z-30 items-center justify-center">
-          <div className="mx-auto w-full max-w-[43.4375rem]">
-            <ShawqiPlusMahaCalligraphy />
-          </div>
-        </FrameContent>
-      </Frame>
-      <Frame
-        ref={shawqiPlusMahaCalligraphyFrames[6].ref}
-        dimensions="9:16"
-        color="primary-foreground"
-        className="bg-rose-950">
-        <FrameContent className="z-30 items-center justify-center">
-          <div className="mx-auto w-full max-w-[43.4375rem]">
-            <ShawqiPlusMahaCalligraphy />
-          </div>
-        </FrameContent>
-      </Frame>
-      {/* QR Code */}
-      <Frame ref={qrCodeFrames[0].ref} dimensions="1:1.414" color="primary">
-        <FrameContent className="h-[80rem] w-[60rem] justify-center">
-          <SectionTitle className="mx-auto text-center font-bold !leading-[0.9] text-primary-foreground">
-            {" "}
-            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              Stories
-            </FrameHighlight>{" "}
-            that <br />
-            must be{" "}
-            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              told.
-            </FrameHighlight>
-          </SectionTitle>
-          <FrameParagraph className="text-center">
-            An intimate collection of diaries and art from the heart of{" "}
-            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-              Gaza.
-            </FrameParagraphHighlight>{" "}
-            In a library of{" "}
-            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-              millions
-            </FrameParagraphHighlight>{" "}
-            of stories, this one is waiting for{" "}
-            <FrameParagraphHighlight className="bg-primary-foreground text-primary">
-              you
-            </FrameParagraphHighlight>{" "}
-            — raw, un-
-            <span className="-mr-px tracking-wide">fi</span>ltered, and deeply
-            human.
-          </FrameParagraph>
-          <Image
-            src="/qr-code-palestiniancauses.png"
-            alt="QR Code"
-            fill
-            className="!static mx-auto my-12 !h-auto !w-full max-w-md object-cover object-center ring-4 ring-primary-foreground"
-          />
-          <FrameSquare className="mx-auto bg-primary-foreground text-primary ring-primary-foreground">
-            <Image
-              src="/logo-primary.png"
-              alt="Primary Logo"
-              fill
-              className="!static !h-24 !w-24"
-            />
-          </FrameSquare>
-        </FrameContent>
-      </Frame>
-      <Frame
-        ref={qrCodeFrames[1].ref}
-        dimensions="1.6:1"
-        color="primary-foreground">
-        <FrameImagesGrid>
-          <div className="relative col-start-2 col-end-7 row-start-3 row-end-11">
-            <FrameSquare className="mx-auto h-full w-full bg-primary-foreground ring-primary-foreground">
-              <Image
-                src="/logo-primary.png"
-                alt="Primary Logo"
-                fill
-                className="!static !h-auto !max-w-xs"
-              />
-            </FrameSquare>
-          </div>
-          <div className="relative col-start-7 col-end-12 row-start-3 row-end-11 ring-2 ring-primary ring-offset-8 ring-offset-primary-foreground">
-            <Image
-              src="/qr-code-palestiniancauses.png"
-              alt="QR Code"
-              fill
-              className="!static mx-auto max-w-md object-cover object-center"
-            />
-          </div>
-        </FrameImagesGrid>
-      </Frame>
-      <Frame
-        ref={qrCodeFrames[2].ref}
-        dimensions="1.6:1"
-        color="primary"
-        className="flex-col">
-        <SectionTitle className="mx-auto mb-6 text-center font-bold !leading-[0.9] text-primary-foreground">
-          {" "}
-          <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-            Stories
-          </FrameHighlight>{" "}
-          that <br />
-          must be{" "}
-          <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-            told.
-          </FrameHighlight>
-        </SectionTitle>
-        <FrameParagraph className="mb-12 max-w-4xl text-center">
-          Discover authentic diaries and art from the heart of Gaza. A
-          perspective beyond the headlines.
-        </FrameParagraph>
-        <SectionHeadingBadge className="text-primary-foreground">
-          Scan to Order Your Copy
-        </SectionHeadingBadge>
-      </Frame>
-      <Frame
-        ref={nArtWorkFrames[0].ref}
-        dimensions="4:5"
-        color="primary-foreground">
-        <FrameContent>
-          <FrameSquare className="mb-auto bg-primary-foreground text-primary ring-primary-foreground">
-            <Image
-              src="/logo-primary.png"
-              alt="Primary Logo"
-              fill
-              className="!static !h-24 !w-24"
-            />
-          </FrameSquare>
-          <FrameTitle className="grid w-full grid-cols-1 grid-rows-3 items-start">
-            <FrameHighlight className="w-max before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
-              The Unknown
-            </FrameHighlight>
-            <FrameHighlight className="w-max before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
-              Is Lurking
-            </FrameHighlight>
-            <FrameHighlight className="w-max before:-inset-x-2.5 before:top-1/4 before:bg-primary-foreground before:ring-primary-foreground">
-              For Gazans.
-            </FrameHighlight>
-          </FrameTitle>
-          <SectionHeadingBadge className="bg-primary text-lg text-primary-foreground ring-primary">
-            Artwork by N. — Digitally Enhanced for a Re
-            <span className="-mr-px tracking-wide">fi</span>ned Experience
-          </SectionHeadingBadge>
-        </FrameContent>
-        <FrameImagesGrid>
-          <div className="relative col-start-1 col-end-13 row-start-1 row-end-13">
-            <Image
-              src="/the-unknown-is-lurking-for-gazans-refined.png"
-              alt="N's Art-Work no. 03"
-              fill
-              className="!static object-cover object-center"
-            />
-          </div>
-        </FrameImagesGrid>
-      </Frame>
-      <Frame
-        ref={nArtWorkFrames[1].ref}
-        dimensions="4:5"
-        color="primary-foreground">
-        <FrameContent>
-          <FrameSquare className="shrink-0 bg-primary text-primary-foreground ring-primary">
-            <QuoteIcon className="h-20 w-20 stroke-[1.5]" />
-          </FrameSquare>
-          <FrameParagraph>
-            Nothing can describe the feeling of a traveler spat by war at that
-            moment, filled with confusion, fear, and{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              false security in front of Rafah crossing.
-            </FrameParagraphHighlight>{" "}
-            My friend told me that he had waited for his name on the list of
-            travelers for several weeks, but as soon as he saw it later, he
-            cried. S. was about to cross the intersection, but he looked toward
-            his father and brother,{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              his eyes begging them to answer a
-            </FrameParagraphHighlight>{" "}
-            <FrameParagraphHighlight className="bg-primary text-primary-foreground">
-              straightforward question:
-            </FrameParagraphHighlight>{" "}
-            Is what I am doing right or wrong? Rescue me from traveling if it is
-            a bad decision.
-          </FrameParagraph>
-          <FrameParagraph>
-            S. says ruefully: &ldquo;One does not feel proud to be Palestinian
-            except in his \ her homeland, but outside its borders, he \ she...
-          </FrameParagraph>
-        </FrameContent>
-      </Frame>
-      <Frame ref={nArtWorkFrames[2].ref} dimensions="4:5" color="primary">
-        <FrameContent className="justify-center">
-          <FrameTitle>
-            ...understands very well the{" "}
-            <FrameHighlight className="mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              curse
-            </FrameHighlight>{" "}
-            of the{" "}
-            <FrameHighlight className="mx-2.5 text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              Palestinian...
-            </FrameHighlight>
-          </FrameTitle>
-          <SectionHeadingBadge className="text-primary-foreground">
-            Composed by L. featured in The Volume &quot;A Human But From
-            Gaza&quot;
-          </SectionHeadingBadge>
-        </FrameContent>
-      </Frame>
-      <Frame
-        ref={nArtWorkFrames[3].ref}
-        dimensions="4:5"
-        color="primary-foreground">
-        <FrameContent>
-          <FrameTitle>
-            Discover the complete diary and{" "}
-            <FrameHighlight className="text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
-              further
-            </FrameHighlight>{" "}
-            compelling{" "}
-            <FrameHighlight className="z-20 -mx-2.5 text-primary-foreground before:-inset-x-2.5 before:bg-primary before:ring-primary">
-              narratives
-            </FrameHighlight>{" "}
-            within:
-          </FrameTitle>
-        </FrameContent>
-      </Frame>
-      <Frame ref={nArtWorkFrames[4].ref} dimensions="4:5" color="primary">
-        <FrameContent>
-          <FrameTitle>
-            Link in{" "}
-            <FrameHighlight className="text-primary before:-inset-x-2.5 before:bg-primary-foreground before:ring-primary-foreground">
-              bio.
-            </FrameHighlight>{" "}
-          </FrameTitle>
-          <FrameSquare className="mt-auto bg-primary-foreground text-primary ring-primary-foreground">
-            <Image
-              src="/logo-primary.png"
-              alt="Primary Logo"
-              fill
-              className="!static !h-24 !w-24"
-            />
-          </FrameSquare>
-        </FrameContent>
-        <FrameImagesGrid className="scale-1">
-          <div className="col-start-6 col-end-13 row-start-4 row-end-13 -translate-y-10 ring ring-primary-foreground ring-offset-8 ring-offset-primary">
-            <Image
-              src="https://nwdtauhmkupvkywh.public.blob.vercel-storage.com/book-cover/book-cover-new.png"
-              alt="A Human But From Gaza Book Cover"
-              fill
-              className="!static object-cover object-[top_left]"
-            />
-          </div>
-        </FrameImagesGrid>
-      </Frame>
-      {/* Logo */}
-      <Frame
-        ref={profileImagesFrames[2].ref}
-        dimensions="1:1"
-        color="primary-foreground"
-        className="bg-transparent">
-        <div className="-mb-16 w-[56.625rem]">
-          <PSCLogo />
-        </div>
-      </Frame>
-      <Frame
-        ref={profileImagesFrames[3].ref}
-        dimensions="1:1"
-        color="primary"
-        className="bg-transparent">
-        <div className="-mb-16 w-[56.625rem]">
-          <PSCLogo color="primary-foreground" />
-        </div>
-      </Frame>
-      {/* Social Media Avatars */}
-      <Frame
-        ref={profileImagesFrames[0].ref}
-        dimensions="1:1"
-        color="primary-foreground">
-        <div className="-mb-16 w-[47.5rem]">
-          <PSCLogo />
-        </div>
-      </Frame>
-      <Frame ref={profileImagesFrames[1].ref} dimensions="1:1" color="primary">
-        <div className="-mb-16 w-[47.5rem]">
-          <PSCLogo color="primary-foreground" />
-        </div>
-      </Frame>
-      {/* Social Media Templates */}
-      <Frame ref={frames[6].ref} dimensions="9:16" color="primary-foreground">
-        <div className="mb-52 mt-auto w-[10rem]">
-          <PSCLogo />
-        </div>
-      </Frame>
-      <Frame ref={frames[5].ref} dimensions="9:16" color="primary">
-        <div className="mb-52 mt-auto w-[10rem]">
-          <PSCLogo color="primary-foreground" />
-        </div>
-      </Frame>
-      {/* GitHub */}
-      <Frame ref={frames[6].ref} dimensions="github" color="primary">
-        <FrameContent className="h-[32rem] w-[70rem]">
-          <SectionHeading className="!max-w-none !text-7xl font-bold text-primary-foreground lg:!leading-none xl:!leading-none">
-            Join our open-source <br />
-            <span className="relative z-10 mr-2 inline-block font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
-              mission.
-            </span>{" "}
-            Contribute to strengthen PalestinianCauses{" "}
-            <span className="relative z-10 inline-block pl-1 font-semibold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-16 before:-translate-y-1/2 before:bg-primary-foreground">
-              identity.
-            </span>{" "}
-          </SectionHeading>
-          <SectionHeadingBadge className="text-lg text-primary-foreground">
-            Maintained By Shawqi Hatem (@shawqicauses)
-          </SectionHeadingBadge>
-        </FrameContent>
-        <FrameImagesGrid>
-          <div className="relative col-start-7 col-end-13 row-start-6 row-end-13 translate-y-2.5 p-2.5 ring-2 ring-primary">
-            <Image
-              src="/i-g-01.png"
-              alt="Screen Shot UI 07"
-              fill
-              sizes="42rem"
-              className="!relative bg-primary-foreground object-cover object-center"
-            />
-          </div>
-        </FrameImagesGrid>
-      </Frame>
-      {/* Hoodies */}
-      <Frame
-        ref={hoodiesFrames[0].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-transparent">
-        <SectionHeading className="!text-9xl">
-          CODE <br />
-          <span className="relative z-10 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
-            WRITTEN
-          </span>{" "}
-          <br />
-          WITH
-          <br />
-          THE{" "}
-          <span className="relative z-10 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
-            SOUND
-          </span>{" "}
-          <br /> OF <br />
-          <span className="relative z-10 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
-            BOMBS.
-          </span>{" "}
-          <br />{" "}
-          <span className="text-7xl font-medium italic tracking-normal text-primary/20">
-            (Still Transmitting Truth).
-          </span>
-        </SectionHeading>
-      </Frame>
-      <Frame
-        ref={hoodiesFrames[1].ref}
-        dimensions="4:5"
-        color="primary"
-        className="bg-transparent">
-        <SectionHeading className="!text-9xl text-primary-foreground">
-          <span className="relative z-10 inline-block pl-2 font-extrabold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary-foreground">
-            RUINS
-          </span>{" "}
-          <br />
-          AT
-          <br />
-          <span className="relative z-10 inline-block pl-2 font-extrabold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary-foreground">
-            DUSK
-          </span>{" "}
-          <br />
-          REBUILDING
-          <br />
-          AT{" "}
-          <span className="relative z-10 inline-block pl-2 font-extrabold text-primary before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary-foreground">
-            DAWN.
-          </span>{" "}
-          <br />{" "}
-          <span className="text-7xl font-semibold italic tracking-normal text-primary-foreground/20">
-            (Gaza Strip).
-          </span>
-        </SectionHeading>
-      </Frame>
-      <Frame
-        ref={hoodiesFrames[2].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-transparent">
-        <SectionHeading className="!text-9xl">
-          UNDER <br />
-          <span className="relative z-10 ml-40 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
-            ASHES.
-          </span>{" "}
-          <br />
-          BUILDING{" "}
-          <span className="relative z-10 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
-            THE
-          </span>{" "}
-          <br /> NEXT
-          <span className="relative z-10 ml-40 inline-block pl-2 font-[900] text-primary-foreground before:absolute before:-right-2 before:left-0 before:top-1/2 before:z-[-1] before:block before:h-28 before:-translate-y-1/2 before:bg-primary">
-            SUN.
-          </span>{" "}
-          <br />{" "}
-          <span className="text-7xl font-medium italic tracking-normal text-primary/20">
-            (GAZA&apos;S LIGHT).
-          </span>
-        </SectionHeading>
-      </Frame>
     </main>
   );
 };

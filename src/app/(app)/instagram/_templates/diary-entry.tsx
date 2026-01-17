@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 04
+// REVIEWED - 05
 
 import {
   BookOpenIcon,
@@ -30,9 +30,9 @@ import {
   ImageFrame,
   ImageFrameRender,
 } from "../_components/frame";
-import { ThemeColors } from "../page";
+import { ThemeColors } from "../_components/global";
 
-const SupportOptionsCard = function SupportOptionsCard({
+export const ActionCard = function ActionCard({
   color,
   Icon,
   title,
@@ -284,28 +284,28 @@ export const DiaryEntryTemplate = function DiaryEntryTemplate({
             </FrameHighlight>
           </FrameTitle>
           <div className="mx-auto grid w-full grid-cols-[20rem_20rem] items-center justify-center gap-10">
-            <SupportOptionsCard
+            <ActionCard
               color={color}
               Icon={BookOpenIcon}
               title="Explore The Complete Story"
               description="Read our full diary entry and discover our complete narrative on
                 our website"
             />
-            <SupportOptionsCard
+            <ActionCard
               color={color}
               Icon={MessageCircleIcon}
               title="Join The Conversation"
               description="Share your thoughts and engage with our community through
                 meaningful dialogue"
             />
-            <SupportOptionsCard
+            <ActionCard
               color={color}
               Icon={ShareIcon}
               title="Amplify The Message"
               description="Help spread awareness by sharing this important story with your
                 network"
             />
-            <SupportOptionsCard
+            <ActionCard
               color={color}
               Icon={FileHeartIcon}
               title="Show Your Support"

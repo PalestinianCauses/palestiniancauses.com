@@ -1,4 +1,4 @@
-// REVIEWED - 02
+// REVIEWED - 03
 import { toJpeg, toPng } from "html-to-image";
 import {
   forwardRef,
@@ -6,15 +6,19 @@ import {
   PropsWithChildren,
   RefObject,
 } from "react";
+import { RiInstagramLine } from "react-icons/ri";
 
 import { Paragraph, SectionHeading } from "@/components/globals/typography";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/styles";
 
-// eslint-disable-next-line import/no-cycle
-import { Dimensions, ThemeColors } from "../page";
-
-import { themeClasses } from "./psc-logo";
+import {
+  Dimensions,
+  dimensionsClasses,
+  themeClasses,
+  ThemeColors,
+} from "./global";
 
 export type ImageFrame = {
   id: string;
@@ -25,18 +29,6 @@ export type ImageFrame = {
 export type ImageFrameRenderProps = {
   frames: ImageFrame[];
   text?: string;
-};
-
-// eslint-disable-next-line no-unused-vars
-export const dimensionsClasses: { [K in Dimensions]: string } = {
-  "open-graph": "w-[75rem] h-[39.375rem]",
-  "github": "w-[80rem] aspect-[2/1]",
-  "1:1": "w-[67.5rem] aspect-square",
-  "1:1.414": "w-[67.5rem] aspect-[1/1.414]",
-  "1.6:1": "w-[67.5rem] aspect-[1.6/1]",
-  "4:5": "w-[67.5rem] aspect-[4/5]",
-  "16:9": "w-[67.5rem] aspect-[16/9]",
-  "9:16": "w-[67.5rem] aspect-[9/16]",
 };
 
 export const ImageFrameRender = function ImageFrameRender({
@@ -87,6 +79,10 @@ export const Frame = forwardRef<HTMLDivElement, FrameProps>(
       )}
       {...props}>
       {children}
+      <div className="absolute bottom-5 flex items-center justify-center gap-2.5 text-2xl font-bold">
+        <RiInstagramLine className="size-8" />
+        PalestinianCauses.
+      </div>
     </div>
   ),
 );
@@ -98,7 +94,7 @@ export const FrameContent = function FrameContent({
   return (
     <div
       className={cn(
-        "flex h-[65rem] w-[55rem] flex-col items-start justify-start gap-12",
+        "flex h-[65.625rem] w-[55rem] flex-col items-start justify-start gap-12",
         className,
       )}>
       {children}
@@ -128,7 +124,7 @@ export const FrameSquare = function FrameSquare({
   return (
     <div
       className={cn(
-        "relative flex h-32 w-32 items-center justify-center ring-1",
+        "relative flex size-32 shrink-0 items-center justify-center ring-1 [&_>_svg]:size-16 [&_>_svg]:stroke-[1.5]",
         className,
       )}>
       {children}
@@ -143,11 +139,27 @@ export const FrameTitle = function FrameTitle({
   return (
     <SectionHeading
       className={cn(
-        "!text-9xl font-bold text-current lg:!leading-[0.9] xl:!leading-[0.9]",
+        "!text-[10rem] font-bold text-current lg:!leading-[0.9] xl:!leading-[0.9]",
         className,
       )}>
       {children}
     </SectionHeading>
+  );
+};
+
+export const FrameBadge = function FrameBadge({
+  className,
+  children,
+}: PropsWithChildren & HTMLAttributes<HTMLDivElement>) {
+  return (
+    <Badge
+      size="lg"
+      className={cn(
+        "border-l-4 border-current bg-transparent text-3xl text-current ring-0 hover:bg-transparent",
+        className,
+      )}>
+      {children}
+    </Badge>
   );
 };
 
@@ -158,7 +170,7 @@ export const FrameHighlight = function FrameHighlight({
   return (
     <span
       className={cn(
-        "relative z-10 inline-block before:absolute before:inset-x-0 before:inset-y-0 before:z-[-1] before:block before:ring-1",
+        "relative z-10 inline-block before:absolute before:inset-x-0 before:inset-y-[initial] before:bottom-0 before:z-[-1] before:block before:h-1/2 before:ring-0",
         className,
       )}>
       {children}
