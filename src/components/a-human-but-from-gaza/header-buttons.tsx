@@ -1,9 +1,10 @@
 "use client";
 
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { ArrowRightIcon, HeartIcon, Loader2Icon } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { Fragment, useTransition } from "react";
 import { toast } from "sonner";
 
@@ -15,6 +16,8 @@ import { Button } from "../ui/button";
 
 export const HeaderButtons = function HeaderButtons() {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const doSecureCopy = () => {
     startTransition(async () => {
@@ -23,9 +26,20 @@ export const HeaderButtons = function HeaderButtons() {
       );
 
       if (!response.data || response.error) {
+        // Check if error is due to un-authenticated user
+        if (response.error === messages.actions.user.unAuthenticated) {
+          const redirect = [
+            `/signin`,
+            `redirect=${encodeURIComponent(pathname)}`,
+          ].join("?");
+
+          router.push(redirect);
+          return;
+        }
+
         toast.error(
           response.error ||
-            messages.actions.order.serverErrorCreateCheckoutSession,
+          messages.actions.order.serverErrorCreateCheckoutSession,
         );
 
         return;
