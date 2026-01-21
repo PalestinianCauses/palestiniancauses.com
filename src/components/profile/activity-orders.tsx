@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 10
+// REVIEWED - 11
 
 import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns/format";
@@ -265,81 +265,81 @@ export const OrderItem = function OrderItem({
               <Separator className="hidden w-full flex-1 bg-input/50 sm:block" />
             </div>
           ) : null}
-          <div className="mb-5 flex w-full flex-col gap-2.5">
-            {!isPublicProfile
-              ? order.items.map((orderItem) => {
-                  const isCompletePlusPaid =
-                    order.orderStatus === "completed" &&
-                    order.productOrderStatus === "paid" &&
-                    orderItem.itemType === "product";
+          {!isPublicProfile ? (
+            <div className="mb-5 flex w-full flex-col gap-2.5">
+              {order.items.map((orderItem) => {
+                const isCompletePlusPaid =
+                  order.orderStatus === "completed" &&
+                  order.productOrderStatus === "paid" &&
+                  orderItem.itemType === "product";
 
-                  const downloadingURLs =
-                    isCompletePlusPaid && isObject(orderItem.product)
-                      ? createProductDownloadingURLs(orderItem.product)
-                      : [];
+                const downloadingURLs =
+                  isCompletePlusPaid && isObject(orderItem.product)
+                    ? createProductDownloadingURLs(orderItem.product)
+                    : [];
 
-                  return (
-                    <div
-                      key={orderItem.id}
-                      className="flex w-full flex-col gap-5">
-                      <div className="flex w-full flex-col items-start justify-start gap-2.5 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="flex w-full flex-col items-start justify-start gap-x-5 gap-y-2.5 sm:w-max sm:flex-row sm:items-center">
-                          <SubSectionHeading
-                            as="h5"
-                            className="flex w-full items-center justify-between gap-2.5 text-base tracking-normal text-foreground sm:w-max sm:justify-start lg:text-base xl:text-base">
-                            <span className="block max-w-60 truncate sm:max-w-80 md:max-w-sm">
-                              {(isObject(orderItem.product) &&
-                                orderItem.product.title) ||
-                                (isObject(orderItem.service) &&
-                                  orderItem.service.name) ||
-                                (isObject(orderItem.package) &&
-                                  orderItem.package.name)}{" "}
-                            </span>
-                            <div className="flex items-center justify-start gap-2.5">
-                              <XIcon className="size-4 text-muted-foreground" />
-                              {orderItem.quantity}
-                            </div>
-                          </SubSectionHeading>
-                          <OrderItemType orderType={orderItem.itemType} />
-                        </div>
-                        <Paragraph className="text-mono text-base font-semibold text-foreground lg:text-base">
-                          {orderItem.price} USD
-                        </Paragraph>
+                return (
+                  <div
+                    key={orderItem.id}
+                    className="flex w-full flex-col gap-5">
+                    <div className="flex w-full flex-col items-start justify-start gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex w-full flex-col items-start justify-start gap-x-5 gap-y-2.5 sm:w-max sm:flex-row sm:items-center">
+                        <SubSectionHeading
+                          as="h5"
+                          className="flex w-full items-center justify-between gap-2.5 text-base tracking-normal text-foreground sm:w-max sm:justify-start lg:text-base xl:text-base">
+                          <span className="block max-w-60 truncate sm:max-w-80 md:max-w-sm">
+                            {(isObject(orderItem.product) &&
+                              orderItem.product.title) ||
+                              (isObject(orderItem.service) &&
+                                orderItem.service.name) ||
+                              (isObject(orderItem.package) &&
+                                orderItem.package.name)}{" "}
+                          </span>
+                          <div className="flex items-center justify-start gap-2.5">
+                            <XIcon className="size-4 text-muted-foreground" />
+                            {orderItem.quantity}
+                          </div>
+                        </SubSectionHeading>
+                        <OrderItemType orderType={orderItem.itemType} />
                       </div>
-                      {downloadingURLs.length !== 0 ? (
-                        <div className="space-y-2.5 p-0">
-                          {downloadingURLs.map((link, index) => (
-                            <Button
-                              key={link.url || index}
-                              variant="outline"
-                              size="lg"
-                              className="w-full justify-start px-5"
-                              asChild>
-                              <Link
-                                href={link.url}
-                                target="_blank"
-                                rel="noreferrer noopener">
-                                <ExternalLinkIcon />
-                                <span className="mr-auto truncate">
-                                  {link.title}
-                                  {link.isFile && link.fileSize ? (
-                                    <span className="ml-2.5 font-mono text-sm leading-none text-muted-foreground">
-                                      ({Math.round(link.fileSize / 1024 / 1024)}{" "}
-                                      MB)
-                                    </span>
-                                  ) : null}
-                                </span>
-                                <DownloadIcon className="!size-5" />
-                              </Link>
-                            </Button>
-                          ))}
-                        </div>
-                      ) : null}
+                      <Paragraph className="text-mono text-base font-semibold text-foreground lg:text-base">
+                        {orderItem.price} USD
+                      </Paragraph>
                     </div>
-                  );
-                })
-              : null}
-          </div>
+                    {downloadingURLs.length !== 0 ? (
+                      <div className="space-y-2.5 p-0">
+                        {downloadingURLs.map((link, index) => (
+                          <Button
+                            key={link.url || index}
+                            variant="outline"
+                            size="lg"
+                            className="w-full justify-start px-5"
+                            asChild>
+                            <Link
+                              href={link.url}
+                              target="_blank"
+                              rel="noreferrer noopener">
+                              <ExternalLinkIcon />
+                              <span className="mr-auto truncate">
+                                {link.title}
+                                {link.isFile && link.fileSize ? (
+                                  <span className="ml-2.5 font-mono text-sm leading-none text-muted-foreground">
+                                    ({Math.round(link.fileSize / 1024 / 1024)}{" "}
+                                    MB)
+                                  </span>
+                                ) : null}
+                              </span>
+                              <DownloadIcon className="!size-5" />
+                            </Link>
+                          </Button>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
+            </div>
+          ) : null}
           <div className="flex w-full flex-row items-center justify-between gap-5">
             <SubSectionHeading
               as="h4"
