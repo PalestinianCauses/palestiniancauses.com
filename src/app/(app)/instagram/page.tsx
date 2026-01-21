@@ -1,39 +1,28 @@
 "use client";
 
-// REVIEWED - 31
+// REVIEWED - 32
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
-import {
-  ArrowRightIcon,
-  BookKeyIcon,
-  BookOpenIcon,
-  BriefcaseBusinessIcon,
-  GlobeIcon,
-  MessageCircleIcon,
-  PencilLineIcon,
-  ShoppingCartIcon,
-  SparklesIcon,
-} from "lucide-react";
+import { ArrowDownIcon, ArrowRightIcon } from "lucide-react";
+import Image from "next/image";
 import { Fragment, useRef } from "react";
-import { RiInstagramFill } from "react-icons/ri";
 
 import { SectionHeading } from "@/components/globals/typography";
-import { Button } from "@/components/ui/button";
 
 import {
   Frame,
   FrameBadge,
+  FrameBlur,
   FrameContent,
   FrameHighlight,
   FrameParagraph,
   FrameParagraphHighlight,
-  FrameSquare,
   FrameTitle,
   ImageFrame,
   ImageFrameRender,
 } from "./_components/frame";
-import { ActionCard, DiaryEntryTemplate } from "./_templates/diary-entry";
+import { DiaryEntryTemplate } from "./_templates/diary-entry";
 
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 const ShawqiPlusMahaCalligraphy = function ShawqiPlusMahaCalligraphy() {
@@ -118,37 +107,27 @@ const InstagramStudioPage = function InstagramStudioPage() {
   // Followers from my GitHub profile, please ignore this :)
   const frames: ImageFrame[] = [
     {
-      id: "psc-2.0.0-instagram-01-01",
+      id: "psc-2.0.0-instagram-02-01",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "psc-2.0.0-instagram-01-02",
+      id: "psc-2.0.0-instagram-02-02",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "psc-2.0.0-instagram-01-03",
+      id: "psc-2.0.0-instagram-02-03",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "psc-2.0.0-instagram-01-04",
+      id: "psc-2.0.0-instagram-02-04",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "psc-2.0.0-instagram-01-05",
-      ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
-    },
-    {
-      id: "psc-2.0.0-instagram-01-06",
-      ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
-    },
-    {
-      id: "psc-2.0.0-instagram-01-07",
+      id: "psc-2.0.0-instagram-02-05",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
@@ -161,27 +140,35 @@ const InstagramStudioPage = function InstagramStudioPage() {
         ref={frames[0].ref}
         dimensions="4:5"
         color="primary-foreground"
-        className="bg-background">
-        <FrameContent className="items-center justify-center">
-          <FrameBadge className="border-green-500 bg-gradient-to-r from-green-500/10 text-green-500">
-            PalestinianCauses&apos; 1st Anniversary
-          </FrameBadge>
-          <FrameTitle className="text-center">
-            365{" "}
-            <FrameHighlight className="before:bg-green-500">
-              Days
+        className="bg-green-700">
+        <FrameContent>
+          <FrameTitle>
+            We{" "}
+            <FrameHighlight className="before:bg-background">
+              gave
+            </FrameHighlight>{" "}
+            away{" "}
+            <FrameHighlight className="mb-2.5 before:bg-background">
+              1,000
+            </FrameHighlight>{" "}
+            <FrameHighlight className="mb-2.5 before:bg-background">
+              copies
+            </FrameHighlight>{" "}
+            for{" "}
+            <FrameHighlight className="before:bg-background">
+              free.
             </FrameHighlight>
-            : From Rubble To{" "}
-            <FrameHighlight className="before:bg-green-500">
-              Pixels
-            </FrameHighlight>
-            .
           </FrameTitle>
-          <Button
-            size="icon"
-            className="h-24 w-48 justify-end border-r-4 border-green-500 bg-transparent bg-gradient-to-l from-green-500/10 text-green-500 hover:bg-transparent">
-            <ArrowRightIcon className="!size-12 -translate-x-1/2 stroke-[1.5]" />
-          </Button>
+          <FrameBadge className="bg-foreground text-background">
+            Here is why that era ends today
+            <ArrowRightIcon className="!size-12 stroke-[1.5]" />
+          </FrameBadge>
+          <Image
+            src="http://localhost:3000/gift-icon.png"
+            alt="Gift Icon"
+            fill
+            className="!absolute !-bottom-[25rem] !-right-[25rem] !left-[initial] !top-[initial] !-z-10 !h-auto !w-[80rem] !max-w-[80rem]"
+          />
         </FrameContent>
       </Frame>
 
@@ -190,42 +177,32 @@ const InstagramStudioPage = function InstagramStudioPage() {
         dimensions="4:5"
         color="primary-foreground"
         className="bg-background">
-        <FrameContent>
-          <FrameSquare className="bg-red-500/10 text-red-500 shadow-2xl shadow-red-500/25 ring-red-500">
-            <BookKeyIcon />
-          </FrameSquare>
-          <SectionHeading className="font-semibold">
-            <FrameHighlight className="before:bg-red-500/25">
-              Over 1,000 Orders
+        <FrameContent className="items-center justify-center">
+          <Image
+            src="http://localhost:3000/download-icon.png"
+            alt="Download Icon"
+            fill
+            className="!static !h-auto !max-w-xs"
+          />
+          <SectionHeading className="text-center font-semibold">
+            A download is temporary.
+            <FrameHighlight className="before:bg-green-500">
+              A fortress is permanent.
             </FrameHighlight>{" "}
-            of{" "}
-            <span className="font-bold">
-              A Human <br /> But From Gaza
-            </span>{" "}
-            e-book.
           </SectionHeading>
-          <FrameParagraph className="font-normal text-muted-foreground">
-            What started as a mission to amplify Gazan voices has become a
-            movement. Over a thousand compassionate readers have embraced{" "}
-            <span className="text-foreground underline decoration-red-500 decoration-2 underline-offset-8">
-              &ldquo;A Human But From Gaza,&ldquo;
-            </span>{" "}
-            transforming each order into a powerful declaration of global
-            solidarity.
-          </FrameParagraph>
-          <FrameParagraph className="font-normal text-muted-foreground">
-            <span className="text-foreground underline decoration-red-500 decoration-2 underline-offset-8">
-              Your partnership fuels
-            </span>{" "}
-            our ability to reach even more readers worldwide. The e-book is now
-            available for{" "}
-            <span className="text-foreground underline decoration-red-500 decoration-2 underline-offset-8">
-              18 USD
-            </span>
-            —every purchase sustains our mission and amplifies authentic Gazan
-            voices when they&apos;re needed most.
+          <FrameParagraph className="text-center font-normal text-muted-foreground">
+            You proved these stories matter. But to protect <br />
+            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
+              Gazan narratives
+            </FrameParagraphHighlight>{" "}
+            from being erased, we need to build sustainable infrastructure. We
+            are moving from{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
+              &quot;charity&quot; to &quot;agency.&quot;
+            </FrameParagraphHighlight>
           </FrameParagraph>
         </FrameContent>
+        <FrameBlur className="from-green-500/10 via-green-500 to-green-500/10" />
       </Frame>
 
       <Frame
@@ -233,35 +210,32 @@ const InstagramStudioPage = function InstagramStudioPage() {
         dimensions="4:5"
         color="primary-foreground"
         className="bg-background">
-        <FrameContent>
-          <FrameSquare className="bg-orange-500/10 text-orange-500 shadow-2xl shadow-orange-500/25 ring-orange-500">
-            <PencilLineIcon />
-          </FrameSquare>
-          <SectionHeading className="font-semibold">
-            <FrameHighlight className="before:bg-orange-500/25">
-              Over 59 Diary Entries
-            </FrameHighlight>{" "}
-            <br />
-            Featured in The Truth Museum.
+        <FrameContent className="items-center justify-center">
+          <Image
+            src="http://localhost:3000/dollar-icon.png"
+            alt="Dollar Icon"
+            fill
+            className="!static !h-auto !max-w-xs"
+          />
+          <SectionHeading className="text-center font-semibold">
+            18 USD. Not a cost. <br />{" "}
+            <FrameHighlight className="before:bg-green-500">
+              An investment.
+            </FrameHighlight>
           </SectionHeading>
-          <FrameParagraph className="font-normal text-muted-foreground">
-            Behind every number lies a story. The Truth Museum now features over
-            59 diary entries, each written and shared by{" "}
-            <span className="text-foreground underline decoration-orange-500 decoration-2 underline-offset-8">
-              remarkable individuals from Gaza
-            </span>{" "}
-            who chose courage over silence, transforming their pain into
-            powerful narratives of resilience and hope.
-          </FrameParagraph>
-          <FrameParagraph className="font-normal text-muted-foreground">
-            <span className="text-foreground underline decoration-orange-500 decoration-2 underline-offset-8">
-              Every entry you read amplifies
-            </span>{" "}
-            these authentic voices, ensuring Gaza&apos;s truth reaches global
-            audiences. Your engagement transforms silence into solidarity,
-            helping these stories be seen, heard, and remembered.
+          <FrameParagraph className="text-center font-normal text-muted-foreground">
+            This isn&apos;t just for an e-book. Your purchase directly funds{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
+              our agency.
+            </FrameParagraphHighlight>{" "}
+            It pays writers, powers the museum, and{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
+              proves that Gazan talent
+            </FrameParagraphHighlight>{" "}
+            is a world-class asset.
           </FrameParagraph>
         </FrameContent>
+        <FrameBlur className="from-green-500/10 via-green-500 to-green-500/10" />
       </Frame>
 
       <Frame
@@ -269,155 +243,63 @@ const InstagramStudioPage = function InstagramStudioPage() {
         dimensions="4:5"
         color="primary-foreground"
         className="bg-background">
-        <FrameContent>
-          <FrameSquare className="bg-yellow-500/10 text-yellow-600 shadow-2xl shadow-yellow-500/25 ring-yellow-500">
-            <RiInstagramFill className="!stroke-0" />
-          </FrameSquare>
-          <SectionHeading className="font-semibold">
-            <FrameHighlight className="before:bg-yellow-500/25">
-              Over 7,500 Followers
+        <FrameContent className="items-center justify-center">
+          <Image
+            src="http://localhost:3000/lock-icon.png"
+            alt="Lock Icon"
+            fill
+            className="!static !h-auto !max-w-xs"
+          />
+          <SectionHeading className="text-center font-semibold">
+            Achieve The <br />{" "}
+            <FrameHighlight className="before:bg-green-500">
+              Truth Bearer
             </FrameHighlight>{" "}
-            <br />
-            on our Instagram Profile
+            Status.
           </SectionHeading>
-          <FrameParagraph className="font-normal text-muted-foreground">
-            From zero to{" "}
-            <span className="text-foreground underline decoration-yellow-500 decoration-2 underline-offset-8">
-              over 7,500 followers
-            </span>
-            —each one represents a commitment to amplifying authentic Gazan
-            stories and building a global community rooted in solidarity and
-            truth.
+          <FrameParagraph className="text-center font-normal text-muted-foreground">
+            When you order, you don&apos;t just{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
+              get a file.{" "}
+            </FrameParagraphHighlight>
           </FrameParagraph>
-          <FrameParagraph className="font-normal text-muted-foreground">
-            <span className="text-foreground underline decoration-yellow-500 decoration-2 underline-offset-8">
-              This community you&apos;ve helped build
-            </span>{" "}
-            has become a powerful platform where Gazan voices resonate far
-            beyond borders. Your support has been the foundation of our
-            journey—and this is just the beginning.
+          <FrameParagraph className="text-center font-normal text-muted-foreground">
+            You{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
+              achieve a permanent badge
+            </FrameParagraphHighlight>{" "}
+            on your profile. A digital testament that{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
+              you helped build
+            </FrameParagraphHighlight>{" "}
+            this foundation.
           </FrameParagraph>
         </FrameContent>
+        <FrameBlur className="from-green-500/10 via-green-500 to-green-500/10" />
       </Frame>
 
       <Frame
         ref={frames[4].ref}
         dimensions="4:5"
         color="primary-foreground"
-        className="bg-background">
+        className="bg-green-900">
         <FrameContent>
-          <FrameSquare className="bg-green-500/10 text-green-500 shadow-2xl shadow-green-500/25 ring-green-500">
-            <SparklesIcon />
-          </FrameSquare>
-          <SectionHeading className="font-semibold">
-            Today, We Introduce{" "}
-            <FrameHighlight className="before:bg-green-500/25">
-              Our New Identity:
+          <Image
+            src="http://localhost:3000/comment-icon.png"
+            alt="Comment Icon"
+            fill
+            className="!static !h-auto !max-w-xs"
+          />
+          <FrameTitle>
+            Possess <br /> a part of
+            <FrameHighlight className="before:bg-background">
+              history.
             </FrameHighlight>{" "}
-            <br />
-            PalestinianCauses Digital Agency
-          </SectionHeading>
-          <FrameParagraph className="font-normal text-muted-foreground">
-            After a year of amplifying Gazan voices, we&apos;re taking the next
-            step. Today, we proudly introduce{" "}
-            <span className="text-foreground underline decoration-green-500 decoration-2 underline-offset-8">
-              PalestinianCauses Digital Agency
-            </span>
-            —a world-class digital services agency powered by Gazan talent,
-            where excellence meets purpose in every project we deliver.
-          </FrameParagraph>
-          <FrameParagraph className="font-normal text-muted-foreground">
-            <span className="text-foreground underline decoration-green-500 decoration-2 underline-offset-8">
-              Discover Shawqi&apos;s Professional Room
-            </span>
-            —our founder&apos;s showcase of expertise, services, and packages.
-            More Professional Rooms and{" "}
-            <span className="text-foreground underline decoration-green-500 decoration-2 underline-offset-8">
-              The Riwaq: Blog Rooms
-            </span>{" "}
-            are launching soon. Stay tuned for curated writings on craft,
-            resilience, and creative excellence.
-          </FrameParagraph>
-        </FrameContent>
-      </Frame>
-
-      <Frame
-        ref={frames[5].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-background">
-        <FrameContent>
-          <FrameSquare className="bg-teal-500/10 text-teal-500 shadow-2xl shadow-teal-500/25 ring-teal-500">
-            <BriefcaseBusinessIcon />
-          </FrameSquare>
-          <SectionHeading className="font-semibold">
-            <FrameHighlight className="before:bg-teal-500/25">
-              What&apos;s Coming Next?
-            </FrameHighlight>{" "}
-            <br />
-            Building Tomorrow&apos;s Solutions
-          </SectionHeading>
-          <FrameParagraph className="font-normal text-muted-foreground">
-            As PalestinianCauses Digital Agency,{" "}
-            <span className="text-foreground underline decoration-teal-500 decoration-2 underline-offset-8">
-              we deliver
-            </span>{" "}
-            Branded Web Applications, Strategic Content Creation, and Expert
-            Translation Services—each project demonstrating how adversity
-            transforms into competitive advantage.
-          </FrameParagraph>
-          <FrameParagraph className="font-normal text-muted-foreground">
-            <span className="text-foreground underline decoration-teal-500 decoration-2 underline-offset-8">
-              Dive into our new About Us page
-            </span>{" "}
-            to discover our mission, vision, and the resilient Gazan talent
-            powering world-class digital solutions. More Professional Rooms and
-            Blog Rooms content are launching soon—
-            <span className="text-foreground underline decoration-teal-500 decoration-2 underline-offset-8">
-              watch this space.
-            </span>
-          </FrameParagraph>
-        </FrameContent>
-      </Frame>
-
-      <Frame
-        ref={frames[6].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-background">
-        <FrameContent className="items-center justify-center">
-          <SectionHeading className="text-center font-semibold">
-            What Can{" "}
-            <FrameHighlight className="before:bg-foreground/25">
-              You Do Now?
-            </FrameHighlight>
-          </SectionHeading>
-          <div className="mx-auto grid w-full grid-cols-[20rem_20rem] items-center justify-center gap-10">
-            <ActionCard
-              color="primary-foreground"
-              Icon={GlobeIcon}
-              title="Explore Our Website"
-              description="Discover our new About Us page and explore Shawqi's Professional Room. More rooms launching soon—stay connected"
-            />
-            <ActionCard
-              color="primary-foreground"
-              Icon={ShoppingCartIcon}
-              title="Order Our E-book"
-              description="Join over 1,000 readers by ordering &ldquo;A Human But From Gaza&rdquo; for 18 USD. Every purchase amplifies authentic Gazan voices"
-            />
-            <ActionCard
-              color="primary-foreground"
-              Icon={BookOpenIcon}
-              title="Read Diary Entries"
-              description="Explore The Truth Museum and immerse yourself in powerful, authentic stories from remarkable individuals from/in Gaza"
-            />
-            <ActionCard
-              color="primary-foreground"
-              Icon={MessageCircleIcon}
-              title="Join The Conversation"
-              description="Share your thoughts through comments and become part of a community ensuring Gaza's truth is seen, heard, and remembered"
-            />
-          </div>
+          </FrameTitle>
+          <FrameBadge className="bg-foreground text-background">
+            Leave a comment with &quot;book&quot; to secure your copy
+            <ArrowDownIcon className="!size-12 stroke-[1.5]" />
+          </FrameBadge>
         </FrameContent>
       </Frame>
 
