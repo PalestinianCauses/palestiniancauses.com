@@ -1,6 +1,4 @@
 {
-  "reviewed": "true",
-
   "arrowParens": "always",
   "bracketSameLine": true,
   "bracketSpacing": true,
@@ -13,6 +11,7 @@
   "tabWidth": 2,
   "trailingComma": "all",
   "useTabs": false,
-
-  "plugins": ["prettier-plugin-tailwindcss"]
+  "plugins": [
+    "prettier-plugin-tailwindcss"
+  ]
 }
