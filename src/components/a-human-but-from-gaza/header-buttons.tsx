@@ -39,7 +39,7 @@ export const HeaderButtons = function HeaderButtons() {
 
         toast.error(
           response.error ||
-          messages.actions.order.serverErrorCreateCheckoutSession,
+            messages.actions.order.serverErrorCreateCheckoutSession,
         );
 
         return;

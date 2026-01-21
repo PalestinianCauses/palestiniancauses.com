@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 09
+// REVIEWED - 10
 
 import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns/format";
@@ -255,14 +255,16 @@ export const OrderItem = function OrderItem({
             />
           </div>
           <Separator className="block w-full flex-1 bg-input/50 sm:hidden" />
-          <div className="flex w-full flex-col items-start justify-start gap-2.5 sm:flex-row sm:items-center sm:justify-between">
-            <SubSectionHeading
-              as="h4"
-              className="flex items-center justify-start gap-1.5 text-xs uppercase tracking-[0.2em] text-foreground lg:text-xs xl:text-xs">
-              Order Items
-            </SubSectionHeading>
-            <Separator className="hidden w-full flex-1 bg-input/50 sm:block" />
-          </div>
+          {!isPublicProfile ? (
+            <div className="flex w-full flex-col items-start justify-start gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+              <SubSectionHeading
+                as="h4"
+                className="flex items-center justify-start gap-1.5 text-xs uppercase tracking-[0.2em] text-foreground lg:text-xs xl:text-xs">
+                Order Items
+              </SubSectionHeading>
+              <Separator className="hidden w-full flex-1 bg-input/50 sm:block" />
+            </div>
+          ) : null}
           <div className="mb-5 flex w-full flex-col gap-2.5">
             {!isPublicProfile
               ? order.items.map((orderItem) => {
