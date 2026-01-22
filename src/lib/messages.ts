@@ -1,4 +1,4 @@
-// REVIEWED - 39
+// REVIEWED - 40
 
 export const messages = {
   http: {
@@ -197,6 +197,18 @@ export const messages = {
         notFound: "We couldn't find the product links. Please try again.",
         serverError:
           "We couldn't retrieve the product links. Please try again.",
+      },
+      download: {
+        pending: "Preparing your downloads...",
+        inProgress: "Your files are downloading. Please wait...",
+        success: (fileName: string) =>
+          `"${fileName}" has been downloaded successfully.`,
+        successMultiple: (count: number) =>
+          `All ${count} file${count === 1 ? "" : "s"} have been downloaded successfully.`,
+        error: (fileName: string) =>
+          `We couldn't download "${fileName}" using our platform's download method. Please check your connection and try again, or use the individual file links below to download via your browser.`,
+        errorMultiple:
+          "We couldn't download some files using our platform's download method. Please check your connection and try again, or use the individual file links below to download via your browser.",
       },
       notFound: "We couldn't find this product. Please try again.",
       notAvailableForPurchasing:

@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 
 import {
   ArrowUpRightIcon,
@@ -14,6 +14,7 @@ import { getStripeCheckoutSession } from "@/actions/stripe-get-checkout-session"
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
 import { Paragraph, SectionHeading } from "@/components/globals/typography";
+import { AutoDownload } from "@/components/product/auto-download";
 import { OrderItem } from "@/components/profile/activity-orders";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -110,8 +111,8 @@ export default async function ThankYouPage({
               We Appreciate Your Purchase!
             </SectionHeading>
             <Paragraph className="text-base lg:text-base">
-              Your payment was processed successfully. To make things seamless,
-              we&apos;ve delivered your download links to{" "}
+              Your payment has been processed successfully. We&apos;ve sent your
+              download links to{" "}
               {isObject(order.user) && order.user.email ? (
                 <span className="font-semibold text-foreground">
                   {order.user.email}
@@ -119,48 +120,65 @@ export default async function ThankYouPage({
               ) : (
                 "your email address"
               )}
-              . You are welcome to access your files below at your convenience.
+              . You can access your files below at your convenience.
             </Paragraph>
           </div>
 
           {downloadingURLs.length !== 0 ? (
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2.5">
-                  <DownloadIcon className="size-5" />
-                  Access Your Downloads
-                </CardTitle>
-                <CardDescription>
-                  Choose any of these links below to retrieve your files.
-                </CardDescription>
-              </CardHeader>
-              <div className="space-y-2.5 p-5 pt-0">
-                {downloadingURLs.map((link, index) => (
-                  <Button
-                    key={link.url || index}
-                    variant="outline"
-                    size="lg"
-                    className="w-full justify-start px-5"
-                    asChild>
-                    <Link
-                      href={link.url}
-                      target="_blank"
-                      rel="noreferrer noopener">
-                      <ExternalLinkIcon />
-                      <span className="mr-auto truncate">
-                        {link.title}
-                        {link.isFile && link.fileSize ? (
-                          <span className="ml-2.5 font-mono text-sm leading-none text-muted-foreground">
-                            ({Math.round(link.fileSize / 1024 / 1024)} MB)
-                          </span>
-                        ) : null}
-                      </span>
-                      <DownloadIcon className="!size-5" />
-                    </Link>
-                  </Button>
-                ))}
-              </div>
-            </Card>
+            <Fragment>
+              <AutoDownload downloadingURLs={downloadingURLs} />
+              <Card className="w-full">
+                <CardHeader className="p-5">
+                  <CardTitle className="flex items-center gap-2.5">
+                    <DownloadIcon className="size-5" />
+                    Open Files Individually (Managed by Your Browser)
+                  </CardTitle>
+                  <CardDescription>
+                    {downloadingURLs.some((link) => link.isFile) ? (
+                      <Fragment>
+                        Click any file link below to open it individually. Each
+                        link will open the file in a new browser tab. Depending
+                        on the file type and your browser settings, it may
+                        preview the file (like images or PDFs) or download it
+                        automatically. In case it previews, you can download it
+                        manually from the preview page using your browser&apos;s
+                        download option.
+                      </Fragment>
+                    ) : (
+                      <Fragment>
+                        Select any link below to access your content.
+                      </Fragment>
+                    )}
+                  </CardDescription>
+                </CardHeader>
+                <div className="space-y-2.5 p-5 pt-0">
+                  {downloadingURLs.map((link, index) => (
+                    <Button
+                      key={link.url || index}
+                      variant="outline"
+                      size="lg"
+                      className="w-full justify-start px-5"
+                      asChild>
+                      <Link
+                        href={link.url}
+                        target="_blank"
+                        rel="noreferrer noopener">
+                        <ExternalLinkIcon />
+                        <span className="mr-auto truncate">
+                          {link.title}
+                          {link.isFile && link.fileSize ? (
+                            <span className="ml-2.5 font-mono text-sm leading-none text-muted-foreground">
+                              ({Math.round(link.fileSize / 1024 / 1024)} MB)
+                            </span>
+                          ) : null}
+                        </span>
+                        <DownloadIcon className="!size-5" />
+                      </Link>
+                    </Button>
+                  ))}
+                </div>
+              </Card>
+            </Fragment>
           ) : null}
 
           {order ? (
@@ -171,8 +189,8 @@ export default async function ThankYouPage({
 
           <div className="flex flex-col items-center gap-5">
             <div className="mx-auto max-w-xl text-center text-sm leading-relaxed text-muted-foreground">
-              In case you have not received any email, please check your spam
-              folder. For further assistance, feel free to{" "}
+              In case you haven&apos;t received the email, please check your
+              spam folder. For further assistance, please{" "}
               <Link
                 href="mailto:hello@palestiniancauses.com"
                 className="font-semibold text-foreground underline">
