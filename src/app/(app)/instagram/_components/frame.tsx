@@ -1,4 +1,4 @@
-// REVIEWED - 03
+// REVIEWED - 04
 import { toJpeg, toPng } from "html-to-image";
 import {
   forwardRef,
@@ -31,6 +31,9 @@ export type ImageFrameRenderProps = {
   text?: string;
 };
 
+export const polygon =
+  "polygon(73% 51%, 91% 11%, 100% 46%, 97% 82%, 92% 84%, 75% 64%, 55% 47%, 46% 49%, 45% 62%, 50% 87%, 21% 64%, 0% 100%, 5% 51%, 21% 63%, 58% 0%, 73% 51%)";
+
 export const ImageFrameRender = function ImageFrameRender({
   frames,
   text,
@@ -58,14 +61,40 @@ export const ImageFrameRender = function ImageFrameRender({
   );
 };
 
+export const FrameBlur = function FrameBlur({
+  className,
+}: PropsWithChildren & HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      aria-hidden="true"
+      className="absolute left-[calc(50%_-_24rem)] top-[calc(50%_-_30rem)] -z-10 transform-gpu blur-3xl">
+      <div
+        className={cn(
+          "aspect-[1108/632] w-[69.25rem] bg-gradient-to-r",
+          className,
+        )}
+        style={{ clipPath: polygon }}
+      />
+    </div>
+  );
+};
+
 type FrameProps = HTMLAttributes<HTMLDivElement> & {
+  isFooter?: boolean;
   dimensions?: Dimensions;
   color?: ThemeColors;
 };
 
 export const Frame = forwardRef<HTMLDivElement, FrameProps>(
   (
-    { dimensions = "1:1", color = "primary", className, children, ...props },
+    {
+      isFooter = true,
+      dimensions = "1:1",
+      color = "primary",
+      className,
+      children,
+      ...props
+    },
     ref,
   ) => (
     <div
@@ -79,10 +108,12 @@ export const Frame = forwardRef<HTMLDivElement, FrameProps>(
       )}
       {...props}>
       {children}
-      <div className="absolute bottom-5 flex items-center justify-center gap-2.5 text-2xl font-bold">
-        <RiInstagramLine className="size-8" />
-        PalestinianCauses.
-      </div>
+      {isFooter && (
+        <div className="absolute bottom-5 flex items-center justify-center gap-2.5 text-2xl font-bold">
+          <RiInstagramLine className="size-8" />
+          PalestinianCauses.
+        </div>
+      )}
     </div>
   ),
 );
@@ -150,6 +181,7 @@ export const FrameTitle = function FrameTitle({
 export const FrameBadge = function FrameBadge({
   className,
   children,
+  ...props
 }: PropsWithChildren & HTMLAttributes<HTMLDivElement>) {
   return (
     <Badge
@@ -157,7 +189,8 @@ export const FrameBadge = function FrameBadge({
       className={cn(
         "border-l-4 border-current bg-transparent text-3xl text-current ring-0 hover:bg-transparent",
         className,
-      )}>
+      )}
+      {...props}>
       {children}
     </Badge>
   );
@@ -198,6 +231,12 @@ export const FrameParagraphHighlight = function FrameParagraphHighlight({
   children,
 }: PropsWithChildren & HTMLAttributes<HTMLSpanElement>) {
   return (
-    <span className={cn("px-2.5 font-medium", className)}>{children}</span>
+    <span
+      className={cn(
+        "relative font-medium after:absolute after:inset-x-0 after:bottom-0 after:-z-10 after:h-0.5 after:w-full",
+        className,
+      )}>
+      {children}
+    </span>
   );
 };
