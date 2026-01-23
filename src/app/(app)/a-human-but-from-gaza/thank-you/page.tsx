@@ -1,10 +1,12 @@
-// REVIEWED - 05
+// REVIEWED - 06
 
 import {
   ArrowUpRightIcon,
   DownloadIcon,
   ExternalLinkIcon,
+  InfoIcon,
   PackageCheckIcon,
+  ShareIcon,
 } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -14,7 +16,6 @@ import { getStripeCheckoutSession } from "@/actions/stripe-get-checkout-session"
 import { Container } from "@/components/globals/container";
 import { Footer } from "@/components/globals/footer";
 import { Paragraph, SectionHeading } from "@/components/globals/typography";
-import { AutoDownload } from "@/components/product/auto-download";
 import { OrderItem } from "@/components/profile/activity-orders";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -107,11 +108,9 @@ export default async function ThankYouPage({
           </div>
 
           <div className="space-y-2.5 text-center">
-            <SectionHeading as="h1">
-              We Appreciate Your Purchase!
-            </SectionHeading>
+            <SectionHeading as="h1">Thank You for Your Purchase</SectionHeading>
             <Paragraph className="text-base lg:text-base">
-              Your payment has been processed successfully. We&apos;ve sent your
+              Your payment has been processed successfully. We have sent your
               download links to{" "}
               {isObject(order.user) && order.user.email ? (
                 <span className="font-semibold text-foreground">
@@ -120,65 +119,106 @@ export default async function ThankYouPage({
               ) : (
                 "your email address"
               )}
-              . You can access your files below at your convenience.
+              . You may access your files below at any time.
             </Paragraph>
           </div>
 
           {downloadingURLs.length !== 0 ? (
-            <Fragment>
-              <AutoDownload downloadingURLs={downloadingURLs} />
-              <Card className="w-full">
-                <CardHeader className="p-5">
-                  <CardTitle className="flex items-center gap-2.5">
-                    <DownloadIcon className="size-5" />
-                    Open Files Individually (Managed by Your Browser)
-                  </CardTitle>
-                  <CardDescription>
-                    {downloadingURLs.some((link) => link.isFile) ? (
-                      <Fragment>
-                        Click any file link below to open it individually. Each
-                        link will open the file in a new browser tab. Depending
-                        on the file type and your browser settings, it may
-                        preview the file (like images or PDFs) or download it
-                        automatically. In case it previews, you can download it
-                        manually from the preview page using your browser&apos;s
-                        download option.
-                      </Fragment>
-                    ) : (
-                      <Fragment>
-                        Select any link below to access your content.
-                      </Fragment>
-                    )}
-                  </CardDescription>
-                </CardHeader>
-                <div className="space-y-2.5 p-5 pt-0">
-                  {downloadingURLs.map((link, index) => (
-                    <Button
-                      key={link.url || index}
-                      variant="outline"
-                      size="lg"
-                      className="w-full justify-start px-5"
-                      asChild>
-                      <Link
-                        href={link.url}
-                        target="_blank"
-                        rel="noreferrer noopener">
-                        <ExternalLinkIcon />
-                        <span className="mr-auto truncate">
-                          {link.title}
-                          {link.isFile && link.fileSize ? (
-                            <span className="ml-2.5 font-mono text-sm leading-none text-muted-foreground">
-                              ({Math.round(link.fileSize / 1024 / 1024)} MB)
-                            </span>
-                          ) : null}
+            <Card className="w-full border-none">
+              <CardHeader className="p-0 pb-5">
+                <CardTitle className="flex items-center gap-2.5">
+                  <DownloadIcon className="size-5" />
+                  Your Download Links
+                </CardTitle>
+                <CardDescription>
+                  Select any link below to access your purchased files.
+                </CardDescription>
+              </CardHeader>
+              <div className="mb-5 space-y-2.5 p-0">
+                {downloadingURLs.map((link, index) => (
+                  <Button
+                    key={link.url || index}
+                    variant="outline"
+                    size="lg"
+                    className="w-full justify-start px-5"
+                    asChild>
+                    <Link
+                      href={link.url}
+                      target="_blank"
+                      rel="noreferrer noopener">
+                      <ExternalLinkIcon />
+                      <span className="mr-auto truncate">
+                        {link.title}
+                        {link.isFile && link.fileSize ? (
+                          <span className="ml-2.5 font-mono text-sm leading-none text-muted-foreground">
+                            ({Math.round(link.fileSize / 1024 / 1024)} MB)
+                          </span>
+                        ) : null}
+                      </span>
+                      <DownloadIcon className="!size-5" />
+                    </Link>
+                  </Button>
+                ))}
+              </div>
+
+              <div className="space-y-5">
+                <CardTitle className="flex items-center gap-2.5">
+                  <InfoIcon className="size-5" />
+                  Download Instructions
+                </CardTitle>
+
+                <div className="space-y-2.5 font-normal leading-relaxed text-muted-foreground">
+                  <div className="space-y-2.5 border bg-background p-2.5">
+                    <p className="font-medium text-foreground">
+                      PDFs &amp; Images
+                    </p>
+                    <p>
+                      These file types will open in your browser for preview. To
+                      save them to your device, please follow these steps:
+                    </p>
+                    <ul className="space-y-1.5 px-2.5 pr-0">
+                      <li>
+                        <span className="font-medium text-foreground">
+                          Chrome, Edge, or FireFox:
+                        </span>{" "}
+                        Use the download button in the preview, right-click the
+                        file and select &quot;Save as&quot;, or on mobile
+                        devices, long-press and select &quot;Save as&quot;.
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <ShareIcon className="size-5 shrink-0 text-foreground" />
+                        <span>
+                          <span className="font-medium text-foreground">
+                            Safari (iPhone, iPad, or Mac):
+                          </span>{" "}
+                          Tap the{" "}
+                          <span className="font-medium text-foreground">
+                            Share
+                          </span>{" "}
+                          icon in your browser, then select{" "}
+                          <span className="font-medium text-foreground">
+                            &quot;Save to Files&quot;
+                          </span>
+                          .
                         </span>
-                        <DownloadIcon className="!size-5" />
-                      </Link>
-                    </Button>
-                  ))}
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-2.5 border bg-background p-2.5">
+                    <p className="font-medium text-foreground">
+                      ZIP &amp; Other Archive Files
+                    </p>
+                    <p>
+                      These files will begin downloading automatically when you
+                      click the link. Please check your browser&apos;s download
+                      manager or your device&apos;s Downloads folder to locate
+                      the file.
+                    </p>
+                  </div>
                 </div>
-              </Card>
-            </Fragment>
+              </div>
+            </Card>
           ) : null}
 
           {order ? (
@@ -189,8 +229,9 @@ export default async function ThankYouPage({
 
           <div className="flex flex-col items-center gap-5">
             <div className="mx-auto max-w-xl text-center text-sm leading-relaxed text-muted-foreground">
-              In case you haven&apos;t received the email, please check your
-              spam folder. For further assistance, please{" "}
+              In case you have not received the email with your download links,
+              please check your spam or junk folder. Should you require any
+              assistance, please{" "}
               <Link
                 href="mailto:hello@palestiniancauses.com"
                 className="font-semibold text-foreground underline">
@@ -202,7 +243,7 @@ export default async function ThankYouPage({
           <Button size="lg" asChild>
             <Link href="/a-human-but-from-gaza">
               <ArrowUpRightIcon />
-              Return to Product Page
+              Continue Browsing
             </Link>
           </Button>
         </div>
