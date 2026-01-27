@@ -1,4 +1,4 @@
-// REVIEWED - 04
+// REVIEWED - 05
 import { toJpeg, toPng } from "html-to-image";
 import {
   forwardRef,
@@ -233,7 +233,7 @@ export const FrameParagraphHighlight = function FrameParagraphHighlight({
   return (
     <span
       className={cn(
-        "relative font-medium after:absolute after:inset-x-0 after:bottom-0 after:-z-10 after:h-0.5 after:w-full",
+        "relative font-medium after:absolute after:inset-x-0 after:bottom-0 after:-z-10 after:h-1 after:w-full",
         className,
       )}>
       {children}

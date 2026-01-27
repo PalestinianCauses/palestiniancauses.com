@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 32
+// REVIEWED - 33
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -133,9 +133,241 @@ const InstagramStudioPage = function InstagramStudioPage() {
     },
   ];
 
+  const otherFrames: ImageFrame[] = [
+    {
+      id: "psc-2.0.0-instagram-04-01",
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+    {
+      id: "psc-2.0.0-instagram-04-02",
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+    {
+      id: "psc-2.0.0-instagram-04-03",
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+    {
+      id: "psc-2.0.0-instagram-04-04",
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+    {
+      id: "psc-2.0.0-instagram-04-05",
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+  ];
+
+  const blogsFrames: ImageFrame[] = [
+    {
+      id: "psc-2.0.0-blog-01-01",
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+  ];
+
   return (
     <main className="section-padding-start-lg">
-      <ImageFrameRender frames={frames} />
+      <ImageFrameRender frames={blogsFrames} />
+
+      <Frame
+        isFooter={false}
+        ref={blogsFrames[0].ref}
+        dimensions="open-graph"
+        color="primary-foreground"
+        className="bg-background">
+        <FrameContent className="h-auto w-[67.5rem] gap-6 px-20">
+          <FrameTitle>
+            3{" "}
+            <FrameHighlight className="before:bg-red-500">
+              Habits
+            </FrameHighlight>
+          </FrameTitle>
+          <FrameTitle className="!text-7xl font-semibold !leading-none lg:!leading-none xl:!leading-none">
+            that changed
+            <br />
+            how I{" "}
+            <FrameParagraphHighlight className="font-semibold after:bg-red-500">
+              achieve
+            </FrameParagraphHighlight>{" "}
+            things.
+          </FrameTitle>
+        </FrameContent>
+        <FrameBlur className="from-red-500/10 via-red-500 to-red-500/10" />
+        <Image
+          src="http://localhost:3000/arrow-icon.png"
+          alt="Arrow Icon"
+          fill
+          className="!absolute !-bottom-[10rem] !-right-[10rem] !left-[initial] !top-[initial] !-z-10 !h-auto !max-w-[40rem]"
+        />
+      </Frame>
+
+      <Frame
+        ref={otherFrames[0].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-background">
+        <FrameContent className="items-center justify-center">
+          <FrameTitle className="text-center">
+            <FrameHighlight className="before:bg-yellow-700">
+              Sumoud.
+            </FrameHighlight>{" "}
+            <span dir="rtl" className="relative z-10 font-[ShamelSansOne]">
+              صُمُــــــــوْدْ.
+            </span>
+          </FrameTitle>
+          <FrameParagraph className="text-center !text-5xl italic !leading-snug">
+            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
+              noun.
+            </FrameParagraphHighlight>{" "}
+            The act of building a{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
+              future
+            </FrameParagraphHighlight>{" "}
+            <br /> while the{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
+              ground
+            </FrameParagraphHighlight>{" "}
+            is shaking.
+          </FrameParagraph>
+        </FrameContent>
+        <FrameBlur className="from-yellow-700/10 via-yellow-700 to-yellow-700/10" />
+      </Frame>
+
+      <Frame
+        ref={otherFrames[1].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-background">
+        <FrameContent className="items-center justify-center">
+          <FrameTitle className="text-center">
+            <FrameHighlight className="before:bg-yellow-700">
+              Izzah.
+            </FrameHighlight>{" "}
+            <br />
+            <span dir="rtl" className="relative z-10 font-[ShamelSansOne]">
+              عِــــــــــــــــزَّةْ.
+            </span>
+          </FrameTitle>
+          <FrameParagraph className="text-center !text-5xl italic !leading-snug">
+            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
+              noun.
+            </FrameParagraphHighlight>{" "}
+            Dignity that can not be{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
+              bombed
+            </FrameParagraphHighlight>{" "}
+            away. The refusal to bow, to beg, <br /> or to be broken, even when
+            the world{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
+              looks away.
+            </FrameParagraphHighlight>
+          </FrameParagraph>
+        </FrameContent>
+        <FrameBlur className="from-yellow-700/10 via-yellow-700 to-yellow-700/10" />
+      </Frame>
+
+      <Frame
+        ref={otherFrames[2].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-background">
+        <FrameContent className="items-center justify-center">
+          <FrameTitle className="text-center">
+            <FrameHighlight className="before:bg-yellow-700">
+              Amal.
+            </FrameHighlight>{" "}
+            <br />
+            <span dir="rtl" className="relative z-10 font-[ShamelSansOne]">
+              أَمَــــــــــــــــلْ.
+            </span>
+          </FrameTitle>
+          <FrameParagraph className="text-center !text-5xl italic !leading-snug">
+            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
+              noun.
+            </FrameParagraphHighlight>{" "}
+            The stubborn belief that tomorrow{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
+              will be better.
+            </FrameParagraphHighlight>{" "}
+            A weapon more powerful than any{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
+              missile.
+            </FrameParagraphHighlight>
+          </FrameParagraph>
+        </FrameContent>
+        <FrameBlur className="from-yellow-700/10 via-yellow-700 to-yellow-700/10" />
+      </Frame>
+
+      <Frame
+        ref={otherFrames[3].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-background">
+        <FrameContent className="items-center justify-center">
+          <FrameTitle className="text-center">
+            <FrameHighlight className="before:bg-yellow-700">
+              Nakhwa.
+            </FrameHighlight>{" "}
+            <br />
+            <span dir="rtl" className="relative z-10 font-[ShamelSansOne]">
+              نَخْــــــــــــــــوَةْ.
+            </span>
+          </FrameTitle>
+          <FrameParagraph className="text-center !text-5xl italic !leading-snug">
+            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
+              noun.
+            </FrameParagraphHighlight>{" "}
+            The{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
+              instant
+            </FrameParagraphHighlight>{" "}
+            impulse to run towards the danger to help another. The courage that
+            doesn&apos;t wait for{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
+              permission.
+            </FrameParagraphHighlight>
+          </FrameParagraph>
+        </FrameContent>
+        <FrameBlur className="from-yellow-700/10 via-yellow-700 to-yellow-700/10" />
+      </Frame>
+
+      <Frame
+        ref={otherFrames[4].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-yellow-700">
+        <FrameContent className="items-center justify-center">
+          <FrameTitle className="text-center">
+            <FrameHighlight className="before:bg-background">
+              Gaza.
+            </FrameHighlight>{" "}
+            <br />
+            <span dir="rtl" className="relative z-10 font-[ShamelSansOne]">
+              غَــــــــــــــــزَّةْ.
+            </span>
+          </FrameTitle>
+          <FrameParagraph className="text-center !text-5xl italic !leading-snug">
+            <FrameParagraphHighlight className="text-foreground after:bg-background">
+              noun.
+            </FrameParagraphHighlight>{" "}
+            Not a place of death. A{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-background">
+              laboratory
+            </FrameParagraphHighlight>{" "}
+            of life, unyielding resilience, and{" "}
+            <FrameParagraphHighlight className="text-foreground after:bg-background">
+              world-class
+            </FrameParagraphHighlight>{" "}
+            excellence.
+          </FrameParagraph>
+        </FrameContent>
+        <FrameBlur className="from-yellow-900/10 via-yellow-900 to-yellow-900/10" />
+      </Frame>
+
       <Frame
         ref={frames[0].ref}
         dimensions="4:5"
