@@ -1,10 +1,15 @@
 "use client";
 
-// REVIEWED - 33
+// REVIEWED - 34
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
-import { ArrowDownIcon, ArrowRightIcon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  BedIcon,
+  ClockFadingIcon,
+  RepeatIcon,
+} from "lucide-react";
 import Image from "next/image";
 import { Fragment, useRef } from "react";
 
@@ -107,55 +112,32 @@ const InstagramStudioPage = function InstagramStudioPage() {
   // Followers from my GitHub profile, please ignore this :)
   const frames: ImageFrame[] = [
     {
-      id: "psc-2.0.0-instagram-02-01",
+      id: "psc-2.0.0-instagram-05-01",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "psc-2.0.0-instagram-02-02",
+      id: "psc-2.0.0-instagram-05-02",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "psc-2.0.0-instagram-02-03",
+      id: "psc-2.0.0-instagram-05-03",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "psc-2.0.0-instagram-02-04",
+      id: "psc-2.0.0-instagram-05-04",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "psc-2.0.0-instagram-02-05",
-      ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
-    },
-  ];
-
-  const otherFrames: ImageFrame[] = [
-    {
-      id: "psc-2.0.0-instagram-04-01",
+      id: "psc-2.0.0-instagram-05-05",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
     {
-      id: "psc-2.0.0-instagram-04-02",
-      ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
-    },
-    {
-      id: "psc-2.0.0-instagram-04-03",
-      ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
-    },
-    {
-      id: "psc-2.0.0-instagram-04-04",
-      ref: useRef<HTMLDivElement>(null),
-      as: "jpeg",
-    },
-    {
-      id: "psc-2.0.0-instagram-04-05",
+      id: "psc-2.0.0-instagram-05-06",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
@@ -171,8 +153,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
 
   return (
     <main className="section-padding-start-lg">
-      <ImageFrameRender frames={blogsFrames} />
-
+      <ImageFrameRender frames={frames} />
       <Frame
         isFooter={false}
         ref={blogsFrames[0].ref}
@@ -204,270 +185,91 @@ const InstagramStudioPage = function InstagramStudioPage() {
           className="!absolute !-bottom-[10rem] !-right-[10rem] !left-[initial] !top-[initial] !-z-10 !h-auto !max-w-[40rem]"
         />
       </Frame>
-
-      <Frame
-        ref={otherFrames[0].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-background">
-        <FrameContent className="items-center justify-center">
-          <FrameTitle className="text-center">
-            <FrameHighlight className="before:bg-yellow-700">
-              Sumoud.
-            </FrameHighlight>{" "}
-            <span dir="rtl" className="relative z-10 font-[ShamelSansOne]">
-              صُمُــــــــوْدْ.
-            </span>
-          </FrameTitle>
-          <FrameParagraph className="text-center !text-5xl italic !leading-snug">
-            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
-              noun.
-            </FrameParagraphHighlight>{" "}
-            The act of building a{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
-              future
-            </FrameParagraphHighlight>{" "}
-            <br /> while the{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
-              ground
-            </FrameParagraphHighlight>{" "}
-            is shaking.
-          </FrameParagraph>
-        </FrameContent>
-        <FrameBlur className="from-yellow-700/10 via-yellow-700 to-yellow-700/10" />
-      </Frame>
-
-      <Frame
-        ref={otherFrames[1].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-background">
-        <FrameContent className="items-center justify-center">
-          <FrameTitle className="text-center">
-            <FrameHighlight className="before:bg-yellow-700">
-              Izzah.
-            </FrameHighlight>{" "}
-            <br />
-            <span dir="rtl" className="relative z-10 font-[ShamelSansOne]">
-              عِــــــــــــــــزَّةْ.
-            </span>
-          </FrameTitle>
-          <FrameParagraph className="text-center !text-5xl italic !leading-snug">
-            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
-              noun.
-            </FrameParagraphHighlight>{" "}
-            Dignity that can not be{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
-              bombed
-            </FrameParagraphHighlight>{" "}
-            away. The refusal to bow, to beg, <br /> or to be broken, even when
-            the world{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
-              looks away.
-            </FrameParagraphHighlight>
-          </FrameParagraph>
-        </FrameContent>
-        <FrameBlur className="from-yellow-700/10 via-yellow-700 to-yellow-700/10" />
-      </Frame>
-
-      <Frame
-        ref={otherFrames[2].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-background">
-        <FrameContent className="items-center justify-center">
-          <FrameTitle className="text-center">
-            <FrameHighlight className="before:bg-yellow-700">
-              Amal.
-            </FrameHighlight>{" "}
-            <br />
-            <span dir="rtl" className="relative z-10 font-[ShamelSansOne]">
-              أَمَــــــــــــــــلْ.
-            </span>
-          </FrameTitle>
-          <FrameParagraph className="text-center !text-5xl italic !leading-snug">
-            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
-              noun.
-            </FrameParagraphHighlight>{" "}
-            The stubborn belief that tomorrow{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
-              will be better.
-            </FrameParagraphHighlight>{" "}
-            A weapon more powerful than any{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
-              missile.
-            </FrameParagraphHighlight>
-          </FrameParagraph>
-        </FrameContent>
-        <FrameBlur className="from-yellow-700/10 via-yellow-700 to-yellow-700/10" />
-      </Frame>
-
-      <Frame
-        ref={otherFrames[3].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-background">
-        <FrameContent className="items-center justify-center">
-          <FrameTitle className="text-center">
-            <FrameHighlight className="before:bg-yellow-700">
-              Nakhwa.
-            </FrameHighlight>{" "}
-            <br />
-            <span dir="rtl" className="relative z-10 font-[ShamelSansOne]">
-              نَخْــــــــــــــــوَةْ.
-            </span>
-          </FrameTitle>
-          <FrameParagraph className="text-center !text-5xl italic !leading-snug">
-            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
-              noun.
-            </FrameParagraphHighlight>{" "}
-            The{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
-              instant
-            </FrameParagraphHighlight>{" "}
-            impulse to run towards the danger to help another. The courage that
-            doesn&apos;t wait for{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-yellow-700">
-              permission.
-            </FrameParagraphHighlight>
-          </FrameParagraph>
-        </FrameContent>
-        <FrameBlur className="from-yellow-700/10 via-yellow-700 to-yellow-700/10" />
-      </Frame>
-
-      <Frame
-        ref={otherFrames[4].ref}
-        dimensions="4:5"
-        color="primary-foreground"
-        className="bg-yellow-700">
-        <FrameContent className="items-center justify-center">
-          <FrameTitle className="text-center">
-            <FrameHighlight className="before:bg-background">
-              Gaza.
-            </FrameHighlight>{" "}
-            <br />
-            <span dir="rtl" className="relative z-10 font-[ShamelSansOne]">
-              غَــــــــــــــــزَّةْ.
-            </span>
-          </FrameTitle>
-          <FrameParagraph className="text-center !text-5xl italic !leading-snug">
-            <FrameParagraphHighlight className="text-foreground after:bg-background">
-              noun.
-            </FrameParagraphHighlight>{" "}
-            Not a place of death. A{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-background">
-              laboratory
-            </FrameParagraphHighlight>{" "}
-            of life, unyielding resilience, and{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-background">
-              world-class
-            </FrameParagraphHighlight>{" "}
-            excellence.
-          </FrameParagraph>
-        </FrameContent>
-        <FrameBlur className="from-yellow-900/10 via-yellow-900 to-yellow-900/10" />
-      </Frame>
-
       <Frame
         ref={frames[0].ref}
         dimensions="4:5"
         color="primary-foreground"
-        className="bg-green-700">
+        className="bg-background">
         <FrameContent>
           <FrameTitle>
-            We{" "}
-            <FrameHighlight className="before:bg-background">
-              gave
+            You&apos;re working{" "}
+            <FrameHighlight className="before:bg-red-500">
+              against
             </FrameHighlight>{" "}
-            away{" "}
-            <FrameHighlight className="mb-2.5 before:bg-background">
-              1,000
-            </FrameHighlight>{" "}
-            <FrameHighlight className="mb-2.5 before:bg-background">
-              copies
-            </FrameHighlight>{" "}
-            for{" "}
-            <FrameHighlight className="before:bg-background">
-              free.
+            your <br />{" "}
+            <FrameHighlight className="my-5 mb-0 before:bg-red-500">
+              biology.
             </FrameHighlight>
           </FrameTitle>
-          <FrameBadge className="bg-foreground text-background">
-            Here is why that era ends today
+          <FrameBadge className="border-red-500 bg-foreground text-background">
+            Here is why
             <ArrowRightIcon className="!size-12 stroke-[1.5]" />
           </FrameBadge>
-          <Image
-            src="http://localhost:3000/gift-icon.png"
-            alt="Gift Icon"
-            fill
-            className="!absolute !-bottom-[25rem] !-right-[25rem] !left-[initial] !top-[initial] !-z-10 !h-auto !w-[80rem] !max-w-[80rem]"
-          />
         </FrameContent>
+        <FrameBlur className="from-red-900/10 via-red-500 to-red-900/10" />
+        <Image
+          src="http://localhost:3000/clock-icon.png"
+          alt="Clock Icon"
+          fill
+          className="!absolute !-bottom-[10rem] !-right-[10rem] !left-[initial] !top-[initial] !-z-10 !h-auto !w-[60rem] !max-w-[60rem]"
+        />
       </Frame>
 
       <Frame
         ref={frames[1].ref}
         dimensions="4:5"
         color="primary-foreground"
-        className="bg-background">
-        <FrameContent className="items-center justify-center">
-          <Image
-            src="http://localhost:3000/download-icon.png"
-            alt="Download Icon"
-            fill
-            className="!static !h-auto !max-w-xs"
-          />
-          <SectionHeading className="text-center font-semibold">
-            A download is temporary.
-            <FrameHighlight className="before:bg-green-500">
-              A fortress is permanent.
+        className="bg-red-900">
+        <FrameContent className="justify-center">
+          <FrameTitle>
+            Your{" "}
+            <FrameHighlight className="before:bg-background">
+              focus
             </FrameHighlight>{" "}
-          </SectionHeading>
-          <FrameParagraph className="text-center font-normal text-muted-foreground">
-            You proved these stories matter. But to protect <br />
-            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
-              Gazan narratives
-            </FrameParagraphHighlight>{" "}
-            from being erased, we need to build sustainable infrastructure. We
-            are moving from{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
-              &quot;charity&quot; to &quot;agency.&quot;
+            isn&apos;t a{" "}
+            <FrameHighlight className="before:bg-background">
+              battery;
+            </FrameHighlight>{" "}
+            it&apos;s a wave<span className="text-background">.</span>
+          </FrameTitle>
+          <SectionHeading>
+            You&apos;re trying to grind for 8 hours{" "}
+            <FrameParagraphHighlight className="after:bg-red-300">
+              straight
             </FrameParagraphHighlight>
-          </FrameParagraph>
+            , but your brain operates on{" "}
+            <FrameParagraphHighlight className="after:bg-red-300">
+              Ultradian Rhythms.
+            </FrameParagraphHighlight>
+          </SectionHeading>
         </FrameContent>
-        <FrameBlur className="from-green-500/10 via-green-500 to-green-500/10" />
       </Frame>
 
       <Frame
         ref={frames[2].ref}
         dimensions="4:5"
-        color="primary-foreground"
-        className="bg-background">
-        <FrameContent className="items-center justify-center">
-          <Image
-            src="http://localhost:3000/dollar-icon.png"
-            alt="Dollar Icon"
-            fill
-            className="!static !h-auto !max-w-xs"
-          />
-          <SectionHeading className="text-center font-semibold">
-            18 USD. Not a cost. <br />{" "}
-            <FrameHighlight className="before:bg-green-500">
-              An investment.
-            </FrameHighlight>
+        color="primary"
+        className="bg-red-50">
+        <FrameContent className="justify-center">
+          <SectionHeading className="text-background">
+            After 90 minutes of{" "}
+            <FrameParagraphHighlight className="after:bg-red-500">
+              high-intensity
+            </FrameParagraphHighlight>{" "}
+            work, your cognitive performance doesn&apos;t just dip—it{" "}
+            <FrameParagraphHighlight className="after:bg-red-500">
+              crashes.
+            </FrameParagraphHighlight>
           </SectionHeading>
-          <FrameParagraph className="text-center font-normal text-muted-foreground">
-            This isn&apos;t just for an e-book. Your purchase directly funds{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
-              our agency.
-            </FrameParagraphHighlight>{" "}
-            It pays writers, powers the museum, and{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
-              proves that Gazan talent
-            </FrameParagraphHighlight>{" "}
-            is a world-class asset.
-          </FrameParagraph>
+          <FrameTitle>
+            The 8-Hour Grind is a{" "}
+            <FrameHighlight className="before:bg-red-300">
+              productivity
+            </FrameHighlight>{" "}
+            trap<span className="text-red-300">.</span>
+          </FrameTitle>
+          <SectionHeading className="text-background" />
         </FrameContent>
-        <FrameBlur className="from-green-500/10 via-green-500 to-green-500/10" />
       </Frame>
 
       <Frame
@@ -475,64 +277,131 @@ const InstagramStudioPage = function InstagramStudioPage() {
         dimensions="4:5"
         color="primary-foreground"
         className="bg-background">
-        <FrameContent className="items-center justify-center">
-          <Image
-            src="http://localhost:3000/lock-icon.png"
-            alt="Lock Icon"
-            fill
-            className="!static !h-auto !max-w-xs"
-          />
-          <SectionHeading className="text-center font-semibold">
-            Achieve The <br />{" "}
-            <FrameHighlight className="before:bg-green-500">
-              Truth Bearer
-            </FrameHighlight>{" "}
-            Status.
+        <FrameContent className="justify-center">
+          <SectionHeading className="text-foreground">
+            Staying at your desk past your biological limit{" "}
+            <FrameParagraphHighlight className="after:bg-red-500">
+              creates
+            </FrameParagraphHighlight>{" "}
+            &quot;False Busy-ness.&quot;
           </SectionHeading>
-          <FrameParagraph className="text-center font-normal text-muted-foreground">
-            When you order, you don&apos;t just{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
-              get a file.{" "}
+          <FrameTitle>
+            You type{" "}
+            <FrameHighlight className="before:bg-red-500">more</FrameHighlight>
+            , <br /> but <span className="mb-5 inline-block">
+              you
+            </span> think{" "}
+            <FrameHighlight className="before:bg-red-500">less.</FrameHighlight>
+          </FrameTitle>
+          <SectionHeading className="text-foreground">
+            You are trading{" "}
+            <FrameParagraphHighlight className="after:bg-red-500">
+              Excellence
+            </FrameParagraphHighlight>{" "}
+            for{" "}
+            <FrameParagraphHighlight className="after:bg-red-500">
+              Exhaustion.
             </FrameParagraphHighlight>
-          </FrameParagraph>
-          <FrameParagraph className="text-center font-normal text-muted-foreground">
-            You{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
-              achieve a permanent badge
-            </FrameParagraphHighlight>{" "}
-            on your profile. A digital testament that{" "}
-            <FrameParagraphHighlight className="text-foreground after:bg-green-500">
-              you helped build
-            </FrameParagraphHighlight>{" "}
-            this foundation.
-          </FrameParagraph>
+          </SectionHeading>
         </FrameContent>
-        <FrameBlur className="from-green-500/10 via-green-500 to-green-500/10" />
       </Frame>
 
       <Frame
         ref={frames[4].ref}
         dimensions="4:5"
         color="primary-foreground"
-        className="bg-green-900">
-        <FrameContent>
+        className="bg-background">
+        <FrameContent className="justify-center">
           <Image
-            src="http://localhost:3000/comment-icon.png"
-            alt="Comment Icon"
+            src="http://localhost:3000/desk-clock-icon.png"
+            alt="Desk Clock Icon"
             fill
             className="!static !h-auto !max-w-xs"
           />
-          <FrameTitle>
-            Possess <br /> a part of
-            <FrameHighlight className="before:bg-background">
-              history.
+          <SectionHeading className="text-7xl font-semibold lg:text-7xl xl:text-7xl">
+            The way out of this <br />
+            <FrameHighlight className="before:bg-red-500">
+              trap:
             </FrameHighlight>{" "}
-          </FrameTitle>
-          <FrameBadge className="bg-foreground text-background">
-            Leave a comment with &quot;book&quot; to secure your copy
-            <ArrowDownIcon className="!size-12 stroke-[1.5]" />
-          </FrameBadge>
+            The{" "}
+            <FrameHighlight className="before:bg-red-500">
+              90-Minute
+            </FrameHighlight>{" "}
+            Sprint.
+          </SectionHeading>
+          <div className="flex flex-col items-start justify-start gap-5">
+            <FrameParagraph className="flex items-center justify-start gap-5 !text-5xl font-medium text-foreground">
+              <div className="flex h-20 w-20 items-center justify-center border border-red-500 bg-red-500/10 shadow-2xl shadow-red-500/25">
+                <ClockFadingIcon className="size-10" />
+              </div>
+              90 mins of deep focus.
+            </FrameParagraph>
+            <FrameParagraph className="flex items-center justify-start gap-5 !text-5xl font-medium text-foreground">
+              <div className="flex h-20 w-20 items-center justify-center border border-red-500 bg-red-500/10 shadow-2xl shadow-red-500/25">
+                <BedIcon className="size-10" />
+              </div>
+              15 mins of absolute rest.
+            </FrameParagraph>
+            <FrameParagraph className="flex items-center justify-start gap-5 !text-5xl font-medium text-foreground">
+              <div className="flex h-20 w-20 items-center justify-center border border-red-500 bg-red-500/10 shadow-2xl shadow-red-500/25">
+                <RepeatIcon className="size-10" />
+              </div>
+              Repeat 3-4 times a day.
+            </FrameParagraph>
+          </div>
+          <SectionHeading className="text-foreground">
+            You{" "}
+            <FrameParagraphHighlight className="after:bg-red-500">
+              achieve
+            </FrameParagraphHighlight>{" "}
+            more in 6{" "}
+            <FrameParagraphHighlight className="after:bg-red-500">
+              focused
+            </FrameParagraphHighlight>{" "}
+            hours than most do in 12{" "}
+            <FrameParagraphHighlight className="after:bg-red-500">
+              distracted
+            </FrameParagraphHighlight>{" "}
+            ones.
+          </SectionHeading>
         </FrameContent>
+        <FrameBlur className="from-red-900/10 via-red-500 to-red-900/10" />
+      </Frame>
+
+      <Frame
+        ref={frames[5].ref}
+        dimensions="4:5"
+        color="primary-foreground"
+        className="bg-background">
+        <FrameContent className="items-center justify-center">
+          <Image
+            src="http://localhost:3000/psc-2.0.0-blog-01-01.jpeg"
+            alt="Blog 01 01"
+            fill
+            className="!static !h-auto !max-w-3xl border border-red-500 shadow-2xl shadow-red-500/25"
+          />
+          <SectionHeading className="text-center text-7xl font-semibold lg:text-7xl xl:text-7xl">
+            Stop the{" "}
+            <FrameHighlight className="before:bg-red-500">
+              grind.
+            </FrameHighlight>{" "}
+            <br /> Start the{" "}
+            <FrameHighlight className="before:bg-red-500">
+              architecture.
+            </FrameHighlight>
+          </SectionHeading>
+          <FrameParagraph className="text-center font-medium text-foreground">
+            Comment{" "}
+            <FrameParagraphHighlight className="after:bg-red-500">
+              &quot;Habit&quot;
+            </FrameParagraphHighlight>{" "}
+            and I&apos;ll DM you my full biological road-map from{" "}
+            <FrameParagraphHighlight className="after:bg-red-500">
+              The Riwaq.
+            </FrameParagraphHighlight>
+          </FrameParagraph>
+        </FrameContent>
+        <FrameBlur className="from-red-900/10 via-red-500 to-red-900/10" />
       </Frame>
 
       <DiaryEntryTemplate
