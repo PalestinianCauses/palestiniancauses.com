@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 34
+// REVIEWED - 35
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -21,6 +21,7 @@ import {
   FrameBlur,
   FrameContent,
   FrameHighlight,
+  FrameImagesGrid,
   FrameParagraph,
   FrameParagraphHighlight,
   FrameTitle,
@@ -143,9 +144,17 @@ const InstagramStudioPage = function InstagramStudioPage() {
     },
   ];
 
+  const otherFrames: ImageFrame[] = [
+    {
+      id: "psc-2.0.0-instagram-06-01",
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+  ];
+
   const blogsFrames: ImageFrame[] = [
     {
-      id: "psc-2.0.0-blog-01-01",
+      id: "psc-2.0.0-blog-02-02",
       ref: useRef<HTMLDivElement>(null),
       as: "jpeg",
     },
@@ -153,7 +162,7 @@ const InstagramStudioPage = function InstagramStudioPage() {
 
   return (
     <main className="section-padding-start-lg">
-      <ImageFrameRender frames={frames} />
+      <ImageFrameRender frames={otherFrames} />
       <Frame
         isFooter={false}
         ref={blogsFrames[0].ref}
@@ -161,30 +170,66 @@ const InstagramStudioPage = function InstagramStudioPage() {
         color="primary-foreground"
         className="bg-background">
         <FrameContent className="h-auto w-[67.5rem] gap-6 px-20">
+          <FrameTitle className="!text-7xl font-semibold !leading-none lg:!leading-none xl:!leading-none">
+            the architect&apos;s guide
+            <br /> to the{" "}
+            <FrameParagraphHighlight className="font-semibold after:bg-red-500">
+              machine
+            </FrameParagraphHighlight>
+          </FrameTitle>
           <FrameTitle>
-            3{" "}
             <FrameHighlight className="before:bg-red-500">
-              Habits
+              What AI
             </FrameHighlight>
           </FrameTitle>
           <FrameTitle className="!text-7xl font-semibold !leading-none lg:!leading-none xl:!leading-none">
-            that changed
-            <br />
-            how I{" "}
             <FrameParagraphHighlight className="font-semibold after:bg-red-500">
-              achieve
+              really
             </FrameParagraphHighlight>{" "}
-            things.
+            is?
           </FrameTitle>
         </FrameContent>
         <FrameBlur className="from-red-500/10 via-red-500 to-red-500/10" />
         <Image
-          src="http://localhost:3000/arrow-icon.png"
-          alt="Arrow Icon"
+          src="http://localhost:3000/security-icon.png"
+          alt="Security Icon"
           fill
           className="!absolute !-bottom-[10rem] !-right-[10rem] !left-[initial] !top-[initial] !-z-10 !h-auto !max-w-[40rem]"
         />
       </Frame>
+      <Frame
+        ref={otherFrames[0].ref}
+        dimensions="4:5"
+        color="primary-foreground">
+        <FrameContent className="items-end justify-center">
+          <FrameTitle className="text-right drop-shadow-xl">
+            <FrameHighlight className="before:bg-red-500">We</FrameHighlight>
+            <br /> don&apos;t <br />
+            <FrameHighlight className="before:bg-red-500">wait</FrameHighlight>
+            <br /> for <br />
+            <FrameHighlight className="before:bg-red-500">
+              permission
+            </FrameHighlight>
+            <br /> to
+            <br />
+            <FrameHighlight className="before:bg-red-500">
+              build.
+            </FrameHighlight>
+          </FrameTitle>
+        </FrameContent>
+        <FrameImagesGrid className="scale-125">
+          <Image
+            src="http://localhost:3000/image.JPG"
+            alt="Image"
+            fill
+            className="!static !inset-[initial] col-start-1 col-end-13 row-start-1 row-end-13 object-cover"
+          />
+        </FrameImagesGrid>
+        <div className="absolute inset-0 -z-10 bg-background/25 mix-blend-multiply" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-transparent via-background/10 to-background/50 mix-blend-multiply" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-transparent via-background/10 to-background/50 mix-blend-multiply" />
+      </Frame>
+
       <Frame
         ref={frames[0].ref}
         dimensions="4:5"
