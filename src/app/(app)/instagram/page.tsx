@@ -1,6 +1,6 @@
 "use client";
 
-// REVIEWED - 35
+// REVIEWED - 36
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 
@@ -160,9 +160,28 @@ const InstagramStudioPage = function InstagramStudioPage() {
     },
   ];
 
+  const logosFrames: ImageFrame[] = [
+    {
+      id: "psc-2.0.0-logo-01-01",
+      ref: useRef<HTMLDivElement>(null),
+      as: "jpeg",
+    },
+  ];
+
   return (
     <main className="section-padding-start-lg">
-      <ImageFrameRender frames={otherFrames} />
+      <ImageFrameRender frames={logosFrames} />
+      <Frame
+        ref={logosFrames[0].ref}
+        dimensions="1:1"
+        color="primary-foreground"
+        isFooter={false}>
+        <FrameContent className="items-center justify-center">
+          <FrameTitle className="!text-[28rem] !leading-none lg:!leading-none xl:!leading-none">
+            PC.
+          </FrameTitle>
+        </FrameContent>
+      </Frame>
       <Frame
         isFooter={false}
         ref={blogsFrames[0].ref}
